@@ -1,0 +1,17 @@
+<main-menu></main-menu>
+
+<div ng-controller="taskListController as tl">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h3>Tasks</h3>
+        </div>
+    </div>
+
+    <div class="row task-list">
+        <div class="task-list_item" ng-repeat="task in tl.tasks">
+            {{ task.name }}
+        </div>
+    </div>
+
+</div>

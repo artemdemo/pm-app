@@ -1,0 +1,22 @@
+{
+  "name": "pm",
+  "version": "1.0.0",
+  "description": "Project Management",
+  "author": "Artem Demo",
+  "devDependencies": {
+    "angular": "^1.4.6",
+    "angular-foundation": "^0.7.0",
+    "angular-resource": "^1.4.6",
+    "angular-ui-router": "^0.2.15",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.0.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-flatten": "^0.2.0",
+    "gulp-ignore": "^1.2.1",
+    "gulp-less": "^3.0.3",
+    "gulp-minify-html": "^1.0.4",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-typescript": "^2.9.0",
+    "less-plugin-autoprefix": "^1.5.1"
+  }
+}
