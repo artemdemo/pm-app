@@ -1,6 +1,6 @@
 # Database
 
-## Task table
+## Tasks table
 ```
 [
   '{{repeat(20)}}',
@@ -21,6 +21,23 @@
   }
 ] 
 ```
+
+## Projects table
+```
+[
+  '{{repeat(5)}}',
+  {
+    id: '{{objectId()}}',
+    name: '{{company()}}',
+    description: '{{lorem(4)}}',
+    status: '{{integer(6,10)}}',
+    assignee: '{{integer(1,5)}}',
+    author: '{{integer(1,5)}}',
+    created_at: '{{date(new Date(2015, 0, 0), new Date(2016, 0, 0), "YYYY-MM-dd HH:mm:ss")}}'
+  }
+]
+```
+
 
 [JSON generator](http://www.json-generator.com/)
 
