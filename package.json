@@ -8,6 +8,7 @@
     "angular-foundation": "^0.7.0",
     "angular-resource": "^1.4.6",
     "angular-ui-router": "^0.2.15",
+    "font-awesome": "^4.4.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-concat": "^2.6.0",

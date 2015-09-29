@@ -73,7 +73,7 @@ gulp.task('copy-build', function () {
         .pipe(gulp.dest('./front'));
     gulp
         .src([
-            './node_modules/bootstrap/dist/fonts/*'
+            './node_modules/font-awesome/fonts/*'
         ])
         .pipe(gulp.dest('./front/fonts'));
     gulp
