@@ -1,7 +1,5 @@
 @import "../variables";
 
-@task-item-font-size: 15px;
-
 .task-list-wrap__task-page {
   padding: 0 10px;
 }
@@ -10,10 +8,12 @@
 
 .task-item {
   border: 1px solid #CACACA;
+  border-top: 3px solid #C5C5C5;
   padding: 3px 5px;
   border-radius: 5px;
   margin-bottom: 10px;
   position: relative;
+  cursor: pointer;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -49,7 +49,11 @@
     font-weight: bold;
     display: inline-block;
   }
+  .task-item_label {
+    .task-item-padding();
 
+    display: inline-block;
+  }
   .task-item_sp {
     .task-item-padding();
 
