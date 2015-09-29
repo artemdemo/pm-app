@@ -9,8 +9,20 @@
     </div>
 
     <div class="row task-list">
-        <div class="task-list_item" ng-repeat="task in tp.tasks">
-            {{ task.name }}
+        <div class="task-item" ng-repeat="task in tp.tasks">
+            <div class="task-item_title">
+                <div class="task-item_priority task-item_priority__minor"></div>
+                {{ task.name }}
+            </div>
+            <div class="task-item_sp">
+                SP: {{ task.sp }}
+            </div>
+            <div class="task-item_created">
+                {{ task.created_at }}
+            </div>
+            <div class="task-item_description">
+                {{ task.description }}
+            </div>
         </div>
     </div>
 
