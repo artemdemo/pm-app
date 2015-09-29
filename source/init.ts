@@ -15,4 +15,4 @@
 /// <reference path="./directives/mainMenu/mainMenuDirective.ts" />
 
 /*---- Controllers ----*/
-/// <reference path="./controllers/taskListController.ts" />
+/// <reference path="./controllers/tasksPageController.ts" />

@@ -1,6 +1,6 @@
 module pmApp {
 
-    class taskListController {
+    class tasksPageController {
         public static $inject = [
             '$scope',
             'tasksService'
@@ -20,5 +20,5 @@ module pmApp {
 
     angular
         .module('pmApp')
-        .controller('taskListController', taskListController)
+        .controller('tasksPageController', tasksPageController)
 }
