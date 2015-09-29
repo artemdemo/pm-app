@@ -8,11 +8,12 @@
         </div>
     </div>
 
-    <div class="row task-list">
+    <div class="row task-list" data-as-sortable="tp.dragControlListeners" data-ng-model="tp.tasks">
         <div class="task-item"
-             ng-repeat="task in tp.tasks track by task.id"
-             ng-class="{ 'task-item__has-substasks': task.subtasks.length > 0 }">
-            <div class="task-item_title">
+             ng-repeat="task in tp.tasks"
+             ng-class="{ 'task-item__has-substasks': task.subtasks.length > 0 }"
+             data-as-sortable-item>
+            <div class="task-item_title" data-as-sortable-item-handle>
                 <div class="task-item_priority task-item_priority__minor"></div>
                 {{ task.name }}
             </div>

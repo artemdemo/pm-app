@@ -55,6 +55,7 @@ gulp.task('concat', function(){
         './front/js/angular-ui-router.min.js',
         './front/js/mm-foundation-tpls.min.js',
         './front/js/angular-resource.min.js',
+        './front/js/ng-sortable.min.js',
         './front/js/app.js'
     ])
         .pipe(concat('app-all.js'))
@@ -81,7 +82,8 @@ gulp.task('copy-build', function () {
             './node_modules/angular/angular.min.js',
             './node_modules/angular-foundation/mm-foundation-tpls.min.js',
             './node_modules/angular-ui-router/release/angular-ui-router.min.js',
-            './node_modules/angular-resource/angular-resource.min.js'
+            './node_modules/angular-resource/angular-resource.min.js',
+            './vendor/ng-sortable/dist/ng-sortable.min.js'
         ])
         .pipe(gulp.dest('./front/js'))
 });
