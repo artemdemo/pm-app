@@ -10,6 +10,8 @@ module pmApp {
 
         private tasks = [];
 
+        private tasksLoadingPromise = null;
+
         constructor(public $http, public $q, public $rootScope, public apiService) {}
 
         /**
@@ -19,7 +21,6 @@ module pmApp {
          */
         private updateTasks( newTasks ) {
             this.tasks = newTasks;
-            this.$rootScope.$broadcast('tasks-updated');
         }
 
         /**
@@ -31,23 +32,34 @@ module pmApp {
             let deferred = this.$q.defer();
 
             this.$http.get(this.apiService.getAbsoluteUrl('/tasks/open'))
-                .then((result) => {
-                    deferred.resolve(result.data);
-                    this.updateTasks(result.data);
-                },
-                (data) => {
-                    deferred.reject(data);
-                });
+                .then(
+                    (result) => {
+                        deferred.resolve(result.data);
+                        this.updateTasks(result.data);
+                    },
+                    (data) => deferred.reject(data)
+                );
+
+            this.tasksLoadingPromise = deferred.promise;
 
             return deferred.promise;
         }
 
         /**
          * Return all tasks
-         * @returns {Array}
+         * @returns {promise}
          */
         getTasks() {
-            return this.tasks
+            let deferred = this.$q.defer();
+
+            this.$q.all([
+                this.tasksLoadingPromise
+            ]).then(
+                () => deferred.resolve(this.tasks),
+                () => deferred.resolve(this.tasks)
+            );
+
+            return deferred.promise;
         }
     }
 

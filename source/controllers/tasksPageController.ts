@@ -9,11 +9,12 @@ module pmApp {
         public tasks;
 
         constructor (public $scope, public tasksService) {
-            this.tasks = tasksService.getTasks();
 
-            $scope.$on('tasks-updated', () => {
-                this.tasks = tasksService.getTasks();
-            });
+            tasksService.getTasks()
+                .then(
+                    (newTasks) => this.tasks = newTasks,
+                    (newTasks) => this.tasks = newTasks
+                );
         }
     }
 
