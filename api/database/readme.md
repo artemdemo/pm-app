@@ -15,6 +15,7 @@
     author: '{{integer(1,5)}}',
     project: '{{integer(1,2)}}',
     iteration: '{{integer(1,2)}}',
+    subtasks: [],
     parent: null,
     created_at: '{{date(new Date(2015, 0, 0), new Date(2016, 0, 0), "YYYY-MM-dd HH:mm:ss")}}'
   }

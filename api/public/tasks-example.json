@@ -11,35 +11,39 @@
     "project": 1,
     "iteration": 2,
     "parent": null,
+    "subtasks": [
+      {
+        "id": "5609ab1a15d69ef019a517b3",
+        "name": "Zentility",
+        "description": "Esse consequat elit nulla consequat ut officia ullamco elit sit aliqua laboris cillum. Nulla elit dolore enim ad eu pariatur tempor dolor elit Lorem aliqua non duis eu. Quis ex duis sunt magna deserunt velit eu voluptate mollit enim. Pariatur ullamco nisi dolore est sunt commodo ullamco anim occaecat.",
+        "priority": 2,
+        "status": 10,
+        "sp": 1,
+        "assignee": 3,
+        "author": 5,
+        "project": 1,
+        "iteration": 1,
+        "subtasks": [],
+        "parent": "5609ab1a647809223e3bf845",
+        "created_at": "2015-01-30 00:21:18"
+      },
+      {
+        "id": "5609ab1aa5c0adf1fb64477e",
+        "name": "Verton",
+        "description": "Sint nulla sint fugiat elit ea. In aliquip magna laborum sunt fugiat est laboris consequat ut velit voluptate. Exercitation non sint velit sit laboris est adipisicing adipisicing amet dolor amet ea nostrud et. Est dolor labore deserunt ipsum.",
+        "priority": 2,
+        "status": 10,
+        "sp": 15,
+        "assignee": 5,
+        "author": 3,
+        "project": 2,
+        "iteration": 1,
+        "subtasks": [],
+        "parent": "5609ab1a647809223e3bf845",
+        "created_at": "2015-03-20 03:33:35"
+      }
+    ],
     "created_at": "2015-04-21 02:55:11"
-  },
-  {
-    "id": "5609ab1a15d69ef019a517b3",
-    "name": "Zentility",
-    "description": "Esse consequat elit nulla consequat ut officia ullamco elit sit aliqua laboris cillum. Nulla elit dolore enim ad eu pariatur tempor dolor elit Lorem aliqua non duis eu. Quis ex duis sunt magna deserunt velit eu voluptate mollit enim. Pariatur ullamco nisi dolore est sunt commodo ullamco anim occaecat.",
-    "priority": 2,
-    "status": 10,
-    "sp": 1,
-    "assignee": 3,
-    "author": 5,
-    "project": 1,
-    "iteration": 1,
-    "parent": "5609ab1a647809223e3bf845",
-    "created_at": "2015-01-30 00:21:18"
-  },
-  {
-    "id": "5609ab1aa5c0adf1fb64477e",
-    "name": "Verton",
-    "description": "Sint nulla sint fugiat elit ea. In aliquip magna laborum sunt fugiat est laboris consequat ut velit voluptate. Exercitation non sint velit sit laboris est adipisicing adipisicing amet dolor amet ea nostrud et. Est dolor labore deserunt ipsum.",
-    "priority": 2,
-    "status": 10,
-    "sp": 15,
-    "assignee": 5,
-    "author": 3,
-    "project": 2,
-    "iteration": 1,
-    "parent": "5609ab1a647809223e3bf845",
-    "created_at": "2015-03-20 03:33:35"
   },
   {
     "id": "5609ab1ac198b998b0a293f6",
@@ -53,6 +57,7 @@
     "project": 1,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-01-19 08:28:12"
   },
   {
@@ -67,49 +72,54 @@
     "project": 2,
     "iteration": 2,
     "parent": null,
+    "subtasks": [
+      {
+        "id": "5609ab1aeb3c37f24f109722",
+        "name": "Ziggles",
+        "description": "Elit mollit voluptate nostrud ea laboris elit dolore laborum do incididunt proident ipsum irure. Excepteur mollit commodo ad non nulla elit adipisicing consequat tempor incididunt commodo proident mollit elit. Irure consectetur enim eu ex enim tempor dolor consectetur. Pariatur exercitation ullamco ea est.",
+        "priority": 3,
+        "status": 6,
+        "sp": 11,
+        "assignee": 2,
+        "author": 1,
+        "project": 2,
+        "iteration": 2,
+        "parent": "5609ab1afdcc4f2c5fa87bba",
+        "subtasks": [],
+        "created_at": "2015-01-27 19:47:52"
+      },
+      {
+        "id": "5609ab1a583a5ebe0fa52f2f",
+        "name": "Farmex",
+        "description": "Lorem amet proident aute tempor fugiat do labore sunt labore. Aliqua cillum mollit officia magna occaecat tempor ullamco occaecat aliqua. Magna minim Lorem incididunt consectetur incididunt deserunt cillum ad ipsum elit minim laboris nostrud. Reprehenderit laboris minim duis cillum sint do sit mollit magna mollit reprehenderit consectetur consectetur exercitation.",
+        "priority": 2,
+        "status": 9,
+        "sp": 2,
+        "assignee": 4,
+        "author": 5,
+        "project": 2,
+        "iteration": 1,
+        "parent": "5609ab1afdcc4f2c5fa87bba",
+        "subtasks": [],
+        "created_at": "2015-10-11 03:15:42"
+      },
+      {
+        "id": "5609ab1a73294dc9fd981346",
+        "name": "Terragen",
+        "description": "Culpa esse excepteur ad minim ipsum aliqua. Do est occaecat amet velit cupidatat amet labore nostrud enim excepteur id culpa cupidatat cupidatat. Voluptate excepteur sunt Lorem adipisicing dolor enim esse eu id. Cupidatat dolore excepteur laborum irure minim nulla mollit velit nulla velit do.",
+        "priority": 2,
+        "status": 7,
+        "sp": 7,
+        "assignee": 2,
+        "author": 2,
+        "project": 2,
+        "iteration": 2,
+        "parent": "5609ab1afdcc4f2c5fa87bba",
+        "subtasks": [],
+        "created_at": "2015-01-04 20:58:37"
+      }
+    ],
     "created_at": "2015-12-28 09:12:33"
-  },
-  {
-    "id": "5609ab1aeb3c37f24f109722",
-    "name": "Ziggles",
-    "description": "Elit mollit voluptate nostrud ea laboris elit dolore laborum do incididunt proident ipsum irure. Excepteur mollit commodo ad non nulla elit adipisicing consequat tempor incididunt commodo proident mollit elit. Irure consectetur enim eu ex enim tempor dolor consectetur. Pariatur exercitation ullamco ea est.",
-    "priority": 3,
-    "status": 6,
-    "sp": 11,
-    "assignee": 2,
-    "author": 1,
-    "project": 2,
-    "iteration": 2,
-    "parent": "5609ab1afdcc4f2c5fa87bba",
-    "created_at": "2015-01-27 19:47:52"
-  },
-  {
-    "id": "5609ab1a583a5ebe0fa52f2f",
-    "name": "Farmex",
-    "description": "Lorem amet proident aute tempor fugiat do labore sunt labore. Aliqua cillum mollit officia magna occaecat tempor ullamco occaecat aliqua. Magna minim Lorem incididunt consectetur incididunt deserunt cillum ad ipsum elit minim laboris nostrud. Reprehenderit laboris minim duis cillum sint do sit mollit magna mollit reprehenderit consectetur consectetur exercitation.",
-    "priority": 2,
-    "status": 9,
-    "sp": 2,
-    "assignee": 4,
-    "author": 5,
-    "project": 2,
-    "iteration": 1,
-    "parent": "5609ab1afdcc4f2c5fa87bba",
-    "created_at": "2015-10-11 03:15:42"
-  },
-  {
-    "id": "5609ab1a73294dc9fd981346",
-    "name": "Terragen",
-    "description": "Culpa esse excepteur ad minim ipsum aliqua. Do est occaecat amet velit cupidatat amet labore nostrud enim excepteur id culpa cupidatat cupidatat. Voluptate excepteur sunt Lorem adipisicing dolor enim esse eu id. Cupidatat dolore excepteur laborum irure minim nulla mollit velit nulla velit do.",
-    "priority": 2,
-    "status": 7,
-    "sp": 7,
-    "assignee": 2,
-    "author": 2,
-    "project": 2,
-    "iteration": 2,
-    "parent": "5609ab1afdcc4f2c5fa87bba",
-    "created_at": "2015-01-04 20:58:37"
   },
   {
     "id": "5609ab1af9dfd34989bf59ba",
@@ -123,6 +133,7 @@
     "project": 1,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-12-09 22:33:12"
   },
   {
@@ -137,6 +148,7 @@
     "project": 1,
     "iteration": 1,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-06-17 11:28:37"
   },
   {
@@ -151,6 +163,7 @@
     "project": 2,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-01-02 06:28:38"
   },
   {
@@ -165,6 +178,7 @@
     "project": 2,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-05-06 12:31:50"
   },
   {
@@ -179,6 +193,7 @@
     "project": 2,
     "iteration": 1,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-10-03 09:16:31"
   },
   {
@@ -193,6 +208,7 @@
     "project": 1,
     "iteration": 1,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-09-04 16:38:04"
   },
   {
@@ -207,6 +223,7 @@
     "project": 1,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-05-16 08:28:04"
   },
   {
@@ -221,6 +238,7 @@
     "project": 1,
     "iteration": 1,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-10-23 18:50:48"
   },
   {
@@ -235,6 +253,7 @@
     "project": 1,
     "iteration": 1,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-11-25 23:54:10"
   },
   {
@@ -249,6 +268,7 @@
     "project": 2,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-12-28 10:30:47"
   },
   {
@@ -263,6 +283,7 @@
     "project": 2,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-10-11 05:26:20"
   },
   {
@@ -277,6 +298,7 @@
     "project": 1,
     "iteration": 2,
     "parent": null,
+    "subtasks": [],
     "created_at": "2015-09-17 17:37:13"
   }
 ]
