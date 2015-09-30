@@ -1,34 +1,34 @@
 # Project Management
 
-Project Management system
-
-## Consider to change Lumen
-
-Lumen is the perfect solution for building Laravel based micro-services and blazing fast APIs.
-
-http://laravelista.com/json-web-token-authentication-for-lumen/
+Open Source Project Management system. It's more scrum then kanban, case I believe in sprints :)
 
 
+## Technologies
+
+* AngularJS v.1.4.6 (with TypeScript v.1.6)
+* Laravel v.5.1.11
 
 ## Installation
 
+### Front end
+
+1. Install all related packages
 ```
 $ npm install
 ```
 
+2. Build the app
 ```
 $ gulp build
 ```
 
-### Run migrations and seeding
+### Back end
 
-Inside of /api folder
+1. Create database with relevant name
 
+2. Inside of /api folder run following commands:
+
+Create all tables
 ```
 $ php artisan migrate
 ```
-
-```
-$ php artisan db:seed --class=MetatagsTableSeeder
-```
-
