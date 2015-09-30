@@ -10,9 +10,11 @@
 /*---- Services ----*/
 /// <reference path="./services/apiService.ts" />
 /// <reference path="./services/tasksService.ts" />
+/// <reference path="./services/projectsService.ts" />
 
 /*---- Directives ----*/
 /// <reference path="./directives/mainMenu/mainMenuDirective.ts" />
 
 /*---- Controllers ----*/
 /// <reference path="./controllers/tasksPageController.ts" />
+/// <reference path="./controllers/projectsPageController.ts" />
