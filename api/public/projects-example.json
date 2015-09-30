@@ -6,6 +6,47 @@
     "status": 9,
     "assignee": 4,
     "author": 3,
+    "tasks": [
+      {
+        "id": "5609ab1aeb3c37f24f109722",
+        "name": "Ziggles",
+        "description": "Elit mollit voluptate nostrud ea laboris elit dolore laborum do incididunt proident ipsum irure. Excepteur mollit commodo ad non nulla elit adipisicing consequat tempor incididunt commodo proident mollit elit. Irure consectetur enim eu ex enim tempor dolor consectetur. Pariatur exercitation ullamco ea est.",
+        "priority": 3,
+        "status": 6,
+        "sp": 11,
+        "assignee": 2,
+        "author": 1,
+        "project": 2,
+        "iteration": 2,
+        "created_at": "2015-01-27 19:47:52"
+      },
+      {
+        "id": "5609ab1a583a5ebe0fa52f2f",
+        "name": "Farmex",
+        "description": "Lorem amet proident aute tempor fugiat do labore sunt labore. Aliqua cillum mollit officia magna occaecat tempor ullamco occaecat aliqua. Magna minim Lorem incididunt consectetur incididunt deserunt cillum ad ipsum elit minim laboris nostrud. Reprehenderit laboris minim duis cillum sint do sit mollit magna mollit reprehenderit consectetur consectetur exercitation.",
+        "priority": 2,
+        "status": 9,
+        "sp": 2,
+        "assignee": 4,
+        "author": 5,
+        "project": 2,
+        "iteration": 1,
+        "created_at": "2015-10-11 03:15:42"
+      },
+      {
+        "id": "5609ab1a73294dc9fd981346",
+        "name": "Terragen",
+        "description": "Culpa esse excepteur ad minim ipsum aliqua. Do est occaecat amet velit cupidatat amet labore nostrud enim excepteur id culpa cupidatat cupidatat. Voluptate excepteur sunt Lorem adipisicing dolor enim esse eu id. Cupidatat dolore excepteur laborum irure minim nulla mollit velit nulla velit do.",
+        "priority": 2,
+        "status": 7,
+        "sp": 7,
+        "assignee": 2,
+        "author": 2,
+        "project": 2,
+        "iteration": 2,
+        "created_at": "2015-01-04 20:58:37"
+      }
+    ],
     "created_at": "2015-12-20 21:32:18"
   },
   {
@@ -15,6 +56,7 @@
     "status": 9,
     "assignee": 5,
     "author": 4,
+    "tasks": [],
     "created_at": "2015-01-13 05:38:44"
   },
   {
@@ -24,6 +66,7 @@
     "status": 8,
     "assignee": 5,
     "author": 4,
+    "tasks": [],
     "created_at": "2015-11-01 09:10:22"
   },
   {
@@ -33,6 +76,7 @@
     "status": 7,
     "assignee": 4,
     "author": 1,
+    "tasks": [],
     "created_at": "2015-11-06 19:20:38"
   },
   {
@@ -42,6 +86,7 @@
     "status": 8,
     "assignee": 4,
     "author": 3,
+    "tasks": [],
     "created_at": "2015-09-13 12:08:38"
   }
 ]

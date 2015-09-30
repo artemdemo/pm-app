@@ -1,7 +1,43 @@
 <main-menu></main-menu>
 
-<div class="row">
-    <div class="large-12 columns">
-        <h3>Projects</h3>
+<div ng-controller="projectsPageController as pp">
+
+    <div class="row">
+        <div class="large-12 columns">
+            <h3>Projects</h3>
+        </div>
     </div>
+
+    <div class="row project-list" data-as-sortable="pp.dragControlListeners" data-ng-model="pp.projects">
+        <div class="project-item"
+             ng-repeat="project in pp.projects"
+             data-as-sortable-item>
+            <div class="project-item_title" data-as-sortable-item-handle>
+                {{ project.name }}
+            </div>
+            <div class="project-item_data">
+                <div class="project-item_created">{{ project.created_at }}</div>
+                <div class="project-item_progressbar"><progressbar value="55"></progressbar></div>
+                <div class="project-item_progress-percent">55%</div>
+            </div>
+            <div class="project-item_description">
+                {{ project.description }}
+            </div>
+            <div class="subtask-list" ng-show="project.tasks.length > 0">
+                <div class="subtask-item" ng-repeat="task in project.tasks track by task.id">
+                    <div class="task-item_title">
+                        <div class="task-item_priority task-item_priority__major"></div>
+                        {{ task.name }}
+                    </div>
+                    <div class="task-item_label">
+                        <span class="info label">ToDo</span>
+                    </div>
+                    <div class="task-item_sp">
+                        SP: {{ task.sp }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

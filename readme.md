@@ -26,7 +26,9 @@ $ gulp build
 
 1. Create database with relevant name
 
-2. Inside of /api folder run following commands:
+2. Inside of /api create your .env file based on .env.example
+
+3. Then run following commands:
 
 Create all tables
 ```
