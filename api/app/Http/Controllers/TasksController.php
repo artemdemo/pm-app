@@ -21,7 +21,7 @@ class TasksController extends Controller {
 
     /**
      * Return all open tasks that current user have access to
-     * Open tasks ara tasks that NOT DONE and NOT CLOSED
+     * Open tasks are tasks that NOT DONE and NOT CLOSED
      */
     public function getOpen()
     {

@@ -4,7 +4,6 @@ module pmApp {
         public static $inject = [
             '$http',
             '$q',
-            '$rootScope',
             'apiService'
         ];
 
@@ -12,7 +11,7 @@ module pmApp {
 
         private tasksLoadingPromise = null;
 
-        constructor(public $http, public $q, public $rootScope, public apiService) {}
+        constructor(public $http, public $q, public apiService) {}
 
         /**
          * Function will update tasks list.
