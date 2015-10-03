@@ -7,5 +7,6 @@ interface SubmenuChildItem {
 interface SubmenuItem {
     title: string;
     onclick: () => {};
+    action?: string;
     submenu: SubmenuChildItem[];
 }

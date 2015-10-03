@@ -30,6 +30,9 @@ module pmApp {
                         resolve: {
                             task: function () {
                                 return scope.task;
+                            },
+                            action: function() {
+                                return item.action
                             }
                         }
                     });
@@ -55,11 +58,13 @@ module pmApp {
                     {
                         'title': 'Open',
                         'onclick': itemClick,
+                        'action': 'open',
                         'submenu': []
                     },
                     {
                         'title': 'Edit',
                         'onclick': itemClick,
+                        'action': 'edit',
                         'submenu': []
                     },
                     {

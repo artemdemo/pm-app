@@ -5,12 +5,17 @@ module pmApp {
             '$scope',
             '$modalInstance',
             'tasksService',
-            'task'
+            'task',
+            'action'
         ];
 
         public tasks;
 
-        constructor (public $scope, public $modalInstance, public tasksService, public task) {
+        constructor (public $scope, public $modalInstance, public tasksService, public task, public action) {
+        }
+
+        public edit() {
+            this.action = 'edit';
         }
 
         public cancel () {
