@@ -7,7 +7,6 @@ module pmApp {
         ];
 
         public tasks;
-        public dragControlListeners;
 
         constructor (public $scope, public tasksService) {
 
@@ -16,13 +15,6 @@ module pmApp {
                     (newTasks) => this.tasks = newTasks,
                     (newTasks) => this.tasks = newTasks
                 );
-
-            this.dragControlListeners = {
-                accept: function (sourceItemHandleScope, destSortableScope) {return true}, //override to determine drag is allowed or not. default is true.
-                itemMoved: function (event) {},
-                orderChanged: function(event) {
-                }.bind(this),
-            };
         }
     }
 

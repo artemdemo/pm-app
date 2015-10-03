@@ -8,10 +8,11 @@
         </div>
     </div>
 
-    <div class="row project-list">
+    <div class="row project-list" data-as-sortable="pp.dragControlListeners" data-ng-model="pp.projects">
         <div class="project-item"
-             ng-repeat="project in pp.projects">
-            <div class="project-item_title">
+             ng-repeat="project in pp.projects"
+             data-as-sortable-item>
+            <div class="project-item_title" data-as-sortable-item-handle>
                 <span class="project-item_title-content">{{ project.name }}</span>
                 <project-submenu></project-submenu>
             </div>
