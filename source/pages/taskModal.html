@@ -1,0 +1,13 @@
+<div>
+    <h4>{{ tm.task.name }}</h4>
+    <div>
+        <div class="task-item_label">
+            <span class="info label">ToDo</span>
+        </div>
+        <div class="task-item_sp ng-binding">sp: {{ tm.task.sp }}</div>
+        <div class="task-item_created ng-binding">{{ tm.task.created_at }}</div>
+    </div>
+
+    <button class="button" ng-click="ok()">OK</button>
+    <a class="close-reveal-modal" ng-click="tm.cancel()">&#215;</a>
+</div>

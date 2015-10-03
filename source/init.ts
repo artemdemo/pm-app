@@ -19,4 +19,5 @@
 
 /*---- Controllers ----*/
 /// <reference path="./controllers/tasksPageController.ts" />
+/// <reference path="./controllers/taskModalController.ts" />
 /// <reference path="./controllers/projectsPageController.ts" />
