@@ -13,7 +13,9 @@
 /// <reference path="./services/projectsService.ts" />
 
 /*---- Directives ----*/
-/// <reference path="./directives/mainMenu/mainMenuDirective.ts" />
+/// <reference path="./directives/mainMenu/mainMenu.ts" />
+/// <reference path="./directives/submenus/taskSubmenu.ts" />
+/// <reference path="./directives/submenus/projectSubmenu.ts" />
 
 /*---- Controllers ----*/
 /// <reference path="./controllers/tasksPageController.ts" />

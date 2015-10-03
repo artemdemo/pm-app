@@ -21,11 +21,14 @@
                 <span class="info label">ToDo</span>
             </div>
             <div class="task-item_sp">
-                SP: {{ task.sp }}
+                sp: {{ task.sp }}
             </div>
             <div class="task-item_created">
                 {{ task.created_at }}
             </div>
+
+            <task-submenu></task-submenu>
+
             <div class="task-item_description">
                 {{ task.description }}
             </div>

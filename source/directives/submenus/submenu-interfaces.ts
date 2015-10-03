@@ -1,0 +1,11 @@
+interface SubmenuChildItem {
+    title: string;
+    onclick: () => {};
+    selected: boolean;
+}
+
+interface SubmenuItem {
+    title: string;
+    onclick: () => {};
+    submenu: SubmenuChildItem[];
+}

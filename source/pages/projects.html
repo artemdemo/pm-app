@@ -1,6 +1,6 @@
 <main-menu></main-menu>
 
-<div ng-controller="projectsPageController as pp">
+<div class="project-list-wrap" ng-controller="projectsPageController as pp">
 
     <div class="row">
         <div class="large-12 columns">
@@ -13,7 +13,8 @@
              ng-repeat="project in pp.projects"
              data-as-sortable-item>
             <div class="project-item_title" data-as-sortable-item-handle>
-                {{ project.name }}
+                <span class="project-item_title-content">{{ project.name }}</span>
+                <project-submenu></project-submenu>
             </div>
             <div class="project-item_data">
                 <div class="project-item_created">{{ project.created_at }}</div>
@@ -33,7 +34,7 @@
                         <span class="info label">ToDo</span>
                     </div>
                     <div class="task-item_sp">
-                        SP: {{ task.sp }}
+                        sp: {{ task.sp }}
                     </div>
                 </div>
             </div>

@@ -89,7 +89,7 @@ gulp.task('copy-build', function () {
 });
 
 gulp.task('watch', function(){
-    gulp.watch('./source/less/**/*.less',['less']);
+    gulp.watch('./source/**/**/*.less',['less']);
     gulp.watch('./source/**/*.ts',['ts', 'concat']);
     gulp.watch('./source/**/*.html',['minify-html', 'copy']);
 });
