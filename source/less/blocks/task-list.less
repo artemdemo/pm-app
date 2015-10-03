@@ -1,64 +1,68 @@
 @import "../variables";
 @import "../mixins";
 
-.task-list-wrap__task-page {
-  padding: 0 10px;
+.task-list {
 }
-
-.task-list {}
 
 .task-item {
-  border: 1px solid #CACACA;
-  border-top: 3px solid #C5C5C5;
-  padding: 3px 5px;
-  border-radius: @item-border-radius;
-  margin-bottom: 10px;
-  position: relative;
+    border: 1px solid #CACACA;
+    border-top: 3px solid #C5C5C5;
+    padding: 3px 5px;
+    border-radius: @item-border-radius;
+    margin-bottom: 10px;
+    position: relative;
 
-  &:last-of-type {
-    margin-bottom: 0;
-  }
+    &:last-of-type {
+        margin-bottom: 0;
+    }
 }
 
-  .task-item_priority {
+.task-item_priority {
     width: 7px;
     height: 7px;
     border-radius: 50%;
     margin: 0 4px 2px 2px;
     display: inline-block;
 
+    &-wrap {
+        .item-inline-data();
+    }
+
     &__minor {
-      background-color: @color-minor;
+        background-color: @color-minor;
     }
     &__major {
-      background-color: @color-major;
+        background-color: @color-major;
     }
     &__critical {
-      background-color: @color-critical;
+        background-color: @color-critical;
     }
-  }
+}
 
-  .task-item_title {
+.task-item_title {
     .item-inline-data();
 
     font-size: @item-font-size;
     font-weight: bold;
-  }
-  .task-item_label {
+}
+
+.task-item_label {
     .item-inline-data()
-  }
-  .task-item_sp {
+}
+
+.task-item_sp {
     .item-inline-data();
 
     font-size: @item-font-size;
-  }
-  .task-item_created {
+}
+
+.task-item_created {
     .item-inline-data();
 
     font-size: @item-font-size;
-  }
+}
 
-  .task-item_description {
+.task-item_description {
     font-size: @item-font-size - 1;
     color: @muted-text-color;
     max-height: 42px;
@@ -66,12 +70,16 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-  }
+}
+
+.task-item_description-full {
+    margin: 10px 0;
+}
 
 @media (max-width: 800px) {
-  .task-item_description {
-    display: block;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
+    .task-item_description {
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }

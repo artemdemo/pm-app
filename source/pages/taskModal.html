@@ -1,13 +1,21 @@
 <div>
-    <h4>{{ tm.task.name }}</h4>
+    <h4>{{ tm.task.name }} <small>{{ tm.task.created_at }}</small></h4>
     <div>
         <div class="task-item_label">
             <span class="info label">ToDo</span>
         </div>
+        <div class="task-item_priority-wrap">
+            <div class="task-item_priority task-item_priority__critical"></div> critical
+        </div>
         <div class="task-item_sp ng-binding">sp: {{ tm.task.sp }}</div>
-        <div class="task-item_created ng-binding">{{ tm.task.created_at }}</div>
+        <div class="task-item_created ng-binding"></div>
+    </div>
+    <div class="task-item_description-full">
+        {{ tm.task.description }}
     </div>
 
-    <button class="button" ng-click="ok()">OK</button>
+    <button class="button small radius" ng-click="tm.save()">Save</button>
+    <button class="button small radius info" ng-click="tm.edit()">Edit</button>
+    <button class="button small radius secondary" ng-click="tm.cancel()">Cancel</button>
     <a class="close-reveal-modal" ng-click="tm.cancel()">&#215;</a>
 </div>

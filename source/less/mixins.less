@@ -2,6 +2,14 @@
  * Item inline data used to put some text data one after another in one line
  */
 .item-inline-data() {
-  padding: 0 15px 0 0;
-  display: inline-block;
+    padding: 0 15px 0 0;
+    display: inline-block;
+}
+
+.clearfix() {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
 }
