@@ -14,13 +14,14 @@ module pmApp {
      */
     angular
         .module('pmApp')
-        .directive('taskSubmenu', ['$modal', 'helper', function($modal, helper){
+        .directive('taskSubmenu', ['$modal', function($modal){
             let link = (scope, el, attr) => {
 
                 /**
                  * Handle click on item menu
                  * Opens modal with task information
                  * @param item {SubmenuItem} - iem from the scope.menu object
+                 * @param $event
                  */
                 let itemClick = function(item: SubmenuItem, $event) {
                     $modal.open({
@@ -32,11 +33,15 @@ module pmApp {
                             }
                         }
                     });
-                    hideSubmenu(null);
                 }.bind(scope);
 
 
-                // Handle click on subitem menu
+                /**
+                 * Handle click on subitem menu
+                 * @param subitem {SubmenuChildItem}
+                 * @param parentItem {SubmenuItem}
+                 * @param $event
+                 */
                 let subitemClick = function(subitem: SubmenuChildItem, parentItem: SubmenuItem, $event) {
                     parentItem.submenu = parentItem.submenu.map(function(item: SubmenuChildItem){
                         item.selected = false;
@@ -45,32 +50,6 @@ module pmApp {
                     subitem.selected = true;
                 }.bind(scope);
 
-                let $body = angular.element(document.body);
-                var hideFunctionAttached = false;
-                var hideSubmenu = function(event) {
-                    switch (true) {
-                        case event && helper.hasClass(event.target, 'submenu-list_item-content'):
-                            break;
-                        case event && helper.hasClass(event.target, 'submenu-list_item'):
-                            break;
-                        default:
-                            el.removeClass('active');
-                            $body.unbind('click', hideSubmenu);
-                            setTimeout(function(){
-                                hideFunctionAttached = false;
-                            });
-                    }
-                };
-
-                el.bind('click', function(){
-                    if (!hideFunctionAttached) {
-                        el.addClass('active');
-                        setTimeout(function(){
-                            $body.bind('click', hideSubmenu)
-                        });
-                        hideFunctionAttached = true;
-                    }
-                });
 
                 scope.menu = [
                     {

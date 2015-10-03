@@ -19,6 +19,7 @@
 /// <reference path="./directives/mainMenu/mainMenu.ts" />
 /// <reference path="./directives/submenus/taskSubmenu.ts" />
 /// <reference path="./directives/submenus/projectSubmenu.ts" />
+/// <reference path="./directives/submenus/submenuOpenHandler.ts" />
 
 /*---- Controllers ----*/
 /// <reference path="./controllers/tasksPageController.ts" />
