@@ -12,6 +12,9 @@
 /// <reference path="./services/tasksService.ts" />
 /// <reference path="./services/projectsService.ts" />
 
+/*---- Providers ----*/
+/// <reference path="./providers/helperProvider.ts" />
+
 /*---- Directives ----*/
 /// <reference path="./directives/mainMenu/mainMenu.ts" />
 /// <reference path="./directives/submenus/taskSubmenu.ts" />

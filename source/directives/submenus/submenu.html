@@ -3,7 +3,7 @@
     <ul class="submenu-list submenu-list__wrapper">
         <li ng-repeat="item in menu"
             class="submenu-list_item"
-            ng-click="item.onclick(item)"
+            ng-click="item.onclick(item, $event)"
             ng-class="{'submenu-list_item__has-children' : item.submenu.length > 0}">
 
             <div class="submenu-list_item-content">{{ item.title }}</div>
@@ -12,7 +12,7 @@
                 ng-show="item.submenu.length > 0">
                 <li ng-repeat="subitem in item.submenu"
                     class="submenu-list_item"
-                    ng-click="subitem.onclick(subitem, item)"
+                    ng-click="subitem.onclick(subitem, item, $event)"
                     ng-class="{'submenu-list_item__selected' : subitem.selected}">
                     <div class="submenu-list_item-content">{{ subitem.title }}</div>
                 </li>
