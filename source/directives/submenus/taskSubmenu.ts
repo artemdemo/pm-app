@@ -14,7 +14,16 @@ module pmApp {
      */
     angular
         .module('pmApp')
-        .directive('taskSubmenu', ['$modal', function($modal){
+        .directive('taskSubmenu',
+        [
+            '$modal',
+            'taskModalHtmlLinkConstant',
+            'taskModalControllerConstant',
+        function(
+            $modal,
+            taskModalHtmlLinkConstant,
+            taskModalControllerConstant
+        ) {
             let link = (scope, el, attr) => {
 
                 /**
@@ -25,8 +34,8 @@ module pmApp {
                  */
                 let itemClick = function(item: SubmenuItem, $event) {
                     $modal.open({
-                        templateUrl: 'html/taskModal.html',
-                        controller: 'taskModalController as tm',
+                        templateUrl: taskModalHtmlLinkConstant,
+                        controller: taskModalControllerConstant,
                         resolve: {
                             task: function () {
                                 return scope.task;

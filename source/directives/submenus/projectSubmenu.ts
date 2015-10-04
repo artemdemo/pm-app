@@ -22,6 +22,11 @@ module pmApp {
 
                 scope.menu = [
                     {
+                        'title': 'Open',
+                        'onclick': itemClick,
+                        'submenu': []
+                    },
+                    {
                         'title': 'Edit',
                         'onclick': itemClick,
                         'submenu': []

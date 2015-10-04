@@ -9,9 +9,32 @@ module pmApp {
             'action'
         ];
 
-        public tasks;
+        public taskEditCopy: Task;
 
-        constructor (public $scope, public $modalInstance, public tasksService, public task, public action) {
+        /**
+         *
+         * @param $scope
+         * @param $modalInstance
+         * @param tasksService
+         * @param task
+         * @param action {string} - will contain action that user want apply on the task
+         *      Possible values:
+         *      'new' - adding new task
+         *      'edit' - editing task
+         *      'open' - viewing task data
+         */
+        constructor (
+            public $scope,
+            public $modalInstance,
+            public tasksService,
+            public task,
+            public action
+        ) {
+            if ( action == 'new' ) {
+                this.taskEditCopy = tasksService.getEmptyTask();
+            } else {
+                this.taskEditCopy = angular.copy(task);
+            }
         }
 
         public edit() {

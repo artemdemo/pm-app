@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="task-item-edit" ng-show="tm.action == 'edit'">
+    <div class="task-item-edit" ng-show="tm.action != 'edit'">
         <div>
             <label>Task name:
                 <input type="text" class="task-item-edit_title" ng-model="tm.taskEditCopy.name">
@@ -78,7 +78,7 @@
     <button
             class="button small radius"
             ng-click="tm.save()"
-            ng-show="tm.action == 'edit'">Save</button>
+            ng-show="tm.action != 'edit'">Save</button>
     <button
             class="button small radius info"
             ng-click="tm.edit()"

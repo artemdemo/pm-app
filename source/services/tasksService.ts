@@ -79,7 +79,7 @@ module pmApp {
          * Return empty task data
          * It will be used in modal
          */
-        public static getEmptyTask(): Task {
+        public getEmptyTask(): Task {
             let newTask:Task;
             let date:moment.Moment = moment(new Date());
 
@@ -94,7 +94,7 @@ module pmApp {
                 description: ''
             };
 
-            return newTask;
+            return angular.copy(newTask);
         }
     }
 
