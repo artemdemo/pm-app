@@ -2,7 +2,10 @@
 /// <reference path="./d.ts/angular-ui-router/angular-ui-router.d.ts" />
 
 
+/// <reference path="./interfaces.ts" />
+
 /// <reference path="./app.ts" />
+/// <reference path="./constants.ts" />
 
 /*---- Factories ----*/
 /// <reference path="./factories/iterationsFactory.ts" />
