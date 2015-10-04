@@ -1,27 +1,29 @@
 <div class="row">
-    <h4 ng-show="tm.action == 'open'">
-        {{ tm.task.name }}
-        <small>{{ tm.task.created_at }}</small>
-    </h4>
     <div ng-show="tm.action == 'open'">
-        <div class="task-item_label">
-            <span class="info label">ToDo</span>
+        <h4>
+            {{ tm.task.name }}
+            <small>{{ tm.task.created_at.date }} {{ tm.task.created_at.time }}</small>
+        </h4>
+        <div>
+            <div class="task-item_label">
+                <span class="info label">ToDo</span>
+            </div>
+            <div class="task-item_priority-wrap">
+                <div class="task-item_priority task-item_priority__critical"></div> critical
+            </div>
+            <div class="task-item_sp ng-binding">sp: {{ tm.task.sp }}</div>
+            <div class="task-item_created ng-binding"></div>
         </div>
-        <div class="task-item_priority-wrap">
-            <div class="task-item_priority task-item_priority__critical"></div> critical
+        <div class="task-item_description-full"
+             ng-show="tm.action == 'open'">
+            {{ tm.task.description }}
         </div>
-        <div class="task-item_sp ng-binding">sp: {{ tm.task.sp }}</div>
-        <div class="task-item_created ng-binding"></div>
-    </div>
-    <div class="task-item_description-full"
-         ng-show="tm.action == 'open'">
-        {{ tm.task.description }}
     </div>
 
     <div class="task-item-edit" ng-show="tm.action == 'edit'">
         <div>
             <label>Task name:
-                <input type="text" class="task-item-edit_title" ng-model="tm.task.name">
+                <input type="text" class="task-item-edit_title" ng-model="tm.taskEditCopy.name">
             </label>
         </div>
         <div class="row">
@@ -31,14 +33,14 @@
                         <span class="prefix">SP</span>
                     </div>
                     <div class="small-9 columns">
-                        <input type="number" ng-model="tm.task.sp" placeholder="Story Points">
+                        <input type="number" ng-model="tm.taskEditCopy.sp" placeholder="Story Points">
                     </div>
                 </div>
             </div>
             <div class="large-3 medium-6 small-6 columns">
                 <div class="row collapse prefix-radius">
                     <div class="small-6 medium-4 columns">
-                        <span class="prefix">Priority</span>
+                        <span class="prefix">Status</span>
                     </div>
                     <div class="small-6 medium-8 columns">
                         <select>
@@ -51,17 +53,24 @@
                 </div>
             </div>
             <div class="large-3 medium-6 small-6 columns">
-                <select>
-                    <option>Minor</option>
-                    <option>Major</option>
-                    <option>Critical</option>
-                </select>
+                <div class="row collapse prefix-radius">
+                    <div class="small-6 medium-4 columns">
+                        <span class="prefix">Priority</span>
+                    </div>
+                    <div class="small-6 medium-8 columns">
+                        <select>
+                            <option>Minor</option>
+                            <option>Major</option>
+                            <option>Critical</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="large-3 medium-6 small-6 columns">&nbsp;</div>
         </div>
         <div>
             <label>Description:
-                <textarea class="task-item-edit_description" ng-model="tm.task.description"></textarea>
+                <textarea class="task-item-edit_description" ng-model="tm.taskEditCopy.description"></textarea>
             </label>
         </div>
     </div>

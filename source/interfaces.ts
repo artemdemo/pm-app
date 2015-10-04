@@ -8,7 +8,11 @@
  */
 interface Task {
     name: string;
-    created_at: Date;
+    created_at: {
+        date: string;
+        time: string;
+        raw: moment.Moment;
+    };
     sp: number;
     description: string;
 }

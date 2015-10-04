@@ -51,6 +51,7 @@ gulp.task('minify-html', function() {
 gulp.task('concat', function(){
     return gulp.src([
         './front/js/angular.min.js',
+        './front/js/moment.min.js',
 
         './front/js/angular-ui-router.min.js',
         './front/js/mm-foundation-tpls.min.js',
@@ -79,6 +80,7 @@ gulp.task('copy-build', function () {
         .pipe(gulp.dest('./front/fonts'));
     gulp
         .src([
+            './node_modules/moment/min/moment.min.js',
             './node_modules/angular/angular.min.js',
             './node_modules/angular-foundation/mm-foundation-tpls.min.js',
             './node_modules/angular-ui-router/release/angular-ui-router.min.js',

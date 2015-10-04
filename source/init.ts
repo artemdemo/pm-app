@@ -1,5 +1,6 @@
 /// <reference path="./d.ts/angularjs/angular.d.ts" />
 /// <reference path="./d.ts/angular-ui-router/angular-ui-router.d.ts" />
+/// <reference path="./d.ts/moment/moment.d.ts" />
 
 
 /// <reference path="./interfaces.ts" />
