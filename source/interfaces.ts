@@ -4,7 +4,7 @@
  */
 
 /**
- * Inerface for the single task
+ * Interface for the single task
  */
 interface Task {
     name: string;

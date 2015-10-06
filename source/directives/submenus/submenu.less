@@ -49,14 +49,14 @@ project-submenu {
     right: 5px;
 }
 
-.submenu-list_item {
+.submenu-list__item {
     padding: 0 5px;
 
-    &:last-of-type > .submenu-list_item-content {
+    &:last-of-type > .submenu-list__item-content {
         border-bottom-width: 0;
     }
 
-    &.submenu-list_item__has-children > .submenu-list_item-content {
+    &.submenu-list__item_has-children > .submenu-list__item-content {
         color: gray;
         padding: 5px 5px 0 5px;
         border-bottom-width: 1px;
@@ -71,14 +71,14 @@ project-submenu {
         background-color: @submenu-bg-color__hover;
     }
 
-    &.submenu-list_item__has-children:active,
-    &.submenu-list_item__has-children:hover {
+    &.submenu-list__item_has-children:active,
+    &.submenu-list__item_has-children:hover {
         box-shadow: none;
         background: @submenu-bg-color;
     }
 }
 
-.submenu-list_item__selected {
+.submenu-list_item_selected {
     position: relative;
 
     &:after {
@@ -96,7 +96,7 @@ project-submenu {
     }
 }
 
-.submenu-list_item-content {
+.submenu-list__item-content {
     border-top: 0;
     border-right: 0;
     border-left: 0;

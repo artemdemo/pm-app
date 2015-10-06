@@ -2,19 +2,19 @@
     <i class="fa fa-cog"></i>
     <ul class="submenu-list submenu-list__wrapper">
         <li ng-repeat="item in menu"
-            class="submenu-list_item"
+            class="submenu-list__item"
             ng-click="item.onclick(item, $event)"
-            ng-class="{'submenu-list_item__has-children' : item.submenu.length > 0}">
+            ng-class="{'submenu-list__item_has-children' : item.submenu.length > 0}">
 
-            <div class="submenu-list_item-content">{{ item.title }}</div>
+            <div class="submenu-list__item-content">{{ item.title }}</div>
 
             <ul class="submenu-list submenu-list__child"
                 ng-show="item.submenu.length > 0">
                 <li ng-repeat="subitem in item.submenu"
-                    class="submenu-list_item"
+                    class="submenu-list__item"
                     ng-click="subitem.onclick(subitem, item, $event)"
-                    ng-class="{'submenu-list_item__selected' : subitem.selected}">
-                    <div class="submenu-list_item-content">{{ subitem.title }}</div>
+                    ng-class="{'submenu-list__item_selected' : subitem.selected}">
+                    <div class="submenu-list__item-content">{{ subitem.title }}</div>
                 </li>
             </ul>
         </li>

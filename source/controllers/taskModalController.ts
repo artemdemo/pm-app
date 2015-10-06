@@ -30,6 +30,7 @@ module pmApp {
             public task,
             public action
         ) {
+
             if ( action == 'new' ) {
                 this.taskEditCopy = tasksService.getEmptyTask();
             } else {

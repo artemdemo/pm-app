@@ -8,29 +8,29 @@
     margin-bottom: 10px;
 }
 
-.project-item_title {
+.project-item__title {
     padding: 3px 5px;
     background-color: gray;
     border-top-left-radius: @item-border-radius;
     border-top-right-radius: @item-border-radius;
 }
 
-.project-item_title-content {
+.project-item__title-content {
     color: white;
     font-weight: bold;
 }
 
-.project-item_data {
+.project-item__data {
     font-size: @item-font-size - 2;
     padding: 3px 5px 0 5px;
     color: @muted-text-color;
 }
 
-.project-item_created {
+.project-item__created {
     .item-inline-data();
 }
 
-.project-item_progressbar {
+.project-item__progressbar {
     .item-inline-data();
     min-width: 200px;
     height: 22px;
@@ -53,11 +53,11 @@
     }
 }
 
-.project-item_progress-percent {
+.project-item__progress-percent {
     .item-inline-data();
 }
 
-.project-item_description {
+.project-item__description {
     padding: 5px 5px;
     max-height: 54px;
     overflow: hidden;
@@ -67,7 +67,7 @@
 }
 
 @media (max-width: 800px) {
-    .project-item_description {
+    .project-item__description {
         display: block;
         white-space: nowrap;
         text-overflow: ellipsis;

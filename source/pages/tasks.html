@@ -3,8 +3,8 @@
 <div class="page-wrap" ng-controller="tasksPageController as tp">
 
     <div class="row header-control">
-        <h3 class="header-control_title">Tasks</h3>
-        <div class="header-control_control-elements">
+        <h3 class="header-control__title">Tasks</h3>
+        <div class="header-control__control-elements">
             <button class="button radius info button-with-icon" ng-click="tp.newTask()">
                 <i class="fa fa-pencil-square-o"></i>
             </button>
@@ -15,32 +15,32 @@
         <div class="task-item"
              ng-repeat="task in tp.tasks track by task.id"
              ng-class="{ 'task-item__has-substasks': task.subtasks.length > 0 }">
-            <div class="task-item_title">
-                <div class="task-item_priority task-item_priority__minor"></div>
+            <div class="task-item__title">
+                <div class="task-item__priority task-item__priority_minor"></div>
                 {{ task.name }}
             </div>
-            <div class="task-item_label">
+            <div class="task-item__label">
                 <span class="info label">ToDo</span>
             </div>
-            <div class="task-item_sp">
+            <div class="task-item__sp">
                 sp: {{ task.sp }}
             </div>
-            <div class="task-item_created">
-                {{ task.created_at }}
+            <div class="task-item__created">
+                {{ task.created_at.date }} {{ task.created_at.time }}
             </div>
 
             <task-submenu data-task="task"></task-submenu>
 
-            <div class="task-item_description">
+            <div class="task-item__description">
                 {{ task.description }}
             </div>
             <div class="subtask-list" ng-show="task.subtasks.length > 0">
                 <div class="subtask-item" ng-repeat="subtask in task.subtasks track by subtask.id">
-                    <div class="task-item_title">
-                        <div class="task-item_priority task-item_priority__major"></div>
+                    <div class="task-item__title">
+                        <div class="task-item__priority task-item__priority_major"></div>
                         {{ subtask.name }}
                     </div>
-                    <div class="subtask-item_description">
+                    <div class="subtask-item__description">
                         {{ subtask.description }}
                     </div>
                 </div>

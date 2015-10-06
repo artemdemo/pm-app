@@ -1,0 +1,43 @@
+<div class="row">
+    <div ng-show="pm.action == 'open'">
+        <h4>
+            {{ pm.project.name }}
+            <small>{{ pm.project.created_at.date }} {{ pm.project.created_at.time }}</small>
+        </h4>
+        <div>
+            <div class="task-item__priority-wrap">
+                <div class="task-item__priority task-item_priority_critical"></div> critical
+            </div>
+            <div class="task-item__sp ng-binding">sp: {{ pm.project.sp }}</div>
+            <div class="task-item__created ng-binding"></div>
+        </div>
+        <div class="task-item__description-full"
+             ng-show="pm.action == 'open'">
+            {{ pm.project.description }}
+        </div>
+    </div>
+
+    <div class="task-item-edit" ng-show="pm.action != 'open'">
+        <div>
+            <label>Project name:
+                <input type="text" class="task-item-edit__title" ng-model="pm.projectEditCopy.name">
+            </label>
+        </div>
+        <div>
+            <label>Description:
+                <textarea class="task-item-edit__description" ng-model="pm.projectEditCopy.description"></textarea>
+            </label>
+        </div>
+    </div>
+
+    <button
+            class="button small radius"
+            ng-click="pm.save()"
+            ng-show="pm.action != 'edit'">Save</button>
+    <button
+            class="button small radius info"
+            ng-click="pm.edit()"
+            ng-show="pm.action == 'open'">Edit</button>
+    <button class="button small radius secondary" ng-click="pm.cancel()">Cancel</button>
+    <a class="close-reveal-modal" ng-click="pm.cancel()">&#215;</a>
+</div>
