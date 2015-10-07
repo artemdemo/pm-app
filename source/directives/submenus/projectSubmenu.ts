@@ -12,23 +12,44 @@ module pmApp {
      */
     angular
         .module('pmApp')
-        .directive('projectSubmenu', [function(){
+        .directive('projectSubmenu', [
+            '$modal',
+            'projectModalHtmlLinkConstant',
+            'projectModalControllerConstant',
+        function(
+            $modal,
+            projectModalHtmlLinkConstant,
+            projectModalControllerConstant
+        ){
             let link = (scope, el, attr) => {
 
                 // Handle click on item menu
                 let itemClick = function(item: SubmenuItem) {
-                    console.log(this)
+                    $modal.open({
+                        templateUrl: projectModalHtmlLinkConstant,
+                        controller: projectModalControllerConstant,
+                        resolve: {
+                            project: function () {
+                                return scope.project;
+                            },
+                            action: function() {
+                                return item.action
+                            }
+                        }
+                    });
                 }.bind(scope);
 
                 scope.menu = [
                     {
                         'title': 'Open',
                         'onclick': itemClick,
+                        'action': 'open',
                         'submenu': []
                     },
                     {
                         'title': 'Edit',
                         'onclick': itemClick,
+                        'action': 'edit',
                         'submenu': []
                     }
                 ];
@@ -36,7 +57,9 @@ module pmApp {
             return {
                 link: link,
                 templateUrl: 'html/submenu.html',
-                scope: {},
+                scope: {
+                    project: '='
+                },
                 restrict: 'E'
             }
         }]);

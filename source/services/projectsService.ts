@@ -59,6 +59,28 @@ module pmApp {
 
             return deferred.promise;
         }
+
+        /**
+         * Return empty project data
+         * It will be used in modal
+         */
+        public getEmptyProject(): Project {
+            let newProject:Project;
+            let date:moment.Moment = moment(new Date());
+
+            newProject = <Project>{
+                name: '',
+                created_at: {
+                    date: date.format('YYYY-MM-DD'),
+                    time: date.format('HH:mm'),
+                    raw: date
+                },
+                sp: null,
+                description: ''
+            };
+
+            return angular.copy(newProject);
+        }
     }
 
     angular

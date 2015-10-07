@@ -55,7 +55,7 @@ module pmApp {
                  * @param $event
                  */
                 let subitemClick = function(subitem: SubmenuChildItem, parentItem: SubmenuItem, $event) {
-                    parentItem.submenu = parentItem.submenu.map(function(item: SubmenuChildItem){
+                    parentItem.submenu = parentItem.submenu.map((item: SubmenuChildItem) => {
                         item.selected = false;
                         return item;
                     });

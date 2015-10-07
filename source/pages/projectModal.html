@@ -4,12 +4,9 @@
             {{ pm.project.name }}
             <small>{{ pm.project.created_at.date }} {{ pm.project.created_at.time }}</small>
         </h4>
-        <div>
-            <div class="task-item__priority-wrap">
-                <div class="task-item__priority task-item_priority_critical"></div> critical
-            </div>
-            <div class="task-item__sp ng-binding">sp: {{ pm.project.sp }}</div>
-            <div class="task-item__created ng-binding"></div>
+        <div class="project-item__data project-item__data_modal">
+            <div class="project-item__progressbar"><progressbar value="55"></progressbar></div>
+            <div class="project-item__progress-percent">55%</div>
         </div>
         <div class="task-item__description-full"
              ng-show="pm.action == 'open'">
@@ -33,7 +30,7 @@
     <button
             class="button small radius"
             ng-click="pm.save()"
-            ng-show="pm.action != 'edit'">Save</button>
+            ng-show="pm.action != 'open'">Save</button>
     <button
             class="button small radius info"
             ng-click="pm.edit()"

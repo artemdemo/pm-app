@@ -16,3 +16,17 @@ interface Task {
     sp: number;
     description: string;
 }
+
+
+/**
+ * Interface for the single project
+ */
+interface Project {
+    name: string;
+    created_at: {
+        date: string;
+        time: string;
+        raw: moment.Moment;
+    };
+    description: string;
+}

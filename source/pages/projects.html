@@ -5,7 +5,7 @@
     <div class="row header-control">
         <h3 class="header-control__title">Projects</h3>
         <div class="header-control__control-elements">
-            <button class="button radius info button-with-icon">
+            <button class="button radius info button-with-icon" ng-click="pp.newProject()">
                 <i class="fa fa-pencil-square-o"></i>
             </button>
         </div>
@@ -16,7 +16,7 @@
              ng-repeat="project in pp.projects">
             <div class="project-item__title">
                 <span class="project-item__title-content">{{ project.name }}</span>
-                <project-submenu></project-submenu>
+                <project-submenu  data-project="project"></project-submenu>
             </div>
             <div class="project-item__data">
                 <div class="project-item__created">{{ project.created_at }}</div>
