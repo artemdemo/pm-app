@@ -3,7 +3,7 @@
 use Validator;
 use Illuminate\Http\Request;
 
-class ProjectsController extends Controller {
+class IterationsController extends Controller {
 
     /**
      * Create a new controller instance.
@@ -20,12 +20,12 @@ class ProjectsController extends Controller {
      */
     public function getIndex()
     {
-        return 'This is projects controller';
+        return 'This is iterations controller';
     }
 
 
     /**
-     * Add project to the DB
+     * Add iteration to the DB
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -38,6 +38,9 @@ class ProjectsController extends Controller {
         $rules = array(
             'name'=>'required',
             'description'=>'required',
+            'start'=>'required|date',
+            'duration'=>'required|integer',
+            'sp_available'=>'required|integer',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -53,13 +56,16 @@ class ProjectsController extends Controller {
 
             // $user = User::find( $user_id );
 
-            $project = new Project;
-            $project -> name = $request -> get('name');
-            $project -> description = $request -> get('description');
-            $project -> save();
+            $iteration = new Iteration;
+            $iteration -> name = $request -> get('name');
+            $iteration -> description = $request -> get('description');
+            $iteration -> start = $request -> get('start');
+            $iteration -> duration = $request -> get('duration');
+            $iteration -> sp_available = $request -> get('sp_available');
+            $iteration -> save();
 
             return response() -> json(array(
-                'id' => $project -> id,
+                'id' => $iteration -> id,
                 'ErrorStatus' => 0
             ), 201);
         }
@@ -67,7 +73,7 @@ class ProjectsController extends Controller {
 
 
     /**
-     * Update project in the DB
+     * Update iteration in the DB
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -81,6 +87,9 @@ class ProjectsController extends Controller {
             'id'=>'required|integer',
             'name'=>'required',
             'description'=>'required',
+            'start'=>'required|date',
+            'duration'=>'required|integer',
+            'sp_available'=>'required|integer',
         );
 
         $validator = Validator::make($request->all(), $rules);
@@ -96,13 +105,16 @@ class ProjectsController extends Controller {
 
             // $user = User::find( $user_id );
 
-            $project = Project::find($request -> get('id'));
-            $project -> name = $request -> get('name');
-            $project -> description = $request -> get('description');
-            $project -> save();
+            $iteration = Iteration::find($request -> get('id'));
+            $iteration -> name = $request -> get('name');
+            $iteration -> description = $request -> get('description');
+            $iteration -> start = $request -> get('start');
+            $iteration -> duration = $request -> get('duration');
+            $iteration -> sp_available = $request -> get('sp_available');
+            $iteration -> save();
 
             return response() -> json(array(
-                'id' => $project -> id,
+                'id' => $iteration -> id,
                 'ErrorStatus' => 0
             ), 201);
         }
@@ -110,12 +122,12 @@ class ProjectsController extends Controller {
 
 
     /**
-     * Delete project
+     * Delete iteration
      *
      * @param null $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteProject($id = null)
+    public function deleteIteration($id = null)
     {
         if (!$id) {
             return response() -> json(array(
@@ -125,8 +137,8 @@ class ProjectsController extends Controller {
         } else {
             // $user = User::find( $user_id );
 
-            $project = Project::find($id);
-            $project -> delete();
+            $iteration = Iteration::find($id);
+            $iteration -> delete();
         }
 
         return response() -> json(array(
@@ -143,11 +155,11 @@ class ProjectsController extends Controller {
         // $response = file_get_contents('projects-example.json');
         // return response()->json( json_decode($response) );
 
-        $projects = Project::where('author', 0)
+        $iterations = Iteration::where('author', 0)
             -> orderBy('id', 'desc')
             -> get();
 
-        return response()->json( $projects );
+        return response()->json( $iterations );
     }
 
 }

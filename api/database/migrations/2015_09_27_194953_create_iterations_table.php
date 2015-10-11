@@ -18,7 +18,7 @@ class CreateIterationsTable extends Migration
             $table->string('description');
             $table->dateTime('start');
             $table->integer('duration');
-            $table->integer('sp-available');
+            $table->integer('sp_available');
             $table->integer('author');
             $table->timestamps();
         });

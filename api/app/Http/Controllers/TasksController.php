@@ -87,7 +87,7 @@ class TasksController extends Controller {
         // if ( ! $user_id ) return response() -> json( $this -> AUTH_ERROR, 401 );
 
         $rules = array(
-            'id'=>'required|numeric',
+            'id'=>'required|integer',
             'name'=>'required',
             'description'=>'required',
             'priority'=>'required|numeric',
