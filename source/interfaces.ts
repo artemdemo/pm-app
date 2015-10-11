@@ -7,13 +7,16 @@
  * Interface for the single task
  */
 interface Task {
+    id;
+    priority;
+    sp;
+    status;
     name: string;
     created_at: {
         date: string;
         time: string;
         raw: moment.Moment;
     };
-    sp: number;
     description: string;
 }
 

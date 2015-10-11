@@ -19,7 +19,7 @@ module pmApp {
          * @param relativeUrl
          * @returns {string}
          */
-        getAbsoluteUrl (relativeUrl:string):string {
+        getAbsoluteUrl(relativeUrl:string):string {
             return this.apiBaseUrl + relativeUrl;
         }
     }

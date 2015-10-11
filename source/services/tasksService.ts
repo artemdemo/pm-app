@@ -23,8 +23,12 @@ module pmApp {
             let tasks:Task[] = [];
 
             for (var i = 0, len = newTasks.length; i < len; i++) {
-                let task = newTasks[i];
+                let task: Task = newTasks[i];
                 let date = moment(task.created_at);
+                task.id = parseInt(task.id);
+                task.priority = parseInt(task.priority);
+                task.sp = parseInt(task.sp);
+                task.status = parseInt(task.status);
                 task.created_at = {
                     date: date.format('YYYY-MM-DD'),
                     time: date.format('HH:mm'),
@@ -106,7 +110,27 @@ module pmApp {
          * @param task {Task}
          */
         public saveTask(task) {
-            console.log(task)
+            let deferred = this.$q.defer();
+
+            if ( task.id ) {
+                this.$http.post(
+                    this.apiService.getAbsoluteUrl('/tasks/update'),
+                    task
+                ).then(
+                    (data) => deferred.resolve(data),
+                    (data) => deferred.reject(data)
+                )
+            } else {
+                this.$http.post(
+                    this.apiService.getAbsoluteUrl('/tasks/add'),
+                    task
+                ).then(
+                    (data) => deferred.resolve(data),
+                    (data) => deferred.reject(data)
+                )
+            }
+
+            return deferred.promise;
         }
     }
 
