@@ -29,18 +29,16 @@
             <div class="subtask-list" ng-show="project.tasks.length > 0">
                 <div class="subtask-item" ng-repeat="task in project.tasks track by task.id">
 
-
-
                     <div class="task-item__title">
-                        <div class="task-item__priority task-item__priority_major"></div>
+                        <div class="item-stat-priority item-stat-priority_major"></div>
                         {{ task.name }}
                     </div>
 
-                    <div class="items-stat">
-                        <div class="items-stat__label">
+                    <div class="item-stat">
+                        <div class="item-stat__label">
                             <span class="info label">ToDo</span>
                         </div>
-                        <div class="items-stat__sp">
+                        <div class="item-stat__sp">
                             sp: {{ task.sp }}
                         </div>
                     </div>

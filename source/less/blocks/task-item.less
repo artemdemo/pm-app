@@ -21,29 +21,6 @@
     font-weight: bold;
 }
 
-.task-item__priority {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    margin: 0 4px 2px 2px;
-    display: inline-block;
-
-    &-wrap {
-        .item-inline-data();
-    }
-
-    &_minor {
-        background-color: @color-minor;
-    }
-    &_major {
-        background-color: @color-major;
-    }
-    &_critical {
-        background-color: @color-critical;
-    }
-}
-
-
 .task-item__description {
     font-size: @item-font-size - 1;
     color: @muted-text-color;
