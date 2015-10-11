@@ -54,7 +54,5 @@ gulp.task('watch-livereload', function(){
     startExpress();
     startLivereload();
 
-    gulp.watch('./source/**/**/*.less',notifyLivereload);
-    gulp.watch('./source/**/*.ts',notifyLivereload);
-    gulp.watch('./source/**/*.html',notifyLivereload);
+    gulp.watch('./source/**/*',notifyLivereload);
 });

@@ -1,4 +1,5 @@
-var gulp = require('gulp');
+var gulp = require('gulp'),
+    gutil = require('gulp-util');
 
 
 require('./gulp/livereload.js');
@@ -10,6 +11,10 @@ require('./gulp/copy.js');
 require('./gulp/copy-build.js');
 
 
+gulp.task('default-info', function(){
+    gutil.log(gutil.colors.yellow('[watching]'),'Frontend url:', gutil.colors.blue('http://localhost/pm/front/'));
+});
+
 gulp.task('watch', function(){
     gulp.watch('./source/**/**/*.less',['less']);
     gulp.watch('./source/**/*.ts',['ts', 'concat']);
@@ -18,5 +23,5 @@ gulp.task('watch', function(){
 
 
 gulp.task('build', ['less', 'ts', 'copy-build', 'minify-html', 'copy', 'concat']);
-gulp.task('default', ['build', 'watch']);
-gulp.task('serve', ['default', 'watch-livereload']);
+gulp.task('serve', ['build', 'watch', 'watch-livereload']);
+gulp.task('default', ['build', 'watch', 'default-info']);
