@@ -65,7 +65,6 @@ class TasksController extends Controller {
             $task -> priority = $request -> get('priority');
             $task -> status = $request -> get('status');
             $task -> sp = $request -> get('sp');
-
             $task -> save();
 
             return response() -> json(array(
@@ -115,7 +114,6 @@ class TasksController extends Controller {
             $task -> priority = $request -> get('priority');
             $task -> status = $request -> get('status');
             $task -> sp = $request -> get('sp');
-
             $task -> save();
 
             return response() -> json(array(
@@ -124,6 +122,7 @@ class TasksController extends Controller {
             ), 201);
         }
     }
+
 
     /**
      * Delete task
