@@ -18,7 +18,6 @@
     "gulp-ignore": "^1.2.1",
     "gulp-less": "^3.0.3",
     "gulp-minify-html": "^1.0.4",
-    "gulp-sourcemaps": "^1.5.2",
     "gulp-typescript": "^2.9.0",
     "gulp-util": "^3.0.6",
     "less-plugin-autoprefix": "^1.5.1",
