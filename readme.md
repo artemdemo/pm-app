@@ -24,6 +24,12 @@ $ npm install
 $ gulp
 ```
 
+You can also use build in livereload:
+```
+$ gulp serve
+```
+
+
 ### Back end
 
 1. Create database with relevant name
