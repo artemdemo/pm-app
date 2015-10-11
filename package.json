@@ -8,6 +8,8 @@
     "angular-foundation": "^0.7.0",
     "angular-resource": "^1.4.6",
     "angular-ui-router": "^0.2.15",
+    "connect-livereload": "^0.5.3",
+    "express": "^4.13.3",
     "font-awesome": "^4.4.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
@@ -18,7 +20,9 @@
     "gulp-minify-html": "^1.0.4",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-typescript": "^2.9.0",
+    "gulp-util": "^3.0.6",
     "less-plugin-autoprefix": "^1.5.1",
-    "moment": "^2.10.6"
+    "moment": "^2.10.6",
+    "tiny-lr": "^0.2.0"
   }
 }

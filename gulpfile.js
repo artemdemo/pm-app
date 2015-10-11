@@ -9,6 +9,47 @@ var gulp = require('gulp'),
 var LessPluginAutoPrefix = require('less-plugin-autoprefix'),
     autoprefix= new LessPluginAutoPrefix({ browsers: ['last 2 versions'] });
 
+var EXPRESS_PORT = 4000;
+var EXPRESS_ROOT = __dirname + '/front';
+var LIVERELOAD_PORT = 35729;
+
+// Let's make things more readable by
+// encapsulating each part's setup
+// in its own method
+function startExpress() {
+
+    var express = require('express');
+    var app = express();
+    app.use(require('connect-livereload')());
+    app.use(express.static(EXPRESS_ROOT));
+    app.listen(EXPRESS_PORT);
+}
+
+// We'll need a reference to the tinylr
+// object to send notifications of file changes
+// further down
+var lr;
+function startLivereload() {
+
+    lr = require('tiny-lr')();
+    lr.listen(LIVERELOAD_PORT);
+}
+
+// Notifies livereload of changes detected
+// by `gulp.watch()`
+function notifyLivereload(event) {
+
+    // `gulp.watch()` events provide an absolute path
+    // so we need to make it relative to the server root
+    var fileName = require('path').relative(EXPRESS_ROOT, event.path);
+
+    lr.changed({
+        body: {
+            files: [fileName]
+        }
+    });
+}
+
 gulp.task('less', function(){
     return gulp.src('./source/less/main.less')
         .pipe(less({
@@ -91,9 +132,16 @@ gulp.task('copy-build', function () {
 });
 
 gulp.task('watch', function(){
+    startExpress();
+    startLivereload();
+
     gulp.watch('./source/**/**/*.less',['less']);
     gulp.watch('./source/**/*.ts',['ts', 'concat']);
     gulp.watch('./source/**/*.html',['minify-html', 'copy']);
+
+    gulp.watch('./source/**/**/*.less',notifyLivereload);
+    gulp.watch('./source/**/*.ts',notifyLivereload);
+    gulp.watch('./source/**/*.html',notifyLivereload);
 });
 
 gulp.task('build', ['less', 'ts', 'copy-build', 'minify-html', 'copy', 'concat']);
