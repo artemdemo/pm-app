@@ -2,9 +2,17 @@ module pmApp {
     class apiService {
         public static $inject = [];
 
-        private apiBaseUrl = '../api/public';
+        private apiBaseUrl: string;
 
-        constructor() {}
+        constructor() {
+            switch (true) {
+                case /localhost/.exec(location.hostname) != null:
+                    this.apiBaseUrl = 'http://localhost/pm/api/public';
+                    break;
+                default:
+                    this.apiBaseUrl = '../api/public';
+            }
+        }
 
         /**
          * Return absolute url based on given relative
