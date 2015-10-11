@@ -1,3 +1,5 @@
+(English version)[https://github.com/artemdemo/pm-app/blob/master/readme.md]
+
 # Приложение для управления проектоми и задачами
 
 Приложение для управления проектами и задачами. Это больше скрам, нежели канбан,
@@ -8,6 +10,8 @@
 
 * AngularJS v.1.4.6 (with TypeScript v.1.6)
 * Laravel v.5.1.11
+
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/_img/pmapp.png "Приложение для управления проектоми и задачами")
 
 ## Инсталляция
 
