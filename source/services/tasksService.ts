@@ -78,12 +78,15 @@ module pmApp {
         /**
          * Return empty task data
          * It will be used in modal
+         *
+         * @returns {Task}
          */
         public getEmptyTask(): Task {
             let newTask:Task;
             let date:moment.Moment = moment(new Date());
 
             newTask = <Task>{
+                id: null,
                 name: '',
                 created_at: {
                     date: date.format('YYYY-MM-DD'),
@@ -95,6 +98,15 @@ module pmApp {
             };
 
             return angular.copy(newTask);
+        }
+
+        /**
+         * Save task to the DB
+         *
+         * @param task {Task}
+         */
+        public saveTask(task) {
+            console.log(task)
         }
     }
 

@@ -46,6 +46,10 @@ module pmApp {
             this.$modalInstance.dismiss('cancel');
         }
 
+        public save () {
+            this.tasksService.saveTask(this.taskEditCopy);
+        }
+
     }
 
     angular
