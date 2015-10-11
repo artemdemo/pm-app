@@ -99,14 +99,24 @@
         </div>
     </div>
 
-    <button
-            class="button small radius"
-            ng-click="tm.save()"
-            ng-show="tm.action != 'open'">Save</button>
-    <button
-            class="button small radius info"
-            ng-click="tm.edit()"
-            ng-show="tm.action == 'open'">Edit</button>
-    <button class="button small radius secondary" ng-click="tm.cancel()">Cancel</button>
+    <div class="buttons-line">
+        <div class="buttons-line__left">
+            <button
+                    class="button small radius"
+                    ng-click="tm.save()"
+                    ng-show="tm.action != 'open'">Save</button>
+            <button
+                    class="button small radius info"
+                    ng-click="tm.edit()"
+                    ng-show="tm.action == 'open'">Edit</button>
+            <button class="button small radius secondary" ng-click="tm.cancel()">Cancel</button>
+        </div>
+        <div class="buttons-line__right">
+            <button
+                    class="button small radius alert"
+                    ng-click="tm.delete()"
+                    ng-show="tm.canBeDeleted == true">Delete</button>
+        </div>
+    </div>
     <a class="close-reveal-modal" ng-click="tm.cancel()">&#215;</a>
 </div>

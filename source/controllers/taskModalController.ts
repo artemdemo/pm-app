@@ -11,6 +11,8 @@ module pmApp {
 
         public taskEditCopy: Task;
 
+        public canBeDeleted: Boolean;
+
         /**
          *
          * @param $scope
@@ -31,8 +33,11 @@ module pmApp {
             public action
         ) {
 
+            this.canBeDeleted = true;
+
             if ( action == 'new' ) {
                 this.taskEditCopy = tasksService.getEmptyTask();
+                this.canBeDeleted = false;
             } else {
                 this.taskEditCopy = angular.copy(task);
             }
@@ -42,12 +47,16 @@ module pmApp {
             this.action = 'edit';
         }
 
-        public cancel () {
+        public cancel() {
             this.$modalInstance.dismiss('cancel');
         }
 
-        public save () {
+        public save() {
             this.tasksService.saveTask(this.taskEditCopy);
+        }
+
+        public delete() {
+            this.tasksService.deleteTask(this.taskEditCopy);
         }
 
     }

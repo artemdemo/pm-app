@@ -40,6 +40,7 @@ module pmApp {
             this.tasks = tasks;
         }
 
+
         /**
          * Load all open tasks that user have access to them
          * Open tasks ara tasks that NOT DONE and NOT CLOSED
@@ -62,6 +63,7 @@ module pmApp {
             return deferred.promise;
         }
 
+
         /**
          * Return all tasks
          * @returns {promise}
@@ -78,6 +80,7 @@ module pmApp {
 
             return deferred.promise;
         }
+
 
         /**
          * Return empty task data
@@ -104,17 +107,19 @@ module pmApp {
             return angular.copy(newTask);
         }
 
+
         /**
          * Save task to the DB
          *
          * @param task {Task}
+         * @returns {promise}
          */
         public saveTask(task) {
             let deferred = this.$q.defer();
 
             if ( task.id ) {
-                this.$http.post(
-                    this.apiService.getAbsoluteUrl('/tasks/update'),
+                this.$http.put(
+                    this.apiService.getAbsoluteUrl('/tasks'),
                     task
                 ).then(
                     (data) => deferred.resolve(data),
@@ -122,12 +127,36 @@ module pmApp {
                 )
             } else {
                 this.$http.post(
-                    this.apiService.getAbsoluteUrl('/tasks/add'),
+                    this.apiService.getAbsoluteUrl('/tasks'),
                     task
                 ).then(
                     (data) => deferred.resolve(data),
                     (data) => deferred.reject(data)
                 )
+            }
+
+            return deferred.promise;
+        }
+
+
+        /**
+         * Delete task
+         *
+         * @param task {Task}
+         * @returns {promise}
+         */
+        public deleteTask(task: Task) {
+            let deferred = this.$q.defer();
+
+            if ( task.id ) {
+                this.$http.delete(
+                    this.apiService.getAbsoluteUrl('/tasks/task/' + task.id)
+                ).then(
+                    (data) => deferred.resolve(data),
+                    (data) => deferred.reject(data)
+                )
+            } else {
+                deferred.reject()
             }
 
             return deferred.promise;
