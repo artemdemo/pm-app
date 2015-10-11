@@ -5,14 +5,19 @@
             <small>{{ tm.task.created_at.date }} {{ tm.task.created_at.time }}</small>
         </h4>
         <div>
-            <div class="task-item__label">
-                <span class="info label">ToDo</span>
+
+            <div class="items-stat">
+                <div class="items-stat__label">
+                    <span class="info label">ToDo</span>
+                </div>
+                <div class="items-stat__priority-wrap">
+                    <div class="items-stat__priority items-stat__priority_critical"></div> critical
+                </div>
+                <div class="items-stat__sp">
+                    sp: {{ task.sp }}
+                </div>
             </div>
-            <div class="task-item__priority-wrap">
-                <div class="task-item__priority task-item__priority_critical"></div> critical
-            </div>
-            <div class="task-item__sp ng-binding">sp: {{ tm.task.sp }}</div>
-            <div class="task-item__created ng-binding"></div>
+
         </div>
         <div class="task-item__description-full"
              ng-show="tm.action == 'open'">
@@ -29,20 +34,20 @@
         <div class="row">
             <div class="large-3 medium-6 small-6 columns">
                 <div class="row collapse prefix-radius">
-                    <div class="small-3 columns">
+                    <div class="small-5 medium-4 columns">
                         <span class="prefix">SP</span>
                     </div>
-                    <div class="small-9 columns">
+                    <div class="small-7 medium-8 columns">
                         <input type="number" ng-model="tm.taskEditCopy.sp" placeholder="Story Points">
                     </div>
                 </div>
             </div>
             <div class="large-3 medium-6 small-6 columns">
                 <div class="row collapse prefix-radius">
-                    <div class="small-6 medium-4 columns">
+                    <div class="small-5 medium-4 columns">
                         <span class="prefix">Status</span>
                     </div>
-                    <div class="small-6 medium-8 columns">
+                    <div class="small-7 medium-8 columns">
                         <select>
                             <option>ToDo</option>
                             <option>In Process</option>
@@ -54,10 +59,10 @@
             </div>
             <div class="large-3 medium-6 small-6 columns">
                 <div class="row collapse prefix-radius">
-                    <div class="small-6 medium-4 columns">
+                    <div class="small-5 medium-4 columns">
                         <span class="prefix">Priority</span>
                     </div>
-                    <div class="small-6 medium-8 columns">
+                    <div class="small-7 medium-8 columns">
                         <select>
                             <option>Minor</option>
                             <option>Major</option>
@@ -66,7 +71,16 @@
                     </div>
                 </div>
             </div>
-            <div class="large-3 medium-6 small-6 columns">&nbsp;</div>
+            <div class="large-3 medium-6 small-6 columns">
+                <div class="row collapse prefix-radius">
+                    <div class="small-5 medium-4 columns">
+                        <span class="prefix">Project</span>
+                    </div>
+                    <div class="small-7 medium-8 columns">
+                        <input type="text" placeholder="Project">
+                    </div>
+                </div>
+            </div>
         </div>
         <div>
             <label>Description:
@@ -78,7 +92,7 @@
     <button
             class="button small radius"
             ng-click="tm.save()"
-            ng-show="tm.action != 'edit'">Save</button>
+            ng-show="tm.action != 'open'">Save</button>
     <button
             class="button small radius info"
             ng-click="tm.edit()"

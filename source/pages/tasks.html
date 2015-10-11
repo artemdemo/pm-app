@@ -19,15 +19,19 @@
                 <div class="task-item__priority task-item__priority_minor"></div>
                 {{ task.name }}
             </div>
-            <div class="task-item__label">
-                <span class="info label">ToDo</span>
+
+            <div class="items-stat">
+                <div class="items-stat__label">
+                    <span class="info label">ToDo</span>
+                </div>
+                <div class="items-stat__sp">
+                    sp: {{ task.sp }}
+                </div>
+                <div class="items-stat__created">
+                    {{ task.created_at.date }} {{ task.created_at.time }}
+                </div>
             </div>
-            <div class="task-item__sp">
-                sp: {{ task.sp }}
-            </div>
-            <div class="task-item__created">
-                {{ task.created_at.date }} {{ task.created_at.time }}
-            </div>
+
 
             <task-submenu data-task="task"></task-submenu>
 

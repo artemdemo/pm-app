@@ -1,9 +1,6 @@
 @import "../variables";
 @import "../mixins";
 
-.task-list {
-}
-
 .task-item {
     border: 1px solid #CACACA;
     border-top: 3px solid #C5C5C5;
@@ -15,6 +12,13 @@
     &:last-of-type {
         margin-bottom: 0;
     }
+}
+
+.task-item__title {
+    .item-inline-data();
+
+    font-size: @item-font-size;
+    font-weight: bold;
 }
 
 .task-item__priority {
@@ -39,28 +43,6 @@
     }
 }
 
-.task-item__title {
-    .item-inline-data();
-
-    font-size: @item-font-size;
-    font-weight: bold;
-}
-
-.task-item__label {
-    .item-inline-data()
-}
-
-.task-item__sp {
-    .item-inline-data();
-
-    font-size: @item-font-size;
-}
-
-.task-item__created {
-    .item-inline-data();
-
-    font-size: @item-font-size;
-}
 
 .task-item__description {
     font-size: @item-font-size - 1;
