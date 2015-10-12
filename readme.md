@@ -9,12 +9,17 @@ Open Source Project Management app. It's more scrum then kanban, case I believe 
 
 * AngularJS v.1.4.6 (with TypeScript v.1.6)
 * Laravel v.5.1.11
+* Foundation for grid and design
 
 ![alt tag](https://github.com/artemdemo/pm-app/blob/master/_img/pmapp.png "Project Management App")
 
 ## Installation
 
+Obviously you'll need PHP, MySQL and Apache installed on your machine.
+
 ### Front end
+
+I'm using Gulp as task manager.
 
 1. Install all related packages
 ```

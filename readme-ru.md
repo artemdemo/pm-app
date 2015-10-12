@@ -10,12 +10,17 @@
 
 * AngularJS v.1.4.6 (with TypeScript v.1.6)
 * Laravel v.5.1.11
+* Foundation for grid and design
 
 ![alt tag](https://github.com/artemdemo/pm-app/blob/master/_img/pmapp.png "Приложение для управления проектоми и задачами")
 
 ## Инсталляция
 
+Разумеется нужно установить PHP, MySQL и Apache.
+
 ### Front end
+
+Для сборки я использую Gulp.
 
 1. Устанавиваем покеты
 ```
