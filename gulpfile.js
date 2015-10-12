@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+    shell = require('gulp-shell'),
     gutil = require('gulp-util');
 
 
@@ -9,6 +10,11 @@ require('./gulp/minify-html.js');
 require('./gulp/concat.js');
 require('./gulp/copy.js');
 require('./gulp/copy-build.js');
+
+
+gulp.task('karma', shell.task([
+    './node_modules/karma/bin/karma start'
+]));
 
 
 gulp.task('default-info', function(){
@@ -25,3 +31,4 @@ gulp.task('watch', function(){
 gulp.task('build', ['less', 'ts', 'copy-build', 'minify-html', 'copy', 'concat']);
 gulp.task('serve', ['build', 'watch', 'watch-livereload']);
 gulp.task('default', ['build', 'watch', 'default-info']);
+gulp.task('test', ['karma']);

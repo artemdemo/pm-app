@@ -33,10 +33,6 @@ module pmApp {
     }
 
     angular
-        .module('pmApp', ['ui.router', 'mm.foundation', 'as.sortable', 'ngResource'])
-        .config(AppConfiguration)
-        .run(['tasksService', 'projectsService', (tasksService, projectsService)=>{
-            tasksService.loadOpenTasks();
-            projectsService.loadOpenProjects();
-        }]);
+        .module('pmApp', ['ui.router', 'mm.foundation', 'ngResource'])
+        .config(AppConfiguration);
 }

@@ -2,9 +2,15 @@ var gulp = require('gulp'),
     ts = require('gulp-typescript');
 
 gulp.task('ts', function(){
-    var tsResult = gulp.src('source/init.ts')
+    gulp.src('source/init.ts')
         .pipe(ts({
             out: 'app.js'
-        }));
-    return tsResult.js.pipe(gulp.dest('front/js'));
+        }))
+        .js.pipe(gulp.dest('front/js'));
+
+    gulp.src('source/run.ts')
+        .pipe(ts({
+            out: 'app-run.js'
+        }))
+        .js.pipe(gulp.dest('front/js'));
 });

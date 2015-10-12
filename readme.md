@@ -36,6 +36,10 @@ You can also use build in livereload:
 $ gulp serve
 ```
 
+Run tests:
+```
+$ gulp test
+```
 
 ### Back end
 
