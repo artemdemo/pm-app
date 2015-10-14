@@ -11,6 +11,10 @@
         </div>
     </div>
 
+    <div class="row noitems-placeholder" ng-show="tp.tasks.length == 0">
+        There is no tasks. <span class="noitems-placeholder__link" ng-click="tp.newTask()">Create one.</span>
+    </div>
+
     <div class="row task-list">
         <div class="task-item"
              ng-repeat="task in tp.tasks track by task.id"

@@ -1,0 +1,17 @@
+@import "../variables";
+@import "../mixins";
+
+.noitems-placeholder {
+    color: @muted-text-color;
+    font-size: @item-font-size;
+    text-align: center;
+}
+
+    .noitems-placeholder__link {
+        cursor: pointer;
+        text-decoration: underline;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }

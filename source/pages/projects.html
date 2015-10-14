@@ -11,9 +11,13 @@
         </div>
     </div>
 
+    <div class="row noitems-placeholder" ng-show="pp.projects.length == 0">
+        There is no projects. <span class="noitems-placeholder__link" ng-click="pp.newProject()">Create one.</span>
+    </div>
+
     <div class="row project-list">
         <div class="project-item"
-             ng-repeat="project in pp.projects">
+             ng-repeat="project in pp.projects track by project.id">
             <div class="project-item__title">
                 <span class="project-item__title-content">{{ project.name }}</span>
                 <project-submenu  data-project="project"></project-submenu>
