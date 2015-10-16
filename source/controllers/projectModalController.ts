@@ -4,17 +4,21 @@ module pmApp {
         public static $inject = [
             '$scope',
             '$modalInstance',
+            'tasksService',
             'projectsService',
             'project',
             'action'
         ];
 
         public projectEditCopy: Project;
+        public selectedTask: Task;
+        public availableTasks: Task[] = [];
 
         /**
          *
          * @param $scope
          * @param $modalInstance
+         * @param tasksService
          * @param projectsService
          * @param project
          * @param action {string} - will contain action that user want apply on the project
@@ -26,6 +30,7 @@ module pmApp {
         constructor (
             public $scope,
             public $modalInstance,
+            public tasksService,
             public projectsService,
             public project,
             public action
@@ -36,6 +41,10 @@ module pmApp {
             } else {
                 this.projectEditCopy = angular.copy(project);
             }
+
+            tasksService.getTasks()
+                .then((tasks) => this.availableTasks = tasks);
+
         }
 
         public edit() {

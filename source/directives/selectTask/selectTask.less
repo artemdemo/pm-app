@@ -1,0 +1,37 @@
+@import "../../less/variables";
+@import "../../less/mixins";
+
+select-task {
+    display: block;
+    z-index: 1;
+}
+
+.select-task__list {
+    list-style-type: none;
+    font-size: @item-font-size;
+    opacity: 0;
+    padding: 4px 7px;
+    position: absolute;
+    margin-top: -16px;
+    margin-left: -1000px;
+    background: white;
+    box-shadow: 1px 1px 6px rgb(195, 195, 195);
+    border-radius: 2px;
+    -webkit-transition: opacity 0.4s;
+    transition: opacity 0.4s;
+    z-index: 1;
+
+    &.select-task__list_show {
+        margin-left: 0;
+        opacity: 1;
+    }
+}
+
+.select-task__list-item {
+    padding: 3px 5px;
+    cursor: pointer;
+
+    &:hover {
+        background: lightgray;
+    }
+}

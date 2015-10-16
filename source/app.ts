@@ -33,6 +33,6 @@ module pmApp {
     }
 
     angular
-        .module('pmApp', ['ui.router', 'mm.foundation', 'ngResource'])
+        .module('pmApp', ['ui.router', 'mm.foundation', 'ngSanitize', 'ngResource'])
         .config(AppConfiguration);
 }

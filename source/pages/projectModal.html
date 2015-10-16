@@ -8,9 +8,19 @@
             <div class="project-item__progressbar"><progressbar value="55"></progressbar></div>
             <div class="project-item__progress-percent">55%</div>
         </div>
-        <div class="task-item__description-full"
-             ng-show="pm.action == 'open'">
+        <div class="task-item__description-full">
             {{ pm.project.description }}
+        </div>
+        <div class="subtask-list" ng-show="pm.subtasks.length > 0">
+            <div class="subtask-item" ng-repeat="subtask in pm.subtasks track by subtask.id">
+                <div class="task-item__title">
+                    <div class="item-stat-priority item-stat-priority_major"></div>
+                    {{ subtask.name }}
+                </div>
+                <div class="subtask-item__description">
+                    {{ subtask.description }}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -24,6 +34,13 @@
             <label>Description:
                 <textarea class="task-item-edit__description" ng-model="pm.projectEditCopy.description"></textarea>
             </label>
+        </div>
+        <div>
+            <select-task
+                tasks="pm.availableTasks"
+                selected-task="pm.selectedTask"
+                label="Add task(s) to this project"
+                placeholder="Write task name"></select-task>
         </div>
     </div>
 
