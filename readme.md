@@ -1,4 +1,4 @@
-(Русская версия)[https://github.com/artemdemo/pm-app/blob/master/readme-ru.md]
+[Русская версия](https://github.com/artemdemo/pm-app/blob/master/readme-ru.md)
 
 # Project Management App
 

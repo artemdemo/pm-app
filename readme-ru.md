@@ -1,4 +1,4 @@
-(English version)[https://github.com/artemdemo/pm-app/blob/master/readme.md]
+[English version](https://github.com/artemdemo/pm-app/blob/master/readme.md)
 
 # Приложение для управления проектоми и задачами
 
