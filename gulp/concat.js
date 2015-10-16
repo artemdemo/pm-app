@@ -7,8 +7,9 @@ gulp.task('concat', function(){
         './front/js/angular.min.js',
 
         './front/js/angular-ui-router.min.js',
-        './front/js/mm-foundation-tpls.min.js',
         './front/js/angular-resource.min.js',
+        './front/js/mm-foundation-tpls.min.js',
+        './front/js/angular-sanitize.min.js',
         './front/js/app.js',
         './front/js/app-run.js'
     ])

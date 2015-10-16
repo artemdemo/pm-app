@@ -19,9 +19,11 @@ module.exports = function (config) {
             'node_modules/angular-mocks/angular-mocks.js',
             'front/js/angular-resource.min.js',
             'front/js/angular-ui-router.min.js',
+            'front/js/angular-sanitize.min.js',
             'front/js/mm-foundation-tpls.min.js',
             'front/js/moment.min.js',
             'front/js/app.js',
+            'front/**/*.html',
             'test/**/*spec.js'
         ],
 
@@ -32,8 +34,40 @@ module.exports = function (config) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {},
+        preprocessors: {
+            'front/**/*.html': ['ng-html2js'],
 
+            /*
+             * Note:
+             * babel and karma-babel-preprocessor only convert ES6 modules to CommonJS/AMD/SystemJS/UMD.
+             * If you choose CommonJS, you still need to resolve and concatenate CommonJS modules on your own.
+             * We recommend karma-browserify + babelify or webpack + babel-loader in such cases.
+             *
+             * @source https://github.com/babel/karma-babel-preprocessor
+             */
+            'test/**/*spec.js': ['babel']
+        },
+
+        ngHtml2JsPreprocessor: {
+            // strip this from the file path
+            stripPrefix: 'front/html/',
+            // prepend this to the
+            prependPrefix: 'html/',
+
+            moduleName: 'my.templates'
+        },
+
+        babelPreprocessor: {
+            options: {
+                sourceMap: 'inline'
+            },
+            filename: function (file) {
+                return file.originalPath.replace(/\.js$/, '.es5.js');
+            },
+            sourceFileName: function (file) {
+                return file.originalPath;
+            }
+        },
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -60,7 +94,8 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        // browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
 
         // Continuous Integration mode

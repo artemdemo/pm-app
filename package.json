@@ -8,6 +8,7 @@
     "angular-foundation": "^0.7.0",
     "angular-mocks": "^1.4.7",
     "angular-resource": "^1.4.6",
+    "angular-sanitize": "^1.4.7",
     "angular-ui-router": "^0.2.15",
     "connect-livereload": "^0.5.3",
     "express": "^4.13.3",
@@ -24,12 +25,16 @@
     "gulp-util": "^3.0.6",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.10",
+    "karma-babel-preprocessor": "^5.2.2",
     "karma-chrome-launcher": "^0.2.1",
     "karma-jasmine": "^0.3.6",
     "karma-jasmine-html-reporter": "^0.1.8",
+    "karma-ng-html2js-preprocessor": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.1",
     "karma-verbose-reporter": "0.0.3",
     "less-plugin-autoprefix": "^1.5.1",
     "moment": "^2.10.6",
+    "phantomjs": "^1.9.18",
     "tiny-lr": "^0.2.0"
   }
 }
