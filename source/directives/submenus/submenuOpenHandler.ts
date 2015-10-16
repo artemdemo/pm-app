@@ -8,12 +8,12 @@ module pmApp {
      */
     angular
         .module('pmApp')
-        .directive('submenuOpenHandler', ['helper', function(helper){
+        .directive('submenuOpenHandler', ['helper', (helper) => {
             let link = (scope, el, attr) => {
 
                 let $body = angular.element(document.body);
                 var hideFunctionAttached = false;
-                var hideSubmenu = function(event) {
+                var hideSubmenu = (event) => {
                     switch (true) {
                         case event && helper.hasClass(event.target, 'submenu-list_item-content'):
                             break;
@@ -22,18 +22,14 @@ module pmApp {
                         default:
                             el.removeClass('active');
                             $body.unbind('click', hideSubmenu);
-                            setTimeout(function(){
-                                hideFunctionAttached = false;
-                            });
+                            setTimeout(() => hideFunctionAttached = false);
                     }
                 };
 
-                el.bind('click', function(){
+                el.bind('click', () => {
                     if (!hideFunctionAttached) {
                         el.addClass('active');
-                        setTimeout(function(){
-                            $body.bind('click', hideSubmenu)
-                        });
+                        setTimeout(() => $body.bind('click', hideSubmenu));
                         hideFunctionAttached = true;
                     }
                 });
