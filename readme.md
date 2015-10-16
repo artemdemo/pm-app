@@ -36,11 +36,6 @@ You can also use build in livereload:
 $ gulp serve
 ```
 
-Run tests:
-```
-$ gulp test
-```
-
 ### Back end
 
 1. Create database with relevant name
@@ -52,4 +47,15 @@ $ gulp test
 Create all tables
 ```
 $ php artisan migrate
+```
+
+## Tests
+
+For frontend unit tests I'm using karma with jasmine.
+All test are written in es2015 (es6) and compiled on the fly 5to6 with babel.
+
+
+Run tests:
+```
+$ gulp test
 ```
