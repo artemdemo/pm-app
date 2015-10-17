@@ -12,7 +12,8 @@ namespace pmApp {
         ];
 
         public projectEditCopy: Project;
-        public selectedTask: Task;
+        public tasks: Task[] = [];
+        public selectedSubtask: Task;
         public availableTasks: Task[] = [];
 
         /**
@@ -45,6 +46,12 @@ namespace pmApp {
 
             tasksService.getTasks()
                 .then((tasks: Task[]) => this.availableTasks = tasks);
+
+            $scope.$watch(() => this.selectedSubtask, (newValue) => {
+                if (newValue) {
+                    this.tasks.push(newValue);
+                }
+            })
 
         }
 

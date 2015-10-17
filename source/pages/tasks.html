@@ -42,17 +42,13 @@
             <div class="task-item__description">
                 {{ task.description }}
             </div>
-            <div class="subtask-list" ng-show="task.subtasks.length > 0">
-                <div class="subtask-item" ng-repeat="subtask in task.subtasks track by subtask.id">
-                    <div class="task-item__title">
-                        <div class="item-stat-priority item-stat-priority_major"></div>
-                        {{ subtask.name }}
-                    </div>
-                    <div class="subtask-item__description">
-                        {{ subtask.description }}
-                    </div>
-                </div>
-            </div>
+
+            <subtask-list
+                    class="subtask-list"
+                    ng-show="tm.subtasks.length > 0"
+                    subtasks="tm.subtasks"
+                    hide-remove-button="true"></subtask-list>
+
         </div>
     </div>
 

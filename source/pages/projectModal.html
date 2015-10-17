@@ -11,17 +11,13 @@
         <div class="task-item__description-full">
             {{ pm.project.description }}
         </div>
-        <div class="subtask-list" ng-show="pm.subtasks.length > 0">
-            <div class="subtask-item" ng-repeat="subtask in pm.subtasks track by subtask.id">
-                <div class="task-item__title">
-                    <div class="item-stat-priority item-stat-priority_major"></div>
-                    {{ subtask.name }}
-                </div>
-                <div class="subtask-item__description">
-                    {{ subtask.description }}
-                </div>
-            </div>
-        </div>
+
+        <subtask-list
+                class="subtask-list subtask-list_task-modal"
+                ng-show="pm.tasks.length > 0"
+                subtasks="pm.tasks"
+                hide-remove-button="true"
+                title="Tasks:"></subtask-list>
     </div>
 
     <div class="task-item-edit" ng-show="pm.action != 'open'">
@@ -35,26 +31,18 @@
                 <textarea class="task-item-edit__description" ng-model="pm.projectEditCopy.description"></textarea>
             </label>
         </div>
-        <div>
-            <div class="subtask-list" ng-show="pm.subtasks.length > 0">
-                <div class="subtask-item" ng-repeat="subtask in pm.subtasks track by subtask.id">
-                    <div class="task-item__title">
-                        <div class="item-stat-priority item-stat-priority_major"></div>
-                        {{ subtask.name }}
-                    </div>
-                    <div class="subtask-item__description">
-                        {{ subtask.description }}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div>
-            <selectable-dropdown
+
+        <subtask-list
+                class="subtask-list subtask-list_task-modal"
+                ng-show="pm.tasks.length > 0"
+                subtasks="pm.tasks"
+                title="Tasks:"></subtask-list>
+
+        <selectable-dropdown
                 items="pm.availableTasks"
-                selected-task="pm.selectedTask"
+                selected-task="pm.selectedSubtask"
                 label="Add task(s) to this project"
                 placeholder="Write task name"></selectable-dropdown>
-        </div>
     </div>
 
     <button

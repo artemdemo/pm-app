@@ -72,16 +72,6 @@ namespace pmApp {
         public deleteTask(): void {
             this.tasksService.deleteTask(this.taskEditCopy);
         }
-
-        public removeSubtask(subtask: Task): void {
-            console.log(subtask);
-            for(var i: number = 0, len: number = this.subtasks.length; i<len; i++){
-                if (this.subtasks[i].id === subtask.id) {
-                    this.subtasks.splice(i, 1);
-                    break;
-                }
-            }
-        }
     }
 
     angular
