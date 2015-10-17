@@ -16,6 +16,10 @@ gulp.task('karma', shell.task([
     './node_modules/karma/bin/karma start'
 ]));
 
+gulp.task('tslint', shell.task([
+    './node_modules/tslint/bin/tslint ./source/**/*.ts'
+]));
+
 
 gulp.task('default-info', function(){
     gutil.log(gutil.colors.yellow('[watching]'),'Frontend url:', gutil.colors.blue('http://localhost/pm/front/'));
@@ -31,4 +35,4 @@ gulp.task('watch', function(){
 gulp.task('build', ['less', 'ts', 'copy-build', 'minify-html', 'copy', 'concat']);
 gulp.task('serve', ['build', 'watch', 'watch-livereload']);
 gulp.task('default', ['build', 'watch', 'default-info']);
-gulp.task('test', ['karma']);
+gulp.task('test', ['tslint', 'karma']);

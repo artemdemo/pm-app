@@ -24,11 +24,11 @@ describe('selectTask directive', () => {
             }
         ];
 
-        element = $compile(`<select-task
+        element = $compile(`<selectable-dropdown
                                 tasks="tasks"
                                 placeholder="Test placeholder"
                                 label="Test label">
-                            </select-task>`)($rootScope);
+                            </selectable-dropdown>`)($rootScope);
         $rootScope.$digest();
     }));
 
@@ -36,7 +36,7 @@ describe('selectTask directive', () => {
 
     it(
         `<label> text should be 'Test label'`,
-        () => expect(element[0].querySelector('.select-task__label-text').textContent).toEqual('Test label')
+        () => expect(element[0].querySelector('.selectable-dropdown__label-text').textContent).toEqual('Test label')
     );
 
     it(
@@ -46,12 +46,12 @@ describe('selectTask directive', () => {
 
     it(
         `List of tasks contain 2 items`,
-        () => expect(element[0].querySelectorAll('.select-task__list-item').length).toEqual(2)
+        () => expect(element[0].querySelectorAll('.selectable-dropdown__list-item').length).toEqual(2)
     );
 
     it(
         `First item name is equal to 'task 1'`,
-        () => expect(element[0].querySelectorAll('.select-task__list-item')[0]
-                .querySelector('.select-task__list-item-name').textContent).toEqual('task 1')
+        () => expect(element[0].querySelectorAll('.selectable-dropdown__list-item')[0]
+                .querySelector('.selectable-dropdown__list-item-name').textContent).toEqual('task 1')
     );
 });

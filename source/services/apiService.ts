@@ -1,6 +1,8 @@
-module pmApp {
-    class apiService {
-        public static $inject = [];
+namespace pmApp {
+    'use strict';
+
+    class ApiService {
+        public static $inject: string[] = [];
 
         private apiBaseUrl: string;
 
@@ -19,12 +21,12 @@ module pmApp {
          * @param relativeUrl
          * @returns {string}
          */
-        getAbsoluteUrl(relativeUrl:string):string {
+        public getAbsoluteUrl(relativeUrl: string): string {
             return this.apiBaseUrl + relativeUrl;
         }
     }
 
     angular
         .module('pmApp')
-        .service('apiService', apiService);
+        .service('apiService', ApiService);
 }

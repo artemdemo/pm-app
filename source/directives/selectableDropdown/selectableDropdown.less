@@ -1,12 +1,12 @@
 @import "../../less/variables";
 @import "../../less/mixins";
 
-select-task {
+selectable-dropdown {
     display: block;
     z-index: 1;
 }
 
-.select-task__list {
+.selectable-dropdown__list {
     list-style-type: none;
     font-size: @item-font-size;
     opacity: 0;
@@ -21,13 +21,13 @@ select-task {
     transition: opacity 0.4s;
     z-index: 1;
 
-    &.select-task__list_show {
+    &.selectable-dropdown__list_show {
         margin-left: 0;
         opacity: 1;
     }
 }
 
-.select-task__list-item {
+.selectable-dropdown__list-item {
     padding: 3px 5px;
     cursor: pointer;
 

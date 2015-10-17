@@ -33,3 +33,13 @@ interface Project {
     };
     description: string;
 }
+
+
+/**
+ * General response from the server on save/delete/put an piece of data
+ * It could be for project or task or whatever was saved
+ */
+interface gIOresponce {
+    ErrorStatus: number;
+    id?: string;
+}

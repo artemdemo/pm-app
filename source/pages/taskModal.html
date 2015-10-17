@@ -97,6 +97,13 @@
                 <textarea class="task-item-edit__description" ng-model="tm.taskEditCopy.description"></textarea>
             </label>
         </div>
+        <div>
+            <select-task
+                    tasks="tm.availableTasks"
+                    selected-task="tm.selectedSubtask"
+                    label="Add subtask(s)"
+                    placeholder="Write task name"></select-task>
+        </div>
     </div>
 
     <div class="buttons-line">

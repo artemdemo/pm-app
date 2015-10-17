@@ -1,7 +1,8 @@
-module pmApp {
+namespace pmApp {
+    'use strict';
 
-    class taskModalController {
-        public static $inject = [
+    class TaskModalController {
+        public static $inject: string[] = [
             '$scope',
             '$modalInstance',
             'tasksService',
@@ -12,6 +13,9 @@ module pmApp {
         public taskEditCopy: Task;
 
         public canBeDeleted: Boolean;
+
+        public selectedSubtask: Task;
+        public availableTasks: Task[] = [];
 
         /**
          *
@@ -26,36 +30,39 @@ module pmApp {
          *      'open' - viewing task data
          */
         constructor (
-            public $scope,
-            public $modalInstance,
-            public tasksService,
-            public task,
-            public action
+            public $scope: angular.IScope,
+            public $modalInstance: any,
+            public tasksService: any,
+            public task: any,
+            public action: string
         ) {
 
             this.canBeDeleted = true;
 
-            if ( action == 'new' ) {
+            if ( action === 'new' ) {
                 this.taskEditCopy = tasksService.getEmptyTask();
                 this.canBeDeleted = false;
             } else {
                 this.taskEditCopy = angular.copy(task);
             }
+
+            tasksService.getTasks()
+                .then((tasks: Task[]) => this.availableTasks = tasks);
         }
 
-        public edit() {
+        public edit(): void {
             this.action = 'edit';
         }
 
-        public cancel() {
+        public cancel(): void {
             this.$modalInstance.dismiss('cancel');
         }
 
-        public save() {
+        public save(): void {
             this.tasksService.saveTask(this.taskEditCopy);
         }
 
-        public delete() {
+        public delete(): void {
             this.tasksService.deleteTask(this.taskEditCopy);
         }
 
@@ -63,5 +70,5 @@ module pmApp {
 
     angular
         .module('pmApp')
-        .controller('taskModalController', taskModalController)
+        .controller('taskModalController', TaskModalController);
 }

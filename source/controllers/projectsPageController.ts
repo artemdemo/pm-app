@@ -1,7 +1,8 @@
-module pmApp {
+namespace pmApp {
+    'use strict';
 
-    class projectsPageController {
-        public static $inject = [
+    class ProjectsPageController {
+        public static $inject: string[] = [
             '$scope',
             '$modal',
             'projectsService',
@@ -9,43 +10,39 @@ module pmApp {
             'projectModalControllerConstant'
         ];
 
-        public projects;
+        public projects: Project[];
 
         constructor (
-            public $scope,
-            public $modal,
-            public projectsService,
-            public projectModalHtmlLinkConstant,
-            public projectModalControllerConstant
+            public $scope: angular.IScope,
+            public $modal: any,
+            public projectsService: any,
+            public projectModalHtmlLinkConstant: string,
+            public projectModalControllerConstant: string
         ) {
 
             projectsService.getProjects()
                 .then(
-                (newProjects) => this.projects = newProjects,
-                (newProjects) => this.projects = newProjects
+                (newProjects: Project[]) => this.projects = newProjects,
+                (newProjects: Project[]) => this.projects = newProjects
             );
         }
 
         /**
          * Open modal fr adding new project
          */
-        public newProject () {
+        public newProject(): void {
             this.$modal.open({
                 templateUrl: this.projectModalHtmlLinkConstant,
                 controller: this.projectModalControllerConstant,
                 resolve: {
-                    project: function () {
-                        return null;
-                    },
-                    action: function() {
-                        return 'new'
-                    }
+                    project: (): any => null,
+                    action: (): any => 'new'
                 }
             });
         }
-}
+    }
 
-angular
-    .module('pmApp')
-    .controller('projectsPageController', projectsPageController)
+    angular
+        .module('pmApp')
+        .controller('projectsPageController', ProjectsPageController);
 }

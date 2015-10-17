@@ -1,4 +1,4 @@
-module pmApp {
+namespace pmApp {
 
     class AppConfiguration {
         public static $inject = [

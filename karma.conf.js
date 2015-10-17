@@ -69,6 +69,19 @@ module.exports = function (config) {
             }
         },
 
+        mochaReporter: {
+            /*
+             * Output style
+             * full (default) - all output is printed to the console
+             * autowatch - first run will have the full output and the next runs just output the summary and errors in mocha style
+             * minimal - only the summary and errors are printed to the console in mocha style
+             * noFailures - the failure details are not logged
+             *
+             * @source https://www.npmjs.com/package/karma-mocha-reporter
+             */
+            output: 'autowatch'
+        },
+
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter

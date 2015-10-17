@@ -1,7 +1,8 @@
-module pmApp {
+namespace pmApp {
+    'use strict';
 
-    class tasksPageController {
-        public static $inject = [
+    class TasksPageController {
+        public static $inject: string[] = [
             '$scope',
             '$modal',
             'tasksService',
@@ -9,37 +10,33 @@ module pmApp {
             'taskModalControllerConstant'
         ];
 
-        public tasks;
+        public tasks: Task[];
 
         constructor (
-            public $scope,
-            public $modal,
-            public tasksService,
-            public taskModalHtmlLinkConstant,
-            public taskModalControllerConstant
+            public $scope: angular.IScope,
+            public $modal: any,
+            public tasksService: any,
+            public taskModalHtmlLinkConstant: string,
+            public taskModalControllerConstant: string
         ) {
 
             tasksService.getTasks()
                 .then(
-                    (newTasks) => this.tasks = newTasks,
-                    (newTasks) => this.tasks = newTasks
+                    (newTasks: Task[]) => this.tasks = newTasks,
+                    (newTasks: Task[]) => this.tasks = newTasks
                 );
         }
 
         /**
          * Open modal to create new task
          */
-        public newTask () {
+        public newTask(): void {
             this.$modal.open({
                 templateUrl: this.taskModalHtmlLinkConstant,
                 controller: this.taskModalControllerConstant,
                 resolve: {
-                    task: function () {
-                        return null;
-                    },
-                    action: function() {
-                        return 'new'
-                    }
+                    task: (): any => null,
+                    action: (): any => 'new'
                 }
             });
         }
@@ -47,5 +44,5 @@ module pmApp {
 
     angular
         .module('pmApp')
-        .controller('tasksPageController', tasksPageController)
+        .controller('tasksPageController', TasksPageController);
 }

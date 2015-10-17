@@ -1,4 +1,4 @@
-module pmApp {
+namespace pmApp {
 
     angular
         .module('pmApp')

@@ -5,6 +5,9 @@
 Open Source Project Management app. It's more scrum then kanban, case I believe in sprints and iterations :smile:
 
 
+Work in progress. There is still a lot of things to do.
+
+
 ## Technologies
 
 * AngularJS v.1.4.6 (with TypeScript v.1.6)
@@ -53,6 +56,9 @@ $ php artisan migrate
 
 For frontend unit tests I'm using karma with jasmine.
 All test are written in es2015 (es6) and compiled on the fly 5to6 with babel.
+
+
+In addition all typescript code will be checked with tslint. 
 
 
 Run tests:

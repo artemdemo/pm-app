@@ -1,41 +1,33 @@
-module pmApp {
-    class projectsService {
+namespace pmApp {
+    'use strict';
 
-        public static $inject = [
+    class ProjectsService {
+
+        public static $inject: string[] = [
             '$http',
             '$q',
             'apiService'
         ];
 
-        private projects = [];
+        private projects: Project[] = [];
+        private projectsLoadingPromise: angular.IPromise<Project[]> = null;
 
-        private projectsLoadingPromise = null;
-
-        constructor(public $http, public $q, public apiService) {}
-
-        /**
-         * Function will update projects list.
-         * It will replace projects with the same id; if project has unique id it will be added to the list
-         * @param newProjects
-         */
-        private updateProjects( newProjects ) {
-            this.projects = newProjects;
-        }
+        constructor(public $http: angular.IHttpService, public $q: angular.IQService, public apiService: any) {}
 
         /**
          * Load all open projects that user have access to them
          * @returns {promise}
          */
-        loadOpenProjects() {
-            let deferred = this.$q.defer();
+        public loadOpenProjects(): angular.IPromise<Project[]> {
+            let deferred: angular.IDeferred<Project[]> = this.$q.defer();
 
             this.$http.get(this.apiService.getAbsoluteUrl('/projects/open'))
                 .then(
-                (result) => {
+                (result: any) => {
                     deferred.resolve(result.data);
                     this.updateProjects(result.data);
                 },
-                (data) => deferred.reject(data)
+                (data: any) => deferred.reject(data)
             );
 
             this.projectsLoadingPromise = deferred.promise;
@@ -47,8 +39,8 @@ module pmApp {
          * Return all projects
          * @returns {promise}
          */
-        getProjects() {
-            let deferred = this.$q.defer();
+        public getProjects(): angular.IPromise<Project[]> {
+            let deferred: angular.IDeferred<Project[]> = this.$q.defer();
 
             this.$q.all([
                 this.projectsLoadingPromise
@@ -65,8 +57,8 @@ module pmApp {
          * It will be used in modal
          */
         public getEmptyProject(): Project {
-            let newProject:Project;
-            let date:moment.Moment = moment(new Date());
+            let newProject: Project;
+            let date: moment.Moment = moment(new Date());
 
             newProject = <Project>{
                 name: '',
@@ -81,9 +73,18 @@ module pmApp {
 
             return angular.copy(newProject);
         }
+
+        /**
+         * Function will update projects list.
+         * It will replace projects with the same id; if project has unique id it will be added to the list
+         * @param newProjects
+         */
+        private updateProjects(newProjects: Project[]): void {
+            this.projects = newProjects;
+        }
     }
 
     angular
         .module('pmApp')
-        .service('projectsService', projectsService);
+        .service('projectsService', ProjectsService);
 }

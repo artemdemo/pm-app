@@ -1,6 +1,6 @@
 /// <reference path="./submenu-interfaces.ts" />
 
-module pmApp {
+namespace pmApp {
 
     /**
      * Task submenu directive

@@ -24,7 +24,7 @@
 /// <reference path="./directives/submenus/taskSubmenu.ts" />
 /// <reference path="./directives/submenus/projectSubmenu.ts" />
 /// <reference path="./directives/submenus/submenuOpenHandler.ts" />
-/// <reference path="./directives/selectTask/selectTask.ts" />
+/// <reference path="./directives/selectableDropdown/selectableDropdown.ts" />
 
 /*---- Controllers ----*/
 /// <reference path="./controllers/tasksPageController.ts" />

@@ -1,10 +1,11 @@
-module pmApp {
+namespace pmApp {
+    'use strict';
 
-    let iterationsFactory = ($resource, apiService) => {
+    let iterationsFactory: any = ($resource: any, apiService: any): any => {
         return $resource(apiService.getAbsoluteUrl('/iterations/:id'));
     };
 
     angular
         .module('pmApp')
-        .factory('iterationsFactory', ['$resource', 'apiService', iterationsFactory])
+        .factory('iterationsFactory', ['$resource', 'apiService', iterationsFactory]);
 }

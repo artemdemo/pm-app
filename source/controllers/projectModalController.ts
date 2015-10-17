@@ -1,7 +1,8 @@
-module pmApp {
+namespace pmApp {
+    'use strict';
 
-    class projectModalController {
-        public static $inject = [
+    class ProjectModalController {
+        public static $inject: string[] = [
             '$scope',
             '$modalInstance',
             'tasksService',
@@ -28,30 +29,30 @@ module pmApp {
          *      'open' - viewing project data
          */
         constructor (
-            public $scope,
-            public $modalInstance,
-            public tasksService,
-            public projectsService,
-            public project,
-            public action
+            public $scope: angular.IScope,
+            public $modalInstance: any,
+            public tasksService: any,
+            public projectsService: any,
+            public project: Project,
+            public action: string
         ) {
 
-            if ( action == 'new' ) {
+            if ( action === 'new' ) {
                 this.projectEditCopy = projectsService.getEmptyProject();
             } else {
                 this.projectEditCopy = angular.copy(project);
             }
 
             tasksService.getTasks()
-                .then((tasks) => this.availableTasks = tasks);
+                .then((tasks: Task[]) => this.availableTasks = tasks);
 
         }
 
-        public edit() {
+        public edit(): void {
             this.action = 'edit';
         }
 
-        public cancel () {
+        public cancel(): void {
             this.$modalInstance.dismiss('cancel');
         }
 
@@ -59,5 +60,5 @@ module pmApp {
 
     angular
         .module('pmApp')
-        .controller('projectModalController', projectModalController)
+        .controller('projectModalController', ProjectModalController);
 }
