@@ -19,10 +19,16 @@
             </div>
 
         </div>
-        <div class="task-item__description-full"
-             ng-show="tm.action == 'open'">
+        <div class="task-item__description-full">
             {{ tm.task.description }}
         </div>
+
+        <subtask-list
+                class="subtask-list"
+                ng-show="tm.subtasks.length > 0"
+                subtasks="tm.subtasks"
+                title="Subtasks:"></subtask-list>
+
     </div>
 
     <div class="task-item-edit" ng-show="tm.action != 'open'">
@@ -100,31 +106,36 @@
                 <textarea class="task-item-edit__description" ng-model="tm.taskEditCopy.description"></textarea>
             </label>
         </div>
-        <div>
-            <selectable-dropdown
-                    items="tm.availableTasks"
-                    selected-task="tm.selectedSubtask"
-                    label="Add subtask(s)"
-                    placeholder="Write task name"></selectable-dropdown>
-        </div>
+
+        <subtask-list
+                class="subtask-list subtask-list_task-modal"
+                ng-show="tm.subtasks.length > 0"
+                subtasks="tm.subtasks"
+                title="Subtasks:"></subtask-list>
+
+        <selectable-dropdown
+                items="tm.availableTasks"
+                selected-task="tm.selectedSubtask"
+                label="Add subtask(s)"
+                placeholder="Write task name"></selectable-dropdown>
     </div>
 
     <div class="buttons-line">
         <div class="buttons-line__left">
             <button
                     class="button small radius"
-                    ng-click="tm.save()"
+                    ng-click="tm.saveTask()"
                     ng-show="tm.action != 'open'">Save</button>
             <button
                     class="button small radius info"
-                    ng-click="tm.edit()"
+                    ng-click="tm.editTask()"
                     ng-show="tm.action == 'open'">Edit</button>
             <button class="button small radius secondary" ng-click="tm.cancel()">Cancel</button>
         </div>
         <div class="buttons-line__right">
             <button
                     class="button small radius alert"
-                    ng-click="tm.delete()"
+                    ng-click="tm.deleteTask()"
                     ng-show="tm.canBeDeleted == true">Delete</button>
         </div>
     </div>

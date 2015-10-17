@@ -1,0 +1,45 @@
+@import "../../less/variables";
+@import "../../less/mixins";
+
+subtask-list {
+    display: block;
+}
+
+.subtask-list {
+    padding: 0 5px 0 20px;
+
+    &_task-modal {
+        margin-bottom: 10px;
+    }
+
+    &__title {
+        font-size: @item-font-size;
+        color: #4d4d4d;
+    }
+}
+
+.subtask-item {
+    border-bottom: 1px dashed #C7C7C7;
+    padding: 3px 0 5px 0;
+
+    &:last-of-type {
+        border-bottom: 0;
+    }
+}
+
+.subtask-item__remove {
+    cursor: pointer;
+    color: #F93536;
+    float: right;
+    width: 20px;
+    text-align: center;
+}
+
+.subtask-item__description {
+    font-size: @item-font-size - 1;
+    color: #656565;
+    max-height: 33px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

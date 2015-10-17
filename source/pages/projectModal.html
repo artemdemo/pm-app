@@ -36,6 +36,19 @@
             </label>
         </div>
         <div>
+            <div class="subtask-list" ng-show="pm.subtasks.length > 0">
+                <div class="subtask-item" ng-repeat="subtask in pm.subtasks track by subtask.id">
+                    <div class="task-item__title">
+                        <div class="item-stat-priority item-stat-priority_major"></div>
+                        {{ subtask.name }}
+                    </div>
+                    <div class="subtask-item__description">
+                        {{ subtask.description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
             <selectable-dropdown
                 items="pm.availableTasks"
                 selected-task="pm.selectedTask"

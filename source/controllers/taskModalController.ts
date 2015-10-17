@@ -14,6 +14,7 @@ namespace pmApp {
 
         public canBeDeleted: Boolean;
 
+        public subtasks: Task[] = [];
         public selectedSubtask: Task;
         public availableTasks: Task[] = [];
 
@@ -48,24 +49,39 @@ namespace pmApp {
 
             tasksService.getTasks()
                 .then((tasks: Task[]) => this.availableTasks = tasks);
-        }
 
-        public edit(): void {
-            this.action = 'edit';
+            $scope.$watch(() => this.selectedSubtask, (newValue) => {
+                if (newValue) {
+                    this.subtasks.push(newValue);
+                }
+            })
         }
 
         public cancel(): void {
             this.$modalInstance.dismiss('cancel');
         }
 
-        public save(): void {
+        public editTask(): void {
+            this.action = 'edit';
+        }
+
+        public saveTask(): void {
             this.tasksService.saveTask(this.taskEditCopy);
         }
 
-        public delete(): void {
+        public deleteTask(): void {
             this.tasksService.deleteTask(this.taskEditCopy);
         }
 
+        public removeSubtask(subtask: Task): void {
+            console.log(subtask);
+            for(var i: number = 0, len: number = this.subtasks.length; i<len; i++){
+                if (this.subtasks[i].id === subtask.id) {
+                    this.subtasks.splice(i, 1);
+                    break;
+                }
+            }
+        }
     }
 
     angular
