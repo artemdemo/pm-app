@@ -1,4 +1,4 @@
-describe('selectTask directive', () => {
+describe('selectableDropdown directive', () => {
     let $compile;
     let $templateCache;
     let $rootScope;
@@ -25,7 +25,7 @@ describe('selectTask directive', () => {
         ];
 
         element = $compile(`<selectable-dropdown
-                                tasks="tasks"
+                                items="tasks"
                                 placeholder="Test placeholder"
                                 label="Test label">
                             </selectable-dropdown>`)($rootScope);

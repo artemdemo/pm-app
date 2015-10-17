@@ -6,11 +6,10 @@
     <ul class="selectable-dropdown__list">
         <li
             class="selectable-dropdown__list-item"
-            ng-repeat="item in tasks | filter:search"
+            ng-repeat="item in items | filter:search"
             ng-click="selectItem( item )">
 
             <span class="selectable-dropdown__list-item-name">{{ item.name }}</span>
-            <span class="selectable-dropdown__list-item-status">{{ item.status }}</span>
         </li>
     </ul>
 </div>

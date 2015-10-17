@@ -77,7 +77,10 @@
                         <span class="prefix">Project</span>
                     </div>
                     <div class="small-7 medium-8 columns">
-                        <input type="text" placeholder="Choose project">
+                        <selectable-dropdown
+                                items="tm.availableProjects"
+                                selected-task="tm.selectedProject"
+                                placeholder="Choose project"></selectable-dropdown>
                     </div>
                 </div>
             </div>
@@ -98,11 +101,11 @@
             </label>
         </div>
         <div>
-            <select-task
-                    tasks="tm.availableTasks"
+            <selectable-dropdown
+                    items="tm.availableTasks"
                     selected-task="tm.selectedSubtask"
                     label="Add subtask(s)"
-                    placeholder="Write task name"></select-task>
+                    placeholder="Write task name"></selectable-dropdown>
         </div>
     </div>
 

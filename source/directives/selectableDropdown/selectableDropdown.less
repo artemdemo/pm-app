@@ -30,8 +30,15 @@ selectable-dropdown {
 .selectable-dropdown__list-item {
     padding: 3px 5px;
     cursor: pointer;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &:hover {
         background: lightgray;
+    }
+
+    &-name {
+        white-space: nowrap;
     }
 }

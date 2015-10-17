@@ -17,7 +17,7 @@ gulp.task('karma', shell.task([
 ]));
 
 gulp.task('tslint', shell.task([
-    './node_modules/tslint/bin/tslint ./source/**/*.ts'
+    './node_modules/tslint/bin/tslint ./source/**/*.ts ./source/directives/**/*.ts'
 ]));
 
 
