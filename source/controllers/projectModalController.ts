@@ -12,6 +12,9 @@ namespace pmApp {
         ];
 
         public projectEditCopy: Project;
+
+        public canBeDeleted: Boolean;
+
         public tasks: Task[] = [];
         public selectedSubtask: Task;
         public availableTasks: Task[] = [];
@@ -38,8 +41,11 @@ namespace pmApp {
             public action: string
         ) {
 
+            this.canBeDeleted = true;
+
             if ( action === 'new' ) {
                 this.projectEditCopy = projectsService.getEmptyProject();
+                this.canBeDeleted = false;
             } else {
                 this.projectEditCopy = angular.copy(project);
             }
@@ -61,6 +67,14 @@ namespace pmApp {
 
         public cancel(): void {
             this.$modalInstance.dismiss('cancel');
+        }
+
+        public saveProject(): void {
+            this.projectsService.saveProject(this.projectEditCopy, this.tasks);
+        }
+
+        public deleteProject(): void {
+            this.projectsService.deleteProject(this.projectEditCopy);
         }
 
     }

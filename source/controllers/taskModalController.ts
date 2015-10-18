@@ -66,7 +66,7 @@ namespace pmApp {
         }
 
         public saveTask(): void {
-            this.tasksService.saveTask(this.taskEditCopy);
+            this.tasksService.saveTask(this.taskEditCopy, this.subtasks);
         }
 
         public deleteTask(): void {

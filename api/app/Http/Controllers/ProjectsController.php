@@ -1,11 +1,17 @@
 <?php namespace App\Http\Controllers;
 
+use DB;
 use Validator;
 use Illuminate\Http\Request;
 
 use App\Project;
 
 class ProjectsController extends Controller {
+
+    private $rules = array(
+        'name'=>'required',
+        'description'=>'required',
+    );
 
     /**
      * Create a new controller instance.
@@ -37,12 +43,7 @@ class ProjectsController extends Controller {
         // $user_id = Auth::id();
         // if ( ! $user_id ) return response() -> json( $this -> AUTH_ERROR, 401 );
 
-        $rules = array(
-            'name'=>'required',
-            'description'=>'required',
-        );
-
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $this -> rules);
 
         if ($validator -> fails()) {
 
@@ -55,10 +56,7 @@ class ProjectsController extends Controller {
 
             // $user = User::find( $user_id );
 
-            $project = new Project;
-            $project -> name = $request -> get('name');
-            $project -> description = $request -> get('description');
-            $project -> save();
+            $project = $this -> updatedProject($request);
 
             return response() -> json(array(
                 'id' => $project -> id,
@@ -79,11 +77,8 @@ class ProjectsController extends Controller {
         // $user_id = Auth::id();
         // if ( ! $user_id ) return response() -> json( $this -> AUTH_ERROR, 401 );
 
-        $rules = array(
-            'id'=>'required|integer',
-            'name'=>'required',
-            'description'=>'required',
-        );
+        $rules = $this -> rules;
+        $rules['id'] = 'required|integer';
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -98,10 +93,7 @@ class ProjectsController extends Controller {
 
             // $user = User::find( $user_id );
 
-            $project = Project::find($request -> get('id'));
-            $project -> name = $request -> get('name');
-            $project -> description = $request -> get('description');
-            $project -> save();
+            $project = $this -> updatedProject($request);
 
             return response() -> json(array(
                 'id' => $project -> id,
@@ -150,6 +142,46 @@ class ProjectsController extends Controller {
             -> get();
 
         return response()->json( $projects );
+    }
+
+
+    /**
+     * Update project.
+     * Function will update project if it exists or will add new one if not
+     *
+     * @param $projectRequest
+     * @return Project
+     */
+    private function updatedProject($projectRequest)
+    {
+        if ( $projectRequest -> get('id') ) {
+            $project = Project::find($projectRequest -> get('id'));
+        } else {
+            $project = new Project;
+        }
+
+        $project -> name = $projectRequest -> get('name');
+        $project -> description = $projectRequest -> get('description');
+        $project -> save();
+
+        // task can't be parent of itself
+        $subtasks = $projectRequest -> get('subtasks');
+        $current_project_in_subtasks = array_search($project -> id, $subtasks);
+        if ($current_project_in_subtasks !== false) {
+            array_splice($subtasks, $current_project_in_subtasks, 1);
+        }
+
+        DB::table('tasks')
+            -> where('project', $project -> id)
+            -> update(['project' => null]);
+
+        if (count($subtasks) > 0) {
+            DB::table('tasks')
+                -> whereIn('id', $subtasks)
+                -> update(['project' => $project -> id]);
+        }
+
+        return $project;
     }
 
 }

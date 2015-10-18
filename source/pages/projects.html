@@ -23,7 +23,9 @@
                 <project-submenu  data-project="project"></project-submenu>
             </div>
             <div class="project-item__data">
-                <div class="project-item__created">{{ project.created_at }}</div>
+                <div class="project-item__created">
+                    {{ project.created_at.date }} {{ project.created_at.time }}
+                </div>
                 <div class="project-item__progressbar"><progressbar value="55"></progressbar></div>
                 <div class="project-item__progress-percent">55%</div>
             </div>

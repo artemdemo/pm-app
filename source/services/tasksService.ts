@@ -38,6 +38,30 @@ namespace pmApp {
 
 
         /**
+         * Function will update tasks list.
+         * It will replace tasks with the same id; if task has unique id it will be added to the list
+         * @param newTasks
+         */
+        private updateTasks(newTasks: Task[]): void {
+
+            this.tasks = newTasks.map((task: Task) => {
+                let date: moment.Moment = moment(task.created_at);
+                task.id = parseInt(task.id, 10);
+                task.priority = parseInt(task.priority, 10);
+                task.sp = parseInt(task.sp, 10);
+                task.status = parseInt(task.status, 10);
+                task.created_at = {
+                    date: date.format('YYYY-MM-DD'),
+                    time: date.format('HH:mm'),
+                    raw: date
+                };
+
+                return task
+            });
+        }
+
+
+        /**
          * Return all tasks
          * @returns {promise}
          */
@@ -85,10 +109,13 @@ namespace pmApp {
          * Save task to the DB
          *
          * @param task {Task}
+         * @param subtasks {Task}
          * @returns {promise}
          */
-        public saveTask(task: Task): angular.IPromise<gIOresponce> {
+        public saveTask(task: Task, subtasks: Task[]): angular.IPromise<gIOresponce> {
             let deferred: angular.IDeferred<gIOresponce> = this.$q.defer();
+
+            (<any> task).subtasks = subtasks.map((task) => task.id);
 
             if ( task.id ) {
                 this.$http.put(
@@ -135,32 +162,6 @@ namespace pmApp {
             return deferred.promise;
         }
 
-
-        /**
-         * Function will update tasks list.
-         * It will replace tasks with the same id; if task has unique id it will be added to the list
-         * @param newTasks
-         */
-        private updateTasks(newTasks: Task[]): void {
-            let tasks: Task[] = [];
-
-            for (var i: number = 0, len: number = newTasks.length; i < len; i++) {
-                let task: Task = newTasks[i];
-                let date: moment.Moment = moment(task.created_at);
-                task.id = parseInt(task.id, 10);
-                task.priority = parseInt(task.priority, 10);
-                task.sp = parseInt(task.sp, 10);
-                task.status = parseInt(task.status, 10);
-                task.created_at = {
-                    date: date.format('YYYY-MM-DD'),
-                    time: date.format('HH:mm'),
-                    raw: date
-                };
-                tasks.push(task);
-            }
-
-            this.tasks = tasks;
-        }
     }
 
     angular

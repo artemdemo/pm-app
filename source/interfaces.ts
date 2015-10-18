@@ -7,7 +7,7 @@
  * Interface for the single task
  */
 interface Task {
-    id;
+    id: any;
     priority;
     sp;
     status;
@@ -25,6 +25,7 @@ interface Task {
  * Interface for the single project
  */
 interface Project {
+    id: any;
     name: string;
     created_at: {
         date: string;

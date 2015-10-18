@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use DB;
 use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -7,6 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Task;
 
 class TasksController extends Controller {
+
+    private $rules = array(
+        'name'=>'required',
+        'description'=>'required',
+        'subtasks'=>'array',
+        'priority'=>'required|numeric',
+        'status'=>'required|numeric',
+        'sp'=>'required|numeric',
+    );
 
     /**
      * Create a new controller instance.
@@ -38,15 +48,8 @@ class TasksController extends Controller {
         // $user_id = Auth::id();
         // if ( ! $user_id ) return response() -> json( $this -> AUTH_ERROR, 401 );
 
-        $rules = array(
-            'name'=>'required',
-            'description'=>'required',
-            'priority'=>'required|numeric',
-            'status'=>'required|numeric',
-            'sp'=>'required|numeric',
-        );
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $this -> rules);
 
         if ($validator -> fails()) {
 
@@ -59,13 +62,7 @@ class TasksController extends Controller {
 
             // $user = User::find( $user_id );
 
-            $task = new Task;
-            $task -> name = $request -> get('name');
-            $task -> description = $request -> get('description');
-            $task -> priority = $request -> get('priority');
-            $task -> status = $request -> get('status');
-            $task -> sp = $request -> get('sp');
-            $task -> save();
+            $task = $this -> updatedTask($request);
 
             return response() -> json(array(
                 'id' => $task -> id,
@@ -86,14 +83,8 @@ class TasksController extends Controller {
         // $user_id = Auth::id();
         // if ( ! $user_id ) return response() -> json( $this -> AUTH_ERROR, 401 );
 
-        $rules = array(
-            'id'=>'required|integer',
-            'name'=>'required',
-            'description'=>'required',
-            'priority'=>'required|numeric',
-            'status'=>'required|numeric',
-            'sp'=>'required|numeric',
-        );
+        $rules = $this -> rules;
+        $rules['id'] = 'required|integer';
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -108,13 +99,7 @@ class TasksController extends Controller {
 
             // $user = User::find( $user_id );
 
-            $task = Task::find($request -> get('id'));
-            $task -> name = $request -> get('name');
-            $task -> description = $request -> get('description');
-            $task -> priority = $request -> get('priority');
-            $task -> status = $request -> get('status');
-            $task -> sp = $request -> get('sp');
-            $task -> save();
+            $task = $this -> updatedTask($request);
 
             return response() -> json(array(
                 'id' => $task -> id,
@@ -164,6 +149,49 @@ class TasksController extends Controller {
             -> get();
 
         return response()->json( $tasks );
+    }
+
+
+    /**
+     * Update task.
+     * Function will update task if it exists or will add new one if not
+     *
+     * @param $taskRequest
+     * @return Task
+     */
+    private function updatedTask($taskRequest)
+    {
+        if ( $taskRequest -> get('id') ) {
+            $task = Task::find($taskRequest -> get('id'));
+        } else {
+            $task = new Task;
+        }
+
+        $task -> name = $taskRequest -> get('name');
+        $task -> description = $taskRequest -> get('description');
+        $task -> priority = $taskRequest -> get('priority');
+        $task -> status = $taskRequest -> get('status');
+        $task -> sp = $taskRequest -> get('sp');
+        $task -> save();
+
+        // task can't be parent of itself
+        $subtasks = $taskRequest -> get('subtasks');
+        $current_task_in_subtasks = array_search($task -> id, $subtasks);
+        if ($current_task_in_subtasks !== false) {
+            array_splice($subtasks, $current_task_in_subtasks, 1);
+        }
+
+        DB::table('tasks')
+            -> where('parent', $task -> id)
+            -> update(['parent' => null]);
+
+        if (count($subtasks) > 0) {
+            DB::table('tasks')
+                -> whereIn('id', $subtasks)
+                -> update(['parent' => $task -> id]);
+        }
+
+        return $task;
     }
 
 }

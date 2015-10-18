@@ -45,14 +45,24 @@
                 placeholder="Write task name"></selectable-dropdown>
     </div>
 
-    <button
-            class="button small radius"
-            ng-click="pm.save()"
-            ng-show="pm.action != 'open'">Save</button>
-    <button
-            class="button small radius info"
-            ng-click="pm.edit()"
-            ng-show="pm.action == 'open'">Edit</button>
-    <button class="button small radius secondary" ng-click="pm.cancel()">Cancel</button>
+    <div class="buttons-line">
+        <div class="buttons-line__left">
+            <button
+                    class="button small radius"
+                    ng-click="pm.saveProject()"
+                    ng-show="pm.action != 'open'">Save</button>
+            <button
+                    class="button small radius info"
+                    ng-click="pm.edit()"
+                    ng-show="pm.action == 'open'">Edit</button>
+            <button class="button small radius secondary" ng-click="pm.cancel()">Cancel</button>
+        </div>
+        <div class="buttons-line__right">
+            <button
+                    class="button small radius alert"
+                    ng-click="pm.deleteProject()"
+                    ng-show="pm.canBeDeleted == true">Delete</button>
+        </div>
+    </div>
     <a class="close-reveal-modal" ng-click="pm.cancel()">&#215;</a>
 </div>
