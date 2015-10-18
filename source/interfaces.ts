@@ -8,10 +8,13 @@
  */
 interface Task {
     id: any;
-    priority;
-    sp;
-    status;
+    priority: any;
+    sp: any;
+    status: any;
     name: string;
+    project: any;
+    parent: any;
+    subtasks?: Task[];
     created_at: {
         date: string;
         time: string;
@@ -32,6 +35,7 @@ interface Project {
         time: string;
         raw: moment.Moment;
     };
+    subtasks?: Task[];
     description: string;
 }
 

@@ -25,8 +25,8 @@
 
         <subtask-list
                 class="subtask-list"
-                ng-show="tm.subtasks.length > 0"
-                subtasks="tm.subtasks"
+                ng-show="tm.task.subtasks.length > 0"
+                subtasks="tm.task.subtasks"
                 hide-remove-button="true"
                 title="Subtasks:"></subtask-list>
 
@@ -87,6 +87,7 @@
                         <selectable-dropdown
                                 items="tm.availableProjects"
                                 selected-task="tm.selectedProject"
+                                mode="KeepValue"
                                 placeholder="Choose project"></selectable-dropdown>
                     </div>
                 </div>
@@ -97,7 +98,12 @@
                         <span class="prefix">Parent</span>
                     </div>
                     <div class="small-7 medium-8 columns">
-                        <input type="text" placeholder="Choose parent task">
+                        <!-- Parent task -->
+                        <selectable-dropdown
+                                items="tm.availableTasks"
+                                selected-task="tm.selectedParent"
+                                mode="KeepValue"
+                                placeholder="Choose parent task"></selectable-dropdown>
                     </div>
                 </div>
             </div>
@@ -112,9 +118,11 @@
                 class="subtask-list subtask-list_task-modal"
                 ng-show="tm.subtasks.length > 0"
                 subtasks="tm.subtasks"
+                hide-submenu-btn="true"
                 title="Subtasks:"></subtask-list>
 
         <selectable-dropdown
+                ng-show="!tm.taskEditCopy.parent"
                 items="tm.availableTasks"
                 selected-task="tm.selectedSubtask"
                 label="Add subtask(s)"

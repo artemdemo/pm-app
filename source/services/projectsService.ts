@@ -6,13 +6,19 @@ namespace pmApp {
         public static $inject: string[] = [
             '$http',
             '$q',
-            'apiService'
+            'apiService',
+            'tasksService'
         ];
 
         private projects: Project[] = [];
         private projectsLoadingPromise: angular.IPromise<Project[]> = null;
 
-        constructor(public $http: angular.IHttpService, public $q: angular.IQService, public apiService: any) {}
+        constructor(
+            public $http: angular.IHttpService,
+            public $q: angular.IQService,
+            public apiService: any,
+            public tasksService: any
+        ) {}
 
 
         /**
@@ -65,10 +71,14 @@ namespace pmApp {
             let deferred: angular.IDeferred<Project[]> = this.$q.defer();
 
             this.$q.all([
-                this.projectsLoadingPromise
+                this.projectsLoadingPromise,
+                this.tasksService.getTasksLoadingPromise()
             ]).then(
-                () => deferred.resolve(this.projects),
-                () => deferred.resolve(this.projects)
+                () => deferred.resolve(this.projects.map((project: Project) => {
+                    project.subtasks = this.tasksService.getTasksByProject(project.id);
+                    return project;
+                })),
+                () => deferred.reject()
             );
 
             return deferred.promise;

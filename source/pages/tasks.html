@@ -18,6 +18,7 @@
     <div class="row task-list">
         <div class="task-item"
              ng-repeat="task in tp.tasks track by task.id"
+             ng-if="! task.parent"
              ng-class="{ 'task-item__has-substasks': task.subtasks.length > 0 }">
             <div class="task-item__title">
                 <div class="item-stat-priority item-stat-priority_minor"></div>
@@ -45,9 +46,9 @@
 
             <subtask-list
                     class="subtask-list"
-                    ng-show="tm.subtasks.length > 0"
-                    subtasks="tm.subtasks"
-                    hide-remove-button="true"></subtask-list>
+                    ng-show="task.subtasks.length > 0"
+                    subtasks="task.subtasks"
+                    hide-remove-btn="true"></subtask-list>
 
         </div>
     </div>

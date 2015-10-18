@@ -1,6 +1,7 @@
 /// <reference path="./submenu-interfaces.ts" />
 
 namespace pmApp {
+    'use strict';
 
     /**
      * Task submenu directive
@@ -24,7 +25,7 @@ namespace pmApp {
             taskModalHtmlLinkConstant,
             taskModalControllerConstant
         ) {
-            let link = (scope, el, attr) => {
+            let link = (scope: any, el: angular.IRootElementService, attr: angular.IAttributes) => {
 
                 /**
                  * Handle click on item menu
@@ -32,7 +33,7 @@ namespace pmApp {
                  * @param item {SubmenuItem} - iem from the scope.menu object
                  * @param $event
                  */
-                let itemClick = function(item: SubmenuItem, $event) {
+                let itemClick = function(item: SubmenuItem, $event: angular.IAngularEvent) {
                     $modal.open({
                         templateUrl: taskModalHtmlLinkConstant,
                         controller: taskModalControllerConstant,
@@ -55,7 +56,7 @@ namespace pmApp {
                  * @param $event
                  */
                 let subitemClick = function(subitem: SubmenuChildItem, parentItem: SubmenuItem, $event) {
-                    parentItem.submenu = parentItem.submenu.map((item: SubmenuChildItem) => {
+                    parentItem.submenu = (parentItem.submenu).map((item: SubmenuChildItem) => {
                         item.selected = false;
                         return item;
                     });
@@ -75,8 +76,13 @@ namespace pmApp {
                         'onclick': itemClick,
                         'action': 'edit',
                         'submenu': []
-                    },
-                    {
+                    }
+                ];
+
+                // If task has parent it shouldn't have status: To Do, In Process or whatever,
+                // case parent already taking care of it
+                if (scope.task.parent === null || ! angular.isDefined(scope.task.parent)) {
+                    scope.menu.push({
                         'title': 'Change status:',
                         'submenu': [
                             {
@@ -100,8 +106,8 @@ namespace pmApp {
                                 'onclick': subitemClick
                             }
                         ]
-                    }
-                ];
+                    });
+                }
             };
             return {
                 link: link,

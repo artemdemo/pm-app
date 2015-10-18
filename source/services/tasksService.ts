@@ -46,10 +46,15 @@ namespace pmApp {
 
             this.tasks = newTasks.map((task: Task) => {
                 let date: moment.Moment = moment(task.created_at);
+                let parent = parseInt(task.parent, 10);
+                let project = parseInt(task.project, 10);
+
                 task.id = parseInt(task.id, 10);
                 task.priority = parseInt(task.priority, 10);
                 task.sp = parseInt(task.sp, 10);
                 task.status = parseInt(task.status, 10);
+                task.parent = parent == parent ? parent : task.parent;
+                task.project = project == project ? project : task.project;
                 task.created_at = {
                     date: date.format('YYYY-MM-DD'),
                     time: date.format('HH:mm'),
@@ -58,6 +63,16 @@ namespace pmApp {
 
                 return task
             });
+        }
+
+        /**
+         * Return promise of loading tasks.
+         * Useful to check whether tasks are loading or not.
+         *
+         * @returns {angular.IPromise<Task[]>}
+         */
+        public getTasksLoadingPromise(): angular.IPromise<Task[]> {
+            return this.tasksLoadingPromise;
         }
 
 
@@ -71,11 +86,36 @@ namespace pmApp {
             this.$q.all([
                 this.tasksLoadingPromise
             ]).then(
-                () => deferred.resolve(this.tasks),
-                () => deferred.resolve(this.tasks)
+                () => deferred.resolve(this.tasks.map((task: Task) => {
+                    task.subtasks = this.getTasksByParent(task.id);
+                    return task;
+                })),
+                () => deferred.reject()
             );
 
             return deferred.promise;
+        }
+
+
+        /**
+         * Return tasks that related to given parent
+         *
+         * @param parentId
+         * @returns {Task[]}
+         */
+        public getTasksByParent(parentId: number): Task[] {
+            return this.tasks.filter((task) => task.parent === parentId);
+        }
+
+
+        /**
+         * Return tasks that related to given project
+         *
+         * @param projectId
+         * @returns {Task[]}
+         */
+        public getTasksByProject(projectId: number): Task[] {
+            return this.tasks.filter((task) => task.project === projectId);
         }
 
 

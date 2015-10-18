@@ -23,7 +23,8 @@ namespace pmApp {
                 scope: {
                     subtasks: '=',
                     title: '@',
-                    hideRemoveBtn: '='
+                    hideRemoveBtn: '=',
+                    hideSubmenuBtn: '='
                 },
                 restrict: 'E'
             };

@@ -6,6 +6,7 @@ namespace pmApp {
             '$scope',
             '$modalInstance',
             'tasksService',
+            'projectsService',
             'task',
             'action'
         ];
@@ -16,13 +17,16 @@ namespace pmApp {
 
         public subtasks: Task[] = [];
         public selectedSubtask: Task;
+        public selectedParent: Task;
         public availableTasks: Task[] = [];
+        public availableProjects: Project[] = [];
 
         /**
          *
          * @param $scope
          * @param $modalInstance
          * @param tasksService
+         * @param projectsService
          * @param task
          * @param action {string} - will contain action that user want apply on the task
          *      Possible values:
@@ -34,6 +38,7 @@ namespace pmApp {
             public $scope: angular.IScope,
             public $modalInstance: any,
             public tasksService: any,
+            public projectsService: any,
             public task: any,
             public action: string
         ) {
@@ -44,11 +49,17 @@ namespace pmApp {
                 this.taskEditCopy = tasksService.getEmptyTask();
                 this.canBeDeleted = false;
             } else {
+
+                // I want to keep tasks and subtasks separately
                 this.taskEditCopy = angular.copy(task);
+                this.subtasks = angular.copy(task.subtasks);
             }
 
             tasksService.getTasks()
                 .then((tasks: Task[]) => this.availableTasks = tasks);
+
+            projectsService.getProjects()
+                .then((projects: Project[]) => this.availableProjects = projects);
 
             $scope.$watch(() => this.selectedSubtask, (newValue) => {
                 if (newValue) {
