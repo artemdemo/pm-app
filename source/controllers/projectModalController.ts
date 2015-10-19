@@ -28,9 +28,9 @@ namespace pmApp {
          * @param project
          * @param action {string} - will contain action that user want apply on the project
          *      Possible values:
-         *      'new' - adding new project
-         *      'edit' - editing project
-         *      'open' - viewing project data
+         *      'New' - adding new project
+         *      'Edit' - editing project
+         *      'Open' - viewing project data
          */
         constructor (
             public $scope: angular.IScope,
@@ -43,7 +43,7 @@ namespace pmApp {
 
             this.canBeDeleted = true;
 
-            if ( action === 'new' ) {
+            if ( ModalAction[action] === ModalAction['New'] ) {
                 this.projectEditCopy = projectsService.getEmptyProject();
                 this.canBeDeleted = false;
             } else {
@@ -62,7 +62,7 @@ namespace pmApp {
         }
 
         public edit(): void {
-            this.action = 'edit';
+            this.action = ModalAction[ModalAction.Edit];
         }
 
         public cancel(): void {

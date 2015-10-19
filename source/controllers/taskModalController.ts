@@ -1,6 +1,12 @@
 namespace pmApp {
     'use strict';
 
+    export enum ModalAction {
+        New,
+        Edit,
+        Open
+    }
+
     class TaskModalController {
         public static $inject: string[] = [
             '$scope',
@@ -30,9 +36,9 @@ namespace pmApp {
          * @param task
          * @param action {string} - will contain action that user want apply on the task
          *      Possible values:
-         *      'new' - adding new task
-         *      'edit' - editing task
-         *      'open' - viewing task data
+         *      'New' - adding new task
+         *      'Edit' - editing task
+         *      'Open' - viewing task data
          */
         constructor (
             public $scope: angular.IScope,
@@ -45,7 +51,7 @@ namespace pmApp {
 
             this.canBeDeleted = true;
 
-            if ( action === 'new' ) {
+            if ( ModalAction[action] === ModalAction['New'] ) {
                 this.taskEditCopy = tasksService.getEmptyTask();
                 this.canBeDeleted = false;
             } else {
@@ -73,7 +79,8 @@ namespace pmApp {
         }
 
         public editTask(): void {
-            this.action = 'edit';
+            console.log(ModalAction[ModalAction.Edit]);
+            this.action = ModalAction[ModalAction.Edit];
         }
 
         public saveTask(): void {

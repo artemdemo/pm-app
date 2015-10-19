@@ -1,5 +1,5 @@
 <div class="row">
-    <div ng-show="tm.action == 'open'">
+    <div ng-show="tm.action == 'Open'">
         <h4>
             {{ tm.task.name }}
             <small>{{ tm.task.created_at.date }} {{ tm.task.created_at.time }}</small>
@@ -32,7 +32,7 @@
 
     </div>
 
-    <div class="task-item-edit" ng-show="tm.action != 'open'">
+    <div class="task-item-edit" ng-show="tm.action != 'Open'">
         <div>
             <label>Task name:
                 <input type="text" class="task-item-edit__title" ng-model="tm.taskEditCopy.name">
@@ -134,11 +134,11 @@
             <button
                     class="button small radius"
                     ng-click="tm.saveTask()"
-                    ng-show="tm.action != 'open'">Save</button>
+                    ng-show="tm.action != 'Open'">Save</button>
             <button
                     class="button small radius info"
                     ng-click="tm.editTask()"
-                    ng-show="tm.action == 'open'">Edit</button>
+                    ng-show="tm.action == 'Open'">Edit</button>
             <button class="button small radius secondary" ng-click="tm.cancel()">Cancel</button>
         </div>
         <div class="buttons-line__right">

@@ -36,7 +36,7 @@ namespace pmApp {
                 controller: this.taskModalControllerConstant,
                 resolve: {
                     task: (): any => null,
-                    action: (): any => 'new'
+                    action: (): any => ModalAction.New
                 }
             });
         }

@@ -43,13 +43,13 @@ namespace pmApp {
                     {
                         'title': 'Open',
                         'onclick': itemClick,
-                        'action': 'open',
+                        'action': ModalAction[ModalAction.Open],
                         'submenu': []
                     },
                     {
                         'title': 'Edit',
                         'onclick': itemClick,
-                        'action': 'edit',
+                        'action': ModalAction[ModalAction.Edit],
                         'submenu': []
                     }
                 ];
