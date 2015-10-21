@@ -38,10 +38,13 @@ namespace pmApp {
                     scope.selectedTask = null;
                 });
 
-                scope.selectItem = (item: IItem): void => {
-                    if (Mode[scope.mode] == Mode[<string>'KeepValue']) {
-                        scope.search = item.name;
+                scope.$watch('selectedTask', (newTask: Task) => {
+                    if (newTask && Mode[scope.mode] == Mode[<string>'KeepValue']) {
+                        scope.search = newTask.name;
                     }
+                });
+
+                scope.selectItem = (item: IItem): void => {
                     scope.selectedTask = item;
                     $listContainer.removeClass('selectable-dropdown__list_show');
                 };

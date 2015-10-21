@@ -24,6 +24,7 @@ namespace pmApp {
         public subtasks: Task[] = [];
         public selectedSubtask: Task;
         public selectedParent: Task;
+        public selectedProject: Task;
         public availableTasks: Task[] = [];
         public availableProjects: Project[] = [];
 
@@ -59,6 +60,11 @@ namespace pmApp {
                 // I want to keep tasks and subtasks separately
                 this.taskEditCopy = angular.copy(task);
                 this.subtasks = angular.copy(task.subtasks);
+
+                if (this.taskEditCopy.project) {
+                    projectsService.getProjectById(this.taskEditCopy.project)
+                        .then((project) => this.selectedProject = project);
+                }
             }
 
             tasksService.getTasks()
@@ -67,11 +73,23 @@ namespace pmApp {
             projectsService.getProjects()
                 .then((projects: Project[]) => this.availableProjects = projects);
 
-            $scope.$watch(() => this.selectedSubtask, (newValue) => {
-                if (newValue) {
-                    this.subtasks.push(newValue);
+            $scope.$watch(() => this.selectedSubtask, (newSubTask: Task) => {
+                if (newSubTask) {
+                    this.subtasks.push(newSubTask);
                 }
-            })
+            });
+
+            $scope.$watch(() => this.selectedProject, (newProject: Project) => {
+                if (newProject) {
+                    this.taskEditCopy.project = newProject.id;
+                }
+            });
+
+            $scope.$watch(() => this.selectedParent, (newParent: Task) => {
+                if (newParent) {
+                    this.taskEditCopy.parent = newParent.id;
+                }
+            });
         }
 
         public cancel(): void {

@@ -86,6 +86,34 @@ namespace pmApp {
 
 
         /**
+         * Return project by it's id
+         * @returns {promise}
+         */
+        public getProjectById(projectId: number): angular.IPromise<Project> {
+            let deferred: angular.IDeferred<Project> = this.$q.defer();
+
+            this.$q.all([
+                this.projectsLoadingPromise,
+                this.tasksService.getTasksLoadingPromise()
+            ]).then(
+                () => {
+                    for (var i: number = 0, len: number = this.projects.length; i < len; i++) {
+                        if (projectId === this.projects[i].id) {
+                            let project = this.projects[i];
+                            project.subtasks = this.tasksService.getTasksByProject(project.id);
+                            deferred.resolve(project);
+                            break;
+                        }
+                    }
+                },
+                () => deferred.reject()
+            );
+
+            return deferred.promise;
+        }
+
+
+        /**
          * Return empty project data
          * It will be used in modal
          */

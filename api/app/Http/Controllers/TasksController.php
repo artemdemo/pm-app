@@ -171,6 +171,7 @@ class TasksController extends Controller {
         $task -> description = $taskRequest -> get('description');
         $task -> priority = $taskRequest -> get('priority');
         $task -> status = $taskRequest -> get('status');
+        $task -> project = $taskRequest -> get('project');
         $task -> sp = $taskRequest -> get('sp');
         $task -> save();
 
