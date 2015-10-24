@@ -1,6 +1,18 @@
 namespace pmApp {
     'use strict';
 
+    export interface Project {
+        id: any;
+        name: string;
+        created_at: {
+            date: string;
+            time: string;
+            raw: moment.Moment;
+        };
+        subtasks?: Task[];
+        description: string;
+    }
+
     class ProjectsService {
 
         public static $inject: string[] = [

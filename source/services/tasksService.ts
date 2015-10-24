@@ -1,6 +1,24 @@
 namespace pmApp {
     'use strict';
 
+    export interface Task {
+        id: any;
+        priority: any;
+        sp: any;
+        status: any;
+        name: string;
+        project: any;
+        parent: any;
+        subtasks?: Task[];
+        created_at: {
+            date: string;
+            time: string;
+            raw: moment.Moment;
+        };
+        description: string;
+    }
+
+    
     class TasksService {
 
         public static $inject: string[] = [
@@ -87,7 +105,7 @@ namespace pmApp {
                 this.tasksLoadingPromise
             ]).then(
                 () => deferred.resolve(this.tasks.map((task: Task) => {
-                    task.subtasks = this.getTasksByParent(task.id);
+                    task.subtasks = (<Task[]> this.getTasksByParent(task.id));
                     return task;
                 })),
                 () => deferred.reject()
