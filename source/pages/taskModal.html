@@ -101,7 +101,9 @@
                         <!-- Parent task -->
                         <selectable-dropdown
                                 items="tm.availableTasks"
+                                excluded-items="tm.subtasks"
                                 selected-task="tm.selectedParent"
+                                name-property="name"
                                 mode="KeepValue"
                                 placeholder="Choose parent task"></selectable-dropdown>
                     </div>
@@ -124,8 +126,10 @@
         <selectable-dropdown
                 ng-show="!tm.taskEditCopy.parent"
                 items="tm.availableTasks"
+                excluded-items="tm.subtasks"
                 selected-task="tm.selectedSubtask"
                 label="Add subtask(s)"
+                mode="passThrough"
                 placeholder="Write task name"></selectable-dropdown>
     </div>
 

@@ -15,10 +15,12 @@ describe('subtaskList directive', () => {
 
         $rootScope.tasks = [
             {
+                id: 1,
                 name: 'task 1',
                 description: 'task 1 description'
             },
             {
+                id: 2,
                 name: 'task 2',
                 description: 'task 2 description'
             }
@@ -34,7 +36,9 @@ describe('subtaskList directive', () => {
 
     it(
         `Title is equal to 'Subtasks:'`,
-        () => expect(element[0].querySelector('.subtask-list__title').textContent).toEqual('Subtasks:')
+        () => {
+            expect(element[0].querySelector('.subtask-list__title').textContent).toEqual('Subtasks:')
+        }
     );
 
     it(

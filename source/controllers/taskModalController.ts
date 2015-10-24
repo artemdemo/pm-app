@@ -68,7 +68,9 @@ namespace pmApp {
             }
 
             tasksService.getTasks()
-                .then((tasks: Task[]) => this.availableTasks = tasks);
+                .then((tasks: Task[]) =>
+                    this.availableTasks = tasks
+                        .filter((task: Task) => this.taskEditCopy.id !== task.id));
 
             projectsService.getProjects()
                 .then((projects: Project[]) => this.availableProjects = projects);
@@ -97,7 +99,6 @@ namespace pmApp {
         }
 
         public editTask(): void {
-            console.log(ModalAction[ModalAction.Edit]);
             this.action = ModalAction[ModalAction.Edit];
         }
 

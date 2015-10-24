@@ -6,7 +6,7 @@
     <ul class="selectable-dropdown__list">
         <li
             class="selectable-dropdown__list-item"
-            ng-repeat="item in items | filter:search"
+            ng-repeat="item in availableItems | filter : search"
             ng-click="selectItem( item )">
 
             <span class="selectable-dropdown__list-item-name">{{ item.name }}</span>
