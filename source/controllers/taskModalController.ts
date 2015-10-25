@@ -11,6 +11,7 @@ namespace pmApp {
         public static $inject: string[] = [
             '$scope',
             '$modalInstance',
+            '$q',
             'tasksService',
             'projectsService',
             'task',
@@ -32,6 +33,7 @@ namespace pmApp {
          *
          * @param $scope
          * @param $modalInstance
+         * @param $q
          * @param tasksService
          * @param projectsService
          * @param task
@@ -44,16 +46,22 @@ namespace pmApp {
         constructor (
             public $scope: angular.IScope,
             public $modalInstance: any,
+            public $q: angular.IQService,
             public tasksService: any,
             public projectsService: any,
             public task: any,
             public action: string
         ) {
 
+            let taskEditCopyPromise = null;
+
             this.canBeDeleted = true;
 
-            if ( ModalAction[action] === ModalAction['New'] ) {
-                this.taskEditCopy = tasksService.getEmptyTask();
+            if ( ModalAction[action] === ModalAction[ModalAction['New']] ) {
+                taskEditCopyPromise = tasksService.getEmptyTask()
+                    .then((newTask) => {
+                        this.taskEditCopy = newTask;
+                    });
                 this.canBeDeleted = false;
             } else {
 
@@ -67,10 +75,13 @@ namespace pmApp {
                 }
             }
 
-            tasksService.getTasks()
-                .then((tasks: Task[]) =>
-                    this.availableTasks = tasks
-                        .filter((task: Task) => this.taskEditCopy.id !== task.id));
+            $q.all([
+                tasksService.getTasks(),
+                taskEditCopyPromise
+            ]).then((values) => {
+                this.availableTasks = (<Task[]> values[0])
+                    .filter((task: Task) => this.taskEditCopy.id !== task.id)
+            });
 
             projectsService.getProjects()
                 .then((projects: Project[]) => this.availableProjects = projects);
@@ -103,11 +114,13 @@ namespace pmApp {
         }
 
         public saveTask(): void {
-            this.tasksService.saveTask(this.taskEditCopy, this.subtasks);
+            this.tasksService.saveTask(this.taskEditCopy, this.subtasks)
+                .then(() => this.$modalInstance.close());
         }
 
         public deleteTask(): void {
-            this.tasksService.deleteTask(this.taskEditCopy);
+            this.tasksService.deleteTask(this.taskEditCopy)
+                .then(() => this.$modalInstance.close());
         }
     }
 

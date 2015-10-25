@@ -38,7 +38,11 @@ namespace pmApp {
                     task: (): any => null,
                     action: (): any => ModalAction.New
                 }
-            });
+            }).result
+                .then(() => {
+                    this.tasksService
+                        .getTasks().then((newTasks: Task[]) => this.tasks = newTasks)
+                });
         }
     }
 

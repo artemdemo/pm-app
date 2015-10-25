@@ -6,7 +6,7 @@ namespace pmApp {
         name: string;
     }
 
-    enum Mode {
+    enum EMode {
         PassThrough,
         KeepValue
     }
@@ -53,7 +53,7 @@ namespace pmApp {
                         return ! scope.selectedTask || item.id !== scope.selectedTask.id
                     });
 
-                scope.showSelectedIcon = Mode[scope.mode] == Mode[<string>'KeepValue'];
+                scope.showSelectedIcon = EMode[scope.mode] == EMode[<string>'KeepValue'];
                 scope.availableItems = filterItems();
 
                 $input.bind('focus', (): void => {
@@ -76,7 +76,7 @@ namespace pmApp {
                 });
 
                 scope.$watch('selectedTask', (newTask: IItem) => {
-                    if (newTask && Mode[scope.mode] == Mode[<string>'KeepValue']) {
+                    if (newTask && EMode[scope.mode] == EMode[<string>'KeepValue']) {
                         scope.search = newTask[nameProperty];
                     }
                 });

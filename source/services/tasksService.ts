@@ -18,19 +18,25 @@ namespace pmApp {
         description: string;
     }
 
-    
+
     class TasksService {
 
         public static $inject: string[] = [
             '$http',
             '$q',
+            'settingsService',
             'apiService'
         ];
 
         private tasks: Task[] = [];
         private tasksLoadingPromise: angular.IPromise<Task[]>;
 
-        constructor(public $http: angular.IHttpService, public $q: angular.IQService, public apiService: any) {}
+        constructor(
+            public $http: angular.IHttpService,
+            public $q: angular.IQService,
+            public settingsService: any,
+            public apiService: any
+        ) {}
 
         /**
          * Load all open tasks that user have access to them
@@ -62,25 +68,36 @@ namespace pmApp {
          */
         private updateTasks(newTasks: Task[]): void {
 
-            this.tasks = newTasks.map((task: Task) => {
-                let date: moment.Moment = moment(task.created_at);
-                let parent = parseInt(task.parent, 10);
-                let project = parseInt(task.project, 10);
+            newTasks.forEach((task: Task) => {
+                let taskExists = false;
+                for (var i: number = 0, len: number = this.tasks.length; i<len; i++) {
+                    if (this.tasks[i].id == task.id) {
+                        taskExists = true;
+                        this.tasks[i] = this.convertTask(task)
+                    }
+                }
 
-                task.id = parseInt(task.id, 10);
-                task.priority = parseInt(task.priority, 10);
-                task.sp = parseInt(task.sp, 10);
-                task.status = parseInt(task.status, 10);
-                task.parent = parent == parent ? parent : task.parent;
-                task.project = project == project ? project : task.project;
-                task.created_at = {
-                    date: date.format('YYYY-MM-DD'),
-                    time: date.format('HH:mm'),
-                    raw: date
-                };
-
-                return task
+                if (!taskExists) {
+                    this.tasks.push(this.convertTask(task));
+                }
             });
+
+            this.tasks = this.tasks
+                .sort((taskA: Task, taskB: Task) => parseInt(taskB.id, 10) - parseInt(taskA.id, 10));
+
+        }
+
+        private convertTask(task: Task): Task {
+            let date: moment.Moment = angular.isString(task.created_at) ? moment(task.created_at) : task.created_at.raw;
+
+            task.sp = parseInt(task.sp, 10);
+            task.created_at = {
+                date: date.format('YYYY-MM-DD'),
+                time: date.format('HH:mm'),
+                raw: date
+            };
+
+            return task
         }
 
         /**
@@ -141,11 +158,12 @@ namespace pmApp {
          * Return empty task data
          * It will be used in modal
          *
-         * @returns {Task}
+         * @returns {IPromise<Task>}
          */
-        public getEmptyTask(): Task {
+        public getEmptyTask(): angular.IPromise<Task> {
             let newTask: Task;
             let date: moment.Moment = moment(new Date());
+            let deferred: angular.IDeferred<Task> = this.$q.defer();
 
             newTask = <Task>{
                 id: null,
@@ -159,7 +177,19 @@ namespace pmApp {
                 description: ''
             };
 
-            return angular.copy(newTask);
+            this.$q.all([
+                this.settingsService.getMetatag(EMetatag.priority),
+                this.settingsService.getMetatag(EMetatag.status)
+            ]).then(
+                (values) => {
+                    newTask.priority = values[0][0].id;
+                    newTask.status = values[1][0].id;
+                    deferred.resolve(angular.copy(newTask));
+                },
+                () => deferred.reject()
+            );
+
+            return deferred.promise;
         }
 
 
@@ -180,16 +210,21 @@ namespace pmApp {
                     this.apiService.getAbsoluteUrl('/tasks'),
                     task
                 ).then(
-                    (data: gIOresponce) => deferred.resolve(data),
-                    (data: gIOresponce) => deferred.reject(data)
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => deferred.resolve(result.data ),
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => deferred.reject(result.data)
                 );
             } else {
                 this.$http.post(
                     this.apiService.getAbsoluteUrl('/tasks'),
                     task
                 ).then(
-                    (data: gIOresponce) => deferred.resolve(data),
-                    (data: gIOresponce) => deferred.reject(data)
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
+                        console.log(result);
+                        task.id = result.data.id;
+                        this.updateTasks([task]);
+                        deferred.resolve(result.data)
+                    },
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => deferred.reject(result.data)
                 );
             }
 
