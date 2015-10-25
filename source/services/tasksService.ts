@@ -98,6 +98,21 @@ namespace pmApp {
 
 
         /**
+         * Get task by its id
+         * @param taskId
+         * @returns {any}
+         */
+        public getTaskById(taskId: number): ITask {
+            for (var i: number = 0, len: number = this.tasks.length; i < len; i++) {
+                if (taskId === this.tasks[i].id) {
+                    return this.tasks[i];
+                }
+            }
+            return null;
+        }
+
+
+        /**
          * Return tasks that related to given parent
          *
          * @param parentId
@@ -302,7 +317,7 @@ namespace pmApp {
         /**
          * Convert task to fit data to what used in front end model
          * @param task
-         * @returns {Task}
+         * @returns {ITask}
          */
         private convertTask(task: ITask): ITask {
             let date: moment.Moment = angular.isString(task.created_at) ? moment(task.created_at) : task.created_at.raw;

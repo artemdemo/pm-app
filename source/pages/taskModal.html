@@ -100,6 +100,7 @@
                     <div class="small-7 medium-8 columns">
                         <!-- Parent task -->
                         <selectable-dropdown
+                                disable-input="tm.subtasks.length > 0"
                                 items="tm.availableTasks"
                                 excluded-items="tm.subtasks"
                                 selected-task="tm.selectedParent"
@@ -124,8 +125,8 @@
                 title="Subtasks:"></subtask-list>
 
         <selectable-dropdown
-                ng-show="!tm.taskEditCopy.parent"
                 items="tm.availableTasks"
+                disable-input="tm.taskEditCopy.parent"
                 excluded-items="tm.subtasks"
                 selected-task="tm.selectedSubtask"
                 label="Add subtask(s)"

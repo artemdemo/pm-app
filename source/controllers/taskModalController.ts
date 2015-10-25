@@ -69,6 +69,10 @@ namespace pmApp {
                 this.taskEditCopy = angular.copy(task);
                 this.subtasks = angular.copy(task.subtasks);
 
+                if (this.taskEditCopy.parent) {
+                    this.selectedParent = this.tasksService.getTaskById(this.taskEditCopy.parent);
+                }
+
                 if (this.taskEditCopy.project) {
                     projectsService.getProjectById(this.taskEditCopy.project)
                         .then((project: IProject) => this.selectedProject = project);
@@ -99,9 +103,7 @@ namespace pmApp {
             });
 
             $scope.$watch(() => this.selectedParent, (newParent: ITask) => {
-                if (newParent) {
-                    this.taskEditCopy.parent = newParent.id;
-                }
+                this.taskEditCopy.parent = newParent ? newParent.id : null;
             });
         }
 

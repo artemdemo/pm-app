@@ -16,6 +16,7 @@ namespace pmApp {
      *
      * @attr
      * items - items list
+     * disableInput - disable input condition
      * excludedItems - items that shouldn't be in the list
      * selectedTask - selected item object
      * nameProperty - property of the object where directive expects to find name (default is `name`)
@@ -28,6 +29,7 @@ namespace pmApp {
      * @example
      * <selectable-dropdown
      *      items="tm.availableTasks"
+     *      disable-input="tm.subtasks.length > 0"
      *      excluded-items="tm.subtasks"
      *      selected-task="tm.selectedParent"
      *      name-property="name"
@@ -94,6 +96,7 @@ namespace pmApp {
                 templateUrl: 'html/selectableDropdown.html',
                 scope: {
                     items: '=',
+                    disableInput: '=',
                     selectedTask: '=',
                     excludedItems: '=',
                     nameProperty: '@',

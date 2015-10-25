@@ -1,7 +1,7 @@
 <div class="selectable-dropdown" ng-class="{'selectable-dropdown_selected': selectedTask && showSelectedIcon}">
     <label>
         <span class="selectable-dropdown__label-text">{{ label }}</span>
-        <input type="text" placeholder="{{ placeholder }}" ng-model="search">
+        <input type="text" placeholder="{{ placeholder }}" ng-model="search" ng-disabled="disableInput">
     </label>
     <ul class="selectable-dropdown__list">
         <li
