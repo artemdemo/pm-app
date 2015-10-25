@@ -13,3 +13,4 @@
 
 Route::controller('tasks', 'TasksController');
 Route::controller('projects', 'ProjectsController');
+Route::controller('settings', 'SettingsController');
