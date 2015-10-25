@@ -1,4 +1,4 @@
-describe('projectsService', function(){
+describe('projectsService', () => {
 
     let $rootScope;
     let projectsService;

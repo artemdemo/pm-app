@@ -25,6 +25,11 @@ namespace pmApp {
                     (newTasks: Task[]) => this.tasks = newTasks,
                     (newTasks: Task[]) => this.tasks = newTasks
                 );
+
+            $scope.$on('update-tasks-list', () => {
+                tasksService.getTasks()
+                    .then((newTasks: Task[]) => this.tasks = newTasks);
+            });
         }
 
         /**

@@ -210,8 +210,11 @@ namespace pmApp {
                     this.apiService.getAbsoluteUrl('/tasks'),
                     task
                 ).then(
-                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => deferred.resolve(result.data ),
-                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => deferred.reject(result.data)
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
+                        this.updateTasks([task]);
+                        deferred.resolve()
+                    },
+                    () => deferred.reject()
                 );
             } else {
                 this.$http.post(
@@ -219,12 +222,11 @@ namespace pmApp {
                     task
                 ).then(
                     (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
-                        console.log(result);
                         task.id = result.data.id;
                         this.updateTasks([task]);
-                        deferred.resolve(result.data)
+                        deferred.resolve()
                     },
-                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => deferred.reject(result.data)
+                    () => deferred.reject()
                 );
             }
 
@@ -245,8 +247,16 @@ namespace pmApp {
                 this.$http.delete(
                     this.apiService.getAbsoluteUrl('/tasks/task/' + task.id)
                 ).then(
-                    (data: gIOresponce) => deferred.resolve(data),
-                    (data: gIOresponce) => deferred.reject(data)
+                    () => {
+                        for (var i: number = 0, len: number = this.tasks.length; i<len; i++) {
+                            if (this.tasks[i].id === task.id) {
+                                this.tasks.splice(i, 1);
+                                break;
+                            }
+                        }
+                        deferred.resolve();
+                    },
+                    () => deferred.reject()
                 );
             } else {
                 deferred.reject();

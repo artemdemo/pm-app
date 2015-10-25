@@ -45,7 +45,12 @@ namespace pmApp {
                                 return item.action
                             }
                         }
-                    });
+                    }).result
+                        .then(() => {
+                            if (item.action === ModalAction[ModalAction.Edit]) {
+                                scope.$emit('update-tasks-list');
+                            }
+                        });
                 }.bind(scope);
 
 
