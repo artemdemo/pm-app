@@ -11,7 +11,6 @@ class TasksController extends Controller {
 
     private $rules = array(
         'name'=>'required',
-        'description'=>'required',
         'subtasks'=>'array',
         'priority'=>'required|numeric',
         'status'=>'required|numeric',
@@ -112,10 +111,11 @@ class TasksController extends Controller {
     /**
      * Delete task
      *
-     * @param null $id
+     * @param string $id
+     * @param string $removeSubtasks
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteTask($id = null)
+    public function deleteTask($id = null, $removeSubtasks = 'false')
     {
         if (!$id) {
             return response() -> json(array(
@@ -125,8 +125,13 @@ class TasksController extends Controller {
         } else {
             // $user = User::find( $user_id );
 
-            $task = Task::find($id);
-            $task -> delete();
+            Task::find($id) -> delete();
+
+            if ($removeSubtasks == 'false') {
+                Task::where('parent', $id) -> update(['parent' => null]);
+            } else {
+                Task::where('parent', $id) -> delete();
+            }
         }
 
         return response() -> json(array(

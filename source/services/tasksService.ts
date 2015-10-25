@@ -48,11 +48,15 @@ namespace pmApp {
 
             this.$http.get(this.apiService.getAbsoluteUrl('/tasks/open'))
                 .then(
-                    (result: any) => {
-                        deferred.resolve(result.data);
-                        this.updateTasks(result.data);
+                    (result: angular.IHttpPromiseCallbackArg<any>) => {
+                        if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
+                            deferred.resolve();
+                            this.updateTasks(<Task[]>result.data);
+                        } else {
+                            deferred.reject()
+                        }
                     },
-                    (data: any) => deferred.reject(data)
+                    () => deferred.reject()
                 );
 
             this.tasksLoadingPromise = deferred.promise;
@@ -60,45 +64,6 @@ namespace pmApp {
             return deferred.promise;
         }
 
-
-        /**
-         * Function will update tasks list.
-         * It will replace tasks with the same id; if task has unique id it will be added to the list
-         * @param newTasks
-         */
-        private updateTasks(newTasks: Task[]): void {
-
-            newTasks.forEach((task: Task) => {
-                let taskExists = false;
-                for (var i: number = 0, len: number = this.tasks.length; i<len; i++) {
-                    if (this.tasks[i].id == task.id) {
-                        taskExists = true;
-                        this.tasks[i] = this.convertTask(task)
-                    }
-                }
-
-                if (!taskExists) {
-                    this.tasks.push(this.convertTask(task));
-                }
-            });
-
-            this.tasks = this.tasks
-                .sort((taskA: Task, taskB: Task) => parseInt(taskB.id, 10) - parseInt(taskA.id, 10));
-
-        }
-
-        private convertTask(task: Task): Task {
-            let date: moment.Moment = angular.isString(task.created_at) ? moment(task.created_at) : task.created_at.raw;
-
-            task.sp = parseInt(task.sp, 10);
-            task.created_at = {
-                date: date.format('YYYY-MM-DD'),
-                time: date.format('HH:mm'),
-                raw: date
-            };
-
-            return task
-        }
 
         /**
          * Return promise of loading tasks.
@@ -211,8 +176,12 @@ namespace pmApp {
                     task
                 ).then(
                     (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
-                        this.updateTasks([task]);
-                        deferred.resolve()
+                        if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
+                            this.updateTasks(task, subtasks);
+                            deferred.resolve()
+                        } else {
+                            deferred.reject()
+                        }
                     },
                     () => deferred.reject()
                 );
@@ -222,9 +191,13 @@ namespace pmApp {
                     task
                 ).then(
                     (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
-                        task.id = result.data.id;
-                        this.updateTasks([task]);
-                        deferred.resolve()
+                        if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
+                            task.id = result.data.id;
+                            this.updateTasks(task, subtasks);
+                            deferred.resolve()
+                        } else {
+                            deferred.reject()
+                        }
                     },
                     () => deferred.reject()
                 );
@@ -238,23 +211,37 @@ namespace pmApp {
          * Delete task
          *
          * @param task {Task}
+         * @param removeSubtasks {boolean}
          * @returns {promise}
          */
-        public deleteTask(task: Task): angular.IPromise<gIOresponce> {
+        public deleteTask(task: Task, removeSubtasks: boolean = false): angular.IPromise<gIOresponce> {
             let deferred: angular.IDeferred<gIOresponce> = this.$q.defer();
+
+            let url = '/tasks/task/' + task.id;
+            url += removeSubtasks ? '/true' : '';
 
             if ( task.id ) {
                 this.$http.delete(
-                    this.apiService.getAbsoluteUrl('/tasks/task/' + task.id)
+                    this.apiService.getAbsoluteUrl(url)
                 ).then(
-                    () => {
-                        for (var i: number = 0, len: number = this.tasks.length; i<len; i++) {
-                            if (this.tasks[i].id === task.id) {
-                                this.tasks.splice(i, 1);
-                                break;
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
+                        if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
+                            for (var i: number = this.tasks.length - 1; i>=0; i--) {
+                                if (this.tasks[i].id === task.id) {
+                                    this.tasks.splice(i, 1);
+                                }
+                                if (this.tasks[i].parent === task.id) {
+                                    if (!removeSubtasks) {
+                                        this.tasks[i].parent = null
+                                    } else {
+                                        this.tasks.splice(i, 1);
+                                    }
+                                }
                             }
+                            deferred.resolve();
+                        } else {
+                            deferred.reject()
                         }
-                        deferred.resolve();
                     },
                     () => deferred.reject()
                 );
@@ -263,6 +250,71 @@ namespace pmApp {
             }
 
             return deferred.promise;
+        }
+
+
+        /**
+         * Function will update tasks list.
+         * It will replace tasks with the same id; if task has unique id it will be added to the list
+         * @param newTasks
+         * @param subtasks
+         */
+        private updateTasks(newTasks: Task | Task[], subtasks?: Task[]): void {
+            let tasksArr: Task[] = [];
+
+            if (angular.isArray(newTasks)) {
+                tasksArr = <Task[]>newTasks
+            } else {
+                tasksArr.push(<Task>newTasks)
+            }
+
+            tasksArr.forEach((task: Task) => {
+                let taskExists = false;
+                for (var i: number = 0, len: number = this.tasks.length; i<len; i++) {
+                    if (this.tasks[i].id == task.id) {
+                        taskExists = true;
+                        this.tasks[i] = this.convertTask(task)
+                    }
+                    if (! angular.isDefined(subtasks) || subtasks.length == 0) {
+                        if (this.tasks[i].parent === task.id) {
+                            this.tasks[i].parent = null;
+                        }
+                    } else {
+                        for (var j: number = subtasks.length - 1; j>=0; j--) {
+                            if (subtasks[j].id === this.tasks[i].id) {
+                                this.tasks[i].parent = task.id;
+                                subtasks.splice(j,1);
+                            }
+                        }
+                    }
+                }
+
+                if (!taskExists) {
+                    this.tasks.push(this.convertTask(task));
+                }
+            });
+
+            this.tasks = this.tasks
+                .sort((taskA: Task, taskB: Task) => parseInt(taskB.id, 10) - parseInt(taskA.id, 10));
+
+        }
+
+        /**
+         * Convert task to fit data to what used in front end model
+         * @param task
+         * @returns {Task}
+         */
+        private convertTask(task: Task): Task {
+            let date: moment.Moment = angular.isString(task.created_at) ? moment(task.created_at) : task.created_at.raw;
+
+            task.sp = parseInt(task.sp, 10);
+            task.created_at = {
+                date: date.format('YYYY-MM-DD'),
+                time: date.format('HH:mm'),
+                raw: date
+            };
+
+            return task
         }
 
     }
