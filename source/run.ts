@@ -3,8 +3,11 @@
 namespace pmApp {
     angular
         .module('pmApp')
-        .run(['tasksService', 'projectsService', (tasksService, projectsService)=>{
-            tasksService.loadOpenTasks();
-            projectsService.loadOpenProjects();
-        }]);
+        .run([
+            'tasksService', 'projectsService', 'settingsService',
+            (tasksService, projectsService, settingsService) => {
+                settingsService.loadSettings();
+                tasksService.loadOpenTasks();
+                projectsService.loadOpenProjects();
+            }]);
 }

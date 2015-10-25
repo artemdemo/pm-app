@@ -15,6 +15,7 @@
 /// <reference path="./services/apiService.ts" />
 /// <reference path="./services/tasksService.ts" />
 /// <reference path="./services/projectsService.ts" />
+/// <reference path="./services/settingsService.ts" />
 
 /*---- Providers ----*/
 /// <reference path="./providers/helperProvider.ts" />
