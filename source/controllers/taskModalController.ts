@@ -18,16 +18,16 @@ namespace pmApp {
             'action'
         ];
 
-        public taskEditCopy: Task;
+        public taskEditCopy: ITask;
 
         public canBeDeleted: Boolean;
 
-        public subtasks: Task[] = [];
-        public selectedSubtask: Task;
-        public selectedParent: Task;
-        public selectedProject: Task;
-        public availableTasks: Task[] = [];
-        public availableProjects: Project[] = [];
+        public subtasks: ITask[] = [];
+        public selectedSubtask: ITask;
+        public selectedParent: ITask;
+        public selectedProject: IProject;
+        public availableTasks: ITask[] = [];
+        public availableProjects: IProject[] = [];
 
         /**
          *
@@ -53,52 +53,52 @@ namespace pmApp {
             public action: string
         ) {
 
-            let taskEditCopyPromise = null;
+            let taskEditCopyPromise: angular.IPromise<ITask> = null;
 
             this.canBeDeleted = true;
 
             if ( ModalAction[action] === ModalAction[ModalAction['New']] ) {
                 taskEditCopyPromise = tasksService.getEmptyTask()
-                    .then((newTask) => {
+                    .then((newTask: ITask) => {
                         this.taskEditCopy = newTask;
                     });
                 this.canBeDeleted = false;
             } else {
 
-                // I want to keep tasks and subtasks separately
+                // i want to keep tasks and subtasks separately
                 this.taskEditCopy = angular.copy(task);
                 this.subtasks = angular.copy(task.subtasks);
 
                 if (this.taskEditCopy.project) {
                     projectsService.getProjectById(this.taskEditCopy.project)
-                        .then((project) => this.selectedProject = project);
+                        .then((project: IProject) => this.selectedProject = project);
                 }
             }
 
             $q.all([
                 tasksService.getTasks(),
                 taskEditCopyPromise
-            ]).then((values) => {
-                this.availableTasks = (<Task[]> values[0])
-                    .filter((task: Task) => this.taskEditCopy.id !== task.id)
+            ]).then((values: any) => {
+                this.availableTasks = (<ITask[]> values[0])
+                    .filter((task: ITask) => this.taskEditCopy.id !== task.id);
             });
 
             projectsService.getProjects()
-                .then((projects: Project[]) => this.availableProjects = projects);
+                .then((projects: IProject[]) => this.availableProjects = projects);
 
-            $scope.$watch(() => this.selectedSubtask, (newSubTask: Task) => {
+            $scope.$watch(() => this.selectedSubtask, (newSubTask: ITask) => {
                 if (newSubTask) {
                     this.subtasks.push(newSubTask);
                 }
             });
 
-            $scope.$watch(() => this.selectedProject, (newProject: Project) => {
+            $scope.$watch(() => this.selectedProject, (newProject: IProject) => {
                 if (newProject) {
                     this.taskEditCopy.project = newProject.id;
                 }
             });
 
-            $scope.$watch(() => this.selectedParent, (newParent: Task) => {
+            $scope.$watch(() => this.selectedParent, (newParent: ITask) => {
                 if (newParent) {
                     this.taskEditCopy.parent = newParent.id;
                 }

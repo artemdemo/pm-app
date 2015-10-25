@@ -15,34 +15,33 @@ namespace pmApp {
      */
     angular
         .module('pmApp')
-        .directive('taskSubmenu',
-        [
+        .directive('taskSubmenu', [
             '$modal',
             'taskModalHtmlLinkConstant',
             'taskModalControllerConstant',
-        function(
-            $modal,
-            taskModalHtmlLinkConstant,
-            taskModalControllerConstant
-        ) {
-            let link = (scope: any, el: angular.IRootElementService, attr: angular.IAttributes) => {
+        (
+            $modal: any,
+            taskModalHtmlLinkConstant: string,
+            taskModalControllerConstant: string
+        ): any => {
+            let link: any = (scope: any, el: angular.IRootElementService, attr: angular.IAttributes): void => {
 
                 /**
                  * Handle click on item menu
                  * Opens modal with task information
-                 * @param item {SubmenuItem} - iem from the scope.menu object
+                 * @param item {ISubmenuItem} - iem from the scope.menu object
                  * @param $event
                  */
-                let itemClick = function(item: SubmenuItem, $event: angular.IAngularEvent) {
+                let itemClick: any = function(item: ISubmenuItem, $event: angular.IAngularEvent): void {
                     $modal.open({
                         templateUrl: taskModalHtmlLinkConstant,
                         controller: taskModalControllerConstant,
                         resolve: {
-                            task: function () {
+                            task: function (): ITask {
                                 return scope.task;
                             },
-                            action: function() {
-                                return item.action
+                            action: function(): string {
+                                return item.action;
                             }
                         }
                     }).result
@@ -56,12 +55,12 @@ namespace pmApp {
 
                 /**
                  * Handle click on subitem menu
-                 * @param subitem {SubmenuChildItem}
-                 * @param parentItem {SubmenuItem}
+                 * @param subitem {ISubmenuChildItem}
+                 * @param parentItem {ISubmenuItem}
                  * @param $event
                  */
-                let subitemClick = function(subitem: SubmenuChildItem, parentItem: SubmenuItem, $event) {
-                    parentItem.submenu = (<any> parentItem.submenu).map((item: SubmenuChildItem) => {
+                let subitemClick: any = function(subitem: ISubmenuChildItem, parentItem: ISubmenuItem): void {
+                    parentItem.submenu = (<any> parentItem.submenu).map((item: ISubmenuChildItem) => {
                         item.selected = false;
                         return item;
                     });
@@ -84,7 +83,7 @@ namespace pmApp {
                     }
                 ];
 
-                // If task has parent it shouldn't have status: To Do, In Process or whatever,
+                // if task has parent it shouldn't have status: To Do, In Process or whatever,
                 // case parent already taking care of it
                 if (scope.task.parent === null || ! angular.isDefined(scope.task.parent)) {
                     scope.menu.push({
@@ -121,7 +120,7 @@ namespace pmApp {
                     task: '='
                 },
                 restrict: 'E'
-            }
+            };
         }]);
 
 }

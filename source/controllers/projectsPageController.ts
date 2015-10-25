@@ -10,7 +10,7 @@ namespace pmApp {
             'projectModalControllerConstant'
         ];
 
-        public projects: Project[];
+        public projects: IProject[];
 
         constructor (
             public $scope: angular.IScope,
@@ -22,8 +22,8 @@ namespace pmApp {
 
             projectsService.getProjects()
                 .then(
-                (newProjects: Project[]) => this.projects = newProjects,
-                (newProjects: Project[]) => this.projects = newProjects
+                (newProjects: IProject[]) => this.projects = newProjects,
+                (newProjects: IProject[]) => this.projects = newProjects
             );
         }
 

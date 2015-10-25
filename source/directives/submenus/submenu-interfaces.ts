@@ -1,12 +1,12 @@
-interface SubmenuChildItem {
+interface ISubmenuChildItem {
     title: string;
     onclick: () => {};
     selected: boolean;
 }
 
-interface SubmenuItem {
+interface ISubmenuItem {
     title: string;
     onclick: () => {};
     action?: string;
-    submenu: SubmenuChildItem[];
+    submenu: ISubmenuChildItem[];
 }

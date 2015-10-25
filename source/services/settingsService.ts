@@ -9,7 +9,7 @@ namespace pmApp {
     interface ISettings {
         metatags: {
             priority: IMetatag[]
-        }
+        };
     }
 
     export enum EMetatag {
@@ -17,7 +17,7 @@ namespace pmApp {
         status
     }
 
-    class settingsService {
+    class SettingsService {
         public static $inject: string[] = [
             '$http',
             '$q',
@@ -76,5 +76,5 @@ namespace pmApp {
 
     angular
         .module('pmApp')
-        .service('settingsService', settingsService);
+        .service('settingsService', SettingsService);
 }

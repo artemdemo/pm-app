@@ -20,7 +20,8 @@ namespace pmApp {
      * selectedTask - selected item object
      * nameProperty - property of the object where directive expects to find name (default is `name`)
      * mode - what to do with selected item:
-     *      PassThrough - after selecting text wouldn't be shown text and selected icon wouldn't appear, but `selectedTask` will keep the object
+     *      PassThrough - after selecting text wouldn't be shown text and selected icon wouldn't appear,
+     *                    but `selectedTask` will keep the object
      *      KeepValue - will keep item name in <input>
      * placeholder - text that will be shown in input's placeholder
      *
@@ -42,18 +43,18 @@ namespace pmApp {
                 let $input: angular.IRootElementService = el.find('input');
                 let nameProperty: string = scope.nameProperty ? scope.nameProperty : 'name';
 
-                let filterItems = () => scope.items
+                let filterItems: any = (): IItem[] => scope.items
                     .filter((item: IItem) => {
                         let excludedItems: IItem[] = scope.excludedItems || [];
-                        for (var i:number = 0, len:number = excludedItems.length; i<len; i++) {
+                        for (var i: number = 0, len: number = excludedItems.length; i < len; i++) {
                             if (excludedItems[i].id === item.id) {
                                 return false;
                             }
                         }
-                        return ! scope.selectedTask || item.id !== scope.selectedTask.id
+                        return ! scope.selectedTask || item.id !== scope.selectedTask.id;
                     });
 
-                scope.showSelectedIcon = EMode[scope.mode] == EMode[<string>'KeepValue'];
+                scope.showSelectedIcon = EMode[scope.mode] === EMode[<string>'KeepValue'];
                 scope.availableItems = filterItems();
 
                 $input.bind('focus', (): void => {
@@ -76,7 +77,7 @@ namespace pmApp {
                 });
 
                 scope.$watch('selectedTask', (newTask: IItem) => {
-                    if (newTask && EMode[scope.mode] == EMode[<string>'KeepValue']) {
+                    if (newTask && EMode[scope.mode] === EMode[<string>'KeepValue']) {
                         scope.search = newTask[nameProperty];
                     }
                 });

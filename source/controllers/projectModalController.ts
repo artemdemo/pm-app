@@ -11,13 +11,13 @@ namespace pmApp {
             'action'
         ];
 
-        public projectEditCopy: Project;
+        public projectEditCopy: IProject;
 
         public canBeDeleted: Boolean;
 
-        public tasks: Task[] = [];
-        public selectedSubtask: Task;
-        public availableTasks: Task[] = [];
+        public tasks: ITask[] = [];
+        public selectedSubtask: ITask;
+        public availableTasks: ITask[] = [];
 
         /**
          *
@@ -37,7 +37,7 @@ namespace pmApp {
             public $modalInstance: any,
             public tasksService: any,
             public projectsService: any,
-            public project: Project,
+            public project: IProject,
             public action: string
         ) {
 
@@ -51,13 +51,13 @@ namespace pmApp {
             }
 
             tasksService.getTasks()
-                .then((tasks: Task[]) => this.availableTasks = tasks);
+                .then((tasks: ITask[]) => this.availableTasks = tasks);
 
-            $scope.$watch(() => this.selectedSubtask, (newValue) => {
+            $scope.$watch(() => this.selectedSubtask, (newValue: ITask) => {
                 if (newValue) {
                     this.tasks.push(newValue);
                 }
-            })
+            });
 
         }
 

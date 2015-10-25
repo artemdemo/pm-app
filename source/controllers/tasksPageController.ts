@@ -10,7 +10,7 @@ namespace pmApp {
             'taskModalControllerConstant'
         ];
 
-        public tasks: Task[];
+        public tasks: ITask[];
 
         constructor (
             public $scope: angular.IScope,
@@ -22,13 +22,13 @@ namespace pmApp {
 
             tasksService.getTasks()
                 .then(
-                    (newTasks: Task[]) => this.tasks = newTasks,
-                    (newTasks: Task[]) => this.tasks = newTasks
+                    (newTasks: ITask[]) => this.tasks = newTasks,
+                    (newTasks: ITask[]) => this.tasks = newTasks
                 );
 
             $scope.$on('update-tasks-list', () => {
                 tasksService.getTasks()
-                    .then((newTasks: Task[]) => this.tasks = newTasks);
+                    .then((newTasks: ITask[]) => this.tasks = newTasks);
             });
         }
 
@@ -46,7 +46,7 @@ namespace pmApp {
             }).result
                 .then(() => {
                     this.tasksService
-                        .getTasks().then((newTasks: Task[]) => this.tasks = newTasks)
+                        .getTasks().then((newTasks: ITask[]) => this.tasks = newTasks);
                 });
         }
     }

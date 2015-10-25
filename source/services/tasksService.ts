@@ -1,7 +1,7 @@
 namespace pmApp {
     'use strict';
 
-    export interface Task {
+    export interface ITask {
         id: any;
         priority: any;
         sp: any;
@@ -9,7 +9,7 @@ namespace pmApp {
         name: string;
         project: any;
         parent: any;
-        subtasks?: Task[];
+        subtasks?: ITask[];
         created_at: {
             date: string;
             time: string;
@@ -28,8 +28,8 @@ namespace pmApp {
             'apiService'
         ];
 
-        private tasks: Task[] = [];
-        private tasksLoadingPromise: angular.IPromise<Task[]>;
+        private tasks: ITask[] = [];
+        private tasksLoadingPromise: angular.IPromise<ITask[]>;
 
         constructor(
             public $http: angular.IHttpService,
@@ -43,17 +43,17 @@ namespace pmApp {
          * Open tasks ara tasks that NOT DONE and NOT CLOSED
          * @returns {promise}
          */
-        public loadOpenTasks(): angular.IPromise<Task[]> {
-            let deferred: angular.IDeferred<Task[]> = this.$q.defer();
+        public loadOpenTasks(): angular.IPromise<ITask[]> {
+            let deferred: angular.IDeferred<ITask[]> = this.$q.defer();
 
             this.$http.get(this.apiService.getAbsoluteUrl('/tasks/open'))
                 .then(
                     (result: angular.IHttpPromiseCallbackArg<any>) => {
                         if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
                             deferred.resolve();
-                            this.updateTasks(<Task[]>result.data);
+                            this.updateTasks(<ITask[]>result.data);
                         } else {
-                            deferred.reject()
+                            deferred.reject();
                         }
                     },
                     () => deferred.reject()
@@ -69,9 +69,9 @@ namespace pmApp {
          * Return promise of loading tasks.
          * Useful to check whether tasks are loading or not.
          *
-         * @returns {angular.IPromise<Task[]>}
+         * @returns {angular.IPromise<ITask[]>}
          */
-        public getTasksLoadingPromise(): angular.IPromise<Task[]> {
+        public getTasksLoadingPromise(): angular.IPromise<ITask[]> {
             return this.tasksLoadingPromise;
         }
 
@@ -80,14 +80,14 @@ namespace pmApp {
          * Return all tasks
          * @returns {promise}
          */
-        public getTasks(): angular.IPromise<Task[]> {
-            let deferred: angular.IDeferred<Task[]> = this.$q.defer();
+        public getTasks(): angular.IPromise<ITask[]> {
+            let deferred: angular.IDeferred<ITask[]> = this.$q.defer();
 
             this.$q.all([
                 this.tasksLoadingPromise
             ]).then(
-                () => deferred.resolve(this.tasks.map((task: Task) => {
-                    task.subtasks = (<Task[]> this.getTasksByParent(task.id));
+                () => deferred.resolve(this.tasks.map((task: ITask) => {
+                    task.subtasks = (<ITask[]> this.getTasksByParent(task.id));
                     return task;
                 })),
                 () => deferred.reject()
@@ -101,10 +101,10 @@ namespace pmApp {
          * Return tasks that related to given parent
          *
          * @param parentId
-         * @returns {Task[]}
+         * @returns {ITask[]}
          */
-        public getTasksByParent(parentId: number): Task[] {
-            return this.tasks.filter((task) => task.parent === parentId);
+        public getTasksByParent(parentId: number): ITask[] {
+            return this.tasks.filter((task: ITask) => task.parent === parentId);
         }
 
 
@@ -112,10 +112,10 @@ namespace pmApp {
          * Return tasks that related to given project
          *
          * @param projectId
-         * @returns {Task[]}
+         * @returns {ITask[]}
          */
-        public getTasksByProject(projectId: number): Task[] {
-            return this.tasks.filter((task) => task.project === projectId);
+        public getTasksByProject(projectId: number): ITask[] {
+            return this.tasks.filter((task: ITask) => task.project === projectId);
         }
 
 
@@ -123,14 +123,14 @@ namespace pmApp {
          * Return empty task data
          * It will be used in modal
          *
-         * @returns {IPromise<Task>}
+         * @returns {IPromise<ITask>}
          */
-        public getEmptyTask(): angular.IPromise<Task> {
-            let newTask: Task;
+        public getEmptyTask(): angular.IPromise<ITask> {
+            let newTask: ITask;
             let date: moment.Moment = moment(new Date());
-            let deferred: angular.IDeferred<Task> = this.$q.defer();
+            let deferred: angular.IDeferred<ITask> = this.$q.defer();
 
-            newTask = <Task>{
+            newTask = <ITask>{
                 id: null,
                 name: '',
                 created_at: {
@@ -146,7 +146,7 @@ namespace pmApp {
                 this.settingsService.getMetatag(EMetatag.priority),
                 this.settingsService.getMetatag(EMetatag.status)
             ]).then(
-                (values) => {
+                (values: any) => {
                     newTask.priority = values[0][0].id;
                     newTask.status = values[1][0].id;
                     deferred.resolve(angular.copy(newTask));
@@ -161,14 +161,14 @@ namespace pmApp {
         /**
          * Save task to the DB
          *
-         * @param task {Task}
-         * @param subtasks {Task}
+         * @param task {ITask}
+         * @param subtasks {ITask}
          * @returns {promise}
          */
-        public saveTask(task: Task, subtasks: Task[]): angular.IPromise<gIOresponce> {
+        public saveTask(task: ITask, subtasks: ITask[]): angular.IPromise<gIOresponce> {
             let deferred: angular.IDeferred<gIOresponce> = this.$q.defer();
 
-            (<any> task).subtasks = subtasks.map((task) => task.id);
+            task.subtasks = subtasks.map((task: ITask) => task.id);
 
             if ( task.id ) {
                 this.$http.put(
@@ -178,9 +178,9 @@ namespace pmApp {
                     (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
                         if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
                             this.updateTasks(task, subtasks);
-                            deferred.resolve()
+                            deferred.resolve();
                         } else {
-                            deferred.reject()
+                            deferred.reject();
                         }
                     },
                     () => deferred.reject()
@@ -194,9 +194,9 @@ namespace pmApp {
                         if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
                             task.id = result.data.id;
                             this.updateTasks(task, subtasks);
-                            deferred.resolve()
+                            deferred.resolve();
                         } else {
-                            deferred.reject()
+                            deferred.reject();
                         }
                     },
                     () => deferred.reject()
@@ -210,14 +210,14 @@ namespace pmApp {
         /**
          * Delete task
          *
-         * @param task {Task}
+         * @param task {ITask}
          * @param removeSubtasks {boolean}
          * @returns {promise}
          */
-        public deleteTask(task: Task, removeSubtasks: boolean = false): angular.IPromise<gIOresponce> {
+        public deleteTask(task: ITask, removeSubtasks: boolean = false): angular.IPromise<gIOresponce> {
             let deferred: angular.IDeferred<gIOresponce> = this.$q.defer();
 
-            let url = '/tasks/task/' + task.id;
+            let url: string = '/tasks/task/' + task.id;
             url += removeSubtasks ? '/true' : '';
 
             if ( task.id ) {
@@ -226,13 +226,13 @@ namespace pmApp {
                 ).then(
                     (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
                         if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
-                            for (var i: number = this.tasks.length - 1; i>=0; i--) {
+                            for (var i: number = this.tasks.length - 1; i >= 0; i--) {
                                 if (this.tasks[i].id === task.id) {
                                     this.tasks.splice(i, 1);
                                 }
                                 if (this.tasks[i].parent === task.id) {
                                     if (!removeSubtasks) {
-                                        this.tasks[i].parent = null
+                                        this.tasks[i].parent = null;
                                     } else {
                                         this.tasks.splice(i, 1);
                                     }
@@ -240,7 +240,7 @@ namespace pmApp {
                             }
                             deferred.resolve();
                         } else {
-                            deferred.reject()
+                            deferred.reject();
                         }
                     },
                     () => deferred.reject()
@@ -259,31 +259,31 @@ namespace pmApp {
          * @param newTasks
          * @param subtasks
          */
-        private updateTasks(newTasks: Task | Task[], subtasks?: Task[]): void {
-            let tasksArr: Task[] = [];
+        private updateTasks(newTasks: ITask | ITask[], subtasks?: ITask[]): void {
+            let tasksArr: ITask[] = [];
 
             if (angular.isArray(newTasks)) {
-                tasksArr = <Task[]>newTasks
+                tasksArr = <ITask[]>newTasks;
             } else {
-                tasksArr.push(<Task>newTasks)
+                tasksArr.push(<ITask>newTasks);
             }
 
-            tasksArr.forEach((task: Task) => {
-                let taskExists = false;
-                for (var i: number = 0, len: number = this.tasks.length; i<len; i++) {
-                    if (this.tasks[i].id == task.id) {
+            tasksArr.forEach((task: ITask) => {
+                let taskExists: boolean = false;
+                for (var i: number = 0, len: number = this.tasks.length; i < len; i++) {
+                    if (this.tasks[i].id === task.id) {
                         taskExists = true;
-                        this.tasks[i] = this.convertTask(task)
+                        this.tasks[i] = this.convertTask(task);
                     }
-                    if (! angular.isDefined(subtasks) || subtasks.length == 0) {
+                    if (! angular.isDefined(subtasks) || subtasks.length === 0) {
                         if (this.tasks[i].parent === task.id) {
                             this.tasks[i].parent = null;
                         }
                     } else {
-                        for (var j: number = subtasks.length - 1; j>=0; j--) {
+                        for (var j: number = subtasks.length - 1; j >= 0; j--) {
                             if (subtasks[j].id === this.tasks[i].id) {
                                 this.tasks[i].parent = task.id;
-                                subtasks.splice(j,1);
+                                subtasks.splice(j, 1);
                             }
                         }
                     }
@@ -295,7 +295,7 @@ namespace pmApp {
             });
 
             this.tasks = this.tasks
-                .sort((taskA: Task, taskB: Task) => parseInt(taskB.id, 10) - parseInt(taskA.id, 10));
+                .sort((taskA: ITask, taskB: ITask) => parseInt(taskB.id, 10) - parseInt(taskA.id, 10));
 
         }
 
@@ -304,7 +304,7 @@ namespace pmApp {
          * @param task
          * @returns {Task}
          */
-        private convertTask(task: Task): Task {
+        private convertTask(task: ITask): ITask {
             let date: moment.Moment = angular.isString(task.created_at) ? moment(task.created_at) : task.created_at.raw;
 
             task.sp = parseInt(task.sp, 10);
@@ -314,7 +314,7 @@ namespace pmApp {
                 raw: date
             };
 
-            return task
+            return task;
         }
 
     }

@@ -1,6 +1,7 @@
 /// <reference path="./submenu-interfaces.ts" />
 
 namespace pmApp {
+    'use strict';
 
     /**
      * Directive that handle opening of the submenu
@@ -8,12 +9,13 @@ namespace pmApp {
      */
     angular
         .module('pmApp')
-        .directive('submenuOpenHandler', ['helper', (helper) => {
-            let link = (scope, el, attr) => {
+        .directive('submenuOpenHandler', ['helper', (helper: any) => {
+            let link: any = (scope: angular.IScope, el: angular.IRootElementService): void => {
 
-                let $body = angular.element(document.body);
-                var hideFunctionAttached = false;
-                var hideSubmenu = (event) => {
+                let $body: angular.IRootElementService = angular.element(document.body);
+                let hideFunctionAttached: boolean = false;
+                /* tslint:disable:no-var-keyword */
+                var hideSubmenu: any = (event: Event): void => {
                     switch (true) {
                         case event && helper.hasClass(event.target, 'submenu-list_item-content'):
                             break;
@@ -25,6 +27,7 @@ namespace pmApp {
                             setTimeout(() => hideFunctionAttached = false);
                     }
                 };
+                /* tslint:enable:no-var-keyword */
 
                 el.bind('click', () => {
                     if (!hideFunctionAttached) {
@@ -39,7 +42,6 @@ namespace pmApp {
                 link: link,
                 scope: {},
                 restrict: 'A'
-            }
+            };
         }]);
-
 }

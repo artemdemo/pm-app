@@ -1,7 +1,7 @@
 namespace pmApp {
     'use strict';
 
-    export interface Project {
+    export interface IProject {
         id: any;
         name: string;
         created_at: {
@@ -9,7 +9,7 @@ namespace pmApp {
             time: string;
             raw: moment.Moment;
         };
-        subtasks?: Task[];
+        subtasks?: ITask[];
         description: string;
     }
 
@@ -22,8 +22,8 @@ namespace pmApp {
             'tasksService'
         ];
 
-        private projects: Project[] = [];
-        private projectsLoadingPromise: angular.IPromise<Project[]> = null;
+        private projects: IProject[] = [];
+        private projectsLoadingPromise: angular.IPromise<IProject[]> = null;
 
         constructor(
             public $http: angular.IHttpService,
@@ -37,8 +37,8 @@ namespace pmApp {
          * Load all open projects that user have access to them
          * @returns {promise}
          */
-        public loadOpenProjects(): angular.IPromise<Project[]> {
-            let deferred: angular.IDeferred<Project[]> = this.$q.defer();
+        public loadOpenProjects(): angular.IPromise<IProject[]> {
+            let deferred: angular.IDeferred<IProject[]> = this.$q.defer();
 
             this.$http.get(this.apiService.getAbsoluteUrl('/projects/open'))
                 .then(
@@ -56,37 +56,17 @@ namespace pmApp {
 
 
         /**
-         * Function will update projects list.
-         * It will replace projects with the same id; if project has unique id it will be added to the list
-         * @param newProjects
-         */
-        private updateProjects(newProjects: Project[]): void {
-            this.projects = newProjects.map((project: Project) => {
-                let date: moment.Moment = moment(project.created_at);
-                project.id = parseInt(project.id, 10);
-                project.created_at = {
-                    date: date.format('YYYY-MM-DD'),
-                    time: date.format('HH:mm'),
-                    raw: date
-                };
-
-                return project
-            });
-        }
-
-
-        /**
          * Return all projects
          * @returns {promise}
          */
-        public getProjects(): angular.IPromise<Project[]> {
-            let deferred: angular.IDeferred<Project[]> = this.$q.defer();
+        public getProjects(): angular.IPromise<IProject[]> {
+            let deferred: angular.IDeferred<IProject[]> = this.$q.defer();
 
             this.$q.all([
                 this.projectsLoadingPromise,
                 this.tasksService.getTasksLoadingPromise()
             ]).then(
-                () => deferred.resolve(this.projects.map((project: Project) => {
+                () => deferred.resolve(this.projects.map((project: IProject) => {
                     project.subtasks = this.tasksService.getTasksByProject(project.id);
                     return project;
                 })),
@@ -101,8 +81,8 @@ namespace pmApp {
          * Return project by it's id
          * @returns {promise}
          */
-        public getProjectById(projectId: number): angular.IPromise<Project> {
-            let deferred: angular.IDeferred<Project> = this.$q.defer();
+        public getProjectById(projectId: number): angular.IPromise<IProject> {
+            let deferred: angular.IDeferred<IProject> = this.$q.defer();
 
             this.$q.all([
                 this.projectsLoadingPromise,
@@ -111,7 +91,7 @@ namespace pmApp {
                 () => {
                     for (var i: number = 0, len: number = this.projects.length; i < len; i++) {
                         if (projectId === this.projects[i].id) {
-                            let project = this.projects[i];
+                            let project: IProject = this.projects[i];
                             project.subtasks = this.tasksService.getTasksByProject(project.id);
                             deferred.resolve(project);
                             break;
@@ -129,11 +109,11 @@ namespace pmApp {
          * Return empty project data
          * It will be used in modal
          */
-        public getEmptyProject(): Project {
-            let newProject: Project;
+        public getEmptyProject(): IProject {
+            let newProject: IProject;
             let date: moment.Moment = moment(new Date());
 
-            newProject = <Project>{
+            newProject = <IProject>{
                 id: null,
                 name: '',
                 created_at: {
@@ -152,14 +132,14 @@ namespace pmApp {
         /**
          * Save project to the DB
          *
-         * @param project {Project}
-         * @param subtasks {Task}
+         * @param project {IProject}
+         * @param subtasks {ITask}
          * @returns {promise}
          */
-        public saveProject(project: Project, subtasks: Task[]): angular.IPromise<gIOresponce> {
+        public saveProject(project: IProject, subtasks: ITask[]): angular.IPromise<gIOresponce> {
             let deferred: angular.IDeferred<gIOresponce> = this.$q.defer();
 
-            (<any> project).subtasks = subtasks.map((task) => task.id);
+            project.subtasks = subtasks.map((task: ITask) => task.id);
 
             if ( project.id ) {
                 this.$http.put(
@@ -186,10 +166,10 @@ namespace pmApp {
         /**
          * Delete project
          *
-         * @param project {Project}
+         * @param project {IProject}
          * @returns {promise}
          */
-        public deleteProject(project: Project): angular.IPromise<gIOresponce> {
+        public deleteProject(project: IProject): angular.IPromise<gIOresponce> {
             let deferred: angular.IDeferred<gIOresponce> = this.$q.defer();
 
             if ( project.id ) {
@@ -204,6 +184,26 @@ namespace pmApp {
             }
 
             return deferred.promise;
+        }
+
+
+        /**
+         * Function will update projects list.
+         * It will replace projects with the same id; if project has unique id it will be added to the list
+         * @param newProjects
+         */
+        private updateProjects(newProjects: IProject[]): void {
+            this.projects = newProjects.map((project: IProject) => {
+                let date: moment.Moment = moment(project.created_at);
+                project.id = parseInt(project.id, 10);
+                project.created_at = {
+                    date: date.format('YYYY-MM-DD'),
+                    time: date.format('HH:mm'),
+                    raw: date
+                };
+
+                return project;
+            });
         }
     }
 

@@ -1,6 +1,7 @@
 /// <reference path="./submenu-interfaces.ts" />
 
 namespace pmApp {
+    'use strict';
 
     /**
      * Project submenu directive
@@ -16,24 +17,24 @@ namespace pmApp {
             '$modal',
             'projectModalHtmlLinkConstant',
             'projectModalControllerConstant',
-        function(
-            $modal,
-            projectModalHtmlLinkConstant,
-            projectModalControllerConstant
-        ){
-            let link = (scope, el, attr) => {
+        (
+            $modal: any,
+            projectModalHtmlLinkConstant: string,
+            projectModalControllerConstant: string
+        ) => {
+            let link: any = (scope: any, el: angular.IRootElementService): void => {
 
-                // Handle click on item menu
-                let itemClick = function(item: SubmenuItem) {
+                // handle click on item menu
+                let itemClick: any = function(item: ISubmenuItem): any {
                     $modal.open({
                         templateUrl: projectModalHtmlLinkConstant,
                         controller: projectModalControllerConstant,
                         resolve: {
-                            project: function () {
+                            project: (): IProject => {
                                 return scope.project;
                             },
-                            action: function() {
-                                return item.action
+                            action: (): string => {
+                                return item.action;
                             }
                         }
                     });
@@ -61,7 +62,6 @@ namespace pmApp {
                     project: '='
                 },
                 restrict: 'E'
-            }
+            };
         }]);
-
 }
