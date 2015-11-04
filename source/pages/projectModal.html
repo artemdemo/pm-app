@@ -1,26 +1,26 @@
 <div class="row">
-    <div ng-show="pm.action == 'open'">
+    <div ng-show="pm.action == 'Open'">
         <h4>
-            {{ pm.project.name }}
-            <small>{{ pm.project.created_at.date }} {{ pm.project.created_at.time }}</small>
+            {{ pm.projectEditCopy.name }}
+            <small>{{ pm.projectEditCopy.created_at.date }} {{ pm.projectEditCopy.created_at.time }}</small>
         </h4>
         <div class="project-item__data project-item__data_modal">
             <div class="project-item__progressbar"><progressbar value="55"></progressbar></div>
             <div class="project-item__progress-percent">55%</div>
         </div>
         <div class="task-item__description-full">
-            {{ pm.project.description }}
+            {{ pm.projectEditCopy.description }}
         </div>
 
         <subtask-list
                 class="subtask-list subtask-list_task-modal"
-                ng-show="pm.tasks.length > 0"
-                subtasks="pm.tasks"
-                hide-remove-button="true"
+                ng-show="pm.subtasks.length > 0"
+                subtasks="pm.subtasks"
+                hide-remove-btn="true"
                 title="Tasks:"></subtask-list>
     </div>
 
-    <div class="task-item-edit" ng-show="pm.action != 'open'">
+    <div class="task-item-edit" ng-show="pm.action != 'Open'">
         <div>
             <label>Project name:
                 <input type="text" class="task-item-edit__title" ng-model="pm.projectEditCopy.name">
@@ -34,8 +34,8 @@
 
         <subtask-list
                 class="subtask-list subtask-list_task-modal"
-                ng-show="pm.tasks.length > 0"
-                subtasks="pm.tasks"
+                ng-show="pm.subtasks.length > 0"
+                subtasks="pm.subtasks"
                 title="Tasks:"></subtask-list>
 
         <selectable-dropdown
@@ -50,11 +50,11 @@
             <button
                     class="button small radius"
                     ng-click="pm.saveProject()"
-                    ng-show="pm.action != 'open'">Save</button>
+                    ng-show="pm.action != 'Open'">Save</button>
             <button
                     class="button small radius info"
                     ng-click="pm.edit()"
-                    ng-show="pm.action == 'open'">Edit</button>
+                    ng-show="pm.action == 'Open'">Edit</button>
             <button class="button small radius secondary" ng-click="pm.cancel()">Cancel</button>
         </div>
         <div class="buttons-line__right">

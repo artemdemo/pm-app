@@ -121,6 +121,7 @@ namespace pmApp {
                     time: date.format('HH:mm'),
                     raw: date
                 },
+                subtasks: [],
                 sp: null,
                 description: ''
             };
