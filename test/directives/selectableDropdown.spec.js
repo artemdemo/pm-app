@@ -41,17 +41,8 @@ describe('selectableDropdown directive', () => {
             }
         ];
 
-        $rootScope.subtasks = [
-            {
-                id: 4,
-                name: 'task 4',
-                status: '3'
-            }
-        ];
-
         element = $compile(`<selectable-dropdown
                                 items="tasks"
-                                excluded-items="subtasks"
                                 name-property="name"
                                 selected-task="selectedTask"
                                 mode="KeepValue"
@@ -74,9 +65,9 @@ describe('selectableDropdown directive', () => {
     );
 
     it(
-        `List of tasks contain 4 items`,
+        `List of tasks contain 5 items`,
         () => {
-            expect(element[0].querySelectorAll('.selectable-dropdown__list-item').length).toEqual(4)
+            expect(element[0].querySelectorAll('.selectable-dropdown__list-item').length).toEqual(5)
         }
     );
 
@@ -105,21 +96,5 @@ describe('selectableDropdown directive', () => {
             }
         );
 
-        it(
-            `List of tasks contain 3 items, when passing value`,
-            () => {
-                element = $compile(`<selectable-dropdown
-                                items="tasks"
-                                excluded-items="subtasks"
-                                name-property="name"
-                                selected-task="selectedTask"
-                                mode="PassThrough"
-                                placeholder="Test placeholder"
-                                label="Test label">
-                            </selectable-dropdown>`)($rootScope);
-                $rootScope.$digest();
-                expect(element[0].querySelectorAll('.selectable-dropdown__list-item').length).toEqual(3)
-            }
-        );
     });
 });

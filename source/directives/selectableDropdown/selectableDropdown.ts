@@ -17,7 +17,6 @@ namespace pmApp {
      * @attr
      * items - items list
      * disableInput - disable input condition
-     * excludedItems - items that shouldn't be in the list
      * selectedTask - selected item object
      * nameProperty - property of the object where directive expects to find name (default is `name`)
      * mode - what to do with selected item:
@@ -30,7 +29,6 @@ namespace pmApp {
      * <selectable-dropdown
      *      items="tm.availableTasks"
      *      disable-input="tm.subtasks.length > 0"
-     *      excluded-items="tm.subtasks"
      *      selected-task="tm.selectedParent"
      *      name-property="name"
      *      mode="KeepValue"
@@ -45,19 +43,7 @@ namespace pmApp {
                 let $input: angular.IRootElementService = el.find('input');
                 let nameProperty: string = scope.nameProperty ? scope.nameProperty : 'name';
 
-                let filterItems: any = (): IItem[] => scope.items
-                    .filter((item: IItem) => {
-                        let excludedItems: IItem[] = scope.excludedItems || [];
-                        for (var i: number = 0, len: number = excludedItems.length; i < len; i++) {
-                            if (excludedItems[i].id === item.id) {
-                                return false;
-                            }
-                        }
-                        return ! scope.selectedTask || item.id !== scope.selectedTask.id;
-                    });
-
                 scope.showSelectedIcon = EMode[scope.mode] === EMode[<string>'KeepValue'];
-                scope.availableItems = filterItems();
 
                 $input.bind('focus', (): void => {
                     if (scope.items && scope.items.length > 0) {
@@ -86,7 +72,6 @@ namespace pmApp {
 
                 scope.selectItem = (item: IItem): void => {
                     scope.selectedTask = item;
-                    scope.availableItems = filterItems();
                     $listContainer.removeClass('selectable-dropdown__list_show');
                 };
             };
@@ -98,7 +83,6 @@ namespace pmApp {
                     items: '=',
                     disableInput: '=',
                     selectedTask: '=',
-                    excludedItems: '=',
                     nameProperty: '@',
                     label: '@',
                     placeholder: '@',

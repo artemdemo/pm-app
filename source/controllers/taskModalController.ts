@@ -44,7 +44,7 @@ namespace pmApp {
          *      'Open' - viewing task data
          */
         constructor (
-            public $scope: angular.IScope,
+            public $scope: any,
             public $modalInstance: any,
             public $q: angular.IQService,
             public tasksService: any,
@@ -52,6 +52,7 @@ namespace pmApp {
             public task: any,
             public action: string
         ) {
+            let allTasks: ITask[] = [];
 
             let taskEditCopyPromise: angular.IPromise<ITask> = null;
 
@@ -61,6 +62,7 @@ namespace pmApp {
                 taskEditCopyPromise = tasksService.getEmptyTask()
                     .then((newTask: ITask) => {
                         this.taskEditCopy = newTask;
+                        this.subtasks = [];
                     });
                 this.canBeDeleted = false;
             } else {
@@ -79,12 +81,32 @@ namespace pmApp {
                 }
             }
 
+            /**
+             * Exclude subtasks from the list of available tasks
+             * @param tasks
+             * @param excludedItems
+             */
+            let excludeUsedTasks: any = (tasks: ITask[], excludedItems: ITask[] = []): ITask[] => tasks
+                .filter((item: ITask) => {
+                    for (var i: number = 0, len: number = excludedItems.length; i < len; i++) {
+                        if (excludedItems[i].id === item.id) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+
             $q.all([
                 tasksService.getTasks(),
                 taskEditCopyPromise
             ]).then((values: any) => {
-                this.availableTasks = (<ITask[]> values[0])
-                    .filter((task: ITask) => this.taskEditCopy.id !== task.id);
+                allTasks = (<ITask[]> values[0])
+                    .filter((task: ITask) => this.taskEditCopy.id !== task.id && !task.parent);
+                this.availableTasks = excludeUsedTasks(allTasks, this.subtasks);
+            });
+
+            $scope.$on('close-modal', () => {
+                this.$modalInstance.close();
             });
 
             projectsService.getProjects()
@@ -94,6 +116,10 @@ namespace pmApp {
                 if (newSubTask) {
                     this.subtasks.push(newSubTask);
                 }
+            });
+
+            $scope.$watch(() => this.subtasks.length, () => {
+                this.availableTasks = excludeUsedTasks(allTasks, this.subtasks);
             });
 
             $scope.$watch(() => this.selectedProject, (newProject: IProject) => {
@@ -113,11 +139,6 @@ namespace pmApp {
 
         public editTask(): void {
             this.action = ModalAction[ModalAction.Edit];
-        }
-
-        public saveTask(): void {
-            this.tasksService.saveTask(this.taskEditCopy, this.subtasks)
-                .then(() => this.$modalInstance.close());
         }
 
         public deleteTask(): void {

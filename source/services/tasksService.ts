@@ -130,7 +130,7 @@ namespace pmApp {
          * @returns {ITask[]}
          */
         public getTasksByProject(projectId: number): ITask[] {
-            return this.tasks.filter((task: ITask) => task.project === projectId);
+            return this.tasks.filter((task: ITask) => task.project == projectId);
         }
 
 

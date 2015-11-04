@@ -32,4 +32,5 @@
 /// <reference path="./controllers/tasksPageController.ts" />
 /// <reference path="./controllers/projectModalController.ts" />
 /// <reference path="./controllers/taskModalController.ts" />
+/// <reference path="./controllers/taskModalFormController.ts" />
 /// <reference path="./controllers/projectsPageController.ts" />
