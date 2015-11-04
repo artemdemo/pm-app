@@ -35,6 +35,9 @@
                 <div class="item-stat__created">
                     {{ task.created_at.date }} {{ task.created_at.time }}
                 </div>
+                <div class="item-stat__project" ng-show="task.project">
+                    project: {{ task.project }}
+                </div>
             </div>
 
 

@@ -21,10 +21,16 @@ namespace pmApp {
         ) {
 
             projectsService.getProjects()
-                .then(
-                (newProjects: IProject[]) => this.projects = newProjects,
-                (newProjects: IProject[]) => this.projects = newProjects
-            );
+                .then((newProjects: IProject[]) => this.projects = newProjects);
+
+            $scope.$on('update-projects-list', () => {
+                console.log('update-projects-list');
+                projectsService.getProjects()
+                    .then((newProjects: IProject[]) => {
+                        this.projects = newProjects;
+                        console.log(this.projects);
+                    });
+            });
         }
 
         /**

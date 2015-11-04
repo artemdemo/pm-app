@@ -121,6 +121,7 @@ namespace pmApp {
                     time: date.format('HH:mm'),
                     raw: date
                 },
+                subtasks: [],
                 sp: null,
                 description: ''
             };
@@ -146,16 +147,30 @@ namespace pmApp {
                     this.apiService.getAbsoluteUrl('/projects'),
                     project
                 ).then(
-                    (data: gIOresponce) => deferred.resolve(data),
-                    (data: gIOresponce) => deferred.reject(data)
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
+                        if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
+                            // I will update task list from the controller
+                            deferred.resolve();
+                        } else {
+                            deferred.reject();
+                        }
+                    },
+                    () => deferred.reject()
                 );
             } else {
                 this.$http.post(
                     this.apiService.getAbsoluteUrl('/projects'),
                     project
                 ).then(
-                    (data: gIOresponce) => deferred.resolve(data),
-                    (data: gIOresponce) => deferred.reject(data)
+                    (result: angular.IHttpPromiseCallbackArg<gIOresponce>) => {
+                        if (!result.data.hasOwnProperty('ErrorStatus') || result.data.ErrorStatus === 0) {
+                            // I will update task list from the controller
+                            deferred.resolve();
+                        } else {
+                            deferred.reject();
+                        }
+                    },
+                    () => deferred.reject()
                 );
             }
 

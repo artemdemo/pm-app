@@ -21,10 +21,7 @@ namespace pmApp {
         ) {
 
             tasksService.getTasks()
-                .then(
-                    (newTasks: ITask[]) => this.tasks = newTasks,
-                    (newTasks: ITask[]) => this.tasks = newTasks
-                );
+                .then((newTasks: ITask[]) => this.tasks = newTasks);
 
             $scope.$on('update-tasks-list', () => {
                 tasksService.getTasks()

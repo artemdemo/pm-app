@@ -274,7 +274,7 @@ namespace pmApp {
          * @param newTasks
          * @param subtasks
          */
-        private updateTasks(newTasks: ITask | ITask[], subtasks?: ITask[]): void {
+        public updateTasks(newTasks: ITask | ITask[], subtasks?: ITask[]): void {
             let tasksArr: ITask[] = [];
 
             if (angular.isArray(newTasks)) {
@@ -282,6 +282,8 @@ namespace pmApp {
             } else {
                 tasksArr.push(<ITask>newTasks);
             }
+
+            console.log('tasksService.updateTasks', newTasks);
 
             tasksArr.forEach((task: ITask) => {
                 let taskExists: boolean = false;

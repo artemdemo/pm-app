@@ -37,7 +37,12 @@ namespace pmApp {
                                 return item.action;
                             }
                         }
-                    });
+                    }).result
+                        .then(() => {
+                            if (item.action === ModalAction[ModalAction.Edit]) {
+                                scope.$emit('update-projects-list');
+                            }
+                        });
                 }.bind(scope);
 
                 scope.menu = [

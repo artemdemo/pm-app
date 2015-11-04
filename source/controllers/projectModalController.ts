@@ -15,7 +15,7 @@ namespace pmApp {
 
         public canBeDeleted: Boolean;
 
-        public tasks: ITask[] = [];
+        public subtasks: ITask[] = [];
         public selectedSubtask: ITask;
         public availableTasks: ITask[] = [];
 
@@ -40,6 +40,7 @@ namespace pmApp {
             public project: IProject,
             public action: string
         ) {
+            let allTasks: ITask[] = [];
 
             this.canBeDeleted = true;
 
@@ -48,14 +49,33 @@ namespace pmApp {
                 this.canBeDeleted = false;
             } else {
                 this.projectEditCopy = angular.copy(project);
+                this.subtasks = this.projectEditCopy.subtasks;
             }
 
+            let excludeUsedTasks = (tasks: ITask[], excludedItems: ITask[] = []) => tasks.
+                filter((task: ITask) => {
+                    for (var i: number = 0, len: number = excludedItems.length; i < len; i++) {
+                        if (excludedItems[i].id === task.id) {
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+
             tasksService.getTasks()
-                .then((tasks: ITask[]) => this.availableTasks = tasks);
+                .then((tasks: ITask[]) => {
+                    allTasks = tasks;
+
+                    this.availableTasks = excludeUsedTasks(allTasks, this.subtasks);
+                });
+
+            $scope.$watch(() => this.subtasks.length, (len: number) => {
+                this.availableTasks = excludeUsedTasks(allTasks, this.subtasks);
+            });
 
             $scope.$watch(() => this.selectedSubtask, (newValue: ITask) => {
                 if (newValue) {
-                    this.tasks.push(newValue);
+                    this.subtasks.push(newValue);
                 }
             });
 
@@ -70,7 +90,13 @@ namespace pmApp {
         }
 
         public saveProject(): void {
-            this.projectsService.saveProject(this.projectEditCopy, this.tasks);
+            console.log('projectModalController -> this.availableTasks', this.availableTasks);
+            // I need to compare what tasks were in lst and what are right before saving
+            // Case if some of them are deleted - I need also to use them in order to update main task list
+            this.projectsService.saveProject(this.projectEditCopy, this.subtasks).then(() => {
+                // this.tasksService.updateTasks();
+                this.$modalInstance.close();
+            });
         }
 
         public deleteProject(): void {
