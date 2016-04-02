@@ -90,7 +90,6 @@ namespace pmApp {
         }
 
         public saveProject(): void {
-            console.log('projectModalController -> this.availableTasks', this.availableTasks);
             // I need to compare what tasks were in lst and what are right before saving
             // Case if some of them are deleted - I need also to use them in order to update main task list
             this.projectsService.saveProject(this.projectEditCopy, this.subtasks).then(() => {
