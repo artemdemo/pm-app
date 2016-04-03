@@ -2,66 +2,50 @@
 
 # Project Management App
 
-Open Source Project Management app. It's more scrum then kanban, case I believe in sprints and iterations :smile:
-
+Open Source Project Management app.
 
 Work in progress. There is still a lot of things to do.
+
+## Getting started
+
+Install all modules
+
+```
+$ npm i
+```
+
+Compile client app
+
+```
+$ npm run build
+```
+
+Start server
+
+```
+$ npm start
+```
+
+In development use `watch` command
+
+```
+$ npm run watch
+```
 
 
 ## Technologies
 
-* AngularJS v.1.4.6 (with TypeScript v.1.6)
-* Laravel v.5.1.11
-* Foundation for grid and design
+* Angular 2 - https://angular.io/
+* Bootstrap css - http://getbootstrap.com/
+* Hapi.js - http://hapijs.com/
 
-![alt tag](https://github.com/artemdemo/pm-app/blob/master/_img/pmapp.png "Project Management App")
+## Compilation
 
-## Installation
-
-Obviously you'll need PHP, MySQL and Apache installed on your machine.
-
-### Front end
-
-I'm using Gulp as task manager.
-
-1. Install all related packages
-```
-$ npm install
-```
-
-2. Build the app
-```
-$ gulp
-```
-
-You can also use build in livereload:
-```
-$ gulp serve
-```
-
-### Back end
-
-1. Create database with relevant name
-
-2. Inside of `/api` create your `.env` file based on `.env.example`
-
-3. Then run following commands:
-
-Create all tables
-```
-$ php artisan migrate
-```
-
-## Tests
-
-For frontend unit tests I'm using karma with jasmine.
-All test are written in es2015 (es6) and compiled on the fly 5to6 with babel.
+I'm using webpack with typescript plugins
 
 
-In addition all typescript code will be checked with tslint. 
+Angular 2 + webpack
+http://schempy.com/2016/01/19/angular2_webpack_typescript/
 
 
-Run tests:
-```
-$ gulp test
-```
+https://github.com/hhru/tms/blob/master/tms-static/webpack.config.js
