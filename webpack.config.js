@@ -25,18 +25,18 @@ module.exports = {
         ]
     },
     plugins: [
-        function() {
-            this.plugin('done', function(stats) {
-                var htmlSrc = path.join(__dirname, 'app', 'index.html');
-                var template = fs.readFileSync(htmlSrc, 'utf8');
-                var html = _.template(template)({hash: stats.hash});
-                fs.writeFile(path.join(__dirname, 'public', 'index.html'), html);
-            });
-        },
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        })
+        // function() {
+        //     this.plugin('done', function(stats) {
+        //         var htmlSrc = path.join(__dirname, 'app', 'index.html');
+        //         var template = fs.readFileSync(htmlSrc, 'utf8');
+        //         var html = _.template(template)({hash: stats.hash});
+        //         fs.writeFile(path.join(__dirname, 'public', 'index.html'), html);
+        //     });
+        // }
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     }
+        // })
     ]
 };

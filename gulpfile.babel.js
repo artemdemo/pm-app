@@ -1,12 +1,20 @@
 import gulp from 'gulp';
 import gutil from 'gulp-util';
 import less from 'gulp-less';
+import rename from 'gulp-rename';
+import runSequence from 'run-sequence';
 import del from 'del';
 import webpack from 'webpack';
 import webpackConfig from './webpack.config';
+import path from 'path';
+import fs from 'fs';
+import _ from 'underscore';
 
-let compiler = webpack(webpackConfig);
-let hash = '';
+const compiler = webpack(webpackConfig);
+let hash = {
+    css: '123',
+    js: '123'
+};
 
 gulp.task('js', ['clean'], function(callback) {
     function report(resolve, err, stats) {
@@ -14,7 +22,7 @@ gulp.task('js', ['clean'], function(callback) {
             throw new gutil.PluginError('webpack', err);
         }
 
-        hash = stats.compilation.hash;
+        hash.js = stats.compilation.hash;
 
         gutil.log('[webpack]', stats.toString({
             chunks: false,
@@ -33,6 +41,7 @@ gulp.task('js', ['clean'], function(callback) {
     });
 });
 
+
 gulp.task('js-watch', ['clean'], function() {
     compiler.watch({
         aggregateTimeout: 300,
@@ -42,7 +51,8 @@ gulp.task('js-watch', ['clean'], function() {
             throw new gutil.PluginError('webpack', err);
         }
 
-        hash = stats.compilation.hash;
+        hash.js = stats.compilation.hash;
+        runSequence('html');
 
         gutil.log('[webpack]', stats.toString({
             chunks: false,
@@ -51,13 +61,28 @@ gulp.task('js-watch', ['clean'], function() {
     });
 });
 
+gulp.task('html', function() {
+    const htmlSrc = path.join(__dirname, 'app', 'index.html');
+    const template = fs.readFileSync(htmlSrc, 'utf8');
+    const html = _.template(template)({hash});
+    fs.writeFile(path.join(__dirname, 'public', 'index.html'), html);
+});
+
 gulp.task('clean', function(callback) {
-    del(['public/js']).then(function() {
+    del([
+        'public/js/*.js',
+        'public/js/*.js.map',
+        `!public/js/bundle-${hash.js}.js`,
+        `!public/js/bundle-${hash.js}.js.map`,
+        'public/css/*.css',
+        `!public/css/styles-${hash.css}.css`
+    ]).then(function() {
         callback();
     });
 });
 
 gulp.task('less', ['clean'], function () {
+    hash.css = hash.js;
     return gulp.src('./app/less/styles.less')
         .pipe(less())
         .on('error', function(err) {
@@ -68,12 +93,16 @@ gulp.task('less', ['clean'], function () {
             gutil.log(gutil.colors.bgRed('extract:') +' '+ err.extract.join(' '));
             this.emit('end');
         })
+        .pipe(rename(`styles-${hash.css}.css`))
         .pipe(gulp.dest('./public/css'))
+        .on('end', function() {
+            runSequence('html');
+        });
 });
 
 gulp.task('less-watch', () => {
     gulp.watch('./app/less/*.less', ['less']);
 });
 
-gulp.task('build', ['clean', 'js', 'less']);
-gulp.task('watch', ['clean', 'js-watch', 'less-watch']);
+gulp.task('build', ['clean', 'js', 'html', 'less']);
+gulp.task('watch', ['clean', 'js-watch', 'less', 'less-watch']);
