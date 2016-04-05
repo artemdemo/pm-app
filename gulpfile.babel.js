@@ -45,6 +45,7 @@ gulp.task('js', ['clean'], function(callback) {
             compiler.run(report.bind(null, resolve));
         })
     ]).then(function() {
+        runSequence('clean', 'html');
         callback();
     });
 });
@@ -124,5 +125,5 @@ gulp.task('less-watch', () => {
     gulp.watch('./app/less/*.less', ['less']);
 });
 
-gulp.task('build', ['clean', 'copy', 'js', 'html', 'less']);
+gulp.task('build', ['copy', 'js', 'less']);
 gulp.task('watch', ['clean', 'js-watch', 'less', 'less-watch']);
