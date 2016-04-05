@@ -26,6 +26,15 @@ module.exports = [
     },
     {
         method: 'GET',
+        path:'/fonts/{param*}',
+        handler: {
+            directory: {
+                path: '../public/fonts'
+            }
+        }
+    },
+    {
+        method: 'GET',
         path:'/tasks',
         handler: require('./controllers/tasks').index
     },

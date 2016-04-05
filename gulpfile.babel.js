@@ -11,9 +11,17 @@ import fs from 'fs';
 import _ from 'underscore';
 
 const compiler = webpack(webpackConfig);
+const randomID = () => {
+    return 'xxxxxxxx'.replace(
+        /[xy]/g,
+        (c) => {
+            let r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+};
 let hash = {
-    css: '123',
-    js: '123'
+    css: randomID(),
+    js: randomID()
 };
 
 gulp.task('js', ['clean'], function(callback) {
@@ -52,7 +60,7 @@ gulp.task('js-watch', ['clean'], function() {
         }
 
         hash.js = stats.compilation.hash;
-        runSequence('html');
+        runSequence('clean', 'html');
 
         gutil.log('[webpack]', stats.toString({
             chunks: false,
@@ -96,13 +104,25 @@ gulp.task('less', ['clean'], function () {
         .pipe(rename(`styles-${hash.css}.css`))
         .pipe(gulp.dest('./public/css'))
         .on('end', function() {
-            runSequence('html');
+            runSequence('clean', 'html');
         });
+});
+
+gulp.task('copy', function () {
+    return gulp
+        .src([
+            './node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot',
+            './node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg',
+            './node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf',
+            './node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff',
+            './node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2'
+        ])
+        .pipe(gulp.dest('public/fonts'));
 });
 
 gulp.task('less-watch', () => {
     gulp.watch('./app/less/*.less', ['less']);
 });
 
-gulp.task('build', ['clean', 'js', 'html', 'less']);
+gulp.task('build', ['clean', 'copy', 'js', 'html', 'less']);
 gulp.task('watch', ['clean', 'js-watch', 'less', 'less-watch']);

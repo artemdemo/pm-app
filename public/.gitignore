@@ -1,5 +1,4 @@
-*.js
-*.js.map
+js/
+css/
+fonts/
 *.html
-*.css
-*.css.map

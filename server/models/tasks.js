@@ -8,6 +8,11 @@ let DB = require('./__initDB__.js');
 
 const tableName = 'tasks';
 
+const parseTasks = (tasks) => tasks.map(task => {
+    task.done = !!task.done;
+    return task;
+});
+
 exports.getAll = () => {
     const deferred = Q.defer();
     const db = DB.getDB();
@@ -21,7 +26,7 @@ exports.getAll = () => {
                 console.log(chalk.red.bold('[getAll tasks error]'), err);
                 deferred.reject();
             } else {
-                deferred.resolve(rows);
+                deferred.resolve(parseTasks(rows));
             }
         });
     } else {

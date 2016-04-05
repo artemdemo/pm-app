@@ -1,8 +1,9 @@
 import {Component} from 'angular2/core';
+import {ROUTER_DIRECTIVES} from 'angular2/router';
 
 @Component({
     selector: 'main-menu',
-    directives: [],
+    directives: [ROUTER_DIRECTIVES],
     template: `
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
@@ -13,13 +14,11 @@ import {Component} from 'angular2/core';
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">PM</a>
+                    <a class="navbar-brand" href="/">&lt;PM&gt;</a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a [routerLink]="['/TasksList']">Tasks</a></li>
                     </ul>
                 </div>
             </div>
