@@ -1,8 +1,28 @@
 @import (inline) '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import "./bootstrap-override";
 
-.container_with-menu-on-top {
-    padding-top: 60px;
+.content-with-menu-on-top {
+    margin-top: 51px;
+}
+
+.loading-placeholder {
+    color: #DADADA;
+    font-weight: bold;
+    font-size: 5em;
+    text-align: center;
+    padding: 1em 0;
+}
+
+.clearFix {
+    &::after {
+        content: '';
+        display: table;
+        clear:both;
+    }
 }
 
 @import "./blocks/tasks-list";
+@import "./blocks/tasks-edit";
+@import "./blocks/single-task";
 @import "./blocks/ok-circle";
+@import "./blocks/flat-input";

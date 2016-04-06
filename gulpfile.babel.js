@@ -122,7 +122,7 @@ gulp.task('copy', function () {
 });
 
 gulp.task('less-watch', () => {
-    gulp.watch('./app/less/*.less', ['less']);
+    gulp.watch('./app/less/**/*.less', ['less']);
 });
 
 gulp.task('build', ['copy', 'js', 'less']);

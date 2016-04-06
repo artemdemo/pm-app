@@ -17,6 +17,14 @@ export interface ITaskService {
     updateTasks(): void;
 }
 
+export class Task {
+    constructor(
+        public name: string,
+        public description: string,
+        public done: boolean
+    ) {}
+}
+
 @Injectable()
 export class TasksService implements ITaskService {
     public tasks: Observable<ITask[]> = null;

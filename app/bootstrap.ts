@@ -9,10 +9,12 @@ import {ProjectManagement} from './ProjectManagement';
 import {HTTP_PROVIDERS} from 'angular2/http';
 import {ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
 import {TasksService} from './services/TasksService';
+import {SelectedTaskService} from './services/SelectedTaskService';
 
 bootstrap(ProjectManagement, [
     HTTP_PROVIDERS,
     ROUTER_PROVIDERS,
     provide(LocationStrategy, {useClass: HashLocationStrategy}),
-    TasksService
+    TasksService,
+    SelectedTaskService
 ]);
