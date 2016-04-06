@@ -17,13 +17,16 @@ import {TasksService, ITasksService} from '../services/TasksService';
                 <div class="form-group">
                     <textarea class="flat-input" rows="3" [(ngModel)]="taskModel.description"></textarea>
                 </div>
-                <div class="form-group text-muted">
+                <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
                     <p>Last updated: {{ task.updated }}</p>
                 </div>
                 <div class="clearfix">
                     <div class="pull-left">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">
+                            <span *ngIf="!task.id">Add new</span>
+                            <span *ngIf="task.id">Save</span>
+                        </button>
                         <span class="btn btn-default" (click)="cancel()">Cancel</span>
                     </div>
                     <div class="pull-right">
@@ -55,8 +58,14 @@ export default class SingleTask {
     }
 
     submitTask() {
-        this.TasksService.updateTask(Object.assign(this.task, this.taskModel));
-        this.SelectedTaskService.dropSelectedTask();
+        if (this.taskModel.name) {
+            if (this.taskModel.id) {
+                this.TasksService.updateTask(Object.assign(this.task, this.taskModel));
+            } else {
+                this.TasksService.addTask(Object.assign(this.task, this.taskModel));
+            }
+            this.SelectedTaskService.dropSelectedTask();
+        }
     }
 
     cancel() {

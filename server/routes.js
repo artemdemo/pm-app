@@ -42,5 +42,10 @@ module.exports = [
         method: 'GET',
         path:'/tasks/all',
         handler: require('./controllers/tasks').all
+    },
+    {
+        method: 'POST',
+        path:'/tasks/add',
+        handler: require('./controllers/tasks').add
     }
 ];

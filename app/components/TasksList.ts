@@ -23,6 +23,7 @@ import OkCircle from './OkCircle';
                 </div>
             </div>
         </div>
+        <button class="btn btn-default" (click)="addNewTask()">New Task</button>
     `
 })
 export default class TasksList {
@@ -38,6 +39,10 @@ export default class TasksList {
 
     selectTask(task: ITask) {
         this.SelectedTaskService.setSelectedTask(task);
+    }
+
+    addNewTask() {
+        this.SelectedTaskService.setNewTask();
     }
 
     ngOnDestroy() {

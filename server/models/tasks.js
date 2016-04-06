@@ -1,10 +1,10 @@
 'use strict';
 
-let chalk = require('chalk');
-let moment = require('moment');
-let Q = require('q');
+const chalk = require('chalk');
+const moment = require('moment');
+const Q = require('q');
 
-let DB = require('./__initDB__.js');
+const DB = require('./__initDB__.js');
 
 const tableName = 'tasks';
 
@@ -31,6 +31,34 @@ exports.getAll = () => {
         });
     } else {
         console.log(chalk.red.bold('[getAll tasks error]'), 'There is no query');
+        deferred.reject();
+    }
+
+    return deferred.promise;
+};
+
+exports.addNew = (newTask) => {
+    const deferred = Q.defer();
+    const now = moment(new Date());
+
+    try {
+        DB.insertToTable(tableName, {
+            name: newTask.name,
+            description: newTask.description,
+            added: now.format('YYYY-MM-DD HH:mm:ss'),
+            updated: now.format('YYYY-MM-DD HH:mm:ss')
+        }).then((result) => {
+            deferred.resolve({
+                id: result.id,
+                added: now.format('YYYY-MM-DD HH:mm:ss'),
+                updated: now.format('YYYY-MM-DD HH:mm:ss')
+            });
+        }, (error) => {
+            console.log(chalk.red.bold('[addNew Task error]'), error);
+            deferred.reject();
+        });
+    } catch (error) {
+        console.log(chalk.red.bold('[addNew Task error]'), error);
         deferred.reject();
     }
 

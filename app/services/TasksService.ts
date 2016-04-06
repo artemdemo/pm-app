@@ -1,4 +1,4 @@
-import {Http} from 'angular2/http';
+import {Http, Headers} from 'angular2/http';
 import {Subject} from 'rxjs';
 import {Injectable, Inject} from 'angular2/core';
 
@@ -13,7 +13,9 @@ export interface ITask {
 
 export interface ITasksService {
     tasks: Subject<ITask[]>;
+    addTask(task: ITask): void;
     updateTask(task: ITask): void;
+    getEmptyTask(): ITask;
     refreshTasks(): void;
 }
 
@@ -43,13 +45,36 @@ export class TasksService implements ITasksService {
             });
     }
 
+    addTask(task: ITask): void {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        this.Http.post('/tasks/add', JSON.stringify(task), {
+            headers: headers
+        }).subscribe((res) => {
+            console.log(res.json());
+            this._tasks.push(Object.assign(task, res.json()));
+            this.refreshTasks();
+        });
+    }
+
     updateTask(task: ITask): void {
         for (var i = 0, len = this._tasks.length; i < len; i++) {
             if (this._tasks[i].id == task.id) {
                 this._tasks[i] = task;
-                this.tasks.next(this._tasks);
+                this.refreshTasks();
                 break;
             }
+        }
+    }
+
+    getEmptyTask(): ITask {
+        return {
+            id: null,
+            name: '',
+            description: '',
+            done: false,
+            added: null,
+            updated: null,
         }
     }
 
