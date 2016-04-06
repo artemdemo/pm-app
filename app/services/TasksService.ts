@@ -1,7 +1,6 @@
 import {Http} from 'angular2/http';
-import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs';
 import {Injectable, Inject} from 'angular2/core';
-//import 'rxjs/add/operator/map';
 
 export interface ITask {
     id: number;
@@ -13,7 +12,7 @@ export interface ITask {
 }
 
 export interface ITaskService {
-    tasks: Observable<ITask[]>;
+    tasks: Subject<ITask[]>;
     updateTasks(): void;
 }
 
@@ -27,14 +26,10 @@ export class Task {
 
 @Injectable()
 export class TasksService implements ITaskService {
-    public tasks: Observable<ITask[]> = null;
-    private _tasksObserver: any;
+    public tasks: Subject<ITask[]> = new Subject<ITask[]>();
     private _tasks: ITask[] = [];
 
     constructor(@Inject(Http) private Http) {
-        this.tasks = new Observable(observer =>
-            this._tasksObserver = observer);
-
         Http.get('/tasks/all')
             .subscribe((res) => {
                 this._tasks = res.json();
@@ -43,6 +38,6 @@ export class TasksService implements ITaskService {
     }
 
     updateTasks(): void {
-        this._tasksObserver.next(this._tasks);
+        this.tasks.next(this._tasks);
     }
 }
