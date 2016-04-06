@@ -1,5 +1,5 @@
 import {Component, Inject} from 'angular2/core';
-import {TasksService, ITaskService, ITask} from '../services/TasksService';
+import {TasksService, ITasksService, ITask} from '../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
 import OkCircle from './OkCircle';
 
@@ -29,7 +29,7 @@ export default class TasksList {
     private tasks: ITask[] = [];
     private tasksSubscription;
 
-    constructor(@Inject(TasksService) private TasksService: ITaskService,
+    constructor(@Inject(TasksService) private TasksService: ITasksService,
                 @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
         this.tasksSubscription = TasksService.tasks.subscribe(newTasks => {
             this.tasks = newTasks;
@@ -37,7 +37,6 @@ export default class TasksList {
     }
 
     selectTask(task: ITask) {
-        console.log(task);
         this.SelectedTaskService.setSelectedTask(task);
     }
 

@@ -8,10 +8,10 @@ Work in progress. There is still a lot of things to do.
 
 ## Getting started
 
-Install all modules
+Install all modules and dependencies
 
 ```
-$ npm i
+$ npm i && typings i
 ```
 
 Compile client app
@@ -44,8 +44,16 @@ $ npm run watch
 I'm using webpack with typescript plugins
 
 
-Angular 2 + webpack
-http://schempy.com/2016/01/19/angular2_webpack_typescript/
+## Typescript typings
 
+I'm using `typings` CLI to add missing types for typescript.
 
-https://github.com/hhru/tms/blob/master/tms-static/webpack.config.js
+This is how you install CLI and missing type definition files:
+
+```
+npm install typings --global
+typings install es6-shim --ambient --save
+typings install require --ambient --save
+```
+
+But you don't need it since there is `typings.json` in the project, you only need to run `$ typings i`

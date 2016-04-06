@@ -1,25 +1,30 @@
 import {Component, Inject} from 'angular2/core';
 import {Task} from '../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
+import {TasksService, ITasksService} from '../services/TasksService';
 
 @Component({
     selector: 'single-task',
     template: `
         <div class="single-task">
-            <form (ngSubmit)="submitTask()">
+            <form (ngSubmit)="submitTask()" *ngIf="taskModel">
                 <div class="form-group">
                     <input type="text"
                            class="flat-input"
                            placeholder="Task name"
-                           [(ngModel)]="task.name">
+                           [(ngModel)]="taskModel.name">
                 </div>
                 <div class="form-group">
-                    <textarea class="flat-input" rows="3"></textarea>
+                    <textarea class="flat-input" rows="3" [(ngModel)]="taskModel.description"></textarea>
+                </div>
+                <div class="form-group text-muted">
+                    <p>Task Added: {{ task.added }}</p>
+                    <p>Last updated: {{ task.updated }}</p>
                 </div>
                 <div class="clearfix">
                     <div class="pull-left">
                         <button type="submit" class="btn btn-primary">Save</button>
-                        <span class="btn btn-default">Cancel</span>
+                        <span class="btn btn-default" (click)="cancel()">Cancel</span>
                     </div>
                     <div class="pull-right">
                         <span class="btn btn-link btn-link_danger">Delete</span>
@@ -30,14 +35,35 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
     `
 })
 export default class SingleTask {
-    private task = new Task('', '', false);
+    private task;
+    private taskModel;
     private taskSubscription;
 
-    constructor(@Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
+    constructor(
+        @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
+        @Inject(TasksService) private TasksService: ITasksService
+    ) {
         this.taskSubscription = SelectedTaskService.task.subscribe(newTask => {
-            console.log('SingleTask ->', newTask);
+            if (newTask) {
+                this.task = newTask;
+                this.taskModel = new Task(newTask);
+            } else {
+                this.taskModel = null;
+                this.task = null;
+            }
         });
     }
 
-    submitTask() {}
+    submitTask() {
+        this.TasksService.updateTask(Object.assign(this.task, this.taskModel));
+        this.SelectedTaskService.dropSelectedTask();
+    }
+
+    cancel() {
+        this.SelectedTaskService.dropSelectedTask();
+    }
+
+    ngOnDestroy() {
+        this.taskSubscription.dispose();
+    }
 }

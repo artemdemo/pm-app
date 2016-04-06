@@ -11,21 +11,27 @@ export interface ITask {
     updated: string;
 }
 
-export interface ITaskService {
+export interface ITasksService {
     tasks: Subject<ITask[]>;
-    updateTasks(): void;
+    updateTask(task: ITask): void;
+    refreshTasks(): void;
 }
 
+// Model for form
 export class Task {
-    constructor(
-        public name: string,
-        public description: string,
-        public done: boolean
-    ) {}
+    public name: string;
+    public description: string;
+    public done: boolean;
+
+    constructor(newTask: ITask){
+        this.name = newTask.name;
+        this.description = newTask.description;
+        this.done = newTask.done;
+    }
 }
 
 @Injectable()
-export class TasksService implements ITaskService {
+export class TasksService implements ITasksService {
     public tasks: Subject<ITask[]> = new Subject<ITask[]>();
     private _tasks: ITask[] = [];
 
@@ -33,11 +39,21 @@ export class TasksService implements ITaskService {
         Http.get('/tasks/all')
             .subscribe((res) => {
                 this._tasks = res.json();
-                this.updateTasks();
+                this.refreshTasks();
             });
     }
 
-    updateTasks(): void {
+    updateTask(task: ITask): void {
+        for (var i = 0, len = this._tasks.length; i < len; i++) {
+            if (this._tasks[i].id == task.id) {
+                this._tasks[i] = task;
+                this.tasks.next(this._tasks);
+                break;
+            }
+        }
+    }
+
+    refreshTasks(): void {
         this.tasks.next(this._tasks);
     }
 }

@@ -1,11 +1,12 @@
 import {Subject} from 'rxjs';
 import {Injectable} from 'angular2/core';
-import {ITask, Task} from './TasksService';
+import {ITask} from './TasksService';
 
 export interface ISelectedTaskService {
     task: Subject<ITask>;
     setSelectedTask(newTask: ITask): void;
-    updateTask(): void;
+    dropSelectedTask(): void;
+    refreshTask(): void;
 }
 
 @Injectable()
@@ -17,10 +18,15 @@ export class SelectedTaskService implements ISelectedTaskService {
 
     setSelectedTask(newTask: ITask):void {
         this._task = newTask;
-        this.updateTask();
+        this.refreshTask();
+    }
+    
+    dropSelectedTask(): void {
+        this._task = null;
+        this.refreshTask();
     }
 
-    updateTask(): void {
+    refreshTask(): void {
         this.task.next(this._task);
     }
 }

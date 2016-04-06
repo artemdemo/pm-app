@@ -7,7 +7,8 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
     selector: 'tasks-page',
     directives: [TasksList, SingleTask],
     template: `
-        <div class="tasks-edit" [ngClass]="{'tasks-edit_open-single-task' : openSingleTask}">
+        <div class="tasks-edit" 
+             [ngClass]="{'tasks-edit_open-single-task' : openSingleTask}">
             <div class="tasks-edit__tasks-list">
                 <tasks-list></tasks-list>
             </div>
@@ -23,11 +24,11 @@ export default class TasksPage {
 
     constructor(@Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
         this.taskSubscription = SelectedTaskService.task.subscribe(newTask => {
-            this.openSingleTask = !!(newTask.hasOwnProperty('id') && Number(newTask.id) > 0);
+            this.openSingleTask = !!newTask;
         });
     }
 
     ngOnDestroy() {
-        this.taskSubscription.unsubscribe();
+        this.taskSubscription.dispose();
     }
 }
