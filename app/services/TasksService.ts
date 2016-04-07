@@ -90,7 +90,7 @@ export class TasksService implements ITasksService {
             });
         });
     }
-    
+
     toggleDone(taskId: number, done: boolean): Promise<{}> {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
@@ -155,6 +155,14 @@ export class TasksService implements ITasksService {
     }
 
     refreshTasks(): void {
-        this.tasks.next(this._tasks);
+        this.tasks.next(this._tasks.sort((a, b) => {
+            if (!a.done && b.done) {
+                return -1;
+            }
+            if (a.done && !b.done) {
+                return 1;
+            }
+            return 0;
+        }));
     }
 }

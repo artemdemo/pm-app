@@ -14,7 +14,10 @@ import {OkCircle} from './OkCircle';
                     <ok-circle [status]="task.done" (toggled)="toggleDone(task.id, $event)"></ok-circle>
                 </div>
                 <div class="tasks-list-item__cell" (click)="selectTask(task)">
-                    <span class="tasks-list-item__text">{{ task.name }}</span>
+                    <span class="tasks-list-item__text"
+                          [ngClass]="{'tasks-list-item__text_done' : task.done}">
+                        {{ task.name }}
+                    </span>
                 </div>
             </div>
         </div>
