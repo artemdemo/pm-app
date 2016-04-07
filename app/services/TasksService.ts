@@ -51,20 +51,26 @@ export class TasksService implements ITasksService {
         this.Http.post('/tasks/add', JSON.stringify(task), {
             headers: headers
         }).subscribe((res) => {
-            console.log(res.json());
             this._tasks.push(Object.assign(task, res.json()));
             this.refreshTasks();
         });
     }
 
     updateTask(task: ITask): void {
-        for (var i = 0, len = this._tasks.length; i < len; i++) {
-            if (this._tasks[i].id == task.id) {
-                this._tasks[i] = task;
-                this.refreshTasks();
-                break;
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        this.Http.put('/tasks/update', JSON.stringify(task), {
+            headers: headers
+        }).subscribe((res) => {
+            for (var i = 0, len = this._tasks.length; i < len; i++) {
+                if (this._tasks[i].id == task.id) {
+                    this._tasks[i] = task;
+                    this.refreshTasks();
+                    break;
+                }
             }
-        }
+            this.refreshTasks();
+        });
     }
 
     getEmptyTask(): ITask {

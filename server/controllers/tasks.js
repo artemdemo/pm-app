@@ -18,3 +18,11 @@ exports.add = (request, reply) => {
         reply(boom.badRequest('DB error'))
     });
 };
+
+exports.update = (request, reply) => {
+    tasks.updateTask(request.payload).then(() => {
+        reply({});
+    }, () => {
+        reply(boom.badRequest('DB error'))
+    });
+};

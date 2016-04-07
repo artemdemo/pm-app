@@ -5,7 +5,6 @@ const moment = require('moment');
 const Q = require('q');
 
 const DB = require('./__initDB__.js');
-
 const tableName = 'tasks';
 
 const parseTasks = (tasks) => tasks.map(task => {
@@ -57,8 +56,41 @@ exports.addNew = (newTask) => {
             console.log(chalk.red.bold('[addNew Task error]'), error);
             deferred.reject();
         });
-    } catch (error) {
+    } catch(error) {
         console.log(chalk.red.bold('[addNew Task error]'), error);
+        deferred.reject();
+    }
+
+    return deferred.promise;
+};
+
+exports.updateTask = (task) => {
+    const deferred = Q.defer();
+    const now = moment(new Date());
+
+    if (!task.id) {
+        deferred.reject();
+        console.log(chalk.red.bold('[updateTask error]'), 'No task.id in given task');
+        return deferred.promise;
+    }
+
+    try {
+        DB.updateInTable(tableName, {
+            name: task.name,
+            description: task.description,
+            updated: now.format('YYYY-MM-DD HH:mm:ss')
+        }, [{
+            column: 'id',
+            comparator: '=',
+            value: task.id
+        }]).then(() => {
+            deferred.resolve();
+        }, (error) => {
+            console.log(chalk.red.bold('[updateTask error]'), error);
+            deferred.reject();
+        });
+    } catch(error) {
+        console.log(chalk.red.bold('[updateTask error]'), error);
         deferred.reject();
     }
 

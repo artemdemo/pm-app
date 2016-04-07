@@ -59,7 +59,7 @@ export default class SingleTask {
 
     submitTask() {
         if (this.taskModel.name) {
-            if (this.taskModel.id) {
+            if (this.task.id) {
                 this.TasksService.updateTask(Object.assign(this.task, this.taskModel));
             } else {
                 this.TasksService.addTask(Object.assign(this.task, this.taskModel));
