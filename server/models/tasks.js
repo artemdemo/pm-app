@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 const Q = require('q');
 
-const DB = require('./__initDB__.js');
+const DB = require('sqlite-crud')('./server/pm.db');
 const tableName = 'tasks';
 
 const parseTasks = (tasks) => tasks.map(task => {
@@ -67,6 +67,8 @@ exports.addNew = (newTask) => {
 exports.updateTask = (task) => {
     const deferred = Q.defer();
     const now = moment(new Date());
+    let updateData = {};
+    let updateAllowed = true;
 
     if (!task.id) {
         deferred.reject();
@@ -74,12 +76,24 @@ exports.updateTask = (task) => {
         return deferred.promise;
     }
 
+    const allowedFields = ['name', 'description', 'done'];
+    allowedFields.forEach((field) => {
+        if (task.hasOwnProperty(field)) {
+            updateData[field] = task[field];
+        }
+    });
+
+    if (!updateAllowed) {
+        deferred.reject();
+        console.log(chalk.red.bold('[updateTask error]'), 'No fields to update:', task);
+        return deferred.promise;
+    }
+
+    updateData['updated'] = now.format('YYYY-MM-DD HH:mm:ss');
+    console.log('updateData', updateData);
+
     try {
-        DB.updateInTable(tableName, {
-            name: task.name,
-            description: task.description,
-            updated: now.format('YYYY-MM-DD HH:mm:ss')
-        }, [{
+        DB.updateInTable(tableName, updateData, [{
             column: 'id',
             comparator: '=',
             value: task.id

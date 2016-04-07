@@ -16,6 +16,7 @@ export interface ITasksService {
     addTask(task: ITask): Promise<{}>;
     updateTask(task: ITask): Promise<{}>;
     deleteTask(taskId: number): Promise<{}>;
+    toggleDone(taskId: number, done: boolean): Promise<{}>;
     getEmptyTask(): ITask;
     refreshTasks(): void;
 }
@@ -75,6 +76,36 @@ export class TasksService implements ITasksService {
                 for (var i = 0, len = this._tasks.length; i < len; i++) {
                     if (this._tasks[i].id == task.id) {
                         this._tasks[i] = task;
+                        this.refreshTasks();
+                        updated = true;
+                        resolve();
+                        break;
+                    }
+                }
+                if (!updated) {
+                    reject();
+                }
+            }, () => {
+                reject();
+            });
+        });
+    }
+    
+    toggleDone(taskId: number, done: boolean): Promise<{}> {
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return new Promise((resolve, reject) => {
+            this.Http.put('/tasks', JSON.stringify({
+                id: taskId,
+                done: done
+            }), {
+                headers: headers
+            }).subscribe((res) => {
+                let updated = false;
+                for (var i = 0, len = this._tasks.length; i < len; i++) {
+                    if (this._tasks[i].id == taskId) {
+                        this._tasks[i].done = done;
                         this.refreshTasks();
                         updated = true;
                         resolve();

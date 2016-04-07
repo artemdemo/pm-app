@@ -3,10 +3,11 @@ import {Task, ITask} from '../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
 import {TasksService, ITasksService} from '../services/TasksService';
 import {LoadingSpinner} from './LoadingSpinner';
+import {OkCircle} from './OkCircle';
 
 @Component({
     selector: 'single-task',
-    directives: [LoadingSpinner],
+    directives: [LoadingSpinner, OkCircle],
     template: `
         <div class="single-task">
             <form (ngSubmit)="submitTask()" *ngIf="taskModel">
@@ -18,6 +19,9 @@ import {LoadingSpinner} from './LoadingSpinner';
                 </div>
                 <div class="form-group">
                     <textarea class="flat-input" rows="3" [(ngModel)]="taskModel.description"></textarea>
+                </div>
+                <div class="form-group">
+                    <ok-circle [status]="task.done" (toggled)="toggleDone($event)">Mark done</ok-circle>
                 </div>
                 <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
@@ -106,7 +110,7 @@ export default class SingleTask {
             this.showDelete = true;
         }
     }
-    
+
     hideDeleteButtons = () => this.showDelete = false;
 
     deleteTask() {
@@ -119,6 +123,10 @@ export default class SingleTask {
                 }, () => this.loadingData = false);
         }
     };
+
+    toggleDone(done) {
+        this.taskModel.done = done;
+    }
 
     cancel() {
         this.SelectedTaskService.dropSelectedTask();

@@ -1,7 +1,7 @@
 import {Component, Inject} from 'angular2/core';
 import {TasksService, ITasksService, ITask} from '../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
-import OkCircle from './OkCircle';
+import {OkCircle} from './OkCircle';
 
 @Component({
     selector: 'tasks-list',
@@ -11,7 +11,7 @@ import OkCircle from './OkCircle';
             <div class="tasks-list-item" *ngFor="#task of tasks">
                 <div class="tasks-list-item__cell 
                             tasks-list-item__cell_icon">
-                    <ok-circle></ok-circle>
+                    <ok-circle [status]="task.done" (toggled)="toggleDone(task.id, $event)"></ok-circle>
                 </div>
                 <div class="tasks-list-item__cell" (click)="selectTask(task)">
                     {{ task.name }}
@@ -43,6 +43,10 @@ export default class TasksList {
 
     addNewTask() {
         this.SelectedTaskService.setNewTask();
+    }
+
+    toggleDone(taskId, done) {
+        this.TasksService.toggleDone(taskId, done);
     }
 
     ngOnDestroy() {
