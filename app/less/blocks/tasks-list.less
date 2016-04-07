@@ -12,6 +12,7 @@
 }
 
     .tasks-list-item__cell {
+        position: relative;
         display: table-cell;
         vertical-align: middle;
     }
@@ -22,7 +23,12 @@
             text-align: center;
         }
 
-        .tasks-list-item__cell_expend {
-            color: gray;
-        }
-
+    .tasks-list-item__text {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }

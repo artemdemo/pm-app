@@ -14,12 +14,7 @@ import {OkCircle} from './OkCircle';
                     <ok-circle [status]="task.done" (toggled)="toggleDone(task.id, $event)"></ok-circle>
                 </div>
                 <div class="tasks-list-item__cell" (click)="selectTask(task)">
-                    {{ task.name }}
-                </div>
-                <div class="tasks-list-item__cell 
-                            tasks-list-item__cell_icon 
-                            tasks-list-item__cell_expend">
-                    <span class="glyphicon glyphicon-expand" aria-hidden="true"></span>
+                    <span class="tasks-list-item__text">{{ task.name }}</span>
                 </div>
             </div>
         </div>

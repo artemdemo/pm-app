@@ -38,7 +38,7 @@ import {OkCircle} from './OkCircle';
                               [ngClass]="{btn_disabled: loadingData}">Cancel</span>
                         <loading-spinner *ngIf="loadingData"></loading-spinner>
                     </div>
-                    <div class="pull-right">
+                    <div class="pull-right" *ngIf="task.id">
                         <span class="btn btn-link btn-link_danger"
                               *ngIf="!showDelete"
                               (click)="showDeleteButtons()"
@@ -69,7 +69,7 @@ export default class SingleTask {
     private taskModel;
     private taskSubscription;
     private showDelete: boolean = false;
-    private loadingData:boolean = false;
+    private loadingData: boolean = false;
 
     constructor(
         @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
