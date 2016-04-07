@@ -4,7 +4,7 @@
 
 Open Source Project Management app.
 
-Work in progress. There is still a lot of things to do.
+Work in progress. There is still much to be done.
 
 ## Getting started
 
