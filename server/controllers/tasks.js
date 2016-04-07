@@ -26,3 +26,11 @@ exports.update = (request, reply) => {
         reply(boom.badRequest('DB error'))
     });
 };
+
+exports.delete = (request, reply) => {
+    tasks.deleteTask(request.params.taskId).then(() => {
+        reply({});
+    }, () => {
+        reply(boom.badRequest('DB error'))
+    });
+};

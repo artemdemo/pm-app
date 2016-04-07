@@ -10,6 +10,5 @@ import {Component} from 'angular2/core';
     `
 })
 export default class OkCircle {
-    constructor() {
-    }
+    constructor() {}
 }

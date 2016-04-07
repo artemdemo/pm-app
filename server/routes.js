@@ -45,12 +45,17 @@ module.exports = [
     },
     {
         method: 'POST',
-        path:'/tasks/add',
+        path:'/tasks',
         handler: require('./controllers/tasks').add
     },
     {
         method: 'PUT',
-        path:'/tasks/update',
+        path:'/tasks',
         handler: require('./controllers/tasks').update
+    },
+    {
+        method: 'DELETE',
+        path:'/tasks/{taskId}',
+        handler: require('./controllers/tasks').delete
     }
 ];

@@ -96,3 +96,31 @@ exports.updateTask = (task) => {
 
     return deferred.promise;
 };
+
+exports.deleteTask = (taskId) => {
+    const deferred = Q.defer();
+
+    if (!taskId) {
+        deferred.reject();
+        console.log(chalk.red.bold('[deleteTask error]'), 'No taskId in given task');
+        return deferred.promise;
+    }
+
+    try {
+        DB.deleteRows(tableName, [{
+            column: 'id',
+            comparator: '=',
+            value: taskId
+        }]).then(() => {
+            deferred.resolve();
+        }, (error) => {
+            console.log(chalk.red.bold('[deleteTask error]'), error);
+            deferred.reject();
+        });
+    } catch(error) {
+        console.log(chalk.red.bold('[deleteTask error]'), error);
+        deferred.reject();
+    }
+
+    return deferred.promise;
+};

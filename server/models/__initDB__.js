@@ -99,7 +99,7 @@ exports.insertToTable = (tableName, data) => {
  * Update table row
  * @param tableName {string}
  * @param data {object}
- * @param where {object}
+ * @param where {array}
  *  [
  *      {
  *          column: '',
@@ -184,6 +184,60 @@ exports.getFromTable = (query) => {
             console.log('QUERY was: ', query);
             deferred.reject();
         } else {
+            deferred.resolve(row);
+        }
+    });
+
+    return deferred.promise;
+};
+
+/**
+ * Delete rows from table
+ * @param tableName {string}
+ * @param where {array}
+ *  [
+ *      {
+ *          column: '',
+ *          comparator: '',
+ *          value: ''
+ *      },
+ *      ...
+ *  ]
+ */
+exports.deleteRows = (tableName, where) => {
+    let deferred = Q.defer();
+    let DB = getDB();
+    let query = 'DELETE FROM ' + tableName;
+    let columnValues = [];
+    if (!tableName) {
+        throw new Error('`tableName` is not provided');
+    }
+    if (!where) {
+        throw new Error('`where` is not provided');
+    } else if (!where.hasOwnProperty('length')) {
+        throw new Error('`where` should be an array');
+    } else if (where.length == 0) {
+        throw new Error('There is no data in `where` object');
+    }
+
+    query += ' WHERE ';
+
+    where.forEach((whereItem, i) => {
+        query += whereItem.column + ' ' + whereItem.comparator + ' ?';
+        if (i < where.length - 1) {
+            query += ', ';
+        }
+        columnValues.push(whereItem.value);
+    });
+
+    console.log(chalk.blue('Query:'), query);
+
+    DB.run(query, columnValues, (error, row) => {
+        if (error) {
+            console.log(chalk.red.bold('[updateInTable error]'), error);
+            deferred.reject();
+        } else {
+            console.log(chalk.blue('Deleted '), where);
             deferred.resolve(row);
         }
     });
