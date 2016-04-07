@@ -25,17 +25,20 @@ import {LoadingSpinner} from './LoadingSpinner';
                 </div>
                 <div class="clearfix">
                     <div class="pull-left">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" [disabled]="loadingData">
                             <span *ngIf="!task.id">Add new</span>
                             <span *ngIf="task.id">Save</span>
                         </button>
-                        <span class="btn btn-default" (click)="cancel()">Cancel</span>
-                        <loading-spinner></loading-spinner>
+                        <span class="btn btn-default" 
+                              (click)="cancel()"
+                              [ngClass]="{btn_disabled: loadingData}">Cancel</span>
+                        <loading-spinner *ngIf="loadingData"></loading-spinner>
                     </div>
                     <div class="pull-right">
                         <span class="btn btn-link btn-link_danger"
                               *ngIf="!showDelete"
-                              (click)="showDeleteButtons()">Delete</span>
+                              (click)="showDeleteButtons()"
+                              [ngClass]="{btn_disabled: loadingData}">Delete</span>
                         <div class="delete-task" *ngIf="showDelete">
                             <div class="delete-task__title">Delete?</div>
                             <div class="delete-task-buttons">
@@ -62,6 +65,7 @@ export default class SingleTask {
     private taskModel;
     private taskSubscription;
     private showDelete: boolean = false;
+    private loadingData:boolean = false;
 
     constructor(
         @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
@@ -79,26 +83,41 @@ export default class SingleTask {
     }
 
     submitTask() {
-        if (this.taskModel.name) {
+        if (this.taskModel.name && !this.loadingData) {
+            this.loadingData = true;
             if (this.task.id) {
-                this.TasksService.updateTask(Object.assign(this.task, this.taskModel)).then(() => {
-                    this.SelectedTaskService.dropSelectedTask();
-                });
+                this.TasksService.updateTask(Object.assign(this.task, this.taskModel))
+                    .then(() => {
+                        this.SelectedTaskService.dropSelectedTask();
+                        this.loadingData = false;
+                    }, () => this.loadingData = false);
             } else {
-                this.TasksService.addTask(Object.assign(this.task, this.taskModel)).then(() => {
-                    this.SelectedTaskService.dropSelectedTask();
-                });
+                this.TasksService.addTask(Object.assign(this.task, this.taskModel))
+                    .then(() => {
+                        this.SelectedTaskService.dropSelectedTask();
+                        this.loadingData = false;
+                    }, () => this.loadingData = false);
             }
         }
     }
 
-    showDeleteButtons = () => this.showDelete = true;
+    showDeleteButtons() {
+        if (!this.loadingData) {
+            this.showDelete = true;
+        }
+    }
+    
     hideDeleteButtons = () => this.showDelete = false;
 
     deleteTask() {
-        this.TasksService.deleteTask(this.task.id).then(() => {
-            this.SelectedTaskService.dropSelectedTask();
-        });
+        if (!this.loadingData) {
+            this.loadingData = true;
+            this.TasksService.deleteTask(this.task.id)
+                .then(() => {
+                    this.SelectedTaskService.dropSelectedTask();
+                    this.loadingData = false;
+                }, () => this.loadingData = false);
+        }
     };
 
     cancel() {

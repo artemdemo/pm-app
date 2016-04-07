@@ -35,6 +35,15 @@ module.exports = [
     },
     {
         method: 'GET',
+        path:'/images/{param*}',
+        handler: {
+            directory: {
+                path: '../public/images'
+            }
+        }
+    },
+    {
+        method: 'GET',
         path:'/tasks',
         handler: require('./controllers/tasks').index
     },
