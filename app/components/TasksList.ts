@@ -19,6 +19,12 @@ import {OkCircle} from './OkCircle';
                         {{ task.name }}
                     </span>
                 </div>
+                <div class="tasks-list-item__cell 
+                            tasks-list-item__cell_icon">
+                    <span class="glyphicon glyphicon-triangle-right"
+                          aria-hidden="true"
+                          *ngIf="selectedTask && selectedTask.id == task.id"></span>
+                </div>
             </div>
         </div>
         <button class="btn btn-default" (click)="addNewTask()">New Task</button>
@@ -27,11 +33,16 @@ import {OkCircle} from './OkCircle';
 export default class TasksList {
     private tasks: ITask[] = [];
     private tasksSubscription;
+    private selectedTask: ITask = null;
+    private selectedTaskSubscription;
 
     constructor(@Inject(TasksService) private TasksService: ITasksService,
                 @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
         this.tasksSubscription = TasksService.tasks.subscribe(newTasks => {
             this.tasks = newTasks;
+        });
+        this.selectedTaskSubscription = SelectedTaskService.task.subscribe(newSelectedTask => {
+            this.selectedTask = newSelectedTask;
         });
     }
 
