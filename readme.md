@@ -32,6 +32,12 @@ In development use `watch` command
 $ npm run watch
 ```
 
+If you want to update Angular 2 and it's dependencies run:
+
+```
+$ ./update-angular.sh
+```
+
 
 ## Technologies
 
