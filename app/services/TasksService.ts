@@ -16,7 +16,7 @@ export interface ITasksService {
     addTask(task: ITask): Promise<{}>;
     updateTask(task: ITask): Promise<{}>;
     deleteTask(taskId: number): Promise<{}>;
-    toggleDone(taskId: number, done: boolean): Promise<{}>;
+    setDone(taskId: number, done: boolean): Promise<{}>;
     getEmptyTask(): ITask;
     refreshTasks(): void;
 }
@@ -91,7 +91,7 @@ export class TasksService implements ITasksService {
         });
     }
 
-    toggleDone(taskId: number, done: boolean): Promise<{}> {
+    setDone(taskId: number, done: boolean): Promise<{}> {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 

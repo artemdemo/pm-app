@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
-import MainMenu from './components/MainMenu';
-import TasksPage from './pages/TasksPage';
+import {MainMenu} from './components/MainMenu';
+import {TasksPage} from './pages/TasksPage';
 
 @Component({
     selector: 'pm-app',

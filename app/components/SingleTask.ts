@@ -21,7 +21,7 @@ import {OkCircle} from './OkCircle';
                     <textarea class="flat-input" rows="3" [(ngModel)]="taskModel.description"></textarea>
                 </div>
                 <div class="form-group">
-                    <ok-circle [status]="task.done" (toggled)="toggleDone($event)">Mark done</ok-circle>
+                    <ok-circle [status]="isDone" (click)="toggleDone()">Mark done</ok-circle>
                 </div>
                 <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
@@ -36,7 +36,9 @@ import {OkCircle} from './OkCircle';
                         <span class="btn btn-default" 
                               (click)="cancel()"
                               [ngClass]="{btn_disabled: loadingData}">Cancel</span>
-                        <loading-spinner *ngIf="loadingData"></loading-spinner>
+                        <span class="btn btn-link" *ngIf="loadingData">
+                            <loading-spinner></loading-spinner>
+                        </span>
                     </div>
                     <div class="pull-right" *ngIf="task.id">
                         <span class="btn btn-link btn-link_danger"
@@ -64,10 +66,11 @@ import {OkCircle} from './OkCircle';
         </div>
     `
 })
-export default class SingleTask {
+export class SingleTask {
     private task: ITask;
     private taskModel;
     private taskSubscription;
+    private isDone: boolean = false;
     private showDelete: boolean = false;
     private loadingData: boolean = false;
 
@@ -84,6 +87,10 @@ export default class SingleTask {
                 this.task = null;
             }
         });
+    }
+    
+    ngOnInit() {
+        this.isDone = this.task ? this.task.done : false;
     }
 
     submitTask() {
@@ -124,8 +131,9 @@ export default class SingleTask {
         }
     };
 
-    toggleDone(done) {
-        this.taskModel.done = done;
+    toggleDone() {
+        this.isDone = !this.isDone;
+        this.taskModel.done = this.task.done;
     }
 
     cancel() {

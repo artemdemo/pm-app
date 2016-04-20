@@ -8,9 +8,9 @@ import webpack from 'webpack';
 import webpackConfig from './webpack.config';
 import path from 'path';
 import fs from 'fs';
+import yargs from 'yargs';
 import _ from 'underscore';
 
-const compiler = webpack(webpackConfig);
 const randomID = () => {
     return 'xxxxxxxx'.replace(
         /[xy]/g,
@@ -23,6 +23,19 @@ let hash = {
     css: randomID(),
     js: randomID()
 };
+
+var args = yargs
+    .options('pack', {
+        alias: 'min',
+        describe: 'uglify code',
+        boolean: true
+    }).argv;
+    
+if (args.pack) {
+    webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, mangle: false}));
+}
+
+const compiler = webpack(webpackConfig);
 
 gulp.task('js', ['clean'], function(callback) {
     function report(resolve, err, stats) {

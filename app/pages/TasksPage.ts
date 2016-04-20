@@ -1,6 +1,6 @@
 import {Component, Inject} from 'angular2/core';
-import TasksList from '../components/TasksList';
-import SingleTask from '../components/SingleTask';
+import {TasksList} from '../components/TasksList/TasksList';
+import {SingleTask} from '../components/SingleTask';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
 
 @Component({
@@ -18,7 +18,7 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
         </div>
     `
 })
-export default class TasksPage {
+export class TasksPage {
     private openSingleTask = false;
     private taskSubscription;
 

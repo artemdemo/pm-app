@@ -1,13 +1,17 @@
 import {Component, Output, EventEmitter, Input} from 'angular2/core';
+import {LoadingSpinner} from './LoadingSpinner';
 
 @Component({
     selector: 'ok-circle',
-    directives: [],
+    directives: [LoadingSpinner],
     template: `
-        <span class="ok-circle-container" (click)="toggleStatus()">
-            <span class="ok-circle" [ngClass]="{'ok-circle_done': status}">
+        <span class="ok-circle-container">
+            <span class="ok-circle" 
+                  [ngClass]="{'ok-circle_done': status}"
+                  *ngIf="!loading">
                 <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
             </span>
+            <loading-spinner color="green" *ngIf="loading"></loading-spinner>
             <span class="ok-circle-content" [ngClass]="{'ok-circle-content_done': status}">
                 <ng-content></ng-content> 
             </span>
@@ -15,15 +19,10 @@ import {Component, Output, EventEmitter, Input} from 'angular2/core';
     `
 })
 export class OkCircle {
-    @Input() status: boolean;
-    @Output() toggled: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Input() status: boolean = false;
+    @Input() loading: boolean = false;
 
     constructor() {}
 
     ngOnInit() {}
-
-    toggleStatus() {
-        this.status = !this.status;
-        this.toggled.emit(this.status);
-    }
 }
