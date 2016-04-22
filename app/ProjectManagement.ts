@@ -2,6 +2,7 @@ import {Component} from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
 import {MainMenu} from './components/MainMenu';
 import {TasksPage} from './pages/TasksPage';
+import {ProjectsPage} from './pages/ProjectsPage';
 
 @Component({
     selector: 'pm-app',
@@ -14,7 +15,8 @@ import {TasksPage} from './pages/TasksPage';
     `
 })
 @RouteConfig([
-    { path: '/', component: TasksPage, as: 'TasksPage' }
+    { path: '/', component: TasksPage, as: 'TasksPage' },
+    { path: '/projects', component: ProjectsPage, as: 'ProjectsPage' }
 ])
 export class ProjectManagement {
     constructor() {

@@ -27,8 +27,14 @@ $ npm run pack
 ```
 
 But there is some problem with minifying angular 2 code.
-Therefore for now I'm using minifying with mangling off. 
+Therefore for now I'm using minifying without mangling. 
 See comment by Igor Minar according to this issue: https://github.com/angular/angular/issues/6380#issuecomment-203247147
+
+In any case you can try to pack it with mangle and see if it starts working:
+
+```
+$ npm run pack-with-mangle
+```
 
 Start server
 

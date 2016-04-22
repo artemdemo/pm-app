@@ -25,14 +25,21 @@ let hash = {
 };
 
 var args = yargs
-    .options('pack', {
-        alias: 'min',
-        describe: 'uglify code',
-        boolean: true
+    .options({
+        'pack': {
+            alias: 'min',
+            describe: 'uglify code',
+            boolean: true
+        },
+        'packWithMangle': {
+            describe: 'uglify code with mangle'
+        }
     }).argv;
     
 if (args.pack) {
     webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, mangle: false}));
+} else if (args.packWithMangle) {
+    webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}, mangle: true}));
 }
 
 const compiler = webpack(webpackConfig);

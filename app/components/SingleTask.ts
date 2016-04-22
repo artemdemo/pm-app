@@ -21,7 +21,7 @@ import {OkCircle} from './OkCircle';
                     <textarea class="flat-input" rows="3" [(ngModel)]="taskModel.description"></textarea>
                 </div>
                 <div class="form-group">
-                    <ok-circle [status]="isDone" (click)="toggleDone()">Mark done</ok-circle>
+                    <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
                 </div>
                 <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
@@ -70,7 +70,6 @@ export class SingleTask {
     private task: ITask;
     private taskModel;
     private taskSubscription;
-    private isDone: boolean = false;
     private showDelete: boolean = false;
     private loadingData: boolean = false;
 
@@ -78,19 +77,15 @@ export class SingleTask {
         @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
         @Inject(TasksService) private TasksService: ITasksService
     ) {
-        this.taskSubscription = SelectedTaskService.task.subscribe(newTask => {
-            if (newTask) {
-                this.task = newTask;
-                this.taskModel = new Task(newTask);
+        this.taskSubscription = SelectedTaskService.task.subscribe(selectedTask => {
+            if (selectedTask) {
+                this.task = selectedTask;
+                this.taskModel = new Task(selectedTask);
             } else {
                 this.taskModel = null;
                 this.task = null;
             }
         });
-    }
-    
-    ngOnInit() {
-        this.isDone = this.task ? this.task.done : false;
     }
 
     submitTask() {
@@ -132,8 +127,7 @@ export class SingleTask {
     };
 
     toggleDone() {
-        this.isDone = !this.isDone;
-        this.taskModel.done = this.task.done;
+        this.taskModel.done = !this.taskModel.done;
     }
 
     cancel() {
@@ -141,6 +135,6 @@ export class SingleTask {
     }
 
     ngOnDestroy() {
-        this.taskSubscription.dispose();
+        this.taskSubscription.unsubscribe();
     }
 }

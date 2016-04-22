@@ -29,6 +29,6 @@ export class TasksPage {
     }
 
     ngOnDestroy() {
-        this.taskSubscription.dispose();
+        this.taskSubscription.unsubscribe();
     }
 }

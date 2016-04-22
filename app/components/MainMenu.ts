@@ -19,7 +19,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li><a [routerLink]="['/TasksPage']">Tasks</a></li>
-                        <li><a href="#">Projects</a></li>
+                        <li><a [routerLink]="['/ProjectsPage']">Projects</a></li>
                     </ul>
                 </div>
             </div>
