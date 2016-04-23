@@ -19,6 +19,22 @@ $ npm i && typings i
 $ npm run build
 ```
 
+Так же можно собрать минифицированную версию:
+
+```
+$ npm run pack
+```
+
+Однако, на данный момент есть проблема с минификацией Angelar 2.
+Поэтому сейчас я использую минификацию без mangling.
+Подробнее о проблеме написал Игорь минар в своем комментарии: https://github.com/angular/angular/issues/6380#issuecomment-203247147
+
+В любом случае, можно собрать версию и с mangling и проверить заработает ли:
+
+```
+$ npm run pack-with-mangle
+```
+
 Стартуем сервер
 
 ```
@@ -42,3 +58,7 @@ $ ./update-angular.sh
 * Angular 2 - https://angular.io/
 * Bootstrap css - http://getbootstrap.com/
 * Hapi.js - http://hapijs.com/
+
+## Компигирование
+
+Я исползую webpack с typescript.
