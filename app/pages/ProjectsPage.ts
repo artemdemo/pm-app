@@ -3,9 +3,8 @@ import {ProjectsList} from '../components/ProjectsList/ProjectsList';
 
 @Component({
     selector: 'projects-page',
-    directives: [],
+    directives: [ProjectsList],
     template: `
-        Projects
         <div class="list-container"
              [ngClass]="{'list-container_open-right-panel' : openSingleProject}">
             <div class="list-container__list">

@@ -1,6 +1,6 @@
 import {Component, Inject} from 'angular2/core';
 import {TasksList} from '../components/TasksList/TasksList';
-import {SingleTask} from '../components/SingleTask';
+import {SingleTask} from '../components/TasksList/SingleTask';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
 
 @Component({

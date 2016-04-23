@@ -44,7 +44,10 @@ export class TasksListItem {
     toggleDone(taskId, done) {
         this.isLoading = true;
         this.TasksService.setDone(this.task.id, !this.task.done)
-            .then(() => this.isLoading = false);
+            .then(() => {
+                this.isLoading = false;
+                this.selectTask();
+            });
     }
     
     selectTask() {

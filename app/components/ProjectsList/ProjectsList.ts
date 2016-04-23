@@ -1,18 +1,39 @@
 import {Component, Inject} from 'angular2/core';
 import {ProjectsListItem} from './ProjectsListItem';
+import {ProjectsService, IProjectsService, IProject} from '../../services/ProjectsService';
+import {SelectedProjectService, ISelectedProjectService} from '../../services/SelectedProjectService';
 
 @Component({
     selector: 'projects-list',
     directives: [ProjectsListItem],
     template: `
         <div class="projects-list">
-            <projects-list-item></projects-list-item>
+            <projects-list-item [project]="project" 
+                                *ngFor="#project of projects"></projects-list-item>
         </div>
-        <button class="btn btn-default">New Project</button>
+        <button class="btn btn-default" (click)="addNewProject()">New Project</button>
     `
 })
 export class ProjectsList {
-    constructor() {}
+    private projects: IProject[] = [];
+    private projectsSubscription;
+    
+    constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService,
+                @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService) {
+        this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
+            this.projects = newProjects;
+        });
+    }
+    
+    ngOnInit() {
+        this.ProjectsService.refreshProjects();
+    }
+    
+    addNewProject() {
+        this.SelectedProjectService.setNewProject();
+    }
 
-    ngOnDestroy() {}
+    ngOnDestroy() {
+        this.projectsSubscription.unsubscribe();
+    }
 }

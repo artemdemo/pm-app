@@ -1,9 +1,9 @@
 import {Component, Inject} from 'angular2/core';
-import {Task, ITask} from '../services/TasksService';
-import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
-import {TasksService, ITasksService} from '../services/TasksService';
-import {LoadingSpinner} from './LoadingSpinner';
-import {OkCircle} from './OkCircle';
+import {Task, ITask} from '../../services/TasksService';
+import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
+import {TasksService, ITasksService} from '../../services/TasksService';
+import {LoadingSpinner} from '../LoadingSpinner';
+import {OkCircle} from '../OkCircle';
 
 @Component({
     selector: 'single-task',

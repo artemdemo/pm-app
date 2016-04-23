@@ -10,12 +10,13 @@ export interface IProject {
     updated: string;
 }
 
-export interface IProjectService {
+export interface IProjectsService {
     projects: Subject<IProject[]>;
     addProject(project: IProject): Promise<{}>;
     updateProject(project: IProject): Promise<{}>;
     deleteProject(projectId: number): Promise<{}>;
     refreshProjects(): void;
+    getEmptyProject(): IProject;
 }
 
 // Model for form
@@ -30,7 +31,7 @@ export class Project {
 }
 
 @Injectable()
-export class ProjectService implements IProjectService {
+export class ProjectsService implements IProjectsService {
     public projects: Subject<IProject[]> = new Subject<IProject[]>();
     private _projects: IProject[] = [];
 
@@ -110,7 +111,17 @@ export class ProjectService implements IProjectService {
                 reject();
             });
         });
-    }    
+    }
+    
+    getEmptyProject(): IProject {
+        return {
+            id: null,
+            name: '',
+            description: '',
+            added: null,
+            updated: null,
+        }
+    }  
     
     refreshProjects() {
         this.projects.next(this._projects);
