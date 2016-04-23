@@ -24,6 +24,10 @@ export class TasksList {
             this.tasks = newTasks;
         });
     }
+    
+    ngOnInit() {
+        this.TasksService.refreshTasks();
+    }
 
     addNewTask() {
         this.SelectedTaskService.setNewTask();

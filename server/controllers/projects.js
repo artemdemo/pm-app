@@ -1,20 +1,20 @@
 'use strict';
 
 const boom = require('boom');
-const tasks = require('../models/tasks');
+const projects = require('../models/projects');
 
-exports.index = (request, reply) => reply('This is "tasks" index route');
+exports.index = (request, reply) => reply('This is "projects" index route');
 
 exports.all = (request, reply) => {
-    tasks.getAll().then((tasks) => {
-        reply(tasks);
+    projects.getAll().then((projects) => {
+        reply(projects);
     }, () => {
         reply(boom.badRequest('DB error'))
     });
 };
 
 exports.add = (request, reply) => {
-    tasks.addNew(request.payload).then((result) => {
+    projects.addNew(request.payload).then((result) => {
         reply(result);
     }, () => {
         reply(boom.badRequest('DB error'))
@@ -22,7 +22,7 @@ exports.add = (request, reply) => {
 };
 
 exports.update = (request, reply) => {
-    tasks.updateTask(request.payload).then(() => {
+    projects.updateProject(request.payload).then(() => {
         reply({});
     }, () => {
         reply(boom.badRequest('DB error'))
@@ -30,7 +30,7 @@ exports.update = (request, reply) => {
 };
 
 exports.delete = (request, reply) => {
-    tasks.deleteTask(request.params.taskId).then(() => {
+    projects.deleteProject(request.params.projectId).then(() => {
         reply({});
     }, () => {
         reply(boom.badRequest('DB error'))

@@ -1,10 +1,10 @@
 'use strict';
 
+let fs = require('fs');
 const path = require('path');
 const Hapi = require('hapi');
 const inert = require('inert');
 const chalk = require('chalk');
-const routes = require('./routes');
 
 // Normalize a port into a number, string, or false.
 function normalizePort(val) {
@@ -38,9 +38,22 @@ server.connection({
 
 server.register(inert, () => {});
 
-for (var route in routes) {
-    server.route(routes[route]);
-}
+// Dynamically include routes
+// Function will recursively enter all directories and include all '*.js' files
+let routerDirWalker = (dirPath) => {
+    fs.readdirSync(dirPath).forEach((file) => {
+        if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
+            routerDirWalker(path.join(dirPath, file))
+        } else {
+            let pathToRoute = '.' + path.sep + path.join(dirPath, file.split('.').shift());
+            let routes = require(pathToRoute.replace(/\\/g,'/').replace('/server',''));
+            for (var route in routes) {
+                server.route(routes[route]);
+            }
+        }
+    });
+};
+routerDirWalker('./server/routes');
 
 server.start((err) => {
     if (err) {

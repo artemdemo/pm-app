@@ -6,19 +6,21 @@ import {ProjectsList} from '../components/ProjectsList/ProjectsList';
     directives: [],
     template: `
         Projects
-        <div class="prjects-edit">
-            <div class="projects-edit__projects-list">
+        <div class="list-container"
+             [ngClass]="{'list-container_open-right-panel' : openSingleProject}">
+            <div class="list-container__list">
                 <projects-list></projects-list>
             </div>
-            <div class="projects-edit__single-project">
+            <div class="list-container__panel">
                 <single-project></single-project>
             </div>
         </div>
     `
 })
 export class ProjectsPage {
+    private openSingleProject = false;
 
     constructor() {}
 
-    ngOnDestroy() {}
+    //ngOnDestroy() {}
 }

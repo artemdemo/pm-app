@@ -16,7 +16,8 @@ import {ProjectsPage} from './pages/ProjectsPage';
 })
 @RouteConfig([
     { path: '/', component: TasksPage, as: 'TasksPage' },
-    { path: '/projects', component: ProjectsPage, as: 'ProjectsPage' }
+    { path: '/projects', component: ProjectsPage, as: 'ProjectsPage' },
+    { path: '/**', redirectTo: ['TasksPage'] }
 ])
 export class ProjectManagement {
     constructor() {

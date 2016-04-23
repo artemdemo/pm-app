@@ -40,7 +40,11 @@ export class TasksService implements ITasksService {
     private _tasks: ITask[] = [];
 
     constructor(@Inject(Http) private Http) {
-        Http.get('/tasks/all')
+        this.loadTasks();
+    }
+    
+    loadTasks() {
+        this.Http.get('/tasks/all')
             .subscribe((res) => {
                 this._tasks = res.json();
                 this.refreshTasks();
