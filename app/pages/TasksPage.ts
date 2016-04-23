@@ -7,12 +7,12 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
     selector: 'tasks-page',
     directives: [TasksList, SingleTask],
     template: `
-        <div class="tasks-edit" 
-             [ngClass]="{'tasks-edit_open-single-task' : openSingleTask}">
-            <div class="tasks-edit__tasks-list">
+        <div class="list-container" 
+             [ngClass]="{'list-container_open-right-panel' : openSingleTask}">
+            <div class="list-container__list">
                 <tasks-list></tasks-list>
             </div>
-            <div class="tasks-edit__single-task">
+            <div class="list-container__panel">
                 <single-task></single-task>
             </div>
         </div>

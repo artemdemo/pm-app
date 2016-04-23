@@ -1,35 +1,35 @@
-.tasks-edit {
+.list-container {
     .clearFix();
     max-width: 1170px;
     margin: 0 auto;
 }
 
-    .tasks-edit_open-single-task {
-        .tasks-edit__tasks-list {
+    .list-container_open-right-panel {
+        .list-container__list {
             width: 60%;
             float: left;
         }
-        .tasks-edit__single-task {
+        .list-container__panel {
             display: block;
             width: 40%;
             float: left;
         }
     }
 
-    .tasks-edit__tasks-list {
+    .list-container__list {
         padding: 10px 15px 0 15px;
     }
 
-    .tasks-edit__single-task {
+    .list-container__panel {
         display: none;
     }
 
 @media (max-width: 768px) {
-    .tasks-edit_open-single-task {
-        .tasks-edit__tasks-list {
+    .list-container_open-right-panel {
+        .list-container__list {
             width: 50%;
         }
-        .tasks-edit__single-task {
+        .list-container__panel {
             width: 50%;
         }
     }
