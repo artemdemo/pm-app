@@ -27,7 +27,7 @@ export class Task {
     public description: string;
     public done: boolean;
 
-    constructor(newTask: ITask){
+    constructor(newTask: ITask) {
         this.name = newTask.name;
         this.description = newTask.description;
         this.done = newTask.done;
@@ -39,11 +39,11 @@ export class TasksService implements ITasksService {
     public tasks: Subject<ITask[]> = new Subject<ITask[]>();
     private _tasks: ITask[] = [];
 
-    constructor(@Inject(Http) private Http) {
+    constructor(@Inject(Http) private Http: Http) {
         this.loadTasks();
     }
-    
-    loadTasks() {
+
+    loadTasks(): void {
         this.Http.get('/tasks/all')
             .subscribe((res) => {
                 this._tasks = res.json();
@@ -52,12 +52,12 @@ export class TasksService implements ITasksService {
     }
 
     addTask(task: ITask): Promise<{}> {
-        let headers = new Headers();
+        let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         return new Promise((resolve, reject) => {
             this.Http.post('/tasks', JSON.stringify(task), {
-                headers: headers
+                headers: headers,
             }).subscribe((res) => {
                 this._tasks.push(Object.assign(task, res.json()));
                 this.refreshTasks();
@@ -69,16 +69,16 @@ export class TasksService implements ITasksService {
     }
 
     updateTask(task: ITask): Promise<{}> {
-        let headers = new Headers();
+        let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         return new Promise((resolve, reject) => {
             this.Http.put('/tasks', JSON.stringify(task), {
-                headers: headers
+                headers: headers,
             }).subscribe((res) => {
-                let updated = false;
-                for (var i = 0, len = this._tasks.length; i < len; i++) {
-                    if (this._tasks[i].id == task.id) {
+                let updated: boolean = false;
+                for (let i: number = 0, len: number = this._tasks.length; i < len; i++) {
+                    if (this._tasks[i].id === task.id) {
                         this._tasks[i] = task;
                         this.refreshTasks();
                         updated = true;
@@ -96,19 +96,19 @@ export class TasksService implements ITasksService {
     }
 
     setDone(taskId: number, done: boolean): Promise<{}> {
-        let headers = new Headers();
+        let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         return new Promise((resolve, reject) => {
             this.Http.put('/tasks', JSON.stringify({
                 id: taskId,
-                done: done
+                done: done,
             }), {
-                headers: headers
+                headers: headers,
             }).subscribe((res) => {
-                let updated = false;
-                for (var i = 0, len = this._tasks.length; i < len; i++) {
-                    if (this._tasks[i].id == taskId) {
+                let updated: boolean = false;
+                for (let i: number = 0, len: number = this._tasks.length; i < len; i++) {
+                    if (this._tasks[i].id === taskId) {
                         this._tasks[i].done = done;
                         this.refreshTasks();
                         updated = true;
@@ -128,9 +128,9 @@ export class TasksService implements ITasksService {
     deleteTask(taskId: number): Promise<{}> {
         return new Promise((resolve, reject) => {
             this.Http.delete(`/tasks/${taskId}`).subscribe((res) => {
-                let deleted = false;
-                for (var i = this._tasks.length - 1; i >= 0; i--) {
-                    if (this._tasks[i].id == taskId) {
+                let deleted: boolean = false;
+                for (let i: number = this._tasks.length - 1; i >= 0; i--) {
+                    if (this._tasks[i].id === taskId) {
                         this._tasks.splice(i, 1);
                         this.refreshTasks();
                         resolve();
@@ -155,7 +155,7 @@ export class TasksService implements ITasksService {
             done: false,
             added: null,
             updated: null,
-        }
+        };
     }
 
     refreshTasks(): void {

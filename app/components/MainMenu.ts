@@ -24,8 +24,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
                 </div>
             </div>
         </nav>
-    `
+    `,
 })
 export class MainMenu {
-    constructor() {}
 }

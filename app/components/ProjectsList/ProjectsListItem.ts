@@ -11,19 +11,21 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
                 {{ project.name }}
             </div>
         </div>
-    `
+    `,
 })
 export class ProjectsListItem {
     @Input() project: IProject;
     private selectedProject: IProject = null;
-    private selectedProjectSubscription;
-    
+    private selectedProjectSubscription: any;
+
     constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService,
                 @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService) {
         this.selectedProjectSubscription = SelectedProjectService.project.subscribe(newSelectedProject => {
             this.selectedProject = newSelectedProject;
         });
     }
-    
-    ngOnDestroy() {}
+
+    ngOnDestroy(): void {
+        this.selectedProjectSubscription.unsubscribe();
+    }
 }

@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Input} from 'angular2/core';
+import {Component, Input} from 'angular2/core';
 import {LoadingSpinner} from './LoadingSpinner';
 
 @Component({
@@ -16,13 +16,9 @@ import {LoadingSpinner} from './LoadingSpinner';
                 <ng-content></ng-content> 
             </span>
         </span>
-    `
+    `,
 })
 export class OkCircle {
     @Input() status: boolean = false;
     @Input() loading: boolean = false;
-
-    constructor() {}
-
-    ngOnInit() {}
 }

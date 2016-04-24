@@ -12,16 +12,13 @@ export enum LoadingSpinnerColors {
     selector: 'loading-spinner',
     template: `
         <span class="loading-spinner" [ngClass]="spinnerClass"></span>
-    `
+    `,
 })
 export class LoadingSpinner {
     @Input() color: string = LoadingSpinnerColors[LoadingSpinnerColors.black];
-    
-    spinnerClass: string;
+    private spinnerClass: string;
 
-    constructor() {}
-    
-    ngOnInit() {
+    ngOnInit(): void {
         this.spinnerClass = `loading-spinner_${this.color}`;
     }
 }

@@ -64,12 +64,12 @@ import {OkCircle} from '../OkCircle';
                 </div>
             </form>
         </div>
-    `
+    `,
 })
 export class SingleTask {
     private task: ITask;
-    private taskModel;
-    private taskSubscription;
+    private taskModel: Task;
+    private taskSubscription: any;
     private showDelete: boolean = false;
     private loadingData: boolean = false;
 
@@ -88,7 +88,7 @@ export class SingleTask {
         });
     }
 
-    submitTask() {
+    submitTask(): void {
         if (this.taskModel.name && !this.loadingData) {
             this.loadingData = true;
             if (this.task.id) {
@@ -107,15 +107,17 @@ export class SingleTask {
         }
     }
 
-    showDeleteButtons() {
+    showDeleteButtons(): void {
         if (!this.loadingData) {
             this.showDelete = true;
         }
     }
 
-    hideDeleteButtons = () => this.showDelete = false;
+    hideDeleteButtons(): void {
+        this.showDelete = false;
+    }
 
-    deleteTask() {
+    deleteTask(): void {
         if (!this.loadingData) {
             this.loadingData = true;
             this.TasksService.deleteTask(this.task.id)
@@ -124,17 +126,17 @@ export class SingleTask {
                     this.loadingData = false;
                 }, () => this.loadingData = false);
         }
-    };
+    }
 
-    toggleDone() {
+    toggleDone(): void {
         this.taskModel.done = !this.taskModel.done;
     }
 
-    cancel() {
+    cancel(): void {
         this.SelectedTaskService.dropSelectedTask();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.taskSubscription.unsubscribe();
     }
 }

@@ -16,11 +16,11 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
                 <single-task></single-task>
             </div>
         </div>
-    `
+    `,
 })
 export class TasksPage {
-    private openSingleTask = false;
-    private taskSubscription;
+    private openSingleTask: boolean = false;
+    private taskSubscription: any;
 
     constructor(@Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
         this.taskSubscription = SelectedTaskService.task.subscribe(newTask => {
@@ -28,7 +28,7 @@ export class TasksPage {
         });
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.taskSubscription.unsubscribe();
     }
 }

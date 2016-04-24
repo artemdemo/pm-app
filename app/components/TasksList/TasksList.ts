@@ -12,11 +12,11 @@ import {TasksListItem} from './TasksListItem';
                              *ngFor="#task of tasks"></tasks-list-item>
         </div>
         <button class="btn btn-default" (click)="addNewTask()">New Task</button>
-    `
+    `,
 })
 export class TasksList {
     private tasks: ITask[] = [];
-    private tasksSubscription;
+    private tasksSubscription: any;
 
     constructor(@Inject(TasksService) private TasksService: ITasksService,
                 @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
@@ -24,16 +24,16 @@ export class TasksList {
             this.tasks = newTasks;
         });
     }
-    
-    ngOnInit() {
+
+    ngOnInit(): void {
         this.TasksService.refreshTasks();
     }
 
-    addNewTask() {
+    addNewTask(): void {
         this.SelectedTaskService.setNewTask();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.tasksSubscription.unsubscribe();
     }
 }

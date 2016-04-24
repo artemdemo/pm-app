@@ -24,7 +24,7 @@ export class Project {
     public name: string;
     public description: string;
 
-    constructor(newProject: IProject){
+    constructor(newProject: IProject) {
         this.name = newProject.name;
         this.description = newProject.description;
     }
@@ -35,25 +35,25 @@ export class ProjectsService implements IProjectsService {
     public projects: Subject<IProject[]> = new Subject<IProject[]>();
     private _projects: IProject[] = [];
 
-    constructor(@Inject(Http) private Http) {
+    constructor(@Inject(Http) private Http: Http) {
         this.loadProjects();
     }
-    
-    loadProjects() {
+
+    loadProjects(): void {
         this.Http.get('/projects/all')
             .subscribe((res) => {
                 this._projects = res.json();
                 this.refreshProjects();
             });
     }
-    
+
     addProject(project: IProject): Promise<{}> {
-        let headers = new Headers();
+        let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         return new Promise((resolve, reject) => {
             this.Http.post('/projects', JSON.stringify(project), {
-                headers: headers
+                headers: headers,
             }).subscribe((res) => {
                 this._projects.push(Object.assign(project, res.json()));
                 this.refreshProjects();
@@ -63,18 +63,18 @@ export class ProjectsService implements IProjectsService {
             });
         });
     }
-    
+
     updateProject(project: IProject): Promise<{}> {
-        let headers = new Headers();
+        let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         return new Promise((resolve, reject) => {
             this.Http.put('/projects', JSON.stringify(project), {
-                headers: headers
+                headers: headers,
             }).subscribe((res) => {
-                let updated = false;
-                for (var i = 0, len = this._projects.length; i < len; i++) {
-                    if (this._projects[i].id == project.id) {
+                let updated: boolean = false;
+                for (let i: number = 0, len: number = this._projects.length; i < len; i++) {
+                    if (this._projects[i].id === project.id) {
                         this._projects[i] = project;
                         this.refreshProjects();
                         updated = true;
@@ -90,13 +90,13 @@ export class ProjectsService implements IProjectsService {
             });
         });
     }
-    
+
     deleteProject(projectId: number): Promise<{}> {
         return new Promise((resolve, reject) => {
             this.Http.delete(`/projects/${projectId}`).subscribe((res) => {
-                let deleted = false;
-                for (var i = this._projects.length - 1; i >= 0; i--) {
-                    if (this._projects[i].id == projectId) {
+                let deleted: boolean = false;
+                for (let i: number = this._projects.length - 1; i >= 0; i--) {
+                    if (this._projects[i].id === projectId) {
                         this._projects.splice(i, 1);
                         this.refreshProjects();
                         resolve();
@@ -112,7 +112,7 @@ export class ProjectsService implements IProjectsService {
             });
         });
     }
-    
+
     getEmptyProject(): IProject {
         return {
             id: null,
@@ -120,10 +120,10 @@ export class ProjectsService implements IProjectsService {
             description: '',
             added: null,
             updated: null,
-        }
-    }  
-    
-    refreshProjects() {
+        };
+    }
+
+    refreshProjects(): void {
         this.projects.next(this._projects);
     }
 }

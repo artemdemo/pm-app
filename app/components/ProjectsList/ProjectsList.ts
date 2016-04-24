@@ -12,28 +12,28 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
                                 *ngFor="#project of projects"></projects-list-item>
         </div>
         <button class="btn btn-default" (click)="addNewProject()">New Project</button>
-    `
+    `,
 })
 export class ProjectsList {
     private projects: IProject[] = [];
-    private projectsSubscription;
-    
+    private projectsSubscription: any;
+
     constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService,
                 @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService) {
         this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
             this.projects = newProjects;
         });
     }
-    
-    ngOnInit() {
+
+    ngOnInit(): void {
         this.ProjectsService.refreshProjects();
     }
-    
-    addNewProject() {
+
+    addNewProject(): void {
         this.SelectedProjectService.setNewProject();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.projectsSubscription.unsubscribe();
     }
 }

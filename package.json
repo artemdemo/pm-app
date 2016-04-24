@@ -8,7 +8,9 @@
     "pack": "gulp build --pack",
     "pack-with-mangle": "gulp build --packWithMangle",
     "watch": "gulp watch",
+    "tslint": "./node_modules/tslint/bin/tslint ./app/**/*.ts ./app/components/**/*.ts",
     "start": "node ./server/index",
+    "postinstall": "cp -i hooks/pre-commit.sh .git/hooks/pre-commit && cp -i hooks/pre-push.sh .git/hooks/pre-push",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -46,6 +48,7 @@
     "rxjs": "^5.0.0-beta.6",
     "sqlite-crud": "git+https://github.com/artemdemo/sqlite-crud.git",
     "ts-loader": "^0.8.2",
+    "tslint": "^3.8.0",
     "typescript": "^1.8.10",
     "underscore": "^1.8.3",
     "webpack": "^1.12.14",

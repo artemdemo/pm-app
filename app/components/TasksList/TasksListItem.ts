@@ -26,22 +26,22 @@ import {OkCircle} from '../OkCircle';
                       *ngIf="selectedTask && selectedTask.id == task.id"></span>
             </div>
         </div>
-    `
+    `,
 })
 export class TasksListItem {
     @Input() task: ITask;
     private selectedTask: ITask = null;
     private isLoading: Boolean = false;
-    private selectedTaskSubscription;
-    
+    private selectedTaskSubscription: any;
+
     constructor(@Inject(TasksService) private TasksService: ITasksService,
                 @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
         this.selectedTaskSubscription = SelectedTaskService.task.subscribe(newSelectedTask => {
             this.selectedTask = newSelectedTask;
         });
     }
-    
-    toggleDone(taskId, done) {
+
+    toggleDone(taskId: number, done: boolean): void {
         this.isLoading = true;
         this.TasksService.setDone(this.task.id, !this.task.done)
             .then(() => {
@@ -49,12 +49,12 @@ export class TasksListItem {
                 this.selectTask();
             });
     }
-    
-    selectTask() {
+
+    selectTask(): void {
         this.SelectedTaskService.setSelectedTask(this.task);
     }
-    
-    ngOnDestroy() {
+
+    ngOnDestroy(): void {
         this.selectedTaskSubscription.unsubscribe();
     }
 }

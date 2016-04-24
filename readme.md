@@ -48,6 +48,12 @@ In development use `watch` command
 $ npm run watch
 ```
 
+You can proactively run tslint code style check (it will run automatically before each commit)
+
+```
+$ npm run tslint
+```
+
 If you want to update Angular 2 and it's dependencies run:
 
 ```
