@@ -23,7 +23,7 @@ module.exports = [
     },
     {
         method: 'DELETE',
-        path:'/projects/{taskId}',
+        path:'/projects/{projectId}',
         handler: require('../controllers/projects').delete
     }
 ];

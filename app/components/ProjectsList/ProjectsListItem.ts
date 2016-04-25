@@ -6,7 +6,7 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
     selector: 'projects-list-item',
     directives: [],
     template: `
-        <div class="projects-list-item">
+        <div class="projects-list-item" (click)="selectTask()">
             <div class="projects-list-item__title">
                 {{ project.name }}
             </div>
@@ -23,6 +23,10 @@ export class ProjectsListItem {
         this.selectedProjectSubscription = SelectedProjectService.project.subscribe(newSelectedProject => {
             this.selectedProject = newSelectedProject;
         });
+    }
+
+    selectTask(): void {
+        this.SelectedProjectService.setSelectedProject(this.project);
     }
 
     ngOnDestroy(): void {

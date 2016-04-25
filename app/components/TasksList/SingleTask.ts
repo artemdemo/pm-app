@@ -2,12 +2,15 @@ import {Component, Inject} from 'angular2/core';
 import {Task, ITask} from '../../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksService, ITasksService} from '../../services/TasksService';
+import {ProjectsService, IProjectsService} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
+import {DeleteBtn} from '../DeleteBtn';
+import {DropdownList, IDropdownListItem} from '../DropdownList';
 
 @Component({
     selector: 'single-task',
-    directives: [LoadingSpinner, OkCircle],
+    directives: [LoadingSpinner, OkCircle, DeleteBtn, DropdownList],
     template: `
         <div class="single-task">
             <form (ngSubmit)="submitTask()" *ngIf="taskModel">
@@ -22,6 +25,11 @@ import {OkCircle} from '../OkCircle';
                 </div>
                 <div class="form-group">
                     <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
+                </div>
+                <div class="form-group">
+                    <dropdown-list [list]="projectsList"
+                                   placeholder="Project"
+                                   (onSelect)="selectProject($event)"></dropdown-list>
                 </div>
                 <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
@@ -41,25 +49,7 @@ import {OkCircle} from '../OkCircle';
                         </span>
                     </div>
                     <div class="pull-right" *ngIf="task.id">
-                        <span class="btn btn-link btn-link_danger"
-                              *ngIf="!showDelete"
-                              (click)="showDeleteButtons()"
-                              [ngClass]="{btn_disabled: loadingData}">Delete</span>
-                        <div class="delete-task" *ngIf="showDelete">
-                            <div class="delete-task__title">Delete?</div>
-                            <div class="delete-task-buttons">
-                                <span class="glyphicon
-                                             glyphicon-ok-sign
-                                             delete-task-buttons__ok" 
-                                      aria-hidden="true"
-                                      (click)="deleteTask()"></span>
-                                <span class="glyphicon
-                                             glyphicon-remove-sign
-                                             delete-task-buttons__cancel"
-                                      aria-hidden="true"
-                                      (click)="hideDeleteButtons()"></span>
-                            </div>
-                        </div>
+                        <delete-btn (onDelete)="deleteTask()"></delete-btn>
                     </div>
                 </div>
             </form>
@@ -70,12 +60,14 @@ export class SingleTask {
     private task: ITask;
     private taskModel: Task;
     private taskSubscription: any;
-    private showDelete: boolean = false;
+    private projectsSubscription: any;
     private loadingData: boolean = false;
+    private projectsList: IDropdownListItem[] = [];
 
     constructor(
         @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
-        @Inject(TasksService) private TasksService: ITasksService
+        @Inject(TasksService) private TasksService: ITasksService,
+        @Inject(ProjectsService) private ProjectsService: IProjectsService
     ) {
         this.taskSubscription = SelectedTaskService.task.subscribe(selectedTask => {
             if (selectedTask) {
@@ -86,6 +78,18 @@ export class SingleTask {
                 this.task = null;
             }
         });
+        this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
+            this.projectsList = newProjects.map(project => {
+                return {
+                    id: project.id,
+                    name: project.name,
+                };
+            });
+        });
+    }
+
+    selectProject(project: IDropdownListItem): void {
+        console.log('selectProject', project);
     }
 
     submitTask(): void {
@@ -105,16 +109,6 @@ export class SingleTask {
                     }, () => this.loadingData = false);
             }
         }
-    }
-
-    showDeleteButtons(): void {
-        if (!this.loadingData) {
-            this.showDelete = true;
-        }
-    }
-
-    hideDeleteButtons(): void {
-        this.showDelete = false;
     }
 
     deleteTask(): void {
@@ -138,5 +132,6 @@ export class SingleTask {
 
     ngOnDestroy(): void {
         this.taskSubscription.unsubscribe();
+        this.projectsSubscription.unsubscribe();
     }
 }
