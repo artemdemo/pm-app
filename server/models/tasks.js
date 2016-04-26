@@ -14,24 +14,31 @@ const parseTasks = (tasks) => tasks.map(task => {
 
 exports.getAll = () => {
     const deferred = Q.defer();
-    const db = DB.getDB();
-    let query = '';
-
-    query = `SELECT * FROM ${tableName};`;
-
-    if (query) {
-        db.all(query, (err, rows) => {
-            if (err) {
-                console.log(chalk.red.bold('[getAll tasks error]'), err);
-                deferred.reject();
-            } else {
-                deferred.resolve(parseTasks(rows));
-            }
+    let tasksQuery = `SELECT * FROM ${tableName};`;
+    
+    DB.getAll(tasksQuery)
+        .then((rows) => {
+            let promisesList = [];
+            let tasksIdList = [];
+            let tasks = parseTasks(rows);
+            tasks.forEach(task => {
+                let projectsQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM tasks 
+                                     INNER JOIN projects_tasks_relations ON tasks.id = projects_tasks_relations.task_id 
+                                     WHERE tasks.id = ${task.id};`
+                promisesList.push(DB.getAll(projectsQuery));
+            });
+            Q.all(promisesList)
+                .then((resultsList) => {
+                    resultsList.forEach((data, index) => {
+                        tasks[index]['projects'] = data.map(item => item.project_id)
+                    });
+                    deferred.resolve(tasks);
+                }, () => {
+                    deferred.reject();
+                });
+        }, () => {
+            deferred.reject();
         });
-    } else {
-        console.log(chalk.red.bold('[getAll tasks error]'), 'There is no query');
-        deferred.reject();
-    }
 
     return deferred.promise;
 };

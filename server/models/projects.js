@@ -9,24 +9,14 @@ const tableName = 'projects';
 
 exports.getAll = () => {
     const deferred = Q.defer();
-    const db = DB.getDB();
-    let query = '';
-
-    query = `SELECT * FROM ${tableName};`;
-
-    if (query) {
-        db.all(query, (err, rows) => {
-            if (err) {
-                console.log(chalk.red.bold('[getAll projects error]'), err);
-                deferred.reject();
-            } else {
-                deferred.resolve(rows);
-            }
+    let query = `SELECT * FROM ${tableName};`;
+    
+    DB.getAll(query)
+        .then((rows) => {
+            deferred.resolve(rows);
+        }, () => {
+            deferred.reject();
         });
-    } else {
-        console.log(chalk.red.bold('[getAll projects error]'), 'There is no query');
-        deferred.reject();
-    }
 
     return deferred.promise;
 };
