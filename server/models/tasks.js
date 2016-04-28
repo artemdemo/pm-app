@@ -19,7 +19,6 @@ exports.getAll = () => {
     DB.getAll(tasksQuery)
         .then((rows) => {
             let promisesList = [];
-            let tasksIdList = [];
             let tasks = parseTasks(rows);
             tasks.forEach(task => {
                 let projectsQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM tasks 

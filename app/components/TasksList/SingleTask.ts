@@ -2,7 +2,7 @@ import {Component, Inject} from 'angular2/core';
 import {Task, ITask} from '../../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksService, ITasksService} from '../../services/TasksService';
-import {ProjectsService, IProjectsService} from '../../services/ProjectsService';
+import {ProjectsService, IProjectsService, IProject} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
 import {DeleteBtn} from '../DeleteBtn';
@@ -25,6 +25,17 @@ import {DropdownList, IDropdownListItem} from '../DropdownList';
                 </div>
                 <div class="form-group">
                     <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
+                </div>
+                <div class="form-group">
+                    <ul class="labels-list">
+                        <li class="labels-list-item label label-primary"
+                            *ngFor="#project of selectedProjects">
+                            {{ project.name }}
+                            <span class="labels-list-item__close">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </span>
+                        </li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <dropdown-list [list]="projectsList"
@@ -63,6 +74,7 @@ export class SingleTask {
     private projectsSubscription: any;
     private loadingData: boolean = false;
     private projectsList: IDropdownListItem[] = [];
+    private selectedProjects: IProject[] = [];
 
     constructor(
         @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
@@ -73,19 +85,26 @@ export class SingleTask {
             if (selectedTask) {
                 this.task = selectedTask;
                 this.taskModel = new Task(selectedTask);
+                this.selectedProjects = [];
+                this.projectsList.forEach((project: IProject) => {
+                    if (this.task.projects.indexOf(project.id) > -1) {
+                        this.selectedProjects.push(project);
+                    }
+                });
             } else {
                 this.taskModel = null;
                 this.task = null;
             }
         });
         this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
-            this.projectsList = newProjects.map(project => {
+            this.projectsList = newProjects.map((project: IProject) => {
                 return {
                     id: project.id,
                     name: project.name,
                 };
             });
         });
+        ProjectsService.refreshProjects();
     }
 
     selectProject(project: IDropdownListItem): void {

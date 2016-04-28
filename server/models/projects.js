@@ -9,11 +9,26 @@ const tableName = 'projects';
 
 exports.getAll = () => {
     const deferred = Q.defer();
-    let query = `SELECT * FROM ${tableName};`;
+    let projectsQuery = `SELECT * FROM ${tableName};`;
     
-    DB.getAll(query)
-        .then((rows) => {
-            deferred.resolve(rows);
+    DB.getAll(projectsQuery)
+        .then((projects) => {
+            let promisesList = [];
+            projects.forEach(project => {
+                let tasksQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM projects 
+                                  INNER JOIN projects_tasks_relations ON projects.id = projects_tasks_relations.project_id 
+                                  WHERE projects.id = ${project.id};`
+                promisesList.push(DB.getAll(tasksQuery));
+            });
+            Q.all(promisesList)
+                .then((resultsList) => {
+                    resultsList.forEach((data, index) => {
+                        projects[index]['tasks'] = data.map(item => item.task_id)
+                    });
+                    deferred.resolve(projects);
+                }, () => {
+                    deferred.reject();
+                });
         }, () => {
             deferred.reject();
         });

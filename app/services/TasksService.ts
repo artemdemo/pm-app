@@ -6,6 +6,7 @@ export interface ITask {
     id: number;
     name: string;
     description: string;
+    projects: number[];
     done: boolean;
     added: string;
     updated: string;
@@ -25,11 +26,13 @@ export interface ITasksService {
 export class Task {
     public name: string;
     public description: string;
+    public projects: number[];
     public done: boolean;
 
     constructor(newTask: ITask) {
         this.name = newTask.name;
         this.description = newTask.description;
+        this.projects = newTask.projects;
         this.done = newTask.done;
     }
 }
@@ -152,6 +155,7 @@ export class TasksService implements ITasksService {
             id: null,
             name: '',
             description: '',
+            projects: [],
             done: false,
             added: null,
             updated: null,
