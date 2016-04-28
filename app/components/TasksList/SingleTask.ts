@@ -7,10 +7,11 @@ import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
 import {DeleteBtn} from '../DeleteBtn';
 import {DropdownList, IDropdownListItem} from '../DropdownList';
+import {LabelsList} from '../LabelsList';
 
 @Component({
     selector: 'single-task',
-    directives: [LoadingSpinner, OkCircle, DeleteBtn, DropdownList],
+    directives: [LoadingSpinner, OkCircle, DeleteBtn, DropdownList, LabelsList],
     template: `
         <div class="single-task">
             <form (ngSubmit)="submitTask()" *ngIf="taskModel">
@@ -27,15 +28,8 @@ import {DropdownList, IDropdownListItem} from '../DropdownList';
                     <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
                 </div>
                 <div class="form-group">
-                    <ul class="labels-list">
-                        <li class="labels-list-item label label-primary"
-                            *ngFor="#project of selectedProjects">
-                            {{ project.name }}
-                            <span class="labels-list-item__close">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </span>
-                        </li>
-                    </ul>
+                    <labels-list [list]="selectedProjects" [delitable]="true">
+                    </labels-list>
                 </div>
                 <div class="form-group">
                     <dropdown-list [list]="projectsList"
