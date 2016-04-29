@@ -7,7 +7,7 @@ import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
 import {DeleteBtn} from '../DeleteBtn';
 import {DropdownList, IDropdownListItem} from '../DropdownList';
-import {LabelsList} from '../LabelsList';
+import {LabelsList, ILabelsListItem} from '../LabelsList';
 
 @Component({
     selector: 'single-task',
@@ -28,13 +28,15 @@ import {LabelsList} from '../LabelsList';
                     <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
                 </div>
                 <div class="form-group">
-                    <labels-list [list]="selectedProjects" [delitable]="true">
+                    <labels-list [list]="selectedProjects"
+                                 [delitable]="true"
+                                 (onDelete)="disconnectProject($event)">
                     </labels-list>
                 </div>
                 <div class="form-group">
-                    <dropdown-list [list]="projectsList"
+                    <dropdown-list [list]="availableProject"
                                    placeholder="Project"
-                                   (onSelect)="selectProject($event)"></dropdown-list>
+                                   (onSelect)="connectProject($event)"></dropdown-list>
                 </div>
                 <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
@@ -68,6 +70,7 @@ export class SingleTask {
     private projectsSubscription: any;
     private loadingData: boolean = false;
     private projectsList: IDropdownListItem[] = [];
+    private availableProject: IDropdownListItem[] = [];
     private selectedProjects: IProject[] = [];
 
     constructor(
@@ -80,9 +83,12 @@ export class SingleTask {
                 this.task = selectedTask;
                 this.taskModel = new Task(selectedTask);
                 this.selectedProjects = [];
+                this.availableProject = [];
                 this.projectsList.forEach((project: IProject) => {
                     if (this.task.projects.indexOf(project.id) > -1) {
                         this.selectedProjects.push(project);
+                    } else {
+                        this.availableProject.push(project);
                     }
                 });
             } else {
@@ -101,8 +107,14 @@ export class SingleTask {
         ProjectsService.refreshProjects();
     }
 
-    selectProject(project: IDropdownListItem): void {
-        console.log('selectProject', project);
+    connectProject(project: IDropdownListItem): void {
+        console.log('connectProject', project);
+        this.loadingData = true;
+    }
+
+    disconnectProject(project: ILabelsListItem): void {
+        console.log('disconnectProject', project);
+        this.loadingData = true;
     }
 
     submitTask(): void {

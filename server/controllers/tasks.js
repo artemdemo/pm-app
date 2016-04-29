@@ -2,6 +2,7 @@
 
 const boom = require('boom');
 const tasks = require('../models/tasks');
+const projectsTasksRelations = require('../models/projects_tasks_relations');
 
 exports.index = (request, reply) => reply('This is "tasks" index route');
 
@@ -36,3 +37,21 @@ exports.delete = (request, reply) => {
         reply(boom.badRequest('DB error'))
     });
 };
+
+exports.connectProject = (request, reply) => {
+    projectsTasksRelations.addRelation(request.params.projectId, request.params.taskId)
+        .then(() => {
+            reply({});
+        }, () => {
+            reply(boom.badRequest('DB error'))
+        })
+}
+
+exports.disconnectProject = (request, reply) => {
+    projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
+        .then(() => {
+            reply({});
+        }, () => {
+            reply(boom.badRequest('DB error'))
+        })
+}

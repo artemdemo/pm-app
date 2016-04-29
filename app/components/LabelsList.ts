@@ -1,4 +1,4 @@
-import {Component, Input} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from 'angular2/core';
 
 export interface ILabelsListItem {
     id: number;
@@ -25,8 +25,9 @@ export interface ILabelsListItem {
 export class LabelsList {
     @Input() list: ILabelsListItem[];
     @Input() delitable: boolean = false;
+    @Output() onDelete: EventEmitter<ILabelsListItem> = new EventEmitter<ILabelsListItem>();
 
     deleteItem(item: ILabelsListItem): void {
-        console.log('deleteItem', item);
+        this.onDelete.emit(item);
     }
 }

@@ -7,9 +7,102 @@ const Q = require('q');
 const DB = require('sqlite-crud')('./server/pm.db');
 const tableName = 'projects_tasks_relations';
 
+/**
+ * Add relation between project and task to the table
+ * 
+ * @param projectId {Number}
+ * @param taskId {Number}
+ */
+exports.addRelation = (projectId, taskId) => {
+    const deferred = Q.defer();
+    let query = '';
+    
+    if (typeof projectId != 'number' || projectId < 1) {
+        deferred.reject();
+        console.log(chalk.red.bold('[addRelation error]'), 'projectId should be a number, greater than 1');
+        return deferred.promise;
+    } else if (typeof taskId != 'number' || taskId < 1) {
+        deferred.reject();
+        console.log(chalk.red.bold('[addRelation error]'), 'taskId should be a number, greater than 1');
+        return deferred.promise;
+    }
+    
+    query = `SELECT * FROM ${tableName} WHERE project_id=${projectId} AND task_id=${taskId}`;
+    
+    DB.getAll(query)
+        .then((rows) => {
+            const data = {
+                project_id: projectId,
+                task_id: taskId
+            };
+            if (rows.length == 0) {
+                DB.insertToTable(tableName, data).then(() => {
+                    deferred.resolve();
+                }, (error) => {
+                    console.log(chalk.red.bold('[addRelation error]'), error);
+                    deferred.reject();
+                });
+            } else {
+                console.log(chalk.yellow.bold('[addRelation warning]'), 'Relation already exists:', data);
+                deferred.reject();
+            }
+        }, () => {
+            deferred.reject();
+            console.log(chalk.red.bold('[addRelation error]'), 'Error while fetching relations');
+        });
+    
+    return deferred.promise;
+}
+
+/**
+ * Delete relation
+ * 
+ * @param projectId {Number}
+ * @param taskId {Number}
+ */
+exports.deleteRelation = (projectId, taskId) => {
+    const deferred = Q.defer();
+    let query = '';
+    
+    if (typeof projectId != 'number' || projectId < 1) {
+        deferred.reject();
+        console.log(chalk.red.bold('[deleteRelation error]'), 'projectId should be a number, greater than 1');
+        return deferred.promise;
+    } else if (typeof taskId != 'number' || taskId < 1) {
+        deferred.reject();
+        console.log(chalk.red.bold('[deleteRelation error]'), 'taskId should be a number, greater than 1');
+        return deferred.promise;
+    }
+    
+    DB.deleteRows(tableName, [
+        {
+            column: 'task_id',
+            comparator: '=',
+            value: taskId
+        },
+        {
+            column: 'project_id',
+            comparator: '=',
+            value: taskId
+        }
+    ]).then(() => {
+        deferred.resolve();
+    }, (error) => {
+        console.log(chalk.red.bold('[deleteRelation error]'), error);
+        deferred.reject();
+    });
+    
+    return deferred.promise;
+}
+
+/**
+ * Get all relations by project id or task id
+ * 
+ * @param type {String} - 'project' or 'task'
+ * @param typeId {Number} - id of project or task
+ */
 exports.getRelations = (type, typeId) => {
     const deferred = Q.defer();
-    const db = DB.getDB();
     const allowedTypes = ['project', 'task'];
     let query = '';
     

@@ -150,6 +150,40 @@ export class TasksService implements ITasksService {
         });
     }
 
+    /**
+     * Connect project and given task
+     * 
+     * @param taskId {Number}
+     * @param projectId {Number}
+     * @return Promise<{}>
+     */
+    connectProject(taskId: number, projectId: number): Promise<{}> {
+        return new Promise((resolve, reject) => {
+            this.Http.post(`/tasks/${taskId}/projects/${projectId}`, '').subscribe((res) => {
+                resolve();
+            }, () => {
+                reject();
+            });
+        });
+    }
+
+    /**
+     * Remove conection between task and project
+     * 
+     * @param taskId {Number}
+     * @param projectId {Number}
+     * @return Promise<{}>
+     */
+    disconnectProject(taskId: number, projectId: number): Promise<{}> {
+        return new Promise((resolve, reject) => {
+            this.Http.post(`/tasks/${taskId}/projects/${projectId}`, '').subscribe((res) => {
+                resolve();
+            }, () => {
+                reject();
+            });
+        });
+    }
+
     getEmptyTask(): ITask {
         return {
             id: null,

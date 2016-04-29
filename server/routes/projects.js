@@ -25,5 +25,15 @@ module.exports = [
         method: 'DELETE',
         path:'/projects/{projectId}',
         handler: require('../controllers/projects').delete
+    },
+    {
+        method: 'POST',
+        path:'/projects/{taskId}/task/{projectId}',
+        handler: require('../controllers/projects').connectTask
+    },
+    {
+        method: 'DELETE',
+        path:'/projects/{taskId}/task/{projectId}',
+        handler: require('../controllers/projects').disconnectTask
     }
 ];
