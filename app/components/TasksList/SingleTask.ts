@@ -34,7 +34,7 @@ import {LabelsList, ILabelsListItem} from '../LabelsList';
                     </labels-list>
                 </div>
                 <div class="form-group">
-                    <dropdown-list [list]="availableProject"
+                    <dropdown-list [list]="availableProjects"
                                    placeholder="Project"
                                    (onSelect)="connectProject($event)"></dropdown-list>
                 </div>
@@ -70,7 +70,7 @@ export class SingleTask {
     private projectsSubscription: any;
     private loadingData: boolean = false;
     private projectsList: IDropdownListItem[] = [];
-    private availableProject: IDropdownListItem[] = [];
+    private availableProjects: IDropdownListItem[] = [];
     private selectedProjects: IProject[] = [];
 
     constructor(
@@ -83,12 +83,12 @@ export class SingleTask {
                 this.task = selectedTask;
                 this.taskModel = new Task(selectedTask);
                 this.selectedProjects = [];
-                this.availableProject = [];
+                this.availableProjects = [];
                 this.projectsList.forEach((project: IProject) => {
                     if (this.task.projects.indexOf(project.id) > -1) {
                         this.selectedProjects.push(project);
                     } else {
-                        this.availableProject.push(project);
+                        this.availableProjects.push(project);
                     }
                 });
             } else {
@@ -108,13 +108,25 @@ export class SingleTask {
     }
 
     connectProject(project: IDropdownListItem): void {
-        console.log('connectProject', project);
         this.loadingData = true;
+        this.TasksService.connectProject(this.task.id, project.id)
+            .then(() => {
+                this.loadingData = false;
+                this.SelectedTaskService.setSelectedTask(this.task.id);
+            }, () => {
+                this.loadingData = false;
+            });
     }
 
     disconnectProject(project: ILabelsListItem): void {
-        console.log('disconnectProject', project);
         this.loadingData = true;
+        this.TasksService.disconnectProject(this.task.id, project.id)
+            .then(() => {
+                this.loadingData = false;
+                this.SelectedTaskService.setSelectedTask(this.task.id);
+            }, () => {
+                this.loadingData = false;
+            });
     }
 
     submitTask(): void {

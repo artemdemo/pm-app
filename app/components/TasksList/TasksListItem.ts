@@ -51,7 +51,7 @@ export class TasksListItem {
     }
 
     selectTask(): void {
-        this.SelectedTaskService.setSelectedTask(this.task);
+        this.SelectedTaskService.setSelectedTask(this.task.id);
     }
 
     ngOnDestroy(): void {

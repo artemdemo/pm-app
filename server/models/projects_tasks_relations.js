@@ -17,11 +17,11 @@ exports.addRelation = (projectId, taskId) => {
     const deferred = Q.defer();
     let query = '';
     
-    if (typeof projectId != 'number' || projectId < 1) {
+    if (Number(projectId) != Number(projectId) || Number(projectId) < 1) {
         deferred.reject();
         console.log(chalk.red.bold('[addRelation error]'), 'projectId should be a number, greater than 1');
         return deferred.promise;
-    } else if (typeof taskId != 'number' || taskId < 1) {
+    } else if (Number(taskId) != Number(taskId) || Number(taskId) < 1) {
         deferred.reject();
         console.log(chalk.red.bold('[addRelation error]'), 'taskId should be a number, greater than 1');
         return deferred.promise;
@@ -64,11 +64,11 @@ exports.deleteRelation = (projectId, taskId) => {
     const deferred = Q.defer();
     let query = '';
     
-    if (typeof projectId != 'number' || projectId < 1) {
+    if (Number(projectId) != Number(projectId) || Number(projectId) < 1) {
         deferred.reject();
         console.log(chalk.red.bold('[deleteRelation error]'), 'projectId should be a number, greater than 1');
         return deferred.promise;
-    } else if (typeof taskId != 'number' || taskId < 1) {
+    } else if (Number(taskId) != Number(taskId) || Number(taskId) < 1) {
         deferred.reject();
         console.log(chalk.red.bold('[deleteRelation error]'), 'taskId should be a number, greater than 1');
         return deferred.promise;
@@ -83,7 +83,7 @@ exports.deleteRelation = (projectId, taskId) => {
         {
             column: 'project_id',
             comparator: '=',
-            value: taskId
+            value: projectId
         }
     ]).then(() => {
         deferred.resolve();

@@ -15,7 +15,7 @@ export interface IDropdownListItem {
             <input class="flat-input dropdown-list__input"
                    (focus)="inputFocus()"
                    (blur)="InputBlur()"
-                   (ngModel)="searchInput"
+                   [(ngModel)]="searchInput"
                    [placeholder]="placeholder">
             <div class="dropdown-list-items"
                  [ngClass]="{'dropdown-list-items_show': dropdownIsVisible}"

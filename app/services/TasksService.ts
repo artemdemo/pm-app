@@ -18,8 +18,11 @@ export interface ITasksService {
     updateTask(task: ITask): Promise<{}>;
     deleteTask(taskId: number): Promise<{}>;
     setDone(taskId: number, done: boolean): Promise<{}>;
+    connectProject(taskId: number, projectId: number): Promise<{}>;
+    disconnectProject(taskId: number, projectId: number): Promise<{}>;
     getEmptyTask(): ITask;
     refreshTasks(): void;
+    getTasks(): ITask[];
 }
 
 // Model for form
@@ -46,12 +49,15 @@ export class TasksService implements ITasksService {
         this.loadTasks();
     }
 
-    loadTasks(): void {
-        this.Http.get('/tasks/all')
-            .subscribe((res) => {
-                this._tasks = res.json();
-                this.refreshTasks();
-            });
+    loadTasks(): Promise<{}> {
+        return new Promise((resolve, reject) => {
+            this.Http.get('/tasks/all')
+                .subscribe((res) => {
+                    this._tasks = res.json();
+                    this.refreshTasks();
+                    resolve();
+                });
+        });
     }
 
     addTask(task: ITask): Promise<{}> {
@@ -159,8 +165,12 @@ export class TasksService implements ITasksService {
      */
     connectProject(taskId: number, projectId: number): Promise<{}> {
         return new Promise((resolve, reject) => {
-            this.Http.post(`/tasks/${taskId}/projects/${projectId}`, '').subscribe((res) => {
-                resolve();
+            this.Http.get(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+                this.loadTasks().then(() => {
+                    resolve();
+                }, () => {
+                    reject();
+                });
             }, () => {
                 reject();
             });
@@ -176,8 +186,12 @@ export class TasksService implements ITasksService {
      */
     disconnectProject(taskId: number, projectId: number): Promise<{}> {
         return new Promise((resolve, reject) => {
-            this.Http.post(`/tasks/${taskId}/projects/${projectId}`, '').subscribe((res) => {
-                resolve();
+            this.Http.delete(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+                this.loadTasks().then(() => {
+                    resolve();
+                }, () => {
+                    reject();
+                });
             }, () => {
                 reject();
             });
@@ -207,4 +221,6 @@ export class TasksService implements ITasksService {
             return 0;
         }));
     }
+
+    getTasks: any = (): ITask[] => this._tasks;
 }

@@ -4,7 +4,7 @@ import {ProjectsService, IProjectsService, IProject} from './ProjectsService';
 
 export interface ISelectedProjectService {
     project: Subject<IProject>;
-    setSelectedProject(newProject: IProject): void;
+    setSelectedProject(projectId: number): void;
     dropSelectedProject(): void;
     setNewProject(): void;
     refreshProject(): void;
@@ -17,9 +17,15 @@ export class SelectedProjectService implements ISelectedProjectService {
 
     constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService) {}
 
-    setSelectedProject(newProject: IProject): void {
-        this._project = newProject;
-        this.refreshProject();
+    setSelectedProject(projectId: number): void {
+        const projects: IProject[] = this.ProjectsService.getProjects();
+        for (let i: number = projects.length - 1; i > -1; i--) {
+            if (projects[i].id === projectId) {
+                this._project = projects[i];
+                this.refreshProject();
+                break;
+            }
+        }
     }
 
     setNewProject(): void {

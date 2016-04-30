@@ -6,26 +6,33 @@ export interface IProject {
     id: number;
     name: string;
     description: string;
+    tasks: number[];
     added: string;
     updated: string;
 }
 
 export interface IProjectsService {
     projects: Subject<IProject[]>;
+    loadProjects(): Promise<{}>;
     addProject(project: IProject): Promise<{}>;
     updateProject(project: IProject): Promise<{}>;
     deleteProject(projectId: number): Promise<{}>;
     refreshProjects(): void;
     getEmptyProject(): IProject;
+    connectTask(taskId: number, projectId: number): Promise<{}>;
+    disconnectTask(taskId: number, projectId: number): Promise<{}>;
+    getProjects(): IProject[];
 }
 
 // Model for form
 export class Project {
     public name: string;
     public description: string;
+    public tasks: number[];
 
     constructor(newProject: IProject) {
         this.name = newProject.name;
+        this.tasks = newProject.tasks;
         this.description = newProject.description;
     }
 }
@@ -39,12 +46,15 @@ export class ProjectsService implements IProjectsService {
         this.loadProjects();
     }
 
-    loadProjects(): void {
-        this.Http.get('/projects/all')
-            .subscribe((res) => {
-                this._projects = res.json();
-                this.refreshProjects();
-            });
+    loadProjects(): Promise<{}> {
+        return new Promise((resolve, reject) => {
+            this.Http.get('/projects/all')
+                .subscribe((res) => {
+                    this._projects = res.json();
+                    this.refreshProjects();
+                    resolve();
+                });
+        });
     }
 
     addProject(project: IProject): Promise<{}> {
@@ -113,11 +123,54 @@ export class ProjectsService implements IProjectsService {
         });
     }
 
+    /**
+     * Connect project and given task
+     * 
+     * @param taskId {Number}
+     * @param projectId {Number}
+     * @return Promise<{}>
+     */
+    connectTask(taskId: number, projectId: number): Promise<{}> {
+        return new Promise((resolve, reject) => {
+            this.Http.get(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+                this.loadProjects().then(() => {
+                    resolve();
+                }, () => {
+                    reject();
+                });
+            }, () => {
+                reject();
+            });
+        });
+    }
+
+    /**
+     * Remove conection between task and project
+     * 
+     * @param taskId {Number}
+     * @param projectId {Number}
+     * @return Promise<{}>
+     */
+    disconnectTask(taskId: number, projectId: number): Promise<{}> {
+        return new Promise((resolve, reject) => {
+            this.Http.delete(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+                this.loadProjects().then(() => {
+                    resolve();
+                }, () => {
+                    reject();
+                });
+            }, () => {
+                reject();
+            });
+        });
+    }
+
     getEmptyProject(): IProject {
         return {
             id: null,
             name: '',
             description: '',
+            tasks: [],
             added: null,
             updated: null,
         };
@@ -126,4 +179,6 @@ export class ProjectsService implements IProjectsService {
     refreshProjects(): void {
         this.projects.next(this._projects);
     }
+
+    getProjects: any = (): IProject[] => this._projects;
 }

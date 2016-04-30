@@ -1,13 +1,15 @@
 import {Component, Inject} from 'angular2/core';
+import {TasksService, ITask, ITasksService} from '../../services/TasksService';
 import {Project, IProject} from '../../services/ProjectsService';
 import {SelectedProjectService, ISelectedProjectService} from '../../services/SelectedProjectService';
 import {ProjectsService, IProjectsService} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {DeleteBtn} from '../DeleteBtn';
+import {DropdownList, IDropdownListItem} from '../DropdownList';
 
 @Component({
     selector: 'single-project',
-    directives: [LoadingSpinner, DeleteBtn],
+    directives: [LoadingSpinner, DeleteBtn, DropdownList],
     template: `
         <div class="single-project">
             <form (ngSubmit)="submitProject()" *ngIf="projectModel">
@@ -19,6 +21,11 @@ import {DeleteBtn} from '../DeleteBtn';
                 </div>
                 <div class="form-group">
                     <textarea class="flat-input" rows="3" [(ngModel)]="projectModel.description"></textarea>
+                </div>
+                <div class="form-group">
+                    <dropdown-list [list]="availableTasks"
+                                   placeholder="Task"
+                                   (onSelect)="connectTask($event)"></dropdown-list>
                 </div>
                 <div class="form-group text-muted" *ngIf="project.added">
                     <p>Project Added: {{ project.added }}</p>
@@ -50,20 +57,54 @@ export class SingleProject {
     private projectModel: Project;
     private projectSubscription: any;
     private loadingData: boolean = false;
+    private tasksList: IDropdownListItem[] = [];
+    private availableTasks: IDropdownListItem[] = [];
+    private selectedTasks: ITask[] = [];
+    private tasksSubscription: any;
 
     constructor(
         @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService,
+        @Inject(TasksService) private TasksService: ITasksService,
         @Inject(ProjectsService) private ProjectsService: IProjectsService
     ) {
         this.projectSubscription = SelectedProjectService.project.subscribe(selectedProject => {
             if (selectedProject) {
                 this.project = selectedProject;
                 this.projectModel = new Project(selectedProject);
+                this.availableTasks = [];
+                this.selectedTasks = [];
+                this.tasksList.forEach((task: ITask) => {
+                    if (this.project.tasks.indexOf(task.id) > -1) {
+                        this.selectedTasks.push(task);
+                    } else {
+                        this.availableTasks.push(task);
+                    }
+                });
             } else {
                 this.projectModel = null;
                 this.project = null;
             }
         });
+        this.tasksSubscription = TasksService.tasks.subscribe(newTasks => {
+            this.tasksList = newTasks.map((task: ITask) => {
+                return {
+                    id: task.id,
+                    name: task.name,
+                };
+            });
+        });
+        ProjectsService.refreshProjects();
+    }
+
+    connectProject(task: IDropdownListItem): void {
+        this.loadingData = true;
+        this.ProjectsService.connectTask(task.id, this.project.id)
+            .then(() => {
+                this.loadingData = false;
+                this.SelectedProjectService.setSelectedProject(this.project.id);
+            }, () => {
+                this.loadingData = false;
+            });
     }
 
     submitProject(): void {

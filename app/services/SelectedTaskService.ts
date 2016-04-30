@@ -4,7 +4,7 @@ import {TasksService, ITasksService, ITask} from './TasksService';
 
 export interface ISelectedTaskService {
     task: Subject<ITask>;
-    setSelectedTask(newTask: ITask): void;
+    setSelectedTask(taskId: Number): void;
     dropSelectedTask(): void;
     setNewTask(): void;
     refreshTask(): void;
@@ -17,9 +17,15 @@ export class SelectedTaskService implements ISelectedTaskService {
 
     constructor(@Inject(TasksService) private TasksService: ITasksService) {}
 
-    setSelectedTask(newTask: ITask): void {
-        this._task = newTask;
-        this.refreshTask();
+    setSelectedTask(taskId: Number): void {
+        const tasks: ITask[] = this.TasksService.getTasks();
+        for (let i: number = tasks.length - 1; i > -1; i--) {
+            if (tasks[i].id === taskId) {
+                this._task = tasks[i];
+                this.refreshTask();
+                break;
+            }
+        }
     }
 
     setNewTask(): void {

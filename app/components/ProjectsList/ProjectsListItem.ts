@@ -10,6 +10,9 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
             <div class="projects-list-item__title">
                 {{ project.name }}
             </div>
+            <div class="text-muted">
+                Tasks: {{ project.tasks.length }}
+            </div>
         </div>
     `,
 })
@@ -26,7 +29,7 @@ export class ProjectsListItem {
     }
 
     selectTask(): void {
-        this.SelectedProjectService.setSelectedProject(this.project);
+        this.SelectedProjectService.setSelectedProject(this.project.id);
     }
 
     ngOnDestroy(): void {
