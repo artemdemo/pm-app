@@ -1,9 +1,6 @@
 import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
-export interface ILabelsListItem {
-    id: number;
-    name: string;
-}
 
 @Component({
     selector: 'labels-list',
@@ -23,11 +20,11 @@ export interface ILabelsListItem {
     `,
 })
 export class LabelsList {
-    @Input() list: ILabelsListItem[];
+    @Input() list: IGeneralListItem[];
     @Input() delitable: boolean = false;
-    @Output() onDelete: EventEmitter<ILabelsListItem> = new EventEmitter<ILabelsListItem>();
+    @Output() onDelete: EventEmitter<IGeneralListItem> = new EventEmitter<IGeneralListItem>();
 
-    deleteItem(item: ILabelsListItem): void {
+    deleteItem(item: IGeneralListItem): void {
         this.onDelete.emit(item);
     }
 }

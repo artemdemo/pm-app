@@ -5,13 +5,15 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
 import {ProjectsService, IProjectsService} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {DeleteBtn} from '../DeleteBtn';
-import {DropdownList, IDropdownListItem} from '../DropdownList';
+import {DropdownList} from '../DropdownList';
+import {NarrowList} from '../NarrowList';
+import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'single-project',
-    directives: [LoadingSpinner, DeleteBtn, DropdownList],
+    directives: [LoadingSpinner, DeleteBtn, DropdownList, NarrowList],
     template: `
-        <div class="single-project">
+        <div class="single-panel">
             <form (ngSubmit)="submitProject()" *ngIf="projectModel">
                 <div class="form-group">
                     <input type="text"
@@ -23,8 +25,17 @@ import {DropdownList, IDropdownListItem} from '../DropdownList';
                     <textarea class="flat-input" rows="3" [(ngModel)]="projectModel.description"></textarea>
                 </div>
                 <div class="form-group">
+                    <div class="single-panel__subtitle" *ngIf="selectedTasks.length > 0">
+                        Tasks
+                    </div>
+                    <narrow-list [list]="selectedTasks"
+                                 [delitable]="true"
+                                 (onDelete)="disconnectTask($event)">
+                    </narrow-list>
+                </div>
+                <div class="form-group">
                     <dropdown-list [list]="availableTasks"
-                                   placeholder="Task"
+                                   placeholder="Connect task"
                                    (onSelect)="connectTask($event)"></dropdown-list>
                 </div>
                 <div class="form-group text-muted" *ngIf="project.added">
@@ -57,8 +68,8 @@ export class SingleProject {
     private projectModel: Project;
     private projectSubscription: any;
     private loadingData: boolean = false;
-    private tasksList: IDropdownListItem[] = [];
-    private availableTasks: IDropdownListItem[] = [];
+    private tasksList: IGeneralListItem[] = [];
+    private availableTasks: IGeneralListItem[] = [];
     private selectedTasks: ITask[] = [];
     private tasksSubscription: any;
 
@@ -94,11 +105,23 @@ export class SingleProject {
             });
         });
         ProjectsService.refreshProjects();
+        TasksService.refreshTasks();
     }
 
-    connectProject(task: IDropdownListItem): void {
+    connectTask(task: IGeneralListItem): void {
         this.loadingData = true;
         this.ProjectsService.connectTask(task.id, this.project.id)
+            .then(() => {
+                this.loadingData = false;
+                this.SelectedProjectService.setSelectedProject(this.project.id);
+            }, () => {
+                this.loadingData = false;
+            });
+    }
+
+    disconnectTask(task: IGeneralListItem): void {
+        this.loadingData = true;
+        this.ProjectsService.disconnectTask(task.id, this.project.id)
             .then(() => {
                 this.loadingData = false;
                 this.SelectedProjectService.setSelectedProject(this.project.id);
@@ -142,6 +165,7 @@ export class SingleProject {
     }
 
     ngOnDestroy(): void {
+        this.tasksSubscription.unsubscribe();
         this.projectSubscription.unsubscribe();
     }
 }

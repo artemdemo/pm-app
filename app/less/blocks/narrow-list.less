@@ -1,0 +1,31 @@
+.narrow-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    width: 100%;
+}
+
+.narrow-list-item {
+    display: table;
+    width: 100%;
+    padding: 3px 0 3px 4px;
+    border-bottom: 1px dashed @list-line-color;
+    
+    &:hover {
+        background-color: @list-hover-color;
+    }
+}
+
+    .narrow-list-item__name {
+        display: table-cell;
+    }
+
+    .narrow-list-item__close {
+        display: table-cell;
+        width: 20px;
+        text-align: center;
+        color: #ADADAD;
+        vertical-align: middle;
+        font-size: 70%;
+        cursor: pointer;
+    }

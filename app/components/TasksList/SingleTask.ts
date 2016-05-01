@@ -6,14 +6,15 @@ import {ProjectsService, IProjectsService, IProject} from '../../services/Projec
 import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
 import {DeleteBtn} from '../DeleteBtn';
-import {DropdownList, IDropdownListItem} from '../DropdownList';
-import {LabelsList, ILabelsListItem} from '../LabelsList';
+import {DropdownList} from '../DropdownList';
+import {LabelsList} from '../LabelsList';
+import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'single-task',
     directives: [LoadingSpinner, OkCircle, DeleteBtn, DropdownList, LabelsList],
     template: `
-        <div class="single-task">
+        <div class="single-panel">
             <form (ngSubmit)="submitTask()" *ngIf="taskModel">
                 <div class="form-group">
                     <input type="text"
@@ -35,7 +36,7 @@ import {LabelsList, ILabelsListItem} from '../LabelsList';
                 </div>
                 <div class="form-group">
                     <dropdown-list [list]="availableProjects"
-                                   placeholder="Project"
+                                   placeholder="Connect to project"
                                    (onSelect)="connectProject($event)"></dropdown-list>
                 </div>
                 <div class="form-group text-muted" *ngIf="task.added">
@@ -69,8 +70,8 @@ export class SingleTask {
     private taskSubscription: any;
     private projectsSubscription: any;
     private loadingData: boolean = false;
-    private projectsList: IDropdownListItem[] = [];
-    private availableProjects: IDropdownListItem[] = [];
+    private projectsList: IGeneralListItem[] = [];
+    private availableProjects: IGeneralListItem[] = [];
     private selectedProjects: IProject[] = [];
 
     constructor(
@@ -107,7 +108,7 @@ export class SingleTask {
         ProjectsService.refreshProjects();
     }
 
-    connectProject(project: IDropdownListItem): void {
+    connectProject(project: IGeneralListItem): void {
         this.loadingData = true;
         this.TasksService.connectProject(this.task.id, project.id)
             .then(() => {
@@ -118,7 +119,7 @@ export class SingleTask {
             });
     }
 
-    disconnectProject(project: ILabelsListItem): void {
+    disconnectProject(project: IGeneralListItem): void {
         this.loadingData = true;
         this.TasksService.disconnectProject(this.task.id, project.id)
             .then(() => {

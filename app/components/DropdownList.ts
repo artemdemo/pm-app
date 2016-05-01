@@ -1,10 +1,6 @@
 import {Component, Input, Output, EventEmitter} from 'angular2/core';
 import {SearchName} from '../pipes/SearchName';
-
-export interface IDropdownListItem {
-    id: number;
-    name: string;
-}
+import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'dropdown-list',
@@ -30,16 +26,18 @@ export interface IDropdownListItem {
     `,
 })
 export class DropdownList {
-    @Input() list: IDropdownListItem[] = [];
+    @Input() list: IGeneralListItem[] = [];
     @Input() placeholder: string = '';
-    @Output() onSelect: EventEmitter<IDropdownListItem> = new EventEmitter<IDropdownListItem>();
+    @Output() onSelect: EventEmitter<IGeneralListItem> = new EventEmitter<IGeneralListItem>();
 
     /* tslint:disable */
+    // tslint don't understand that I'm using searchInput inside of template
+    // (but not inside of class)
     private searchInput: string = '';
     /* tslint:enable */
     private dropdownIsVisible: boolean = false;
 
-    select(item: IDropdownListItem): void {
+    select(item: IGeneralListItem): void {
         this.onSelect.emit(item);
     }
 

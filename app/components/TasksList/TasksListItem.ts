@@ -39,6 +39,7 @@ export class TasksListItem {
         this.selectedTaskSubscription = SelectedTaskService.task.subscribe(newSelectedTask => {
             this.selectedTask = newSelectedTask;
         });
+        SelectedTaskService.refreshTask();
     }
 
     toggleDone(taskId: number, done: boolean): void {

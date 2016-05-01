@@ -1,9 +1,5 @@
 import {Component, Input, Output, EventEmitter} from 'angular2/core';
-
-export interface INarrowListItem {
-    id: number;
-    name: string;
-}
+import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'narrow-list',
@@ -25,11 +21,11 @@ export interface INarrowListItem {
     `,
 })
 export class NarrowList {
-    @Input() list: INarrowListItem[];
+    @Input() list: IGeneralListItem[];
     @Input() delitable: boolean = false;
-    @Output() onDelete: EventEmitter<INarrowListItem> = new EventEmitter<INarrowListItem>();
+    @Output() onDelete: EventEmitter<IGeneralListItem> = new EventEmitter<IGeneralListItem>();
 
-    deleteItem(item: INarrowListItem): void {
+    deleteItem(item: IGeneralListItem): void {
         this.onDelete.emit(item);
     }
 }
