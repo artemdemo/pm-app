@@ -65,6 +65,6 @@ $ ./update-angular.sh
 * Bootstrap css - http://getbootstrap.com/
 * Hapi.js - http://hapijs.com/
 
-## Компигирование
+## Компилирование
 
 Я исползую webpack с typescript.
