@@ -6,7 +6,9 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
     selector: 'projects-list-item',
     directives: [],
     template: `
-        <div class="projects-list-item" (click)="selectTask()">
+        <div class="projects-list-item"
+             [ngClass]="{'projects-list-item_selected': selectedProject && selectedProject.id == project.id}"
+             (click)="selectTask()">
             <div class="projects-list-item__title">
                 {{ project.name }}
             </div>
