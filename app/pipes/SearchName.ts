@@ -1,12 +1,12 @@
-import {Pipe} from 'angular2/core';
+import {Pipe} from '@angular/core';
 
 @Pipe({
     name: 'searchName',
 })
 export class SearchName {
-    transform(values: any, [term]: any): any[] {
+    transform(values: any, name: any): any[] {
         return values.filter((item) => {
-            return item.name.toLowerCase().indexOf(term.toLowerCase()) > -1;
+            return item.name.toLowerCase().indexOf(name.toLowerCase()) > -1;
         });
     }
 }

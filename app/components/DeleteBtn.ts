@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter} from 'angular2/core';
+import {Component, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'delete-btn',
@@ -13,7 +13,7 @@ import {Component, Output, EventEmitter} from 'angular2/core';
             <div class="delete-task-buttons">
                 <span class="glyphicon
                              glyphicon-ok-sign
-                             delete-task-buttons__ok" 
+                             delete-task-buttons__ok"
                       aria-hidden="true"
                       (click)="delete()"></span>
                 <span class="glyphicon

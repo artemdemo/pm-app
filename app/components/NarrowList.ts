@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
 @Component({
@@ -7,12 +7,12 @@ import {IGeneralListItem} from '../interfaces/IGeneralListItem';
         <ul class="narrow-list">
             <li class="narrow-list-item"
                 [ngClass]="{'narrow-list-item_delitable': delitable}"
-                *ngFor="#item of list">
+                *ngFor="let item of list">
                 <span class="narrow-list-item__name">
                     {{ item.name }}
                 </span>
                 <span class="narrow-list-item__close"
-                      (click)="deleteItem(item)" 
+                      (click)="deleteItem(item)"
                       *ngIf="delitable">
                     <span class="glyphicon glyphicon-remove"></span>
                 </span>

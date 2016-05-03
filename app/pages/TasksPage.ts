@@ -1,4 +1,4 @@
-import {Component, Inject} from 'angular2/core';
+import {Component, Inject} from '@angular/core';
 import {TasksList} from '../components/TasksList/TasksList';
 import {SingleTask} from '../components/TasksList/SingleTask';
 import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
@@ -7,7 +7,7 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
     selector: 'tasks-page',
     directives: [TasksList, SingleTask],
     template: `
-        <div class="list-container" 
+        <div class="list-container"
              [ngClass]="{'list-container_open-right-panel' : openSingleTask}">
             <div class="list-container__list">
                 <tasks-list></tasks-list>

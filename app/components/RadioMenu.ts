@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
 @Component({
@@ -7,7 +7,7 @@ import {IGeneralListItem} from '../interfaces/IGeneralListItem';
     template: `
         <div class="radio-menu">
             <div class="radio-menu-item"
-                 *ngFor="#item of list"
+                 *ngFor="let item of list"
                  [ngClass]="{'radio-menu-item_selected': selectedItem && selectedItem.id == item.id}"
                  (click)="select(item)">
                 {{ item.name }}

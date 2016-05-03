@@ -19,11 +19,11 @@ if echo $REPLY | grep -E '^[Yy]$' > /dev/null
 then
     printf "\n"
     printf "${BLUE}Removing angular2 and it's components ${NC} \n"
-    npm uninstall angular2 zone.js es6-shim reflect-metadata rxjs ts-loader typescript --save-dev
+    npm uninstall @angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated zone.js es6-shim reflect-metadata rxjs ts-loader typescript --save-dev
 
     printf "\n"
     printf "${BLUE}Installing last version of angular2 and it's components${NC} \n"
-    npm i angular2 zone.js es6-shim reflect-metadata rxjs ts-loader typescript --save-dev
+    npm i @angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated zone.js es6-shim reflect-metadata rxjs ts-loader typescript --save-dev
 
     printf "\n"
     printf "${BLUE}Building project${NC} \n"
@@ -34,5 +34,4 @@ then
     printf "${RED}[!] ${BLUE}Pay attention that there may be ${RED}breaking changes${BLUE}:${NC} "
     printf "https://github.com/angular/angular/blob/master/CHANGELOG.md \n"
 
-    npm start
 fi

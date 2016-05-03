@@ -1,4 +1,4 @@
-import {Component, Inject} from 'angular2/core';
+import {Component, Inject} from '@angular/core';
 import {Task, ITask} from '../../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksService, ITasksService} from '../../services/TasksService';
@@ -49,7 +49,7 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                             <span *ngIf="!task.id">Add new</span>
                             <span *ngIf="task.id">Save</span>
                         </button>
-                        <span class="btn btn-default" 
+                        <span class="btn btn-default"
                               (click)="cancel()"
                               [ngClass]="{btn_disabled: loadingData}">Cancel</span>
                         <span class="btn btn-link" *ngIf="loadingData">

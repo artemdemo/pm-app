@@ -1,6 +1,6 @@
-import {Http, Headers} from 'angular2/http';
+import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs';
-import {Injectable, Inject} from 'angular2/core';
+import {Injectable, Inject} from '@angular/core';
 
 export interface IProject {
     id: number;
@@ -125,7 +125,7 @@ export class ProjectsService implements IProjectsService {
 
     /**
      * Connect project and given task
-     * 
+     *
      * @param taskId {Number}
      * @param projectId {Number}
      * @return Promise<{}>
@@ -146,7 +146,7 @@ export class ProjectsService implements IProjectsService {
 
     /**
      * Remove conection between task and project
-     * 
+     *
      * @param taskId {Number}
      * @param projectId {Number}
      * @return Promise<{}>

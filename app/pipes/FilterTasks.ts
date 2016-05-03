@@ -1,4 +1,4 @@
-import {Pipe} from 'angular2/core';
+import {Pipe} from '@angular/core';
 
 export enum filterTasksType {
     all,
@@ -10,9 +10,9 @@ export enum filterTasksType {
     name: 'filterTasks',
 })
 export class FilterTasks {
-    transform(values: any, [term]: any): any[] {
+    transform(values: any, taskType: any): any[] {
         return values.filter((item) => {
-            switch (term) {
+            switch (taskType) {
                 case filterTasksType.active:
                     return item.done === false;
                 case filterTasksType.completed:

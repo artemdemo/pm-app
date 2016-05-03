@@ -1,5 +1,5 @@
-import {Component} from 'angular2/core';
-import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Component} from '@angular/core';
+import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {MainMenu} from './components/MainMenu';
 import {TasksPage} from './pages/TasksPage';
 import {ProjectsPage} from './pages/ProjectsPage';

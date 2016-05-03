@@ -1,6 +1,6 @@
-import {Http, Headers} from 'angular2/http';
+import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs';
-import {Injectable, Inject} from 'angular2/core';
+import {Injectable, Inject} from '@angular/core';
 
 export interface ITask {
     id: number;
@@ -158,7 +158,7 @@ export class TasksService implements ITasksService {
 
     /**
      * Connect project and given task
-     * 
+     *
      * @param taskId {Number}
      * @param projectId {Number}
      * @return Promise<{}>
@@ -179,7 +179,7 @@ export class TasksService implements ITasksService {
 
     /**
      * Remove conection between task and project
-     * 
+     *
      * @param taskId {Number}
      * @param projectId {Number}
      * @return Promise<{}>

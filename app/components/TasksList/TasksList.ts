@@ -1,4 +1,4 @@
-import {Component, Inject} from 'angular2/core';
+import {Component, Inject} from '@angular/core';
 import {TasksService, ITasksService, ITask} from '../../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksListItem} from './TasksListItem';
@@ -15,7 +15,7 @@ import {FilterTasks, filterTasksType} from '../../pipes/FilterTasks';
                     (onSelect)="filterTasks($event)"></radio-menu>
         <div class="tasks-list">
             <tasks-list-item [task]="task"
-                             *ngFor="#task of tasks | filterTasks : filterType">
+                             *ngFor="let task of tasks | filterTasks: filterType">
             </tasks-list-item>
         </div>
         <button class="btn btn-default" (click)="addNewTask()">New Task</button>

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
 
@@ -8,10 +8,10 @@ import {IGeneralListItem} from '../interfaces/IGeneralListItem';
         <ul class="labels-list">
             <li class="labels-list-item label label-primary"
                 [ngClass]="{'labels-list-item_delitable': delitable}"
-                *ngFor="#item of list">
+                *ngFor="let item of list">
                 {{ item.name }}
                 <span class="labels-list-item__close"
-                      (click)="deleteItem(item)" 
+                      (click)="deleteItem(item)"
                       *ngIf="delitable">
                     <span class="glyphicon glyphicon-remove"></span>
                 </span>

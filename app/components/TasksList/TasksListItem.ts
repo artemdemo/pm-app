@@ -1,4 +1,4 @@
-import {Component, Input, Inject} from 'angular2/core';
+import {Component, Input, Inject} from '@angular/core';
 import {TasksService, ITasksService, ITask} from '../../services/TasksService';
 import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
 import {OkCircle} from '../OkCircle';
@@ -8,7 +8,7 @@ import {OkCircle} from '../OkCircle';
     directives: [OkCircle],
     template: `
         <div class="tasks-list-item">
-            <div class="tasks-list-item__cell 
+            <div class="tasks-list-item__cell
                         tasks-list-item__cell_icon"
                         (click)="toggleDone()">
                 <ok-circle [status]="task.done" [loading]="isLoading"></ok-circle>
@@ -19,7 +19,7 @@ import {OkCircle} from '../OkCircle';
                     {{ task.name }}
                 </span>
             </div>
-            <div class="tasks-list-item__cell 
+            <div class="tasks-list-item__cell
                         tasks-list-item__cell_icon">
                 <span class="glyphicon glyphicon-triangle-right"
                       aria-hidden="true"

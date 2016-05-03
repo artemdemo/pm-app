@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from 'angular2/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {SearchName} from '../pipes/SearchName';
 import {IGeneralListItem} from '../interfaces/IGeneralListItem';
 
@@ -16,8 +16,8 @@ import {IGeneralListItem} from '../interfaces/IGeneralListItem';
             <div class="dropdown-list-items"
                  [ngClass]="{'dropdown-list-items_show': dropdownIsVisible}"
                  *ngIf="list.length > 0">
-                <div class="dropdown-list-items__child" 
-                     *ngFor="#item of list | searchName : searchInput"
+                <div class="dropdown-list-items__child"
+                     *ngFor="let item of list | searchName : searchInput"
                      (click)="select(item)">
                     {{ item.name }}
                 </div>

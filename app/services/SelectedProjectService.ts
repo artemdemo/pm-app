@@ -1,5 +1,5 @@
 import {Subject} from 'rxjs';
-import {Injectable, Inject} from 'angular2/core';
+import {Injectable, Inject} from '@angular/core';
 import {ProjectsService, IProjectsService, IProject} from './ProjectsService';
 
 export interface ISelectedProjectService {
