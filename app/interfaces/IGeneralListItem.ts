@@ -1,4 +1,4 @@
 export interface IGeneralListItem {
-    id: number;
+    id: any;
     name: string;
 }
