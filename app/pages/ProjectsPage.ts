@@ -22,7 +22,9 @@ export class ProjectsPage {
     private openSingleProject: boolean = false;
     private projectSubscription: any;
 
-    constructor(@Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService) {
+    constructor(
+        @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService
+    ) {
         this.projectSubscription = SelectedProjectService.project.subscribe(newTask => {
             this.openSingleProject = !!newTask;
         });
