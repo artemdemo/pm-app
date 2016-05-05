@@ -1,0 +1,3 @@
+{
+	"query": "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, username CHAR (100) UNIQUE, email CHAR (100) UNIQUE, password CHAR (255), added DATETIME, updated DATETIME);"
+}

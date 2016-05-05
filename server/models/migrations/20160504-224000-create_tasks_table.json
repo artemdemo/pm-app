@@ -1,0 +1,3 @@
+{
+	"query": "CREATE TABLE tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, name CHAR (200), description TEXT, done BOOLEAN NOT NULL DEFAULT (0), added DATETIME, updated DATETIME);"
+}
