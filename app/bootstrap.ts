@@ -8,13 +8,13 @@ import {provide} from '@angular/core';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
-import {ProjectManagement} from './ProjectManagement';
+import {MainRouter} from './MainRouter';
 import {TasksService} from './services/TasksService';
 import {SelectedTaskService} from './services/SelectedTaskService';
 import {ProjectsService} from './services/ProjectsService';
 import {SelectedProjectService} from './services/SelectedProjectService';
 
-bootstrap(ProjectManagement, [
+bootstrap(MainRouter, [
     HTTP_PROVIDERS,
     ROUTER_PROVIDERS,
     provide(LocationStrategy, {useClass: HashLocationStrategy}),

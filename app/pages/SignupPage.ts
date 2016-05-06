@@ -2,20 +2,28 @@ import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
 @Component({
-    selector: 'login-page',
+    selector: 'signup-page',
     directives: [ROUTER_DIRECTIVES],
     template: `
         <div class="container">
             <form class="form-signin">
-                <h2 class="form-signin-heading">Please sign in</h2>
+                <h2 class="form-signin-heading">Sign up</h2>
+                <label for="inputUsername" class="sr-only">
+                    Username
+                </label>
+                <input type="text"
+                       class="form-control form-signin__first-input"
+                       placeholder="Username"
+                       required=""
+                       autofocus=""
+                       autocomplete="off">
                 <label for="inputEmail" class="sr-only">
                     Email address
                 </label>
                 <input type="email"
-                       class="form-control form-signin__first-input"
+                       class="form-control form-signin__input"
                        placeholder="Email address"
                        required=""
-                       autofocus=""
                        autocomplete="off">
                 <label for="inputPassword" class="sr-only">
                     Password
@@ -32,15 +40,15 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
                 </div>
                 <button class="btn btn-lg btn-primary btn-block"
                         type="submit">
-                    Login
+                    Sign up
                 </button>
                 <a class="btn btn-link btn-block"
-                   [routerLink]="['SignupPage']">
-                    Create new account - sign up
+                   [routerLink]="['LoginPage']">
+                    I have an account - login
                 </a>
             </form>
         </div>
     `,
 })
-export class LoginPage {
+export class SignupPage {
 }
