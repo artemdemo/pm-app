@@ -1,8 +1,8 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {Task, ITask} from '../../services/TasksService';
-import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
-import {TasksService, ITasksService} from '../../services/TasksService';
-import {ProjectsService, IProjectsService, IProject} from '../../services/ProjectsService';
+import {SelectedTaskService} from '../../services/SelectedTaskService';
+import {TasksService} from '../../services/TasksService';
+import {ProjectsService, IProject} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
 import {DeleteBtn} from '../DeleteBtn';
@@ -64,6 +64,7 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
         </div>
     `,
 })
+@Injectable()
 export class SingleTask {
     private task: ITask;
     private taskModel: Task;
@@ -75,9 +76,9 @@ export class SingleTask {
     private selectedProjects: IProject[] = [];
 
     constructor(
-        @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService,
-        @Inject(TasksService) private TasksService: ITasksService,
-        @Inject(ProjectsService) private ProjectsService: IProjectsService
+        private SelectedTaskService: SelectedTaskService,
+        private TasksService: TasksService,
+        private ProjectsService: ProjectsService
     ) {
         this.taskSubscription = SelectedTaskService.task.subscribe(selectedTask => {
             if (selectedTask) {

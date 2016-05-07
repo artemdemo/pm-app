@@ -1,6 +1,6 @@
-import {Component, Input, Inject} from '@angular/core';
-import {TasksService, ITasksService, ITask} from '../../services/TasksService';
-import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
+import {Component, Input, Injectable} from '@angular/core';
+import {TasksService, ITask} from '../../services/TasksService';
+import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {OkCircle} from '../OkCircle';
 
 @Component({
@@ -28,14 +28,17 @@ import {OkCircle} from '../OkCircle';
         </div>
     `,
 })
+@Injectable()
 export class TasksListItem {
     @Input() task: ITask;
     private selectedTask: ITask = null;
     private isLoading: Boolean = false;
     private selectedTaskSubscription: any;
 
-    constructor(@Inject(TasksService) private TasksService: ITasksService,
-                @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
+    constructor(
+        private TasksService: TasksService,
+        private SelectedTaskService: SelectedTaskService
+    ) {
         this.selectedTaskSubscription = SelectedTaskService.task.subscribe(newSelectedTask => {
             this.selectedTask = newSelectedTask;
         });

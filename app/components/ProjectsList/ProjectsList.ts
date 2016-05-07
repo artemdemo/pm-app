@@ -1,7 +1,7 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {ProjectsListItem} from './ProjectsListItem';
-import {ProjectsService, IProjectsService, IProject} from '../../services/ProjectsService';
-import {SelectedProjectService, ISelectedProjectService} from '../../services/SelectedProjectService';
+import {ProjectsService, IProject} from '../../services/ProjectsService';
+import {SelectedProjectService} from '../../services/SelectedProjectService';
 
 @Component({
     selector: 'projects-list',
@@ -14,12 +14,15 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
         <button class="btn btn-default" (click)="addNewProject()">New Project</button>
     `,
 })
+@Injectable()
 export class ProjectsList {
     private projects: IProject[] = [];
     private projectsSubscription: any;
 
-    constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService,
-                @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService) {
+    constructor(
+        private ProjectsService: ProjectsService,
+        private SelectedProjectService: SelectedProjectService
+    ) {
         this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
             this.projects = newProjects;
         });

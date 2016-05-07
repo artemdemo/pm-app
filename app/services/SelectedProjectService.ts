@@ -1,6 +1,6 @@
 import {Subject} from 'rxjs';
-import {Injectable, Inject} from '@angular/core';
-import {ProjectsService, IProjectsService, IProject} from './ProjectsService';
+import {Injectable} from '@angular/core';
+import {ProjectsService, IProject} from './ProjectsService';
 
 export interface ISelectedProjectService {
     project: Subject<IProject>;
@@ -15,7 +15,9 @@ export class SelectedProjectService implements ISelectedProjectService {
     public project: Subject<IProject> = new Subject<IProject>();
     private _project: IProject = null;
 
-    constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService) {}
+    constructor(
+        private ProjectsService: ProjectsService
+    ) { }
 
     setSelectedProject(projectId: number): void {
         const projects: IProject[] = this.ProjectsService.getProjects();

@@ -1,8 +1,8 @@
-import {Component, Inject} from '@angular/core';
-import {TasksService, ITask, ITasksService} from '../../services/TasksService';
+import {Component, Injectable} from '@angular/core';
+import {TasksService, ITask} from '../../services/TasksService';
 import {Project, IProject} from '../../services/ProjectsService';
-import {SelectedProjectService, ISelectedProjectService} from '../../services/SelectedProjectService';
-import {ProjectsService, IProjectsService} from '../../services/ProjectsService';
+import {SelectedProjectService} from '../../services/SelectedProjectService';
+import {ProjectsService} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {DeleteBtn} from '../DeleteBtn';
 import {DropdownList} from '../DropdownList';
@@ -63,6 +63,7 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
         </div>
     `,
 })
+@Injectable()
 export class SingleProject {
     private project: IProject;
     private projectModel: Project;
@@ -74,9 +75,9 @@ export class SingleProject {
     private tasksSubscription: any;
 
     constructor(
-        @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService,
-        @Inject(TasksService) private TasksService: ITasksService,
-        @Inject(ProjectsService) private ProjectsService: IProjectsService
+        private SelectedProjectService: SelectedProjectService,
+        private TasksService: TasksService,
+        private ProjectsService: ProjectsService
     ) {
         this.projectSubscription = SelectedProjectService.project.subscribe(selectedProject => {
             if (selectedProject) {

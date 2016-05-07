@@ -1,6 +1,6 @@
-import {Component, Inject} from '@angular/core';
-import {TasksService, ITasksService, ITask} from '../../services/TasksService';
-import {SelectedTaskService, ISelectedTaskService} from '../../services/SelectedTaskService';
+import {Component, Injectable} from '@angular/core';
+import {TasksService, ITask} from '../../services/TasksService';
+import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksListItem} from './TasksListItem';
 import {RadioMenu} from '../RadioMenu';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
@@ -21,6 +21,7 @@ import {FilterTasks, filterTasksType} from '../../pipes/FilterTasks';
         <button class="btn btn-default" (click)="addNewTask()">New Task</button>
     `,
 })
+@Injectable()
 export class TasksList {
     private tasks: ITask[] = [];
     private tasksSubscription: any;
@@ -28,8 +29,8 @@ export class TasksList {
     private filterType: filterTasksType;
 
     constructor(
-        @Inject(TasksService) private TasksService: ITasksService,
-        @Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService
+        private TasksService: TasksService,
+        private SelectedTaskService: SelectedTaskService
     ) {
         this.tasksSubscription = TasksService.tasks.subscribe(newTasks => {
             this.tasks = newTasks;

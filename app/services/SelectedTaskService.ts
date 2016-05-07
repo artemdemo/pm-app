@@ -1,6 +1,6 @@
 import {Subject} from 'rxjs';
-import {Injectable, Inject} from '@angular/core';
-import {TasksService, ITasksService, ITask} from './TasksService';
+import {Injectable} from '@angular/core';
+import {TasksService, ITask} from './TasksService';
 
 export interface ISelectedTaskService {
     task: Subject<ITask>;
@@ -15,7 +15,9 @@ export class SelectedTaskService implements ISelectedTaskService {
     public task: Subject<ITask> = new Subject<ITask>();
     private _task: ITask = null;
 
-    constructor(@Inject(TasksService) private TasksService: ITasksService) {}
+    constructor(
+        private TasksService: TasksService
+    ) { }
 
     setSelectedTask(taskId: Number): void {
         const tasks: ITask[] = this.TasksService.getTasks();

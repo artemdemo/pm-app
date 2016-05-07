@@ -1,7 +1,7 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {TasksList} from '../components/TasksList/TasksList';
 import {SingleTask} from '../components/TasksList/SingleTask';
-import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTaskService';
+import {SelectedTaskService} from '../services/SelectedTaskService';
 
 @Component({
     selector: 'tasks-page',
@@ -18,11 +18,14 @@ import {SelectedTaskService, ISelectedTaskService} from '../services/SelectedTas
         </div>
     `,
 })
+@Injectable()
 export class TasksPage {
     private openSingleTask: boolean = false;
     private taskSubscription: any;
 
-    constructor(@Inject(SelectedTaskService) private SelectedTaskService: ISelectedTaskService) {
+    constructor(
+        private SelectedTaskService: SelectedTaskService
+    ) {
         this.taskSubscription = SelectedTaskService.task.subscribe(newTask => {
             this.openSingleTask = !!newTask;
         });

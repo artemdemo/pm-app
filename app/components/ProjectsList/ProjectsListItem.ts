@@ -1,6 +1,6 @@
-import {Component, Input, Inject} from '@angular/core';
-import {ProjectsService, IProjectsService, IProject} from '../../services/ProjectsService';
-import {SelectedProjectService, ISelectedProjectService} from '../../services/SelectedProjectService';
+import {Component, Input, Injectable} from '@angular/core';
+import {ProjectsService, IProject} from '../../services/ProjectsService';
+import {SelectedProjectService} from '../../services/SelectedProjectService';
 
 @Component({
     selector: 'projects-list-item',
@@ -18,13 +18,16 @@ import {SelectedProjectService, ISelectedProjectService} from '../../services/Se
         </div>
     `,
 })
+@Injectable()
 export class ProjectsListItem {
     @Input() project: IProject;
     private selectedProject: IProject = null;
     private selectedProjectSubscription: any;
 
-    constructor(@Inject(ProjectsService) private ProjectsService: IProjectsService,
-                @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService) {
+    constructor(
+        private ProjectsService: ProjectsService,
+        private SelectedProjectService: SelectedProjectService
+    ) {
         this.selectedProjectSubscription = SelectedProjectService.project.subscribe(newSelectedProject => {
             this.selectedProject = newSelectedProject;
         });

@@ -1,6 +1,6 @@
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs';
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 
 export interface IProject {
     id: number;
@@ -42,7 +42,9 @@ export class ProjectsService implements IProjectsService {
     public projects: Subject<IProject[]> = new Subject<IProject[]>();
     private _projects: IProject[] = [];
 
-    constructor(@Inject(Http) private Http: Http) {
+    constructor(
+        private Http: Http
+    ) {
         this.loadProjects();
     }
 

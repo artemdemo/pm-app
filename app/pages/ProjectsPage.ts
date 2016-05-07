@@ -1,7 +1,7 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {ProjectsList} from '../components/ProjectsList/ProjectsList';
 import {SingleProject} from '../components/ProjectsList/SingleProject';
-import {SelectedProjectService, ISelectedProjectService} from '../services/SelectedProjectService';
+import {SelectedProjectService} from '../services/SelectedProjectService';
 
 @Component({
     selector: 'projects-page',
@@ -18,12 +18,13 @@ import {SelectedProjectService, ISelectedProjectService} from '../services/Selec
         </div>
     `,
 })
+@Injectable()
 export class ProjectsPage {
     private openSingleProject: boolean = false;
     private projectSubscription: any;
 
     constructor(
-        @Inject(SelectedProjectService) private SelectedProjectService: ISelectedProjectService
+        private SelectedProjectService: SelectedProjectService
     ) {
         this.projectSubscription = SelectedProjectService.project.subscribe(newTask => {
             this.openSingleProject = !!newTask;
