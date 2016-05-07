@@ -101,6 +101,7 @@ export class SingleProject {
                 return {
                     id: task.id,
                     name: task.name,
+                    done: task.done,
                 };
             });
         });

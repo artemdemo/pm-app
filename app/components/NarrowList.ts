@@ -6,7 +6,8 @@ import {IGeneralListItem} from '../interfaces/IGeneralListItem';
     template: `
         <ul class="narrow-list">
             <li class="narrow-list-item"
-                [ngClass]="{'narrow-list-item_delitable': delitable}"
+                [ngClass]="{'narrow-list-item_delitable': delitable,
+                            'narrow-list-item_done': item.done}"
                 *ngFor="let item of list">
                 <span class="narrow-list-item__name">
                     {{ item.name }}

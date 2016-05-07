@@ -18,6 +18,7 @@ import {IGeneralListItem} from '../interfaces/IGeneralListItem';
                  *ngIf="list.length > 0">
                 <div class="dropdown-list-items__child"
                      *ngFor="let item of list | searchName : searchInput"
+                     [ngClass]="{'dropdown-list-items__child_done': item.done}"
                      (click)="select(item)">
                     {{ item.name }}
                 </div>
