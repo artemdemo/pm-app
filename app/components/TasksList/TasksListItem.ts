@@ -54,14 +54,6 @@ export class TasksListItem {
             this.selectedTask = newSelectedTask;
         });
         SelectedTaskService.refreshTask();
-        this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
-            newProjects.forEach((project: IProject) => {
-                if (this.task && this.task.projects.indexOf(project.id) > -1) {
-                    this.selectedProjects.push(project);
-                }
-            });
-        });
-        ProjectsService.refreshProjects();
     }
 
     toggleDone(taskId: number, done: boolean): void {
@@ -75,6 +67,17 @@ export class TasksListItem {
 
     selectTask(): void {
         this.SelectedTaskService.setSelectedTask(this.task.id);
+    }
+
+    ngOnInit(): void {
+        this.projectsSubscription = this.ProjectsService.projects.subscribe(newProjects => {
+            newProjects.forEach((project: IProject) => {
+                if (this.task && this.task.projects.indexOf(project.id) > -1) {
+                    this.selectedProjects.push(project);
+                }
+            });
+        });
+        this.ProjectsService.refreshProjects();
     }
 
     ngOnDestroy(): void {

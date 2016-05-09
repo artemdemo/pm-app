@@ -106,8 +106,8 @@ export class SingleProject {
                 };
             });
         });
-        ProjectsService.refreshProjects();
         TasksService.refreshTasks();
+        ProjectsService.refreshProjects();
     }
 
     connectTask(task: IGeneralListItem): void {

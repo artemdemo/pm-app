@@ -4,18 +4,22 @@ import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksListItem} from './TasksListItem';
 import {RadioMenu} from '../RadioMenu';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
-import {FilterTasks, filterTasksType} from '../../pipes/FilterTasks';
+
+enum filterTasksType {
+    all,
+    active,
+    completed
+}
 
 @Component({
     selector: 'tasks-list',
     directives: [TasksListItem, RadioMenu],
-    pipes: [FilterTasks],
     template: `
         <radio-menu [list]="listMenu"
-                    (onSelect)="filterTasks($event)"></radio-menu>
+                    (onSelect)="setTasksFilter($event)"></radio-menu>
         <div class="tasks-list">
             <tasks-list-item [task]="task"
-                             *ngFor="let task of tasks | filterTasks: filterType">
+                             *ngFor="let task of filterByType(tasks, filterType)">
             </tasks-list-item>
         </div>
         <button class="btn btn-default" (click)="addNewTask()">New Task</button>
@@ -32,9 +36,6 @@ export class TasksList {
         private TasksService: TasksService,
         private SelectedTaskService: SelectedTaskService
     ) {
-        this.tasksSubscription = TasksService.tasks.subscribe(newTasks => {
-            this.tasks = newTasks;
-        });
         this.listMenu = [
             { id: filterTasksType.all, name: 'All'},
             { id: filterTasksType.active, name: 'Active' },
@@ -46,11 +47,28 @@ export class TasksList {
         this.SelectedTaskService.setNewTask();
     }
 
-    filterTasks(filter: IGeneralListItem): void {
+    setTasksFilter(filter: IGeneralListItem): void {
         this.filterType = filter.id;
     }
 
+    filterByType(tasks: ITask[], taskType: filterTasksType): ITask[] {
+        return tasks.filter((item) => {
+            switch (taskType) {
+                case filterTasksType.active:
+                    return item.done === false;
+                case filterTasksType.completed:
+                    return item.done === true;
+                default:
+                case filterTasksType.all:
+                    return true;
+            }
+        });
+    }
+
     ngOnInit(): void {
+        this.tasksSubscription = this.TasksService.tasks.subscribe(newTasks => {
+            this.tasks = newTasks;
+        });
         this.TasksService.refreshTasks();
     }
 
