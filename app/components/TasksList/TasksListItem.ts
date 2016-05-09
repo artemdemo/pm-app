@@ -1,11 +1,13 @@
 import {Component, Input, Injectable} from '@angular/core';
 import {TasksService, ITask} from '../../services/TasksService';
 import {SelectedTaskService} from '../../services/SelectedTaskService';
+import {ProjectsService, IProject} from '../../services/ProjectsService';
 import {OkCircle} from '../OkCircle';
+import {LabelsList} from '../LabelsList';
 
 @Component({
     selector: 'tasks-list-item',
-    directives: [OkCircle],
+    directives: [OkCircle, LabelsList],
     template: `
         <div class="tasks-list-item">
             <div class="tasks-list-item__cell
@@ -18,6 +20,12 @@ import {OkCircle} from '../OkCircle';
                       [ngClass]="{'tasks-list-item__text_done' : task.done}">
                     {{ task.name }}
                 </span>
+            </div>
+            <div class="tasks-list-item__cell
+                        tasks-list-item__cell_labels">
+                <labels-list class="labels-list_short-content"
+                             [list]="selectedProjects"
+                             [limit]="1"></labels-list>
             </div>
             <div class="tasks-list-item__cell
                         tasks-list-item__cell_icon">
@@ -34,15 +42,26 @@ export class TasksListItem {
     private selectedTask: ITask = null;
     private isLoading: Boolean = false;
     private selectedTaskSubscription: any;
+    private projectsSubscription: any;
+    private selectedProjects: IProject[] = [];
 
     constructor(
         private TasksService: TasksService,
-        private SelectedTaskService: SelectedTaskService
+        private SelectedTaskService: SelectedTaskService,
+        private ProjectsService: ProjectsService
     ) {
         this.selectedTaskSubscription = SelectedTaskService.task.subscribe(newSelectedTask => {
             this.selectedTask = newSelectedTask;
         });
         SelectedTaskService.refreshTask();
+        this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
+            newProjects.forEach((project: IProject) => {
+                if (this.task && this.task.projects.indexOf(project.id) > -1) {
+                    this.selectedProjects.push(project);
+                }
+            });
+        });
+        ProjectsService.refreshProjects();
     }
 
     toggleDone(taskId: number, done: boolean): void {

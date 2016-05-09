@@ -12,9 +12,9 @@ import {ProjectManagement} from './ProjectManagement';
     `
 })
 @RouteConfig([
-        { path: '/...', component: ProjectManagement, name: 'ProjectManagement' },
         { path: '/login', component: LoginPage, name: 'LoginPage' },
         { path: '/signup', component: SignupPage, name: 'SignupPage' },
+        { path: '/...', component: ProjectManagement, name: 'ProjectManagement' },
         { path: '/**', redirectTo: ['ProjectManagement'] }
     ])
 export class MainRouter {

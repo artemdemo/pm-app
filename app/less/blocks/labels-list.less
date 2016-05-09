@@ -7,13 +7,19 @@
 .labels-list-item {
     display: inline-block;
     position: relative;
-    margin-right: 5px;
+
+    .labels-list_short-content & {
+        max-width: 80px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
     .labels-list-item_delitable {
         margin-right: 17px;
     }
-    
+
     .labels-list-item__close {
         display: block;
         position: absolute;
