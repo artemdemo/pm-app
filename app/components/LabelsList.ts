@@ -13,7 +13,7 @@ interface IListItemLabel {
         <ul class="labels-list">
             <li class="labels-list-item label label-primary"
                 [ngClass]="{'labels-list-item_delitable': delitable}"
-                *ngFor="let item of labelsList">
+                *ngFor="let item of filterLabelsList(list)">
                 {{ item.name }}
                 <span class="labels-list-item__close"
                       (click)="deleteItem(item)"
@@ -22,7 +22,7 @@ interface IListItemLabel {
                 </span>
             </li>
             <li class="labels-list-item label label-primary"
-                *ngIf="list.length > limit">
+                [ngClass]="{'labels-list-item_hide': hideItem()}">
                 ...
             </li>
         </ul>
@@ -34,33 +34,27 @@ export class LabelsList {
     @Input() limit: number;
     @Output() onDelete: EventEmitter<IGeneralListItem> = new EventEmitter<IGeneralListItem>();
 
-    private labelsList: IGeneralListItem[] = [];
-
     deleteItem(item: IGeneralListItem): void {
         this.onDelete.emit(item);
     }
 
-    updateLabelsList(newLabelsList?: IGeneralListItem[]): void {
-        const list: IGeneralListItem[] = newLabelsList || this.list;
+    hideItem(): boolean {
+        return !this.limit || this.list.length <= this.limit;
+    }
+
+    filterLabelsList(newLabelsList: IGeneralListItem[]): IGeneralListItem[] {
         if (!this.limit) {
-            this.labelsList = list;
+            return newLabelsList;
         } else {
+            let list: IGeneralListItem[] = [];
             let limitCount: number = 0;
-            this.labelsList = [];
-            for (let i: number = 0, len: number = list.length; i < len; i++) {
+            for (let i: number = 0, len: number = newLabelsList.length; i < len; i++) {
                 if (limitCount < this.limit) {
-                    this.labelsList.push(list[i]);
+                    list.push(newLabelsList[i]);
                 }
                 limitCount++;
             }
+            return list;
         }
-    }
-
-    ngAfterContentChecked(): void {
-        this.updateLabelsList();
-    }
-
-    ngOnChanges(changes: IListItemLabel): void {
-        this.updateLabelsList(changes.list.currentValue);
     }
 }

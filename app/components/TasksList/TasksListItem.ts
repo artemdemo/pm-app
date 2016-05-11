@@ -44,6 +44,7 @@ export class TasksListItem {
     private selectedTaskSubscription: any;
     private projectsSubscription: any;
     private selectedProjects: IProject[] = [];
+    private selectedProjectsId: Number[] = [];
 
     constructor(
         private TasksService: TasksService,
@@ -72,8 +73,9 @@ export class TasksListItem {
     ngOnInit(): void {
         this.projectsSubscription = this.ProjectsService.projects.subscribe(newProjects => {
             newProjects.forEach((project: IProject) => {
-                if (this.task && this.task.projects.indexOf(project.id) > -1) {
+                if (this.task && this.task.projects.indexOf(project.id) > -1 && this.selectedProjectsId.indexOf(project.id) === -1) {
                     this.selectedProjects.push(project);
+                    this.selectedProjectsId.push(project.id);
                 }
             });
         });
