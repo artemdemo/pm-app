@@ -15,10 +15,10 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                 {{ project.name }}
             </div>
             <div class="text-muted">
-                Tasks: {{ activeTasks().length }}
+                Tasks: {{ filterTasks(false).length }}
             </div>
             <div class="text-muted">
-                Done: {{ completedTasks().length }}
+                Done: {{ filterTasks(true).length }}
             </div>
         </div>
     `,
@@ -51,15 +51,12 @@ export class ProjectsListItem {
         TasksService.refreshTasks();
     }
 
-    completedTasks(): IGeneralListItem[] {
+    filterTasks(doneStatus: boolean = true): IGeneralListItem[] {
+        if (this.project.tasks.length === 0) {
+            return [];
+        }
         return this.tasksList.filter((task: IGeneralListItem) => {
-            return task.done;
-        });
-    }
-
-    activeTasks(): IGeneralListItem[] {
-        return this.tasksList.filter((task: IGeneralListItem) => {
-            return !task.done;
+            return task.done === doneStatus && this.project.tasks.indexOf(task.id) !== -1;
         });
     }
 
