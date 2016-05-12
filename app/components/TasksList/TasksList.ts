@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component} from '@angular/core';
 import {TasksService, ITask} from '../../services/TasksService';
 import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksListItem} from './TasksListItem';
@@ -25,7 +25,6 @@ enum filterTasksType {
         <button class="btn btn-default" (click)="addNewTask()">New Task</button>
     `,
 })
-@Injectable()
 export class TasksList {
     private tasks: ITask[] = [];
     private tasksSubscription: any;

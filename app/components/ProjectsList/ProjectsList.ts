@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component} from '@angular/core';
 import {ProjectsListItem} from './ProjectsListItem';
 import {ProjectsService, IProject} from '../../services/ProjectsService';
 import {SelectedProjectService} from '../../services/SelectedProjectService';
@@ -14,7 +14,6 @@ import {SelectedProjectService} from '../../services/SelectedProjectService';
         <button class="btn btn-default" (click)="addNewProject()">New Project</button>
     `,
 })
-@Injectable()
 export class ProjectsList {
     private projects: IProject[] = [];
     private projectsSubscription: any;

@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component} from '@angular/core';
 import {TasksList} from '../components/TasksList/TasksList';
 import {SingleTask} from '../components/TasksList/SingleTask';
 import {SelectedTaskService} from '../services/SelectedTaskService';
@@ -18,7 +18,6 @@ import {SelectedTaskService} from '../services/SelectedTaskService';
         </div>
     `,
 })
-@Injectable()
 export class TasksPage {
     private openSingleTask: boolean = false;
     private taskSubscription: any;

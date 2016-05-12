@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component} from '@angular/core';
 import {ProjectsList} from '../components/ProjectsList/ProjectsList';
 import {SingleProject} from '../components/ProjectsList/SingleProject';
 import {SelectedProjectService} from '../services/SelectedProjectService';
@@ -18,7 +18,6 @@ import {SelectedProjectService} from '../services/SelectedProjectService';
         </div>
     `,
 })
-@Injectable()
 export class ProjectsPage {
     private openSingleProject: boolean = false;
     private projectSubscription: any;

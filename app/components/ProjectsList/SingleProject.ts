@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component} from '@angular/core';
 import {TasksService, ITask} from '../../services/TasksService';
 import {Project, IProject} from '../../services/ProjectsService';
 import {SelectedProjectService} from '../../services/SelectedProjectService';
@@ -63,7 +63,6 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
         </div>
     `,
 })
-@Injectable()
 export class SingleProject {
     private project: IProject;
     private projectModel: Project;

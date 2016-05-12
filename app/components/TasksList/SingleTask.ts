@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component} from '@angular/core';
 import {Task, ITask} from '../../services/TasksService';
 import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksService} from '../../services/TasksService';
@@ -64,7 +64,6 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
         </div>
     `,
 })
-@Injectable()
 export class SingleTask {
     private task: ITask;
     private taskModel: Task;

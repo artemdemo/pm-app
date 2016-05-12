@@ -1,4 +1,4 @@
-import {Component, Input, Injectable} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {TasksService, ITask} from '../../services/TasksService';
 import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {ProjectsService, IProject} from '../../services/ProjectsService';
@@ -36,7 +36,6 @@ import {LabelsList} from '../LabelsList';
         </div>
     `,
 })
-@Injectable()
 export class TasksListItem {
     @Input() task: ITask;
     private selectedTask: ITask = null;
