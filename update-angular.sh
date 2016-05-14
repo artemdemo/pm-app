@@ -9,6 +9,9 @@ BLUE='\033[1;34m'
 RED='\033[1;31m'
 NC='\033[0m'
 
+ANG_PACKS="@angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated"
+SUPPORT_PACKS="zone.js es6-shim reflect-metadata rxjs ts-loader typescript"
+
 printf "\n"
 printf "${BLUE}This command will replace angular2 and it's components with the last ones from npm${NC} \n"
 printf "${YELLOW}Proceed?${NC} \n"
@@ -19,11 +22,11 @@ if echo $REPLY | grep -E '^[Yy]$' > /dev/null
 then
     printf "\n"
     printf "${BLUE}Removing angular2 and it's components ${NC} \n"
-    npm uninstall @angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated zone.js es6-shim reflect-metadata rxjs ts-loader typescript --save-dev
+    npm uninstall ${ANG_PACKAGES} ${SUPPORT_PACKS} --save-dev
 
     printf "\n"
     printf "${BLUE}Installing last version of angular2 and it's components${NC} \n"
-    npm i @angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated zone.js es6-shim reflect-metadata rxjs ts-loader typescript --save-dev
+    npm i ${ANG_PACKAGES} ${SUPPORT_PACKS} --save-dev
 
     printf "\n"
     printf "${BLUE}Building project${NC} \n"
