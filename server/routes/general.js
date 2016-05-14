@@ -3,7 +3,7 @@
 module.exports = [
     {
         method: 'GET',
-        path:'/',
+        path:'/{path?}',
         handler: require('../controllers/index').index
     },
     {

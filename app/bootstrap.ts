@@ -7,7 +7,7 @@ import {bootstrap} from '@angular/platform-browser-dynamic';
 import {provide} from '@angular/core';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
-import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+import {LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {MainRouter} from './MainRouter';
 import {TasksService} from './services/TasksService';
 import {SelectedTaskService} from './services/SelectedTaskService';
@@ -17,7 +17,7 @@ import {SelectedProjectService} from './services/SelectedProjectService';
 bootstrap(MainRouter, [
     HTTP_PROVIDERS,
     ROUTER_PROVIDERS,
-    provide(LocationStrategy, {useClass: HashLocationStrategy}),
+    provide(LocationStrategy, {useClass: PathLocationStrategy}),
     TasksService,
     SelectedTaskService,
     ProjectsService,
