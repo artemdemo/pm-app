@@ -1,6 +1,7 @@
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
+import {AuthorizationService} from './AuthorizationService';
 
 export interface ITask {
     id: number;
@@ -46,14 +47,20 @@ export class TasksService implements ITasksService {
     private _tasks: ITask[] = [];
 
     constructor(
-        private Http: Http
+        private http: Http,
+        private authorizationService: AuthorizationService
     ) {
         this.loadTasks();
     }
 
     loadTasks(): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.get('/tasks/all')
+            this.http.get('/tasks/all', {
+                headers: headers,
+            })
                 .subscribe((res) => {
                     this._tasks = res.json();
                     this.refreshTasks();
@@ -65,9 +72,10 @@ export class TasksService implements ITasksService {
     addTask(task: ITask): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
-            this.Http.post('/tasks', JSON.stringify(task), {
+            this.http.post('/tasks', JSON.stringify(task), {
                 headers: headers,
             }).subscribe((res) => {
                 this._tasks.push(Object.assign(task, res.json()));
@@ -82,9 +90,10 @@ export class TasksService implements ITasksService {
     updateTask(task: ITask): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
-            this.Http.put('/tasks', JSON.stringify(task), {
+            this.http.put('/tasks', JSON.stringify(task), {
                 headers: headers,
             }).subscribe((res) => {
                 let updated: boolean = false;
@@ -109,9 +118,10 @@ export class TasksService implements ITasksService {
     setDone(taskId: number, done: boolean): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
-            this.Http.put('/tasks', JSON.stringify({
+            this.http.put('/tasks', JSON.stringify({
                 id: taskId,
                 done: done,
             }), {
@@ -137,8 +147,13 @@ export class TasksService implements ITasksService {
     }
 
     deleteTask(taskId: number): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.delete(`/tasks/${taskId}`).subscribe((res) => {
+            this.http.delete(`/tasks/${taskId}`, {
+                headers: headers,
+            }).subscribe((res) => {
                 let deleted: boolean = false;
                 for (let i: number = this._tasks.length - 1; i >= 0; i--) {
                     if (this._tasks[i].id === taskId) {
@@ -166,8 +181,13 @@ export class TasksService implements ITasksService {
      * @return Promise<{}>
      */
     connectProject(taskId: number, projectId: number): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.get(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+            this.http.get(`/tasks/${taskId}/project/${projectId}`, {
+                headers: headers,
+            }).subscribe((res) => {
                 this.loadTasks().then(() => {
                     resolve();
                 }, () => {
@@ -187,8 +207,13 @@ export class TasksService implements ITasksService {
      * @return Promise<{}>
      */
     disconnectProject(taskId: number, projectId: number): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.delete(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+            this.http.delete(`/tasks/${taskId}/project/${projectId}`, {
+                headers: headers,
+            }).subscribe((res) => {
                 this.loadTasks().then(() => {
                     resolve();
                 }, () => {

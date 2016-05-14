@@ -15,16 +15,16 @@ const parseTasks = (tasks) => tasks.map(task => {
 exports.getAll = () => {
     const deferred = Q.defer();
     let tasksQuery = `SELECT * FROM ${tableName};`;
-    
-    DB.getAll(tasksQuery)
+
+    DB.queryRows(tasksQuery)
         .then((rows) => {
             let promisesList = [];
             let tasks = parseTasks(rows);
             tasks.forEach(task => {
                 let projectsQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM tasks 
                                      INNER JOIN projects_tasks_relations ON tasks.id = projects_tasks_relations.task_id 
-                                     WHERE tasks.id = ${task.id};`
-                promisesList.push(DB.getAll(projectsQuery));
+                                     WHERE tasks.id = ${task.id};`;
+                promisesList.push(DB.queryRows(projectsQuery));
             });
             Q.all(promisesList)
                 .then((resultsList) => {
@@ -47,7 +47,7 @@ exports.addNew = (newTask) => {
     const now = moment(new Date());
 
     try {
-        DB.insertToTable(tableName, {
+        DB.insertRow(tableName, {
             name: newTask.name,
             description: newTask.description,
             added: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -96,10 +96,9 @@ exports.updateTask = (task) => {
     }
 
     updateData['updated'] = now.format('YYYY-MM-DD HH:mm:ss');
-    console.log('updateData', updateData);
 
     try {
-        DB.updateInTable(tableName, updateData, [{
+        DB.updateRow(tableName, updateData, [{
             column: 'id',
             comparator: '=',
             value: task.id

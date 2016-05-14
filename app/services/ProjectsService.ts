@@ -1,6 +1,7 @@
 import {Http, Headers} from '@angular/http';
 import {Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
+import {AuthorizationService} from './AuthorizationService';
 
 export interface IProject {
     id: number;
@@ -43,14 +44,20 @@ export class ProjectsService implements IProjectsService {
     private _projects: IProject[] = [];
 
     constructor(
-        private Http: Http
+        private http: Http,
+        private authorizationService: AuthorizationService
     ) {
         this.loadProjects();
     }
 
     loadProjects(): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.get('/projects/all')
+            this.http.get('/projects/all', {
+                headers: headers,
+            })
                 .subscribe((res) => {
                     this._projects = res.json();
                     this.refreshProjects();
@@ -62,9 +69,10 @@ export class ProjectsService implements IProjectsService {
     addProject(project: IProject): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
-            this.Http.post('/projects', JSON.stringify(project), {
+            this.http.post('/projects', JSON.stringify(project), {
                 headers: headers,
             }).subscribe((res) => {
                 this._projects.push(Object.assign(project, res.json()));
@@ -79,9 +87,10 @@ export class ProjectsService implements IProjectsService {
     updateProject(project: IProject): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('Content-Type', 'application/json');
+        headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
-            this.Http.put('/projects', JSON.stringify(project), {
+            this.http.put('/projects', JSON.stringify(project), {
                 headers: headers,
             }).subscribe((res) => {
                 let updated: boolean = false;
@@ -104,8 +113,13 @@ export class ProjectsService implements IProjectsService {
     }
 
     deleteProject(projectId: number): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.delete(`/projects/${projectId}`).subscribe((res) => {
+            this.http.delete(`/projects/${projectId}`, {
+                headers: headers,
+            }).subscribe((res) => {
                 let deleted: boolean = false;
                 for (let i: number = this._projects.length - 1; i >= 0; i--) {
                     if (this._projects[i].id === projectId) {
@@ -133,8 +147,13 @@ export class ProjectsService implements IProjectsService {
      * @return Promise<{}>
      */
     connectTask(taskId: number, projectId: number): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.get(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+            this.http.get(`/tasks/${taskId}/project/${projectId}`, {
+                headers: headers,
+            }).subscribe((res) => {
                 this.loadProjects().then(() => {
                     resolve();
                 }, () => {
@@ -154,8 +173,13 @@ export class ProjectsService implements IProjectsService {
      * @return Promise<{}>
      */
     disconnectTask(taskId: number, projectId: number): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.authorizationService.getToken());
+
         return new Promise((resolve, reject) => {
-            this.Http.delete(`/tasks/${taskId}/project/${projectId}`).subscribe((res) => {
+            this.http.delete(`/tasks/${taskId}/project/${projectId}`, {
+                headers: headers,
+            }).subscribe((res) => {
                 this.loadProjects().then(() => {
                     resolve();
                 }, () => {

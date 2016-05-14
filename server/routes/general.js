@@ -4,11 +4,19 @@ module.exports = [
     {
         method: 'GET',
         path:'/{path?}',
+        config: { auth: false },
         handler: require('../controllers/index').index
+    },
+    {
+        method: 'PUT',
+        path:'/login',
+        config: { auth: false },
+        handler: require('../controllers/index').login
     },
     {
         method: 'GET',
         path:'/js/{param*}',
+        config: { auth: false },
         handler: {
             directory: {
                 path: '../public/js'
@@ -18,6 +26,7 @@ module.exports = [
     {
         method: 'GET',
         path:'/css/{param*}',
+        config: { auth: false },
         handler: {
             directory: {
                 path: '../public/css'
@@ -27,6 +36,7 @@ module.exports = [
     {
         method: 'GET',
         path:'/fonts/{param*}',
+        config: { auth: false },
         handler: {
             directory: {
                 path: '../public/fonts'
@@ -36,6 +46,7 @@ module.exports = [
     {
         method: 'GET',
         path:'/images/{param*}',
+        config: { auth: false },
         handler: {
             directory: {
                 path: '../public/images'

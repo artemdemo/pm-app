@@ -5,6 +5,8 @@ const path = require('path');
 const Hapi = require('hapi');
 const inert = require('inert');
 const chalk = require('chalk');
+const hapiAuthJwt = require('hapi-auth-jwt2');
+const bcrypt = require('bcrypt');
 
 // Normalize a port into a number, string, or false.
 function normalizePort(val) {
@@ -36,8 +38,28 @@ server.connection({
     port: normalizePort(process.env.PORT || 8000)
 });
 
+// inert provides new handler methods for serving static files and directories,
+// as well as decorating the reply interface with a file method for serving file based resources.
 server.register(inert, () => {});
 
+/**
+ * Authentication
+ */
+server.register(hapiAuthJwt, () => {});
+
+// Generating secure key (base64, 256 random bytes)
+// https://tonicdev.com/artemdemo/5736ead43ed13c11004bb76b
+server.auth.strategy('jwt', 'jwt',{
+    key: require('./secret').key,
+    validateFunc: require('./auth').validate,
+    verifyOptions: { algorithms: [ 'HS256' ] }
+});
+
+server.auth.default('jwt');
+
+/**
+ * Routing
+ */
 // Dynamically include routes
 // Function will recursively enter all directories and include all '*.js' files
 let routerDirWalker = (dirPath) => {
@@ -61,4 +83,3 @@ server.start((err) => {
     }
     console.log(chalk.yellow.bold('Server is running at: ') + chalk.cyan(server.info.uri));
 });
-

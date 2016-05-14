@@ -10,15 +10,15 @@ const tableName = 'projects';
 exports.getAll = () => {
     const deferred = Q.defer();
     let projectsQuery = `SELECT * FROM ${tableName};`;
-    
-    DB.getAll(projectsQuery)
+
+    DB.queryRows(projectsQuery)
         .then((projects) => {
             let promisesList = [];
             projects.forEach(project => {
                 let tasksQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM projects 
                                   INNER JOIN projects_tasks_relations ON projects.id = projects_tasks_relations.project_id 
-                                  WHERE projects.id = ${project.id};`
-                promisesList.push(DB.getAll(tasksQuery));
+                                  WHERE projects.id = ${project.id};`;
+                promisesList.push(DB.queryRows(tasksQuery));
             });
             Q.all(promisesList)
                 .then((resultsList) => {
@@ -41,7 +41,7 @@ exports.addNew = (newProject) => {
     const now = moment(new Date());
 
     try {
-        DB.insertToTable(tableName, {
+        DB.insertRow(tableName, {
             name: newProject.name,
             description: newProject.description,
             added: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -90,10 +90,9 @@ exports.updateProject = (project) => {
     }
 
     updateData['updated'] = now.format('YYYY-MM-DD HH:mm:ss');
-    console.log('updateData', updateData);
 
     try {
-        DB.updateInTable(tableName, updateData, [{
+        DB.updateRow(tableName, updateData, [{
             column: 'id',
             comparator: '=',
             value: project.id

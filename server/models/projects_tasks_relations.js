@@ -52,7 +52,7 @@ exports.addRelation = (projectId, taskId) => {
         });
     
     return deferred.promise;
-}
+};
 
 /**
  * Delete relation
@@ -93,7 +93,7 @@ exports.deleteRelation = (projectId, taskId) => {
     });
     
     return deferred.promise;
-}
+};
 
 /**
  * Get all relations by project id or task id
@@ -104,7 +104,7 @@ exports.deleteRelation = (projectId, taskId) => {
 exports.getRelations = (type, typeId) => {
     const deferred = Q.defer();
     const allowedTypes = ['project', 'task'];
-    let query = '';
+    let query;
     
     if (!type) {
         deferred.reject();

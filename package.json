@@ -24,10 +24,13 @@
   },
   "homepage": "https://github.com/artemdemo/pm-app#readme",
   "dependencies": {
+    "aguid": "^1.0.4",
+    "bcrypt": "^0.8.6",
     "boom": "^3.1.2",
     "hapi": "^13.2.2",
     "hapi-auth-jwt2": "^6.0.0",
     "inert": "^3.2.0",
+    "jsonwebtoken": "^6.2.0",
     "moment": "^2.12.0",
     "q": "^1.4.1",
     "sqlite-crud": "git+https://github.com/artemdemo/sqlite-crud.git",

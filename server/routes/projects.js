@@ -4,16 +4,19 @@ module.exports = [
     {
         method: 'GET',
         path:'/projects',
+        config: { auth: 'jwt' },
         handler: require('../controllers/projects').index
     },
     {
         method: 'GET',
         path:'/projects/all',
+        config: { auth: 'jwt' },
         handler: require('../controllers/projects').all
     },
     {
         method: 'POST',
         path:'/projects',
+        config: { auth: 'jwt' },
         handler: require('../controllers/projects').add
     },
     {
@@ -24,16 +27,19 @@ module.exports = [
     {
         method: 'DELETE',
         path:'/projects/{projectId}',
+        config: { auth: 'jwt' },
         handler: require('../controllers/projects').delete
     },
     {
         method: 'GET',
         path:'/projects/{taskId}/task/{projectId}',
+        config: { auth: 'jwt' },
         handler: require('../controllers/projects').connectTask
     },
     {
         method: 'DELETE',
         path:'/projects/{taskId}/task/{projectId}',
+        config: { auth: 'jwt' },
         handler: require('../controllers/projects').disconnectTask
     }
 ];
