@@ -4,7 +4,9 @@ const boom = require('boom');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
 
-exports.index = (request, reply) => reply('This is "projects" index route');
+exports.index = (request, reply) => {
+    reply.redirect('/');
+};
 
 exports.all = (request, reply) => {
     projects.getAll().then((projects) => {

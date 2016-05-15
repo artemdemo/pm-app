@@ -4,7 +4,7 @@ module.exports = [
     {
         method: 'GET',
         path:'/tasks',
-        config: { auth: 'jwt' },
+        config: { auth: false },
         handler: require('../controllers/tasks').index
     },
     {

@@ -1,8 +1,14 @@
 import {Component} from '@angular/core';
+import {CanActivate} from '@angular/router-deprecated';
 import {ProjectsList} from '../components/ProjectsList/ProjectsList';
 import {SingleProject} from '../components/ProjectsList/SingleProject';
 import {SelectedProjectService} from '../services/SelectedProjectService';
+import {ComponentInstruction} from '@angular/router-deprecated';
+import {isLoggedIn} from '../services/AuthorizationService';
 
+@CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
+    return isLoggedIn(next, previous);
+})
 @Component({
     selector: 'projects-page',
     directives: [ProjectsList, SingleProject],

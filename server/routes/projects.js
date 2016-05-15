@@ -4,7 +4,7 @@ module.exports = [
     {
         method: 'GET',
         path:'/projects',
-        config: { auth: 'jwt' },
+        config: { auth: false },
         handler: require('../controllers/projects').index
     },
     {

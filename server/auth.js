@@ -9,7 +9,7 @@ const sessions = require('./models/sessions');
  * @param decoded
  * @param request
  * @param callback
- * @returns {*}
+ * @returns void
  */
 exports.validate = function (decoded, request, callback) {
     const now = moment(new Date());
