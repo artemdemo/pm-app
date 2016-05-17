@@ -2,21 +2,31 @@ import {Http, Headers} from '@angular/http';
 import {Router, ComponentInstruction} from '@angular/router-deprecated';
 import {Injectable, Injector} from '@angular/core';
 import {appInjector} from './appInjector';
+import moment = require('moment');
+import Moment = moment.Moment;
 
 export interface IUser {
     email: string;
     password?: string;
+    remember?: boolean;
 }
 
 // Model for form
 export class Login {
     public email: string;
     public password: string;
+    public remember: boolean;
 
     constructor(newUser: IUser) {
         this.email = newUser.email;
         this.password = newUser.password;
+        this.remember = newUser.remember;
     }
+}
+
+export interface IToken {
+    id: string;
+    expiration: string;
 }
 
 export interface IAuthorizationService {
@@ -32,7 +42,9 @@ export class AuthorizationService implements IAuthorizationService {
 
     constructor(
         private http: Http
-    ) {}
+    ) {
+        this.token = window.localStorage.getItem('pm-token');
+    }
 
     login(user: IUser): Promise<{}> {
         let headers: Headers = new Headers();
@@ -42,7 +54,7 @@ export class AuthorizationService implements IAuthorizationService {
             this.http.put('/login', JSON.stringify(user), {
                 headers: headers,
             }).subscribe((res) => {
-                this.setToken(res.headers.get('authorization'));
+                this.setToken(res.headers.get('authorization'), user.remember);
                 resolve();
             }, () => {
                 reject();
@@ -52,15 +64,25 @@ export class AuthorizationService implements IAuthorizationService {
 
     isLoggedIn(): boolean {
         const tokenSections: string[] = this.token ? this.token.split('.') : null;
-        let tokenData: string;
+        const now: Moment = moment(new Date());
+        let tokenData: IToken;
         if (tokenSections) {
-            tokenData = atob(tokenSections[1]); // session id & expiration YYYY-MM-DD
+            try {
+                tokenData = JSON.parse(atob(tokenSections[1]));
+            } catch (e) {
+                return false;
+            }
+            return now.format('YYYY-MM-DD') < tokenData.expiration;
+        } else {
+            return false;
         }
-        return !!this.token;
     };
 
-    setToken(newToken: string): void {
+    setToken(newToken: string, remember: boolean = false): void {
         this.token = newToken;
+        if (remember) {
+            window.localStorage.setItem('pm-token', newToken);
+        }
     }
 
     getToken: any = (): string => this.token;

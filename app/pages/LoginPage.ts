@@ -1,21 +1,6 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated';
-import {AuthorizationService} from '../services/AuthorizationService';
-
-interface IUser {
-    email: string;
-    password?: string;
-}
-
-class Login {
-    public email: string;
-    public password: string;
-
-    constructor(newUser: IUser) {
-        this.email = newUser.email;
-        this.password = newUser.password;
-    }
-}
+import {AuthorizationService, Login} from '../services/AuthorizationService';
 
 @Component({
     selector: 'login-page',
@@ -45,7 +30,9 @@ class Login {
                        [(ngModel)]="loginModel.password">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" value="remember-me"> Remember me
+                        <input type="checkbox"
+                               value="remember-me"
+                               [(ngModel)]="loginModel.remember"> Remember me
                     </label>
                 </div>
                 <button class="btn btn-lg btn-primary btn-block"
@@ -70,6 +57,7 @@ export class LoginPage {
         this.loginModel = new Login({
             email: '',
             password: '',
+            remember: false,
         });
     }
 

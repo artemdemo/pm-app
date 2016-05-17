@@ -11,7 +11,7 @@ Work in progress. There is still much to be done.
 Install all modules and dependencies
 
 ```
-$ npm i && typings i
+$ npm i && tsd i
 ```
 
 Compile client app
@@ -70,14 +70,15 @@ I'm using webpack with typescript plugins
 
 ## Typescript typings
 
-I'm using `typings` CLI to add missing types for typescript.
+I'm using `tsd` CLI to add missing types for typescript.
 
 This is how you install CLI and missing type definition files:
 
 ```
-npm install typings --global
-typings install es6-shim --ambient --save
-typings install require --ambient --save
+npm install tsd --global
+tsd init
+tsd install es6-shim --save
+tsd install require --save
 ```
 
 But you don't need it since there is `typings.json` in the project, you only need to run `$ typings i`
