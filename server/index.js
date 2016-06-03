@@ -52,7 +52,8 @@ server.register(hapiAuthJwt, () => {});
 server.auth.strategy('jwt', 'jwt',{
     key: require('./secret').key,
     validateFunc: require('./auth').validate,
-    verifyOptions: { algorithms: [ 'HS256' ] }
+    verifyOptions: { algorithms: [ 'HS256' ] },
+    ignoreExpiration: true
 });
 
 server.auth.default('jwt');
