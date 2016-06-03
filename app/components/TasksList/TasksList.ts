@@ -22,7 +22,7 @@ enum filterTasksType {
                              *ngFor="let task of filterByType(tasks, filterType)">
             </tasks-list-item>
         </div>
-        <button class="btn btn-default" (click)="addNewTask()">New Task</button>
+        <button class="btn btn-default" (click)="addNewTask()" data-qa="add-new-task">New Task</button>
     `,
 })
 export class TasksList {
