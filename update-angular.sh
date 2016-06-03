@@ -22,11 +22,11 @@ if echo $REPLY | grep -E '^[Yy]$' > /dev/null
 then
     printf "\n"
     printf "${BLUE}Removing angular2 and it's components ${NC} \n"
-    npm uninstall ${ANG_PACKAGES} ${SUPPORT_PACKS} --save-dev
+    npm uninstall ${ANG_PACKS} ${SUPPORT_PACKS} --save-dev
 
     printf "\n"
     printf "${BLUE}Installing last version of angular2 and it's components${NC} \n"
-    npm i ${ANG_PACKAGES} ${SUPPORT_PACKS} --save-dev
+    npm i ${ANG_PACKS} ${SUPPORT_PACKS} --save-dev
 
     printf "\n"
     printf "${BLUE}Building project${NC} \n"
