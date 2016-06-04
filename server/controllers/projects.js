@@ -47,7 +47,7 @@ exports.connectTask = (request, reply) => {
         }, () => {
             reply(boom.badRequest('DB error'))
         })
-}
+};
 
 exports.disconnectTask = (request, reply) => {
     projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
@@ -56,4 +56,4 @@ exports.disconnectTask = (request, reply) => {
         }, () => {
             reply(boom.badRequest('DB error'))
         })
-}
+};

@@ -56,4 +56,4 @@ exports.disconnectProject = (request, reply) => {
         }, () => {
             reply(boom.badRequest('DB error'))
         })
-}
+};
