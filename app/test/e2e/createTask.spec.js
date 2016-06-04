@@ -49,7 +49,7 @@ loginSuit(() => {
                 });
             });
 
-            browser.wait(taskItemsTextPromise, 5000);
+            browser.wait(taskItemsTextPromise, 1000);
         });
 
     });
