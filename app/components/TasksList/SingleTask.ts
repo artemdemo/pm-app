@@ -20,10 +20,14 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                     <input type="text"
                            class="flat-input"
                            placeholder="Task name"
-                           [(ngModel)]="taskModel.name">
+                           [(ngModel)]="taskModel.name"
+                           data-qa="task-name">
                 </div>
                 <div class="form-group">
-                    <textarea class="flat-input" rows="3" [(ngModel)]="taskModel.description"></textarea>
+                    <textarea class="flat-input"
+                              rows="3"
+                              [(ngModel)]="taskModel.description"
+                              data-qa="task-description"></textarea>
                 </div>
                 <div class="form-group">
                     <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
@@ -45,19 +49,23 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                 </div>
                 <div class="clearfix">
                     <div class="pull-left">
-                        <button type="submit" class="btn btn-primary" [disabled]="loadingData">
+                        <button type="submit" 
+                                class="btn btn-primary"
+                                [disabled]="loadingData"
+                                data-qa="task-save">
                             <span *ngIf="!task.id">Add new</span>
                             <span *ngIf="task.id">Save</span>
                         </button>
                         <span class="btn btn-default"
                               (click)="cancel()"
-                              [ngClass]="{btn_disabled: loadingData}">Cancel</span>
+                              [ngClass]="{btn_disabled: loadingData}"
+                              data-qa="task-cancel">Cancel</span>
                         <span class="btn btn-link" *ngIf="loadingData">
                             <loading-spinner></loading-spinner>
                         </span>
                     </div>
                     <div class="pull-right" *ngIf="task.id">
-                        <delete-btn (onDelete)="deleteTask()"></delete-btn>
+                        <delete-btn (onDelete)="deleteTask()" data-qa="task-delete"></delete-btn>
                     </div>
                 </div>
             </form>

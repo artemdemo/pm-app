@@ -1,3 +1,7 @@
+'use strict';
+
+const helper = require('../services/helper')(browser);
+
 module.exports = (nextFn) => {
     describe('common login', () => {
         var urlIsEqual = (url) => {
@@ -18,19 +22,14 @@ module.exports = (nextFn) => {
             const submitButton = element(by.css('[type=submit]'));
 
             emailInput.click();
-            emailInput.sendKeys('admin');
-            emailInput.sendKeys('@');
-            emailInput.sendKeys('adm');
-            emailInput.sendKeys('in');
-            emailInput.sendKeys('.');
-            emailInput.sendKeys('com');
+            helper.sendText(emailInput, 'admin@admin.com');
 
             passwordInput.click();
-            passwordInput.sendKeys('123');
+            helper.sendText(passwordInput, '123');
 
             submitButton.click();
 
-            browser.wait(urlIsEqual('http://localhost:8000/tasks'), 500);
+            browser.wait(helper.urlIsEqual('http://localhost:8000/tasks'), 500);
         });
     });
 
