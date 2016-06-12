@@ -34,6 +34,7 @@ export interface IAuthorizationService {
     setToken(newToken: string): void;
     getToken(): string;
     isLoggedIn(): boolean;
+    unauthorizedError(): void;
 }
 
 @Injectable()
@@ -41,7 +42,8 @@ export class AuthorizationService implements IAuthorizationService {
     private token: string;
 
     constructor(
-        private http: Http
+        private http: Http,
+        private router: Router
     ) {
         this.token = window.localStorage.getItem('pm-token');
     }
@@ -83,6 +85,11 @@ export class AuthorizationService implements IAuthorizationService {
         if (remember) {
             window.localStorage.setItem('pm-token', newToken);
         }
+    }
+
+    unauthorizedError(): void {
+        this.router.navigate(['LoginPage']);
+        window.localStorage.removeItem('pm-token');
     }
 
     getToken: any = (): string => this.token;

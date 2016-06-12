@@ -65,6 +65,10 @@ export class TasksService implements ITasksService {
                     this._tasks = res.json();
                     this.refreshTasks();
                     resolve();
+                }, (error) => {
+                    if (error.status === 401) {
+                        this.authorizationService.unauthorizedError();
+                    }
                 });
         });
     }

@@ -62,6 +62,10 @@ export class ProjectsService implements IProjectsService {
                     this._projects = res.json();
                     this.refreshProjects();
                     resolve();
+                }, (error) => {
+                    if (error.status === 401) {
+                        this.authorizationService.unauthorizedError();
+                    }
                 });
         });
     }
