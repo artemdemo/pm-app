@@ -49,9 +49,7 @@ export class TasksService implements ITasksService {
     constructor(
         private http: Http,
         private authorizationService: AuthorizationService
-    ) {
-        this.loadTasks();
-    }
+    ) {}
 
     loadTasks(): Promise<{}> {
         let headers: Headers = new Headers();

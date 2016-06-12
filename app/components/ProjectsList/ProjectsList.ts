@@ -19,16 +19,16 @@ export class ProjectsList {
     private projectsSubscription: any;
 
     constructor(
-        private ProjectsService: ProjectsService,
+        private projectsService: ProjectsService,
         private SelectedProjectService: SelectedProjectService
     ) {
-        this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
+        this.projectsSubscription = projectsService.projects.subscribe(newProjects => {
             this.projects = newProjects;
         });
     }
 
     ngOnInit(): void {
-        this.ProjectsService.refreshProjects();
+        this.projectsService.refreshProjects();
     }
 
     addNewProject(): void {

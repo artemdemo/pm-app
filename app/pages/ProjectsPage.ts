@@ -5,6 +5,7 @@ import {SingleProject} from '../components/ProjectsList/SingleProject';
 import {SelectedProjectService} from '../services/SelectedProjectService';
 import {ComponentInstruction} from '@angular/router-deprecated';
 import {isLoggedIn} from '../services/AuthorizationService';
+import {ProjectsService} from '../services/ProjectsService';
 
 @CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
     return isLoggedIn(next, previous);
@@ -29,8 +30,10 @@ export class ProjectsPage {
     private projectSubscription: any;
 
     constructor(
+        private projectsService: ProjectsService,
         private SelectedProjectService: SelectedProjectService
     ) {
+        this.projectsService.loadProjects();
         this.projectSubscription = SelectedProjectService.project.subscribe(newTask => {
             this.openSingleProject = !!newTask;
         });

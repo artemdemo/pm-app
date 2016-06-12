@@ -46,9 +46,7 @@ export class ProjectsService implements IProjectsService {
     constructor(
         private http: Http,
         private authorizationService: AuthorizationService
-    ) {
-        this.loadProjects();
-    }
+    ) {}
 
     loadProjects(): Promise<{}> {
         let headers: Headers = new Headers();

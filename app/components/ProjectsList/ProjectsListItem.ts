@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ProjectsService, IProject} from '../../services/ProjectsService';
+import {IProject} from '../../services/ProjectsService';
 import {SelectedProjectService} from '../../services/SelectedProjectService';
 import {TasksService, ITask} from '../../services/TasksService';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
@@ -15,7 +15,7 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                 {{ project.name }}
             </div>
             <div class="text-muted">
-                Tasks: {{ filterTasks(false).length }}
+                Tasks: {{ project.tasks.length }}
             </div>
             <div class="text-muted">
                 Done: {{ filterTasks(true).length }}
@@ -31,7 +31,6 @@ export class ProjectsListItem {
     private tasksSubscription: any;
 
     constructor(
-        private ProjectsService: ProjectsService,
         private TasksService: TasksService,
         private SelectedProjectService: SelectedProjectService
     ) {

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {CanActivate} from '@angular/router-deprecated';
+import {TasksService} from '../services/TasksService';
 import {TasksList} from '../components/TasksList/TasksList';
 import {SingleTask} from '../components/TasksList/SingleTask';
 import {SelectedTaskService} from '../services/SelectedTaskService';
@@ -29,9 +30,11 @@ export class TasksPage {
     private taskSubscription: any;
 
     constructor(
-        private SelectedTaskService: SelectedTaskService
+        private selectedTaskService: SelectedTaskService,
+        private tasksService: TasksService
     ) {
-        this.taskSubscription = SelectedTaskService.task.subscribe(newTask => {
+        this.tasksService.loadTasks();
+        this.taskSubscription = selectedTaskService.task.subscribe(newTask => {
             this.openSingleTask = !!newTask;
         });
     }
