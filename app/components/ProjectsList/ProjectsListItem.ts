@@ -11,13 +11,14 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
         <div class="projects-list-item"
              [ngClass]="{'projects-list-item_selected': selectedProject && selectedProject.id == project.id}"
              (click)="selectTask()">
-            <div class="projects-list-item__title">
+            <div class="projects-list-item__title"
+                 [ngClass]="{'projects-list-item__title_has-items': project.tasks.length > 0}">
                 {{ project.name }}
             </div>
-            <div class="text-muted">
+            <div class="text-muted" *ngIf="project.tasks.length > 0">
                 Tasks: {{ project.tasks.length }}
             </div>
-            <div class="text-muted">
+            <div class="text-muted" *ngIf="project.tasks.length > 0">
                 Done: {{ filterTasks(true).length }}
             </div>
         </div>
