@@ -68,7 +68,7 @@ const getSession = (queryObject) => {
 
 const updateSession = (session) => {
     const deferred = Q.defer();
-    const expiration = moment(new Date()).add(30, 'm');
+    const expiration = moment(new Date()).add(7, 'days');
     let updateData = {};
 
     if (!session.id) {
