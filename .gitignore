@@ -3,3 +3,4 @@
 node_modules
 *.log
 typings
+e2e-test-terminal.pid

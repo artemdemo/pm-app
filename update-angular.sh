@@ -4,10 +4,10 @@
 # And then install new versions from npm
 # At the end it will run `npm run build` and `npm start`
 
-YELLOW='\033[1;33m'
-BLUE='\033[1;34m'
-RED='\033[1;31m'
-NC='\033[0m'
+YELLOW="\033[1;33m"
+BLUE="\033[1;34m"
+RED="\033[1;31m"
+NC="\033[0m"
 
 ANG_PACKS="@angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated"
 SUPPORT_PACKS="zone.js es6-shim reflect-metadata rxjs ts-loader typescript"

@@ -11,7 +11,7 @@
     "tslint": "./node_modules/tslint/bin/tslint ./app/**/*.ts ./app/components/**/*.ts",
     "start": "node ./server/index",
     "postinstall": "cp -i hooks/pre-commit.sh .git/hooks/pre-commit && cp -i hooks/pre-push.sh .git/hooks/pre-push",
-    "e2e": "./node_modules/protractor/bin/webdriver-manager update && protractor protractor.conf.js",
+    "e2e": "./e2e-test.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
