@@ -42,17 +42,25 @@ export class Project {
 export class ProjectsService implements IProjectsService {
     public projects: Subject<IProject[]> = new Subject<IProject[]>();
     private _projects: IProject[] = [];
+    private projectsLoading: boolean = false;
 
     constructor(
         private http: Http,
         private authorizationService: AuthorizationService
-    ) {}
+    ) {
+        this.loadProjects();
+    }
 
     loadProjects(): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
+            if (this.projectsLoading) {
+                resolve();
+                return;
+            }
+            this.projectsLoading = true;
             this.http.get('/projects/all', {
                 headers: headers,
             })
@@ -60,10 +68,12 @@ export class ProjectsService implements IProjectsService {
                     this._projects = res.json();
                     this.refreshProjects();
                     resolve();
+                    this.projectsLoading = false;
                 }, (error) => {
                     if (error.status === 401) {
                         this.authorizationService.unauthorizedError();
                     }
+                    this.projectsLoading = false;
                 });
         });
     }

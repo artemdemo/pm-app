@@ -1,8 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild, ElementRef} from '@angular/core';
 import {IProject} from '../../services/ProjectsService';
 import {SelectedProjectService} from '../../services/SelectedProjectService';
 import {TasksService, ITask} from '../../services/TasksService';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
+
+// tslint:disable-next-line
+const Chart = require('chart.js');
 
 @Component({
     selector: 'projects-list-item',
@@ -15,21 +18,27 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                  [ngClass]="{'projects-list-item__title_has-items': project.tasks.length > 0}">
                 {{ project.name }}
             </div>
-            <div class="text-muted" *ngIf="project.tasks.length > 0">
-                Tasks: {{ project.tasks.length }}
-            </div>
-            <div class="text-muted" *ngIf="project.tasks.length > 0">
-                Done: {{ filterTasks(true).length }}
+            <div *ngIf="project.tasks.length > 0">
+                <canvas #chartСanvas class="projects-list-item__donut-tasks" height="100"></canvas>
+                <div class="text-muted">
+                    Tasks: {{ filterTasks('all').length }}
+                </div>
+                <div class="text-muted">
+                    Done: {{ filterTasks('done').length }}
+                </div>
             </div>
         </div>
     `,
 })
 export class ProjectsListItem {
     @Input() project: IProject;
+    @ViewChild('chartСanvas') canvas: ElementRef;
+
     private tasksList: IGeneralListItem[] = [];
     private selectedProject: IProject = null;
     private selectedProjectSubscription: any;
     private tasksSubscription: any;
+    private chart: any = null;
 
     constructor(
         private TasksService: TasksService,
@@ -50,13 +59,56 @@ export class ProjectsListItem {
         TasksService.refreshTasks();
     }
 
-    filterTasks(doneStatus: boolean = true): IGeneralListItem[] {
+    ngAfterViewInit(): void {
+        const allNumber: number = this.filterTasks('all').length;
+        const doneNumber: number = this.filterTasks('done').length;
+        if (allNumber > 0 && !this.chart) {
+            let data: any = {
+                labels: [],
+                datasets: [
+                    {
+                        data: [allNumber, doneNumber],
+                        borderWidth: 0,
+                        backgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                        ],
+                    },
+                ],
+            };
+            let options: any = {
+                tooltips: {
+                    enabled: false,
+                },
+                maintainAspectRatio: false,
+                cutoutPercentage: 70,
+            };
+            this.chart = new Chart(this.canvas.nativeElement, {
+                type: 'doughnut',
+                data,
+                options,
+            });
+        }
+    }
+
+    filterTasks(filter: string): IGeneralListItem[] {
         if (this.project.tasks.length === 0) {
             return [];
         }
-        return this.tasksList.filter((task: IGeneralListItem) => {
-            return task.done === doneStatus && this.project.tasks.indexOf(task.id) !== -1;
-        });
+        /* tslint:disable */
+        switch (filter) {
+            case 'done':
+                return this.tasksList.filter((task: IGeneralListItem) => {
+                    return task.done === true && this.project.tasks.indexOf(task.id) !== -1;
+                });
+            case 'all':
+            default:
+                return this.tasksList.filter((task: IGeneralListItem) => {
+                    return this.project.tasks.indexOf(task.id) !== -1;
+                });
+        }
+        /* tslint:enable */
     }
 
     selectTask(): void {

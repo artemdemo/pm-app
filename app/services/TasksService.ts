@@ -45,17 +45,25 @@ export class Task {
 export class TasksService implements ITasksService {
     public tasks: Subject<ITask[]> = new Subject<ITask[]>();
     private _tasks: ITask[] = [];
+    private tasksLoading: boolean = false;
 
     constructor(
         private http: Http,
         private authorizationService: AuthorizationService
-    ) {}
+    ) {
+        this.loadTasks();
+    }
 
     loadTasks(): Promise<{}> {
         let headers: Headers = new Headers();
         headers.append('authorization', this.authorizationService.getToken());
 
         return new Promise((resolve, reject) => {
+            if (this.tasksLoading) {
+                resolve();
+                return;
+            }
+            this.tasksLoading = true;
             this.http.get('/tasks/all', {
                 headers: headers,
             })
@@ -63,10 +71,12 @@ export class TasksService implements ITasksService {
                     this._tasks = res.json();
                     this.refreshTasks();
                     resolve();
+                    this.tasksLoading = false;
                 }, (error) => {
                     if (error.status === 401) {
                         this.authorizationService.unauthorizedError();
                     }
+                    this.tasksLoading = false;
                 });
         });
     }
