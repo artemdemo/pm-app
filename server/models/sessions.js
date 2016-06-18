@@ -49,8 +49,7 @@ const getSession = (queryObject) => {
         }])
             .then((result) => {
                 if (result.length == 0) {
-                    console.log(chalk.red.bold('[getSession error]'), 'There is no sessions with id:', sessionId);
-                    deferred.reject();
+                    deferred.resolve(null);
                 } else {
                     deferred.resolve(result[0]);
                 }
