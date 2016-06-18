@@ -51,9 +51,9 @@ authSuit.login(() => {
 
             browser.wait(taskItemsTextPromise, 1000);
         });
-        
-        it('Mark task\'done\'', () => {
-            
+
+        it('Mark task \'done\'', () => {
+
         });
 
         it('logout', () => {

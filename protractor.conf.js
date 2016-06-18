@@ -1,6 +1,9 @@
 exports.config = {
     baseUrl: 'http://localhost:8000/',
-    specs: ['app/test/e2e/createTask.spec.js'],
+    specs: [
+        'app/test/e2e/signupUser.spec.js',
+        'app/test/e2e/createTask.spec.js'
+    ],
     directConnect: true,
     exclude: [],
     multiCapabilities: [{

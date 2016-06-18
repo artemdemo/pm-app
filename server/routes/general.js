@@ -14,6 +14,12 @@ module.exports = [
         handler: require('../controllers/index').login
     },
     {
+        method: 'POST',
+        path:'/signup',
+        config: { auth: false },
+        handler: require('../controllers/index').signup
+    },
+    {
         method: 'GET',
         path:'/js/{param*}',
         config: { auth: false },

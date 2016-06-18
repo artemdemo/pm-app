@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
+import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated';
+import {AuthorizationService, Signup} from '../services/AuthorizationService';
 
 @Component({
     selector: 'signup-page',
     directives: [ROUTER_DIRECTIVES],
     template: `
         <div class="container">
-            <form class="form-signin">
+            <form class="form-signin" (ngSubmit)="submitSignup()">
                 <h2 class="form-signin-heading">Sign up</h2>
                 <label for="inputUsername" class="sr-only">
                     Username
@@ -16,7 +17,8 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
                        placeholder="Username"
                        required=""
                        autofocus=""
-                       autocomplete="off">
+                       autocomplete="off"
+                       [(ngModel)]="signupModel.username">
                 <label for="inputEmail" class="sr-only">
                     Email address
                 </label>
@@ -24,7 +26,8 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
                        class="form-control form-signin__input"
                        placeholder="Email address"
                        required=""
-                       autocomplete="off">
+                       autocomplete="off"
+                       [(ngModel)]="signupModel.email">
                 <label for="inputPassword" class="sr-only">
                     Password
                 </label>
@@ -32,10 +35,13 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
                        class="form-control form-signin__last-input"
                        placeholder="Password"
                        required=""
-                       autocomplete="off">
+                       autocomplete="off"
+                       [(ngModel)]="signupModel.password">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" value="remember-me"> Remember me
+                        <input type="checkbox"
+                               value="remember-me"
+                               [(ngModel)]="signupModel.remember"> Remember me
                     </label>
                 </div>
                 <button class="btn btn-lg btn-primary btn-block"
@@ -51,4 +57,24 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
     `,
 })
 export class SignupPage {
+    private signupModel: Signup = null;
+
+    constructor(
+        private authorizationService: AuthorizationService,
+        private router: Router
+    ) {
+        this.signupModel = new Signup({
+            email: '',
+            username: '',
+            password: '',
+            remember: false,
+        });
+    }
+
+    submitSignup(): void {
+        this.authorizationService.signup(this.signupModel)
+            .then(() => {
+                this.router.navigate(['ProjectManagement/TasksPage']);
+            });
+    }
 }

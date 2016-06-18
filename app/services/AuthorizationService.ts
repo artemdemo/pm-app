@@ -7,6 +7,7 @@ import Moment = moment.Moment;
 
 export interface IUser {
     email: string;
+    username?: string;
     password?: string;
     remember?: boolean;
 }
@@ -24,6 +25,21 @@ export class Login {
     }
 }
 
+// Model for form
+export class Signup {
+    public email: string;
+    public username: string;
+    public password: string;
+    public remember: boolean;
+
+    constructor(newUser: IUser) {
+        this.email = newUser.email;
+        this.username = newUser.username;
+        this.password = newUser.password;
+        this.remember = newUser.remember;
+    }
+}
+
 export interface IToken {
     id: string;
     expiration: string;
@@ -31,6 +47,8 @@ export interface IToken {
 
 export interface IAuthorizationService {
     login(user: IUser): Promise<{}>;
+    logout(): Promise<{}>;
+    signup(user: IUser): Promise<{}>;
     setToken(newToken: string): void;
     getToken(): string;
     isLoggedIn(): boolean;
@@ -75,6 +93,22 @@ export class AuthorizationService implements IAuthorizationService {
                 this.token = null;
                 window.localStorage.removeItem('pm-token');
                 this.router.navigate(['LoginPage']);
+                resolve();
+            }, () => {
+                reject();
+            });
+        });
+    }
+
+    signup(user: IUser): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return new Promise((resolve, reject) => {
+            this.http.post('/signup', JSON.stringify(user), {
+                headers: headers,
+            }).subscribe((res) => {
+                this.setToken(res.headers.get('authorization'), user.remember);
                 resolve();
             }, () => {
                 reject();

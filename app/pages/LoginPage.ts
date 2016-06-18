@@ -65,6 +65,8 @@ export class LoginPage {
         this.authorizationService.login(this.loginModel)
             .then(() => {
                 this.router.navigate(['ProjectManagement/TasksPage']);
+            }, () => {
+                console.log('error login');
             });
     }
 }
