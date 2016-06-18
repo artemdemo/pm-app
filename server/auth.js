@@ -1,6 +1,5 @@
 'use strict';
 
-const chalk = require('chalk');
 const moment = require('moment');
 const sessions = require('./models/sessions');
 

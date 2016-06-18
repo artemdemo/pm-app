@@ -5,7 +5,7 @@ const moment = require('moment');
 const Q = require('q');
 const aguid = require('aguid');  // https://github.com/ideaq/aguid
 
-const DB = require('sqlite-crud')('./pm-database/pm.db');
+const DB = require('sqlite-crud');
 const tableName = 'sessions';
 
 /**

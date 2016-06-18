@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 const Q = require('q');
 
-const DB = require('sqlite-crud')('./pm-database/pm.db');
+const DB = require('sqlite-crud');
 const tableName = 'projects_tasks_relations';
 
 /**
@@ -26,6 +26,8 @@ exports.addRelation = (projectId, taskId) => {
         console.log(chalk.red.bold('[addRelation error]'), 'taskId should be a number, greater than 1');
         return deferred.promise;
     }
+
+    query = `SELECT * FROM ${tableName} WHERE project_id=${projectId} AND task_id=${taskId}`;
 
     DB.queryRows(query)
         .then((rows) => {

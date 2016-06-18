@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const moment = require('moment');
 const Q = require('q');
 
-const DB = require('sqlite-crud')('./pm-database/pm.db');
+const DB = require('sqlite-crud');
 const tableName = 'tasks';
 
 const parseTasks = (tasks) => tasks.map(task => {

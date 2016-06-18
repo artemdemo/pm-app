@@ -7,6 +7,27 @@ const inert = require('inert');
 const chalk = require('chalk');
 const hapiAuthJwt = require('hapi-auth-jwt2');
 const bcrypt = require('bcrypt');
+const DB = require('sqlite-crud');
+const defaultDBPath = './pm-database/pm.db';
+let cliDBPath = '';
+let migrateDB = false;
+
+// node ./server/index --db=e2e-test.db --migrate
+process.argv.forEach((value) => {
+    if (~value.indexOf('--db')) {
+        const match = /--db=(\S+.db)$/.exec(value);
+        if (match) {
+            cliDBPath = match[1];
+        }
+    } else if (value === '--migrate') {
+        migrateDB = true;
+    }
+});
+
+DB.connectToDB(cliDBPath || defaultDBPath);
+if (migrateDB) {
+    DB.migrate('server/models/migrations')
+}
 
 // Normalize a port into a number, string, or false.
 function normalizePort(val) {
