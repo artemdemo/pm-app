@@ -1,10 +1,10 @@
 'use strict';
 
-const loginSuit = require('./suits/login');
+const authSuit = require('./suits/auth');
 const helper = require('./services/helper')(browser);
 
-loginSuit(() => {
-    describe('Creating new task', () => {
+authSuit.login(() => {
+    describe('Creating new task:', () => {
 
         it('open "add task" form', () => {
             const openButton = element(by.css('[data-qa="add-new-task"]'));
@@ -51,7 +51,14 @@ loginSuit(() => {
 
             browser.wait(taskItemsTextPromise, 1000);
         });
+        
+        it('Mark task\'done\'', () => {
+            
+        });
 
+        it('logout', () => {
+            authSuit.logout();
+        })
     });
 });
 

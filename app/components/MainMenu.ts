@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 
+import {AuthorizationService} from '../services/AuthorizationService';
+
 @Component({
     selector: 'main-menu',
     directives: [ROUTER_DIRECTIVES],
@@ -21,10 +23,24 @@ import {ROUTER_DIRECTIVES} from '@angular/router-deprecated';
                         <li><a class="navbar-link" [routerLink]="['TasksPage']">Tasks</a></li>
                         <li><a class="navbar-link" [routerLink]="['ProjectsPage']">Projects</a></li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><span class="navbar-link" 
+                                  (click)="logOut()"
+                                  data-qa="logout-main-menu-button">Logout</span></li>
+                    </ul>
                 </div>
             </div>
         </nav>
     `,
 })
 export class MainMenu {
+    constructor(
+        private authorizationService: AuthorizationService
+    ) {
+
+    }
+
+    logOut(): void {
+        this.authorizationService.logout();
+    }
 }

@@ -1,6 +1,6 @@
 exports.config = {
     baseUrl: 'http://localhost:8000/',
-    specs: ['app/test/e2e/**/*.spec.js'],
+    specs: ['app/test/e2e/createTask.spec.js'],
     directConnect: true,
     exclude: [],
     multiCapabilities: [{
@@ -10,7 +10,7 @@ exports.config = {
     getPageTimeout: 100000,
     framework: 'jasmine2',
     jasmineNodeOpts: {
-        isVerbose: false,
+        isVerbose: true,
         showColors: true,
         includeStackTrace: false,
         defaultTimeoutInterval: 400000

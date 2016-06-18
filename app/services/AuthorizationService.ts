@@ -64,6 +64,24 @@ export class AuthorizationService implements IAuthorizationService {
         });
     }
 
+    logout(): Promise<{}> {
+        let headers: Headers = new Headers();
+        headers.append('authorization', this.getToken());
+
+        return new Promise((resolve, reject) => {
+            this.http.get('/logout', {
+                headers: headers,
+            }).subscribe((res) => {
+                this.token = null;
+                window.localStorage.removeItem('pm-token');
+                this.router.navigate(['LoginPage']);
+                resolve();
+            }, () => {
+                reject();
+            });
+        });
+    }
+
     isLoggedIn(): boolean {
         const tokenSections: string[] = this.token ? this.token.split('.') : null;
         const now: Moment = moment(new Date());

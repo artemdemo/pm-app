@@ -2,7 +2,7 @@
 
 const helper = require('../services/helper')(browser);
 
-module.exports = (nextFn) => {
+const login = (nextFn) => {
     describe('common login', () => {
         var urlIsEqual = (url) => {
             return () => browser.getCurrentUrl().then((actualUrl) => url == actualUrl)
@@ -34,4 +34,24 @@ module.exports = (nextFn) => {
     });
 
     nextFn();
+};
+
+const logout = (nextFn) => {
+    describe('common logout', () => {
+        it('logout from the app', () => {
+            const logoutButton = element(by.css('[type=logout-main-menu-button]'));
+
+            logoutButton.click();
+            browser.wait(helper.urlIsEqual('http://localhost:8000/login'), 500);
+        });
+    });
+
+    if (nextFn) {
+        nextFn();
+    }
+};
+
+module.exports = {
+    login,
+    logout
 };
