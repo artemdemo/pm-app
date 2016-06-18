@@ -24,7 +24,20 @@ process.argv.forEach((value) => {
     }
 });
 
-DB.connectToDB(cliDBPath || defaultDBPath);
+let pathToTheDB = cliDBPath || defaultDBPath;
+try {
+    fs.lstatSync(pathToTheDB);
+} catch(e) {
+    // If there is no default DB, then I assume that user has no access to the repository
+    // and I will create new DB
+    pathToTheDB = './pm.db';
+    try {
+        fs.lstatSync(pathToTheDB);
+    } catch(e) {
+        migrateDB = true;
+    }
+}
+DB.connectToDB(pathToTheDB);
 if (migrateDB) {
     DB.migrate('server/models/migrations')
 }
