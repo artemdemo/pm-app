@@ -9,7 +9,7 @@ BLUE="\033[1;34m"
 RED="\033[1;31m"
 NC="\033[0m"
 
-ANG_PACKS="@angular/common @angular/compiler @angular/core @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated"
+ANG_PACKS="@angular/common @angular/compiler @angular/core @angular/forms @angular/http @angular/platform-browser @angular/platform-browser-dynamic @angular/router-deprecated"
 SUPPORT_PACKS="zone.js es6-shim reflect-metadata rxjs ts-loader typescript"
 
 printf "\n"

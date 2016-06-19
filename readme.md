@@ -76,7 +76,7 @@ $ npm run tslint
 Run e2e tests
 
 ```bash
-$ npm run e2e
+$ npm test
 ```
 
 If you want to update Angular 2 and it's dependencies run:

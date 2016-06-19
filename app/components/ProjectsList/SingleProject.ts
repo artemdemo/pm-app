@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {TasksService, ITask} from '../../services/TasksService';
 import {Project, IProject} from '../../services/ProjectsService';
 import {SelectedProjectService} from '../../services/SelectedProjectService';
@@ -11,18 +12,22 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'single-project',
-    directives: [LoadingSpinner, DeleteBtn, DropdownList, NarrowList],
+    directives: [REACTIVE_FORM_DIRECTIVES, LoadingSpinner, DeleteBtn, DropdownList, NarrowList],
     template: `
         <div class="single-panel">
             <form (ngSubmit)="submitProject()" *ngIf="projectModel">
                 <div class="form-group">
                     <input type="text"
+                           name="name"
                            class="flat-input"
                            placeholder="Project name"
                            [(ngModel)]="projectModel.name">
                 </div>
                 <div class="form-group">
-                    <textarea class="flat-input" rows="3" [(ngModel)]="projectModel.description"></textarea>
+                    <textarea class="flat-input"
+                              name="description"
+                              rows="3"
+                              [(ngModel)]="projectModel.description"></textarea>
                 </div>
                 <div class="form-group">
                     <div class="single-panel__subtitle" *ngIf="selectedTasks.length > 0">

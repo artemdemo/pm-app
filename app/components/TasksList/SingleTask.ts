@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {Task, ITask} from '../../services/TasksService';
 import {SelectedTaskService} from '../../services/SelectedTaskService';
 import {TasksService} from '../../services/TasksService';
@@ -12,12 +13,13 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'single-task',
-    directives: [LoadingSpinner, OkCircle, DeleteBtn, DropdownList, LabelsList],
+    directives: [REACTIVE_FORM_DIRECTIVES, LoadingSpinner, OkCircle, DeleteBtn, DropdownList, LabelsList],
     template: `
         <div class="single-panel">
             <form (ngSubmit)="submitTask()" *ngIf="taskModel">
                 <div class="form-group">
                     <input type="text"
+                           name="name"
                            class="flat-input"
                            placeholder="Task name"
                            [(ngModel)]="taskModel.name"
@@ -25,6 +27,7 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                 </div>
                 <div class="form-group">
                     <textarea class="flat-input"
+                              name="description"
                               rows="3"
                               [(ngModel)]="taskModel.description"
                               data-qa="task-description"></textarea>

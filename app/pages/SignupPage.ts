@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated';
+import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {AuthorizationService, Signup} from '../services/AuthorizationService';
 
 @Component({
     selector: 'signup-page',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
     template: `
         <div class="container">
             <form class="form-signin" (ngSubmit)="submitSignup()">
@@ -13,6 +14,7 @@ import {AuthorizationService, Signup} from '../services/AuthorizationService';
                     Username
                 </label>
                 <input type="text"
+                       name="username"
                        class="form-control form-signin__first-input"
                        placeholder="Username"
                        required=""
@@ -23,6 +25,7 @@ import {AuthorizationService, Signup} from '../services/AuthorizationService';
                     Email address
                 </label>
                 <input type="email"
+                       name="email"
                        class="form-control form-signin__input"
                        placeholder="Email address"
                        required=""
@@ -32,6 +35,7 @@ import {AuthorizationService, Signup} from '../services/AuthorizationService';
                     Password
                 </label>
                 <input type="password"
+                       name="password"
                        class="form-control form-signin__last-input"
                        placeholder="Password"
                        required=""
@@ -40,6 +44,7 @@ import {AuthorizationService, Signup} from '../services/AuthorizationService';
                 <div class="checkbox">
                     <label>
                         <input type="checkbox"
+                               name="remember"
                                value="remember-me"
                                [(ngModel)]="signupModel.remember"> Remember me
                     </label>

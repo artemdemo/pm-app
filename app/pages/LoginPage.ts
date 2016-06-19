@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated';
+import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {AuthorizationService, Login} from '../services/AuthorizationService';
 
 @Component({
     selector: 'login-page',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
     template: `
         <div class="container">
             <form class="form-signin" (ngSubmit)="submitLogin()">
@@ -13,6 +14,7 @@ import {AuthorizationService, Login} from '../services/AuthorizationService';
                     Email address
                 </label>
                 <input type="email"
+                       name="email"
                        class="form-control form-signin__first-input"
                        placeholder="Email address"
                        required=""
@@ -23,6 +25,7 @@ import {AuthorizationService, Login} from '../services/AuthorizationService';
                     Password
                 </label>
                 <input type="password"
+                       name="password"
                        class="form-control form-signin__last-input"
                        placeholder="Password"
                        required=""
@@ -31,6 +34,7 @@ import {AuthorizationService, Login} from '../services/AuthorizationService';
                 <div class="checkbox">
                     <label>
                         <input type="checkbox"
+                               name="remember"
                                value="remember-me"
                                [(ngModel)]="loginModel.remember"> Remember me
                     </label>

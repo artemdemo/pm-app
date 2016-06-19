@@ -11,8 +11,7 @@
     "tslint": "./node_modules/tslint/bin/tslint ./app/**/*.ts ./app/components/**/*.ts",
     "start": "node ./server/index",
     "postinstall": "cp -i hooks/pre-commit.sh .git/hooks/pre-commit && cp -i hooks/pre-push.sh .git/hooks/pre-push",
-    "e2e": "./e2e-test.sh",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./e2e-test.sh"
   },
   "repository": {
     "type": "git",
@@ -41,6 +40,7 @@
     "@angular/common": "^2.0.0-rc.2",
     "@angular/compiler": "^2.0.0-rc.2",
     "@angular/core": "^2.0.0-rc.2",
+    "@angular/forms": "^0.1.0",
     "@angular/http": "^2.0.0-rc.2",
     "@angular/platform-browser": "^2.0.0-rc.2",
     "@angular/platform-browser-dynamic": "^2.0.0-rc.2",
