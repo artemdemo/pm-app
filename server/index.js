@@ -24,22 +24,29 @@ process.argv.forEach((value) => {
     }
 });
 
-let pathToTheDB = cliDBPath || defaultDBPath;
-try {
-    fs.lstatSync(pathToTheDB);
-} catch(e) {
-    // If there is no default DB, then I assume that user has no access to the repository
-    // and I will create new DB
-    pathToTheDB = './pm.db';
+let pathToTheDB = defaultDBPath;
+if (cliDBPath) {
+    pathToTheDB = cliDBPath;
+} else {
     try {
         fs.lstatSync(pathToTheDB);
     } catch(e) {
-        migrateDB = true;
+        // If there is no default DB, then I assume that user has no access to the repository
+        // and I will create new DB
+        pathToTheDB = './pm.db';
+        try {
+            fs.lstatSync(pathToTheDB);
+        } catch(e) {
+            migrateDB = true;
+        }
     }
 }
+
 DB.connectToDB(pathToTheDB);
 if (migrateDB) {
-    DB.migrate('server/models/migrations')
+    const migrationPath = 'server/models/migrations';
+    console.log(chalk.yellow('[Migrating DB] ') + migrationPath);
+    DB.migrate(migrationPath)
 }
 
 // Normalize a port into a number, string, or false.
