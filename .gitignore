@@ -5,3 +5,4 @@ node_modules
 typings
 e2e-test-terminal.pid
 e2e-test.db
+pm.db
