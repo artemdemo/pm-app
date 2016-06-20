@@ -1,0 +1,103 @@
+/**
+ * Design from http://bootswatch.com/paper/
+ */
+
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 6px 16px;
+    font-size: 13px;
+    line-height: 1.846;
+    border-radius: 3px;
+    user-select: none;
+
+    &:hover, &:focus, &.focus {
+        outline: none;
+        color: #444444;
+        text-decoration: none;
+    }
+
+    &:active:focus {
+        outline: none;
+    }
+}
+
+.btn-default, .btn-primary, .btn-success, .btn-info, .btn-warning, .btn-danger, .btn-link {
+    -webkit-background-size: 200% 200%;
+    background-size: 200% 200%;
+    background-position: 50%;
+}
+
+.btn-default {
+    color: #444444;
+    background-color: #ffffff;
+    border-color: transparent;
+
+    &:active {
+        background-color: #e0e0e0;
+        background-image: -webkit-radial-gradient(circle, #e0e0e0 10%, #ffffff 11%);
+        background-image: -o-radial-gradient(circle, #e0e0e0 10%, #ffffff 11%);
+        background-image: radial-gradient(circle, #e0e0e0 10%, #ffffff 11%);
+        background-repeat: no-repeat;
+        background-size: 1000% 1000%;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    &:focus {
+        background-color: #ffffff;
+    }
+
+    &:hover {
+        color: #444444;
+        background-color: #e6e6e6;
+        border-color: rgba(0, 0, 0, 0);
+    }
+
+    &:hover, &:active:hover {
+        background-color: #f0f0f0;
+    }
+}
+
+.btn-primary {
+    color: #ffffff;
+    background-color: #2196f3;
+    border-color: transparent;
+}
+
+.btn-success {
+    color: #ffffff;
+    background-color: #4caf50;
+    border-color: transparent;
+}
+
+.btn-info {
+    color: #ffffff;
+    background-color: #9c27b0;
+    border-color: transparent;
+}
+
+.btn-warning {
+    color: #ffffff;
+    background-color: #ff9800;
+    border-color: transparent;
+}
+
+.btn-danger {
+    color: #ffffff;
+    background-color: #e51c23;
+    border-color: transparent;
+}
+
+.btn {
+    border: none;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s;
+}

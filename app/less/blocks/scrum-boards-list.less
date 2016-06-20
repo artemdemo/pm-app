@@ -1,0 +1,33 @@
+.scrum-boards-list {
+    display: flex;
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+scrum-board {
+    flex-grow: 1;
+    border-radius: 3px;
+    font-size: 90%;
+    margin-right: 1%;
+    padding: 5px 10px;
+    background-color: @list-bg-color;
+    border: 1px solid @list-line-color;
+
+    &:last-of-type {
+        margin-right: 0;
+    }
+}
+    .scrum-board__title {
+        display: flex;
+    }
+
+    .scrum-board__name {
+        font-weight: bold;
+        flex-grow: 1;
+    }
+
+    .scrum-board__edit-board {
+        cursor: pointer;
+        width: 15px;
+        flex-shrink: 1;
+    }
