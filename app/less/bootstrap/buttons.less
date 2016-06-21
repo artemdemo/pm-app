@@ -2,6 +2,39 @@
  * Design from http://bootswatch.com/paper/
  */
 
+@paper-font-color-default: #444444;
+
+@paper-bg-color-primary: #2196f3;
+@paper-bg-color-success: #4caf50;
+@paper-bg-color-info: #9c27b0;
+@paper-bg-color-warning: #ff9800;
+@paper-bg-color-danger: #e51c23;
+
+.btn-pseudo-classes(@main-color, @font-hover-color) {
+    &:active {
+        background-color: darken(@main-color, 20%);
+        background-image: radial-gradient(circle, darken(@main-color, 16%) 10%, darken(@main-color, 10%) 11%);
+        background-repeat: no-repeat;
+        background-size: 1000% 1000%;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    &:focus {
+        background-color: @main-color;
+    }
+
+    &:hover {
+        color: @font-hover-color;
+        background-color: darken(@main-color, 16%);
+        border-color: rgba(0, 0, 0, 0);
+    }
+
+    &:active:hover {
+        color: @font-hover-color;
+        background-color: darken(@main-color, 10%);
+    }
+}
+
 .btn {
     display: inline-block;
     margin-bottom: 0;
@@ -21,7 +54,6 @@
 
     &:hover, &:focus, &.focus {
         outline: none;
-        color: #444444;
         text-decoration: none;
     }
 
@@ -37,62 +69,50 @@
 }
 
 .btn-default {
-    color: #444444;
+    .btn-pseudo-classes(#ffffff, @paper-font-color-default);
+
+    color: @paper-font-color-default;
     background-color: #ffffff;
     border-color: transparent;
-
-    &:active {
-        background-color: #e0e0e0;
-        background-image: -webkit-radial-gradient(circle, #e0e0e0 10%, #ffffff 11%);
-        background-image: -o-radial-gradient(circle, #e0e0e0 10%, #ffffff 11%);
-        background-image: radial-gradient(circle, #e0e0e0 10%, #ffffff 11%);
-        background-repeat: no-repeat;
-        background-size: 1000% 1000%;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-    }
-
-    &:focus {
-        background-color: #ffffff;
-    }
-
-    &:hover {
-        color: #444444;
-        background-color: #e6e6e6;
-        border-color: rgba(0, 0, 0, 0);
-    }
-
-    &:hover, &:active:hover {
-        background-color: #f0f0f0;
-    }
 }
 
 .btn-primary {
+    .btn-pseudo-classes(@paper-bg-color-primary, #ffffff);
+
     color: #ffffff;
-    background-color: #2196f3;
+    background-color: @paper-bg-color-primary;
     border-color: transparent;
 }
 
 .btn-success {
+    .btn-pseudo-classes(@paper-bg-color-success, #ffffff);
+
     color: #ffffff;
-    background-color: #4caf50;
+    background-color: @paper-bg-color-success;
     border-color: transparent;
 }
 
 .btn-info {
+    .btn-pseudo-classes(@paper-bg-color-info, #ffffff);
+
     color: #ffffff;
-    background-color: #9c27b0;
+    background-color: @paper-bg-color-info;
     border-color: transparent;
 }
 
 .btn-warning {
+    .btn-pseudo-classes(@paper-bg-color-warning, #ffffff);
+
     color: #ffffff;
-    background-color: #ff9800;
+    background-color: @paper-bg-color-warning;
     border-color: transparent;
 }
 
 .btn-danger {
+    .btn-pseudo-classes(@paper-bg-color-danger, #ffffff);
+
     color: #ffffff;
-    background-color: #e51c23;
+    background-color: @paper-bg-color-danger;
     border-color: transparent;
 }
 
