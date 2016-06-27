@@ -25,6 +25,7 @@
   "homepage": "https://github.com/artemdemo/pm-app#readme",
   "dependencies": {
     "aguid": "^1.0.4",
+    "atob": "^2.0.3",
     "bcrypt": "^0.8.6",
     "boom": "^3.1.2",
     "hapi": "^13.2.2",

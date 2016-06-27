@@ -6,7 +6,6 @@ const Hapi = require('hapi');
 const inert = require('inert');
 const chalk = require('chalk');
 const hapiAuthJwt = require('hapi-auth-jwt2');
-const bcrypt = require('bcrypt');
 const DB = require('sqlite-crud');
 const defaultDBPath = './pm-database/pm.db';
 let cliDBPath = '';

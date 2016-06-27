@@ -3,7 +3,7 @@
 const chalk = require('chalk');
 const moment = require('moment');
 const Q = require('q');
-
+const sessions = require('./sessions');
 const DB = require('sqlite-crud');
 const tableName = 'tasks';
 
@@ -12,9 +12,11 @@ const parseTasks = (tasks) => tasks.map(task => {
     return task;
 });
 
-exports.getAll = () => {
+exports.getAll = (tasksData) => {
     const deferred = Q.defer();
-    let tasksQuery = `SELECT * FROM ${tableName};`;
+    let tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.added, tasks.updated FROM tasks
+                      INNER JOIN sessions ON sessions.user_id = tasks.user_id
+                      WHERE sessions.id = '${tasksData.tokenId}';`;
 
     DB.queryRows(tasksQuery)
         .then((rows) => {
@@ -42,104 +44,125 @@ exports.getAll = () => {
     return deferred.promise;
 };
 
-exports.addNew = (newTask) => {
+exports.addNew = (newTaskData) => {
     const deferred = Q.defer();
     const now = moment(new Date());
 
-    try {
-        DB.insertRow(tableName, {
-            name: newTask.name,
-            description: newTask.description,
-            added: now.format('YYYY-MM-DD HH:mm:ss'),
-            updated: now.format('YYYY-MM-DD HH:mm:ss')
-        }).then((result) => {
-            deferred.resolve({
-                id: result.id,
+    sessions.getSession({
+        id: newTaskData.tokenId
+    }).then((session) => {
+        try {
+            DB.insertRow(tableName, {
+                name: newTaskData.payload.name,
+                description: newTaskData.payload.description,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
-                updated: now.format('YYYY-MM-DD HH:mm:ss')
+                updated: now.format('YYYY-MM-DD HH:mm:ss'),
+                user_id: session.user_id
+            }).then((result) => {
+                deferred.resolve({
+                    id: result.id,
+                    added: now.format('YYYY-MM-DD HH:mm:ss'),
+                    updated: now.format('YYYY-MM-DD HH:mm:ss')
+                });
+            }, (error) => {
+                console.log(chalk.red.bold('[addNew Task error]'), error);
+                deferred.reject();
             });
-        }, (error) => {
+        } catch(error) {
             console.log(chalk.red.bold('[addNew Task error]'), error);
             deferred.reject();
-        });
-    } catch(error) {
-        console.log(chalk.red.bold('[addNew Task error]'), error);
-        deferred.reject();
-    }
+        }
+    }, () => deferred.reject());
 
     return deferred.promise;
 };
 
-exports.updateTask = (task) => {
+exports.updateTask = (taskData) => {
     const deferred = Q.defer();
     const now = moment(new Date());
     let updateData = {};
     let updateAllowed = true;
 
-    if (!task.id) {
+    if (!taskData.payload.id) {
         deferred.reject();
-        console.log(chalk.red.bold('[updateTask error]'), 'No task.id in given task');
+        console.log(chalk.red.bold('[updateTask error]'), 'No taskData.payload.id in given task');
         return deferred.promise;
     }
 
     const allowedFields = ['name', 'description', 'done'];
     allowedFields.forEach((field) => {
-        if (task.hasOwnProperty(field)) {
-            updateData[field] = task[field];
+        if (taskData.payload.hasOwnProperty(field)) {
+            updateData[field] = taskData.payload[field];
         }
     });
 
     if (!updateAllowed) {
         deferred.reject();
-        console.log(chalk.red.bold('[updateTask error]'), 'No fields to update:', task);
+        console.log(chalk.red.bold('[updateTask error]'), 'No fields to update:', taskData.payload);
         return deferred.promise;
     }
 
     updateData['updated'] = now.format('YYYY-MM-DD HH:mm:ss');
 
-    try {
-        DB.updateRow(tableName, updateData, [{
-            column: 'id',
-            comparator: '=',
-            value: task.id
-        }]).then(() => {
-            deferred.resolve();
-        }, (error) => {
+    sessions.getSession({
+        id: taskData.tokenId
+    }).then((session) => {
+        try {
+            DB.updateRow(tableName, updateData, [{
+                column: 'id',
+                comparator: '=',
+                value: taskData.payload.id
+            },{
+                column: 'user_id',
+                comparator: '=',
+                value: session.user_id
+            }]).then(() => {
+                deferred.resolve();
+            }, (error) => {
+                console.log(chalk.red.bold('[updateTask error]'), error);
+                deferred.reject();
+            });
+        } catch(error) {
             console.log(chalk.red.bold('[updateTask error]'), error);
             deferred.reject();
-        });
-    } catch(error) {
-        console.log(chalk.red.bold('[updateTask error]'), error);
-        deferred.reject();
-    }
+        }
+    }, () => deferred.reject());
 
     return deferred.promise;
 };
 
-exports.deleteTask = (taskId) => {
+exports.deleteTask = (taskData) => {
     const deferred = Q.defer();
 
-    if (!taskId) {
+    if (!taskData.payload) {
         deferred.reject();
-        console.log(chalk.red.bold('[deleteTask error]'), 'No taskId in given task');
+        console.log(chalk.red.bold('[deleteTask error]'), 'No "id" in given task');
         return deferred.promise;
     }
-
-    try {
-        DB.deleteRows(tableName, [{
-            column: 'id',
-            comparator: '=',
-            value: taskId
-        }]).then(() => {
-            deferred.resolve();
-        }, (error) => {
+    sessions.getSession({
+        id: taskData.tokenId
+    }).then((session) => {
+        try {
+            DB.deleteRows(tableName, [{
+                column: 'id',
+                comparator: '=',
+                value: taskData.payload
+            },{
+                column: 'user_id',
+                comparator: '=',
+                value: session.user_id
+            }]).then(() => {
+                deferred.resolve();
+            }, (error) => {
+                console.log(chalk.red.bold('[deleteTask error]'), error);
+                deferred.reject();
+            });
+        } catch(error) {
             console.log(chalk.red.bold('[deleteTask error]'), error);
             deferred.reject();
-        });
-    } catch(error) {
-        console.log(chalk.red.bold('[deleteTask error]'), error);
-        deferred.reject();
-    }
+        }
+    }, () => deferred.reject());
+
 
     return deferred.promise;
 };

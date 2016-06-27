@@ -3,40 +3,77 @@
 const boom = require('boom');
 const tasks = require('../models/tasks');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
+const auth = require('../auth');
+const errConstants = require('../constants/error');
 
 exports.index = (request, reply) => {
     reply.redirect('/');
 };
 
 exports.all = (request, reply) => {
-    tasks.getAll().then((tasks) => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    if (!tokenData) {
+        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const tasksData = {
+        tokenId: tokenData.id
+    };
+    tasks.getAll(tasksData).then((tasks) => {
         reply(tasks);
     }, () => {
-        reply(boom.badRequest('DB error'))
+        reply(boom.badRequest(errConstants.DB_ERROR))
     });
 };
 
 exports.add = (request, reply) => {
-    tasks.addNew(request.payload).then((result) => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    if (!tokenData) {
+        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const tasksData = {
+        payload: request.payload,
+        tokenId: tokenData.id
+    };
+    tasks.addNew(tasksData).then((result) => {
         reply(result);
     }, () => {
-        reply(boom.badRequest('DB error'))
+        reply(boom.badRequest(errConstants.DB_ERROR))
     });
 };
 
 exports.update = (request, reply) => {
-    tasks.updateTask(request.payload).then(() => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    if (!tokenData) {
+        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const tasksData = {
+        payload: request.payload,
+        tokenId: tokenData.id
+    };
+    tasks.updateTask(tasksData).then(() => {
         reply({});
     }, () => {
-        reply(boom.badRequest('DB error'))
+        reply(boom.badRequest(errConstants.DB_ERROR))
     });
 };
 
 exports.delete = (request, reply) => {
-    tasks.deleteTask(request.params.taskId).then(() => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    if (!tokenData) {
+        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const tasksData = {
+        payload: request.params.taskId,
+        tokenId: tokenData.id
+    };
+    tasks.deleteTask(tasksData).then(() => {
         reply({});
     }, () => {
-        reply(boom.badRequest('DB error'))
+        reply(boom.badRequest(errConstants.DB_ERROR))
     });
 };
 
@@ -45,7 +82,7 @@ exports.connectProject = (request, reply) => {
         .then(() => {
             reply({});
         }, () => {
-            reply(boom.badRequest('DB error'))
+            reply(boom.badRequest(errConstants.DB_ERROR))
         })
 };
 
@@ -54,6 +91,6 @@ exports.disconnectProject = (request, reply) => {
         .then(() => {
             reply({});
         }, () => {
-            reply(boom.badRequest('DB error'))
+            reply(boom.badRequest(errConstants.DB_ERROR))
         })
 };

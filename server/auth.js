@@ -1,5 +1,6 @@
 'use strict';
 
+const atob = require('atob');
 const moment = require('moment');
 const sessions = require('./models/sessions');
 
@@ -24,4 +25,29 @@ exports.validate = function (decoded, request, callback) {
     }, () => {
         callback(null, false);
     });
+};
+
+/**
+ * Will return parsed token data
+ * @param token
+ * @returns {object|boolean}
+ * @example
+ * {
+ *   id: string;
+ *   expiration: string;
+ * }
+ */
+exports.parseTokenData =  function(token) {
+    const tokenSections = token ? token.split('.') : null;
+    let tokenData;
+    if (tokenSections) {
+        try {
+            tokenData = JSON.parse(atob(tokenSections[1]));
+        } catch (e) {
+            return false;
+        }
+        return tokenData;
+    } else {
+        return false;
+    }
 };
