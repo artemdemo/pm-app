@@ -2,14 +2,6 @@
  * Design from http://bootswatch.com/paper/
  */
 
-@paper-font-color-default: #444444;
-
-@paper-bg-color-primary: #2196f3;
-@paper-bg-color-success: #4caf50;
-@paper-bg-color-info: #9c27b0;
-@paper-bg-color-warning: #ff9800;
-@paper-bg-color-danger: #e51c23;
-
 .btn-pseudo-classes(@main-color, @font-hover-color) {
     &:active {
         background-color: darken(@main-color, 20%);
@@ -69,50 +61,50 @@
 }
 
 .btn-default {
-    .btn-pseudo-classes(#ffffff, @paper-font-color-default);
+    .btn-pseudo-classes(#ffffff, @font-color-default);
 
-    color: @paper-font-color-default;
+    color: @font-color-default;
     background-color: #ffffff;
     border-color: transparent;
 }
 
 .btn-primary {
-    .btn-pseudo-classes(@paper-bg-color-primary, #ffffff);
+    .btn-pseudo-classes(@color-primary, #ffffff);
 
     color: #ffffff;
-    background-color: @paper-bg-color-primary;
+    background-color: @color-primary;
     border-color: transparent;
 }
 
 .btn-success {
-    .btn-pseudo-classes(@paper-bg-color-success, #ffffff);
+    .btn-pseudo-classes(@color-success, #ffffff);
 
     color: #ffffff;
-    background-color: @paper-bg-color-success;
+    background-color: @color-success;
     border-color: transparent;
 }
 
 .btn-info {
-    .btn-pseudo-classes(@paper-bg-color-info, #ffffff);
+    .btn-pseudo-classes(@color-info, #ffffff);
 
     color: #ffffff;
-    background-color: @paper-bg-color-info;
+    background-color: @color-info;
     border-color: transparent;
 }
 
 .btn-warning {
-    .btn-pseudo-classes(@paper-bg-color-warning, #ffffff);
+    .btn-pseudo-classes(@color-warning, #ffffff);
 
     color: #ffffff;
-    background-color: @paper-bg-color-warning;
+    background-color: @color-warning;
     border-color: transparent;
 }
 
 .btn-danger {
-    .btn-pseudo-classes(@paper-bg-color-danger, #ffffff);
+    .btn-pseudo-classes(@color-danger, #ffffff);
 
     color: #ffffff;
-    background-color: @paper-bg-color-danger;
+    background-color: @color-danger;
     border-color: transparent;
 }
 
