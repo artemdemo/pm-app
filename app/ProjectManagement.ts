@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {RouteConfig, ROUTER_DIRECTIVES} from '@angular/router-deprecated';
 import {MainMenu} from './components/MainMenu';
 import {TasksPage} from './pages/TasksPage';
+import {ScrumPage} from './pages/ScrumPage';
 import {ProjectsPage} from './pages/ProjectsPage';
 
 @Component({
@@ -16,6 +17,7 @@ import {ProjectsPage} from './pages/ProjectsPage';
 })
 @RouteConfig([
     { path: '/tasks', component: TasksPage, name: 'TasksPage', useAsDefault: true },
+    { path: '/scrum', component: ScrumPage, name: 'ScrumPage' },
     { path: '/projects', component: ProjectsPage, name: 'ProjectsPage' }
 ])
 export class ProjectManagement {

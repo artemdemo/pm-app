@@ -25,16 +25,16 @@ module.exports = [
         config: { auth: 'jwt' },
         handler: require('../controllers/boards').delete
     },
-    {
-        method: 'GET',
-        path:'/boards/{boardId}/task/{taskId}',
-        config: { auth: 'jwt' },
-        handler: require('../controllers/boards').connectTask
-    },
-    {
-        method: 'DELETE',
-        path:'/boards/{boardId}/project/{taskId}',
-        config: { auth: 'jwt' },
-        handler: require('../controllers/boards').disconnectTask
-    }
+    // {
+    //     method: 'GET',
+    //     path:'/boards/{boardId}/task/{taskId}',
+    //     config: { auth: 'jwt' },
+    //     handler: require('../controllers/boards').connectTask
+    // },
+    // {
+    //     method: 'DELETE',
+    //     path:'/boards/{boardId}/project/{taskId}',
+    //     config: { auth: 'jwt' },
+    //     handler: require('../controllers/boards').disconnectTask
+    // }
 ];

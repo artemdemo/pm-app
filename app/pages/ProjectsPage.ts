@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
-import {CanActivate} from '@angular/router-deprecated';
+import {CanActivate, ComponentInstruction} from '@angular/router-deprecated';
 import {ProjectsList} from '../components/ProjectsList/ProjectsList';
 import {SingleProject} from '../components/ProjectsList/SingleProject';
 import {SelectedProjectService} from '../services/SelectedProjectService';
-import {ComponentInstruction} from '@angular/router-deprecated';
 import {isLoggedIn} from '../services/AuthorizationService';
 import {ProjectsService} from '../services/ProjectsService';
 

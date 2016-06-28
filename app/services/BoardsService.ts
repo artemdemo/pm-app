@@ -17,7 +17,7 @@ export interface IBoardService {
 }
 
 @Injectable()
-export class BoardService implements IBoardService {
+export class BoardsService implements IBoardService {
     public boards: Subject<IBoard[]> = new Subject<IBoard[]>();
     private _boards: IBoard[] = [];
     private boardsLoading: boolean = false;
@@ -140,7 +140,7 @@ export class BoardService implements IBoardService {
     }
 
     refreshBoards(): void {
-        this.boards.next(this._boards)
+        this.boards.next(this._boards);
     }
 
     getBoards: any = (): IBoard[] => this._boards;

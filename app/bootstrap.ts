@@ -15,6 +15,7 @@ import {TasksService} from './services/TasksService';
 import {SelectedTaskService} from './services/SelectedTaskService';
 import {ProjectsService} from './services/ProjectsService';
 import {SelectedProjectService} from './services/SelectedProjectService';
+import {BoardsService} from './services/BoardsService';
 import {appInjector} from './services/appInjector';
 
 bootstrap(MainRouter, [
@@ -26,6 +27,7 @@ bootstrap(MainRouter, [
     SelectedTaskService,
     ProjectsService,
     SelectedProjectService,
+    BoardsService,
     disableDeprecatedForms(),
     provideForms()
 ]).then((appRef: ComponentRef<MainRouter>) => {

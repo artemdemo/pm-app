@@ -21,6 +21,7 @@ import {AuthorizationService} from '../services/AuthorizationService';
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li><a class="navbar-link" [routerLink]="['TasksPage']">Tasks</a></li>
+                        <li><a class="navbar-link" [routerLink]="['ScrumPage']">Scrum</a></li>
                         <li><a class="navbar-link" [routerLink]="['ProjectsPage']">Projects</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
