@@ -50,6 +50,7 @@ export interface IAuthorizationService {
     logout(): Promise<{}>;
     signup(user: IUser): Promise<{}>;
     setToken(newToken: string): void;
+    getSessionId(): string;
     getToken(): string;
     isLoggedIn(): boolean;
     unauthorizedError(): void;
@@ -143,6 +144,21 @@ export class AuthorizationService implements IAuthorizationService {
         this.router.navigate(['LoginPage']);
         window.localStorage.removeItem('pm-token');
     }
+
+    getSessionId(): string {
+        const tokenSections: string[] = this.token ? this.token.split('.') : null;
+        let tokenData: IToken;
+        if (tokenSections) {
+            try {
+                tokenData = JSON.parse(atob(tokenSections[1]));
+            } catch (e) {
+                return '';
+            }
+            return tokenData.id;
+        } else {
+            return '';
+        }
+    };
 
     getToken: any = (): string => this.token;
 }

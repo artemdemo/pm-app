@@ -15,6 +15,7 @@ export interface ITask {
 
 export interface ITasksService {
     tasks: Subject<ITask[]>;
+    loadTasks(): Promise<{}>;
     addTask(task: ITask): Promise<{}>;
     updateTask(task: ITask): Promise<{}>;
     deleteTask(taskId: number): Promise<{}>;

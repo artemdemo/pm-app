@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
-import {CanActivate} from '@angular/router-deprecated';
+import {CanActivate, ComponentInstruction} from '@angular/router-deprecated';
 import {TasksService} from '../services/TasksService';
 import {TasksList} from '../components/TasksList/TasksList';
 import {SingleTask} from '../components/TasksList/SingleTask';
 import {SelectedTaskService} from '../services/SelectedTaskService';
-import {ComponentInstruction} from '@angular/router-deprecated';
 import {isLoggedIn} from '../services/AuthorizationService';
 
 @CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
