@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {TasksService, ITask} from '../../services/TasksService';
-import {SelectedTaskService} from '../../services/SelectedTaskService';
+import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 import {ProjectsService, IProject} from '../../services/ProjectsService';
 import {OkCircle} from '../OkCircle';
 import {LabelsList} from '../LabelsList';
@@ -47,13 +47,13 @@ export class TasksListItem {
 
     constructor(
         private TasksService: TasksService,
-        private SelectedTaskService: SelectedTaskService,
+        private selectedEntityService: SelectedEntityService,
         private ProjectsService: ProjectsService
     ) {
-        this.selectedTaskSubscription = SelectedTaskService.task.subscribe(newSelectedTask => {
+        this.selectedTaskSubscription = selectedEntityService.getEntitySubject(EntityType.task).subscribe(newSelectedTask => {
             this.selectedTask = newSelectedTask;
         });
-        SelectedTaskService.refreshTask();
+        selectedEntityService.refreshEntity(EntityType.task);
     }
 
     toggleDone(taskId: number, done: boolean): void {
@@ -66,7 +66,7 @@ export class TasksListItem {
     }
 
     selectTask(): void {
-        this.SelectedTaskService.setSelectedTask(this.task.id);
+        this.selectedEntityService.setSelectedEntity(this.task.id, EntityType.task);
     }
 
     ngOnInit(): void {

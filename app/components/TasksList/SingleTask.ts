@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {Task, ITask} from '../../services/TasksService';
-import {SelectedTaskService} from '../../services/SelectedTaskService';
+import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 import {TasksService} from '../../services/TasksService';
 import {ProjectsService, IProject} from '../../services/ProjectsService';
 import {LoadingSpinner} from '../LoadingSpinner';
@@ -86,11 +86,11 @@ export class SingleTask {
     private selectedProjects: IProject[] = [];
 
     constructor(
-        private SelectedTaskService: SelectedTaskService,
-        private TasksService: TasksService,
-        private ProjectsService: ProjectsService
+        private selectedEntityService: SelectedEntityService,
+        private tasksService: TasksService,
+        private projectsService: ProjectsService
     ) {
-        this.taskSubscription = SelectedTaskService.task.subscribe(selectedTask => {
+        this.taskSubscription = selectedEntityService.getEntitySubject(EntityType.task).subscribe(selectedTask => {
             if (selectedTask) {
                 this.task = selectedTask;
                 this.taskModel = new Task(selectedTask);
@@ -108,7 +108,7 @@ export class SingleTask {
                 this.task = null;
             }
         });
-        this.projectsSubscription = ProjectsService.projects.subscribe(newProjects => {
+        this.projectsSubscription = projectsService.projects.subscribe(newProjects => {
             this.projectsList = newProjects.map((project: IProject) => {
                 return {
                     id: project.id,
@@ -116,15 +116,15 @@ export class SingleTask {
                 };
             });
         });
-        ProjectsService.refreshProjects();
+        projectsService.refreshProjects();
     }
 
     connectProject(project: IGeneralListItem): void {
         this.loadingData = true;
-        this.TasksService.connectProject(this.task.id, project.id)
+        this.tasksService.connectProject(this.task.id, project.id)
             .then(() => {
                 this.loadingData = false;
-                this.SelectedTaskService.setSelectedTask(this.task.id);
+                this.selectedEntityService.setSelectedEntity(this.task.id, EntityType.task);
             }, () => {
                 this.loadingData = false;
             });
@@ -132,10 +132,10 @@ export class SingleTask {
 
     disconnectProject(project: IGeneralListItem): void {
         this.loadingData = true;
-        this.TasksService.disconnectProject(this.task.id, project.id)
+        this.tasksService.disconnectProject(this.task.id, project.id)
             .then(() => {
                 this.loadingData = false;
-                this.SelectedTaskService.setSelectedTask(this.task.id);
+                this.selectedEntityService.setSelectedEntity(this.task.id, EntityType.task);
             }, () => {
                 this.loadingData = false;
             });
@@ -145,15 +145,15 @@ export class SingleTask {
         if (this.taskModel.name && !this.loadingData) {
             this.loadingData = true;
             if (this.task.id) {
-                this.TasksService.updateTask(Object.assign(this.task, this.taskModel))
+                this.tasksService.updateTask(Object.assign(this.task, this.taskModel))
                     .then(() => {
-                        this.SelectedTaskService.dropSelectedTask();
+                        this.selectedEntityService.dropSelectedEntity(EntityType.task);
                         this.loadingData = false;
                     }, () => this.loadingData = false);
             } else {
-                this.TasksService.addTask(Object.assign(this.task, this.taskModel))
+                this.tasksService.addTask(Object.assign(this.task, this.taskModel))
                     .then(() => {
-                        this.SelectedTaskService.dropSelectedTask();
+                        this.selectedEntityService.dropSelectedEntity(EntityType.task);
                         this.loadingData = false;
                     }, () => this.loadingData = false);
             }
@@ -163,9 +163,9 @@ export class SingleTask {
     deleteTask(): void {
         if (!this.loadingData) {
             this.loadingData = true;
-            this.TasksService.deleteTask(this.task.id)
+            this.tasksService.deleteTask(this.task.id)
                 .then(() => {
-                    this.SelectedTaskService.dropSelectedTask();
+                    this.selectedEntityService.dropSelectedEntity(EntityType.task);
                     this.loadingData = false;
                 }, () => this.loadingData = false);
         }
@@ -176,11 +176,12 @@ export class SingleTask {
     }
 
     cancel(): void {
-        this.SelectedTaskService.dropSelectedTask();
+        this.selectedEntityService.dropSelectedEntity(EntityType.task);
     }
 
     ngOnDestroy(): void {
         this.taskSubscription.unsubscribe();
         this.projectsSubscription.unsubscribe();
+        this.selectedEntityService.dropSelectedEntity(EntityType.task);
     }
 }

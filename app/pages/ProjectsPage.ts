@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {CanActivate, ComponentInstruction} from '@angular/router-deprecated';
 import {ProjectsList} from '../components/ProjectsList/ProjectsList';
 import {SingleProject} from '../components/ProjectsList/SingleProject';
-import {SelectedProjectService} from '../services/SelectedProjectService';
+import {SelectedEntityService, EntityType} from '../services/SelectedEntityService';
 import {isLoggedIn} from '../services/AuthorizationService';
 import {ProjectsService} from '../services/ProjectsService';
 
@@ -30,10 +30,10 @@ export class ProjectsPage {
 
     constructor(
         private projectsService: ProjectsService,
-        private SelectedProjectService: SelectedProjectService
+        private selectedEntityService: SelectedEntityService
     ) {
         this.projectsService.loadProjects();
-        this.projectSubscription = SelectedProjectService.project.subscribe(newTask => {
+        this.projectSubscription = selectedEntityService.getEntitySubject(EntityType.project).subscribe(newTask => {
             this.openSingleProject = !!newTask;
         });
     }

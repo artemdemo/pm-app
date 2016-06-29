@@ -12,9 +12,8 @@ import {disableDeprecatedForms, provideForms} from '@angular/forms';
 import {MainRouter} from './MainRouter';
 import {AuthorizationService} from './services/AuthorizationService';
 import {TasksService} from './services/TasksService';
-import {SelectedTaskService} from './services/SelectedTaskService';
+import {SelectedEntityService} from './services/SelectedEntityService';
 import {ProjectsService} from './services/ProjectsService';
-import {SelectedProjectService} from './services/SelectedProjectService';
 import {BoardsService} from './services/BoardsService';
 import {appInjector} from './services/appInjector';
 
@@ -24,9 +23,8 @@ bootstrap(MainRouter, [
     { provide: LocationStrategy, useClass: PathLocationStrategy },
     AuthorizationService,
     TasksService,
-    SelectedTaskService,
+    SelectedEntityService,
     ProjectsService,
-    SelectedProjectService,
     BoardsService,
     disableDeprecatedForms(),
     provideForms()

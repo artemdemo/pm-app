@@ -3,7 +3,7 @@ import {CanActivate, ComponentInstruction} from '@angular/router-deprecated';
 import {TasksService} from '../services/TasksService';
 import {TasksList} from '../components/TasksList/TasksList';
 import {SingleTask} from '../components/TasksList/SingleTask';
-import {SelectedTaskService} from '../services/SelectedTaskService';
+import {SelectedEntityService, EntityType} from '../services/SelectedEntityService';
 import {isLoggedIn} from '../services/AuthorizationService';
 
 @CanActivate((next: ComponentInstruction, previous: ComponentInstruction) => {
@@ -29,11 +29,11 @@ export class TasksPage {
     private taskSubscription: any;
 
     constructor(
-        private selectedTaskService: SelectedTaskService,
+        private selectedEntityService: SelectedEntityService,
         private tasksService: TasksService
     ) {
         this.tasksService.loadTasks();
-        this.taskSubscription = selectedTaskService.task.subscribe(newTask => {
+        this.taskSubscription = selectedEntityService.getEntitySubject(EntityType.task).subscribe(newTask => {
             this.openSingleTask = !!newTask;
         });
     }

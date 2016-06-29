@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild, ElementRef} from '@angular/core';
 import {IProject} from '../../services/ProjectsService';
-import {SelectedProjectService} from '../../services/SelectedProjectService';
+import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 import {TasksService, ITask} from '../../services/TasksService';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
@@ -42,9 +42,9 @@ export class ProjectsListItem {
 
     constructor(
         private TasksService: TasksService,
-        private SelectedProjectService: SelectedProjectService
+        private SelectedEntityService: SelectedEntityService
     ) {
-        this.selectedProjectSubscription = SelectedProjectService.project.subscribe(newSelectedProject => {
+        this.selectedProjectSubscription = SelectedEntityService.getEntitySubject(EntityType.project).subscribe(newSelectedProject => {
             this.selectedProject = newSelectedProject;
         });
         this.tasksSubscription = TasksService.tasks.subscribe(newTasks => {
@@ -112,7 +112,7 @@ export class ProjectsListItem {
     }
 
     selectTask(): void {
-        this.SelectedProjectService.setSelectedProject(this.project.id);
+        this.SelectedEntityService.setSelectedEntity(this.project.id, EntityType.project);
     }
 
     ngOnDestroy(): void {

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {ProjectsListItem} from './ProjectsListItem';
 import {ProjectsService, IProject} from '../../services/ProjectsService';
-import {SelectedProjectService} from '../../services/SelectedProjectService';
+import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 
 @Component({
     selector: 'projects-list',
@@ -26,7 +26,7 @@ export class ProjectsList {
 
     constructor(
         private projectsService: ProjectsService,
-        private SelectedProjectService: SelectedProjectService
+        private selectedEntityService: SelectedEntityService
     ) {
         this.projectsSubscription = projectsService.projects.subscribe(newProjects => {
             this.projects = newProjects;
@@ -52,7 +52,7 @@ export class ProjectsList {
     }
 
     addNewProject(): void {
-        this.SelectedProjectService.setNewProject();
+        this.selectedEntityService.setNewEntity(EntityType.project);
     }
 
     ngOnDestroy(): void {

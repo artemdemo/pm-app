@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {TasksService, ITask} from '../../services/TasksService';
-import {SelectedTaskService} from '../../services/SelectedTaskService';
+import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 import {TasksListItem} from './TasksListItem';
 import {RadioMenu} from '../RadioMenu';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
@@ -33,7 +33,7 @@ export class TasksList {
 
     constructor(
         private TasksService: TasksService,
-        private SelectedTaskService: SelectedTaskService
+        private selectedEntityService: SelectedEntityService
     ) {
         this.listMenu = [
             { id: filterTasksType.all, name: 'All'},
@@ -43,7 +43,7 @@ export class TasksList {
     }
 
     addNewTask(): void {
-        this.SelectedTaskService.setNewTask();
+        this.selectedEntityService.setNewEntity(EntityType.task);
     }
 
     setTasksFilter(filter: IGeneralListItem): void {
