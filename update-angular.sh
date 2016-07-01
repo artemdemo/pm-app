@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script will remove current angular2 library and it's components
+# This script will remove current angular2 library and it's components including typescript
 # And then install new versions from npm
 # At the end it will run `npm run build` and `npm start`
 

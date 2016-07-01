@@ -7,13 +7,30 @@ export interface IBoard {
     id: number;
     title: string;
     description: string;
+    tasks: number[];
     added: string;
     updated: string;
 }
 
 export interface IBoardService {
     loadBoards(): Promise<{}>;
+    addBoard(task: IBoard): Promise<{}>;
+    updateBoard(task: IBoard): Promise<{}>;
+    deleteBoard(boardId: number): Promise<{}>;
+    getEmptyBoard(): IBoard;
+    refreshBoards(): void;
     getBoards(): IBoard[];
+}
+
+// Model for form
+export class Board {
+    public title: string;
+    public description: string;
+
+    constructor(newProject: IBoard) {
+        this.title = newProject.title;
+        this.description = newProject.description;
+    }
 }
 
 @Injectable()
@@ -134,6 +151,7 @@ export class BoardsService implements IBoardService {
             id: null,
             title: '',
             description: '',
+            tasks: [],
             added: null,
             updated: null,
         };

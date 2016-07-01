@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Board} from './Board';
 import {IBoard, BoardsService} from '../../services/BoardsService';
+import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 
 @Component({
     selector: 'boards-list',
@@ -20,7 +21,8 @@ export class BoardsList {
     private boardsSubscription: any;
 
     constructor(
-        private boardsService: BoardsService
+        private boardsService: BoardsService,
+        private selectedEntityService: SelectedEntityService
     ) {
     }
 
@@ -36,6 +38,6 @@ export class BoardsList {
     }
 
     addNewBoard(): void {
-        console.log('Add new board');
+        this.selectedEntityService.setNewEntity(EntityType.board);
     }
 }

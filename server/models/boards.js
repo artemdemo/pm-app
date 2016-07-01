@@ -9,13 +9,16 @@ const tableName = 'bards';
 
 exports.getAll = (boardsData) => {
     const deferred = Q.defer();
-    let tasksQuery = `SELECT boards.id, boards.title, boards.description FROM boards
+    let boardsQuery = `SELECT boards.id, boards.title, boards.description FROM boards
                       INNER JOIN sessions ON sessions.user_id = boards.user_id
                       WHERE sessions.id = '${boardsData.tokenId}';`;
 
-    DB.queryRows(tasksQuery)
-        .then((tasks) => {
-            deferred.resolve(tasks);
+    DB.queryRows(boardsQuery)
+        .then((boards) => {
+            boards.forEach((data, index) => {
+                boards[index]['tasks'] = [];
+            });
+            deferred.resolve(boards);
         }, () => {
             deferred.reject();
         });

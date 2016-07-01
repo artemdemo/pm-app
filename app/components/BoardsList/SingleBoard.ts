@@ -1,32 +1,31 @@
 import {Component} from '@angular/core';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {TasksService, ITask} from '../../services/TasksService';
-import {ProjectsService, Project, IProject} from '../../services/ProjectsService';
+import {BoardsService, Board, IBoard} from '../../services/BoardsService';
 import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
-import {LoadingSpinner} from '../LoadingSpinner';
 import {DeleteBtn} from '../DeleteBtn';
-import {DropdownList} from '../DropdownList';
+// import {DropdownList} from '../DropdownList';
 import {NarrowList} from '../NarrowList';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
 @Component({
-    selector: 'single-project',
-    directives: [REACTIVE_FORM_DIRECTIVES, LoadingSpinner, DeleteBtn, DropdownList, NarrowList],
+    selector: 'single-board',
+    directives: [REACTIVE_FORM_DIRECTIVES, DeleteBtn, NarrowList],
     template: `
-        <div class="single-panel">
-            <form (ngSubmit)="submitProject()" *ngIf="projectModel">
+        <div class="single-board">
+            <form (ngSubmit)="submitBoard()" *ngIf="boardModel">
                 <div class="form-group">
                     <input type="text"
-                           name="name"
+                           name="title"
                            class="flat-input"
-                           placeholder="Project name"
-                           [(ngModel)]="projectModel.name">
+                           placeholder="Board title"
+                           [(ngModel)]="boardModel.title">
                 </div>
                 <div class="form-group">
                     <textarea class="flat-input"
                               name="description"
                               rows="3"
-                              [(ngModel)]="projectModel.description"></textarea>
+                              [(ngModel)]="boardModel.description"></textarea>
                 </div>
                 <div class="form-group">
                     <div class="single-panel__subtitle" *ngIf="selectedTasks.length > 0">
@@ -39,18 +38,18 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                 </div>
                 <div class="form-group">
                     <dropdown-list [list]="availableTasks"
-                                   placeholder="Connect task"
+                                   placeholder="Add task to the board"
                                    (onSelect)="connectTask($event)"></dropdown-list>
                 </div>
-                <div class="form-group text-muted" *ngIf="project.added">
-                    <p>Project Added: {{ project.added }}</p>
-                    <p>Last updated: {{ project.updated }}</p>
+                <div class="form-group text-muted" *ngIf="board.added">
+                    <p>Board Added: {{ board.added }}</p>
+                    <p>Last updated: {{ board.updated }}</p>
                 </div>
                 <div class="clearfix">
                     <div class="pull-left">
                         <button type="submit" class="btn btn-primary" [disabled]="loadingData">
-                            <span *ngIf="!project.id">Add new</span>
-                            <span *ngIf="project.id">Save</span>
+                            <span *ngIf="!board.id">Add new</span>
+                            <span *ngIf="board.id">Save</span>
                         </button>
                         <span class="btn btn-default"
                               (click)="cancel()"
@@ -59,18 +58,18 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                             <loading-spinner></loading-spinner>
                         </span>
                     </div>
-                    <div class="pull-right" *ngIf="project.id">
-                        <delete-btn (onDelete)="deleteProject()"></delete-btn>
+                    <div class="pull-right" *ngIf="board.id">
+                        <delete-btn (onDelete)="deleteBoard()"></delete-btn>
                     </div>
                 </div>
             </form>
         </div>
     `,
 })
-export class SingleProject {
-    private project: IProject;
-    private projectModel: Project;
-    private projectSubscription: any;
+export class SingleBoard {
+    private board: IBoard;
+    private boardModel: Board;
+    private boardSubscription: any;
     private loadingData: boolean = false;
     private tasksList: IGeneralListItem[] = [];
     private availableTasks: IGeneralListItem[] = [];
@@ -80,24 +79,24 @@ export class SingleProject {
     constructor(
         private selectedEntityService: SelectedEntityService,
         private tasksService: TasksService,
-        private projectsService: ProjectsService
+        private boardsService: BoardsService
     ) {
-        this.projectSubscription = selectedEntityService.getEntitySubject(EntityType.project).subscribe(selectedProject => {
-            if (selectedProject) {
-                this.project = selectedProject;
-                this.projectModel = new Project(selectedProject);
+        this.boardSubscription = selectedEntityService.getEntitySubject(EntityType.board).subscribe(selectedBoard => {
+            if (selectedBoard) {
+                this.board = selectedBoard;
+                this.boardModel = new Board(selectedBoard);
                 this.availableTasks = [];
                 this.selectedTasks = [];
                 this.tasksList.forEach((task: ITask) => {
-                    if (this.project.tasks.indexOf(task.id) > -1) {
+                    if (this.board.tasks.indexOf(task.id) > -1) {
                         this.selectedTasks.push(task);
                     } else {
                         this.availableTasks.push(task);
                     }
                 });
             } else {
-                this.projectModel = null;
-                this.project = null;
+                this.boardModel = null;
+                this.board = null;
             }
         });
         this.tasksSubscription = tasksService.tasks.subscribe(newTasks => {
@@ -110,68 +109,68 @@ export class SingleProject {
             });
         });
         tasksService.refreshTasks();
-        projectsService.refreshProjects();
+        boardsService.refreshBoards();
     }
 
     connectTask(task: IGeneralListItem): void {
         this.loadingData = true;
-        this.projectsService.connectTask(task.id, this.project.id)
-            .then(() => {
-                this.loadingData = false;
-                this.selectedEntityService.setSelectedEntity(this.project.id, EntityType.project);
-            }, () => {
-                this.loadingData = false;
-            });
+        // this.boardsService.connectTask(task.id, this.board.id)
+        //     .then(() => {
+        //         this.loadingData = false;
+        //         this.selectedEntityService.setSelectedEntity(this.board.id, EntityType.board);
+        //     }, () => {
+        //         this.loadingData = false;
+        //     });
     }
 
     disconnectTask(task: IGeneralListItem): void {
         this.loadingData = true;
-        this.projectsService.disconnectTask(task.id, this.project.id)
-            .then(() => {
-                this.loadingData = false;
-                this.selectedEntityService.setSelectedEntity(this.project.id, EntityType.project);
-            }, () => {
-                this.loadingData = false;
-            });
+        // this.boardsService.disconnectTask(task.id, this.board.id)
+        //     .then(() => {
+        //         this.loadingData = false;
+        //         this.selectedEntityService.setSelectedEntity(this.board.id, EntityType.board);
+        //     }, () => {
+        //         this.loadingData = false;
+        //     });
     }
 
-    submitProject(): void {
-        if (this.projectModel.name && !this.loadingData) {
+    submitBoard(): void {
+        if (this.boardModel.title && !this.loadingData) {
             this.loadingData = true;
-            if (this.project.id) {
-                this.projectsService.updateProject(Object.assign(this.project, this.projectModel))
+            if (this.board.id) {
+                this.boardsService.updateBoard(Object.assign(this.board, this.boardModel))
                     .then(() => {
-                        this.selectedEntityService.dropSelectedEntity(EntityType.project);
+                        this.selectedEntityService.dropSelectedEntity(EntityType.board);
                         this.loadingData = false;
                     }, () => this.loadingData = false);
             } else {
-                this.projectsService.addProject(Object.assign(this.project, this.projectModel))
+                this.boardsService.addBoard(Object.assign(this.board, this.boardModel))
                     .then(() => {
-                        this.selectedEntityService.dropSelectedEntity(EntityType.project);
+                        this.selectedEntityService.dropSelectedEntity(EntityType.board);
                         this.loadingData = false;
                     }, () => this.loadingData = false);
             }
         }
     }
 
-    deleteProject(): void {
+    deleteBoard(): void {
         if (!this.loadingData) {
             this.loadingData = true;
-            this.projectsService.deleteProject(this.project.id)
+            this.boardsService.deleteBoard(this.board.id)
                 .then(() => {
-                    this.selectedEntityService.dropSelectedEntity(EntityType.project);
+                    this.selectedEntityService.dropSelectedEntity(EntityType.board);
                     this.loadingData = false;
                 }, () => this.loadingData = false);
         }
     }
 
     cancel(): void {
-        this.selectedEntityService.dropSelectedEntity(EntityType.project);
+        this.selectedEntityService.dropSelectedEntity(EntityType.board);
     }
 
     ngOnDestroy(): void {
         this.tasksSubscription.unsubscribe();
-        this.projectSubscription.unsubscribe();
-        this.selectedEntityService.dropSelectedEntity(EntityType.project);
+        this.boardSubscription.unsubscribe();
+        this.selectedEntityService.dropSelectedEntity(EntityType.board);
     }
 }

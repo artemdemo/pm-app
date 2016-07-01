@@ -16,6 +16,5 @@ import {ProjectManagement} from './ProjectManagement';
         { path: '/signup', component: SignupPage, name: 'SignupPage' },
         { path: '/...', component: ProjectManagement, name: 'ProjectManagement' },
         { path: '/**', redirectTo: ['ProjectManagement'] }
-    ])
-export class MainRouter {
-}
+])
+export class MainRouter {}
