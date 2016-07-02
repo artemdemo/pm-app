@@ -5,20 +5,33 @@ const moment = require('moment');
 const Q = require('q');
 const sessions = require('./sessions');
 const DB = require('sqlite-crud');
-const tableName = 'bards';
+const tableName = 'boards';
 
 exports.getAll = (boardsData) => {
     const deferred = Q.defer();
     let boardsQuery = `SELECT boards.id, boards.title, boards.description FROM boards
-                      INNER JOIN sessions ON sessions.user_id = boards.user_id
-                      WHERE sessions.id = '${boardsData.tokenId}';`;
+                       INNER JOIN sessions ON sessions.user_id = boards.user_id
+                       WHERE sessions.id = '${boardsData.tokenId}';`;
 
     DB.queryRows(boardsQuery)
         .then((boards) => {
-            boards.forEach((data, index) => {
+            let promisesList = [];
+            boards.forEach((board, index) => {
+                let tasksQuery = `SELECT tasks.id FROM tasks
+                                  INNER JOIN sessions ON sessions.user_id = tasks.user_id
+                                  WHERE sessions.id = '${boardsData.tokenId}' AND tasks.board_id = ${board.id};`;
+                promisesList.push(DB.queryRows(tasksQuery));
                 boards[index]['tasks'] = [];
             });
-            deferred.resolve(boards);
+            Q.all(promisesList)
+                .then((resultsList) => {
+                    resultsList.forEach((data, index) => {
+                        boards[index]['tasks'] = data.map(item => item.id);
+                    });
+                    deferred.resolve(boards);
+                }, () => {
+                    deferred.reject();
+                });
         }, () => {
             deferred.reject();
         });
@@ -118,7 +131,7 @@ exports.deleteBoard = (boardData) => {
 
     if (!boardData.payload) {
         deferred.reject();
-        console.log(chalk.red.bold('[deleteBoard error]'), 'No "id" in given task');
+        console.log(chalk.red.bold('[deleteBoard error]'), 'No "id" in given board');
         return deferred.promise;
     }
     sessions.getSession({

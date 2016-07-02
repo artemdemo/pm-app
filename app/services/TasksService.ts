@@ -8,6 +8,7 @@ export interface ITask {
     name: string;
     description: string;
     projects: number[];
+    board_id: string;
     done: boolean;
     added: string;
     updated: string;
@@ -32,12 +33,14 @@ export class Task {
     public name: string;
     public description: string;
     public projects: number[];
+    public board_id: string;
     public done: boolean;
 
     constructor(newTask: ITask) {
         this.name = newTask.name;
         this.description = newTask.description;
         this.projects = newTask.projects;
+        this.board_id = newTask.board_id;
         this.done = newTask.done;
     }
 }
@@ -244,6 +247,7 @@ export class TasksService implements ITasksService {
             name: '',
             description: '',
             projects: [],
+            board_id: null,
             done: false,
             added: null,
             updated: null,

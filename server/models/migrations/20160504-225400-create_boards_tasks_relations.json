@@ -1,3 +1,0 @@
-{
-    "query": "CREATE TABLE boards_tasks_relations (id INTEGER PRIMARY KEY AUTOINCREMENT, board_id INTEGER REFERENCES boards (id) ON DELETE CASCADE, task_id INTEGER REFERENCES tasks (id) ON DELETE CASCADE, user_id INTEGER REFERENCES users (id) ON DELETE CASCADE);"
-}

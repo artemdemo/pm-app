@@ -66,7 +66,7 @@ exports.delete = (request, reply) => {
         return;
     }
     const boardsData = {
-        payload: request.params.taskId,
+        payload: request.params.boardId,
         tokenId: tokenData.id
     };
     boards.deleteBoard(boardsData).then(() => {

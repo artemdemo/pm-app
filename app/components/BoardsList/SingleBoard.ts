@@ -4,13 +4,14 @@ import {TasksService, ITask} from '../../services/TasksService';
 import {BoardsService, Board, IBoard} from '../../services/BoardsService';
 import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 import {DeleteBtn} from '../DeleteBtn';
+import {LoadingSpinner} from '../LoadingSpinner';
 // import {DropdownList} from '../DropdownList';
 import {NarrowList} from '../NarrowList';
 import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
 
 @Component({
     selector: 'single-board',
-    directives: [REACTIVE_FORM_DIRECTIVES, DeleteBtn, NarrowList],
+    directives: [REACTIVE_FORM_DIRECTIVES, DeleteBtn, LoadingSpinner, NarrowList],
     template: `
         <div class="single-board">
             <form (ngSubmit)="submitBoard()" *ngIf="boardModel">

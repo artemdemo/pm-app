@@ -34,9 +34,9 @@ export class ProjectsListItem {
     @Input() project: IProject;
     @ViewChild('chartСanvas') canvas: ElementRef;
 
-    private tasksList: IGeneralListItem[] = [];
     private selectedProject: IProject = null;
     private selectedProjectSubscription: any;
+    private tasksList: IGeneralListItem[] = [];
     private tasksSubscription: any;
     private chart: any = null;
 

@@ -4,6 +4,7 @@ import {Task, ITask} from '../../services/TasksService';
 import {SelectedEntityService, EntityType} from '../../services/SelectedEntityService';
 import {TasksService} from '../../services/TasksService';
 import {ProjectsService, IProject} from '../../services/ProjectsService';
+import {BoardsService, IBoard} from '../../services/BoardsService';
 import {LoadingSpinner} from '../LoadingSpinner';
 import {OkCircle} from '../OkCircle';
 import {DeleteBtn} from '../DeleteBtn';
@@ -46,13 +47,20 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
                                    placeholder="Connect to project"
                                    (onSelect)="connectProject($event)"></dropdown-list>
                 </div>
+                <div class="form-group">
+                    <select class="form-control"
+                            name="board"
+                            [(ngModel)]="taskModel.board_id">
+                        <option [value]="board.id" *ngFor="let board of boardsList">{{ board.name }}</option>
+                    </select>
+                </div>
                 <div class="form-group text-muted" *ngIf="task.added">
                     <p>Task Added: {{ task.added }}</p>
                     <p>Last updated: {{ task.updated }}</p>
                 </div>
                 <div class="clearfix">
                     <div class="pull-left">
-                        <button type="submit" 
+                        <button type="submit"
                                 class="btn btn-primary"
                                 [disabled]="loadingData"
                                 data-qa="task-save">
@@ -76,19 +84,26 @@ import {IGeneralListItem} from '../../interfaces/IGeneralListItem';
     `,
 })
 export class SingleTask {
+    private loadingData: boolean = false;
+
     private task: ITask;
     private taskModel: Task;
     private taskSubscription: any;
+
     private projectsSubscription: any;
-    private loadingData: boolean = false;
     private projectsList: IGeneralListItem[] = [];
     private availableProjects: IGeneralListItem[] = [];
     private selectedProjects: IProject[] = [];
 
+    private boardsList: IGeneralListItem[] = [];
+    private boardsSubscription: any;
+    private selectedBoard: IGeneralListItem;
+
     constructor(
         private selectedEntityService: SelectedEntityService,
         private tasksService: TasksService,
-        private projectsService: ProjectsService
+        private projectsService: ProjectsService,
+        private boardsService: BoardsService
     ) {
         this.taskSubscription = selectedEntityService.getEntitySubject(EntityType.task).subscribe(selectedTask => {
             if (selectedTask) {
@@ -103,6 +118,9 @@ export class SingleTask {
                         this.availableProjects.push(project);
                     }
                 });
+                if (selectedTask.board_id) {
+                    this.selectedBoard = selectedTask.board_id;
+                }
             } else {
                 this.taskModel = null;
                 this.task = null;
@@ -117,6 +135,15 @@ export class SingleTask {
             });
         });
         projectsService.refreshProjects();
+        this.boardsSubscription = boardsService.boards.subscribe(newBoards => {
+            this.boardsList = newBoards.map((board: IBoard) => {
+                return {
+                    id: board.id,
+                    name: board.title,
+                };
+            });
+        });
+        boardsService.refreshBoards();
     }
 
     connectProject(project: IGeneralListItem): void {
@@ -139,6 +166,10 @@ export class SingleTask {
             }, () => {
                 this.loadingData = false;
             });
+    }
+
+    connectBoard(board: IGeneralListItem): void {
+        console.log(this.selectedBoard);
     }
 
     submitTask(): void {

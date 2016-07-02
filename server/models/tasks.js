@@ -14,7 +14,7 @@ const parseTasks = (tasks) => tasks.map(task => {
 
 exports.getAll = (tasksData) => {
     const deferred = Q.defer();
-    let tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.added, tasks.updated FROM tasks
+    let tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.added, tasks.updated, tasks.board_id FROM tasks
                       INNER JOIN sessions ON sessions.user_id = tasks.user_id
                       WHERE sessions.id = '${tasksData.tokenId}';`;
 
@@ -23,8 +23,8 @@ exports.getAll = (tasksData) => {
             let promisesList = [];
             let tasks = parseTasks(rows);
             tasks.forEach(task => {
-                let projectsQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM tasks 
-                                     INNER JOIN projects_tasks_relations ON tasks.id = projects_tasks_relations.task_id 
+                let projectsQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id FROM tasks
+                                     INNER JOIN projects_tasks_relations ON tasks.id = projects_tasks_relations.task_id
                                      WHERE tasks.id = ${task.id};`;
                 promisesList.push(DB.queryRows(projectsQuery));
             });
@@ -47,6 +47,7 @@ exports.getAll = (tasksData) => {
 exports.addNew = (newTaskData) => {
     const deferred = Q.defer();
     const now = moment(new Date());
+    const boardId = newTaskData.board || null;
 
     sessions.getSession({
         id: newTaskData.tokenId
@@ -57,6 +58,7 @@ exports.addNew = (newTaskData) => {
                 description: newTaskData.payload.description,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
+                board_id: newTaskData.board_id || null,
                 user_id: session.user_id
             }).then((result) => {
                 deferred.resolve({
@@ -89,10 +91,16 @@ exports.updateTask = (taskData) => {
         return deferred.promise;
     }
 
-    const allowedFields = ['name', 'description', 'done'];
+    const allowedFields = ['name', 'description', 'done', 'board_id'];
     allowedFields.forEach((field) => {
         if (taskData.payload.hasOwnProperty(field)) {
-            updateData[field] = taskData.payload[field];
+            let data;
+            if (field == 'board_id') {
+                data = taskData.payload[field] || null;
+            } else {
+                data = taskData.payload[field];
+            }
+            updateData[field] = data;
         }
     });
 
@@ -103,6 +111,8 @@ exports.updateTask = (taskData) => {
     }
 
     updateData['updated'] = now.format('YYYY-MM-DD HH:mm:ss');
+
+    console.log(updateData);
 
     sessions.getSession({
         id: taskData.tokenId
