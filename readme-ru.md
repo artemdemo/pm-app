@@ -49,18 +49,12 @@ $ npm run watch
 $ npm run tslint
 ```
 
-Обновить Angular 2 со всеми его зависимостями. 
-
-```
-$ ./update-angular.sh
-```
-
 ## Технологии
 
-* Angular 2 - https://angular.io/
+* ReactJS - https://facebook.github.io/react/
 * Bootstrap css - http://getbootstrap.com/
 * Hapi.js - http://hapijs.com/
 
 ## Компилирование
 
-Я исползую webpack с typescript.
+Я исползую webpack.

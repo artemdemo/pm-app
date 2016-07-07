@@ -2,41 +2,67 @@ var webpack = require('webpack');
 var path = require('path');
 var fs = require('fs');
 var _ = require('underscore');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
     entry: {
-        'app': './app/bootstrap.ts'
+        'app': './app/index.jsx'
     },
     output: {
         path: __dirname + '/public/',
-        filename: './js/bundle-[hash].js'
+        filename: './js/bundle-[hash].js',
+        publicPath: '/'
     },
     resolve: {
-        extensions: ['', '.js', '.ts']
+        extensions: ['', '.js', '.jsx']
     },
     devtool: 'source-map',
     module: {
         loaders: [
             {
-                test: /\.ts/,
-                loaders: ['ts-loader'],
+                test: /\.jsx?$/,
+                loaders: ['babel-loader'],
                 exclude: /node_modules/
-            }
+            },
+            {
+                test: /\.(less|css)$/,
+                loader: ExtractTextPlugin.extract(
+                    'style',
+                    'css?importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader!less'
+                ),
+            },
+            {
+                test: /\.(png|gif|jpg)$/,
+                loader: 'url-loader?limit=100000&name=images/[hash].[ext]',
+            },
+            {
+                test: /\.json$/,
+                loader: 'json',
+            },
+            // Font Definitions
+            { test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]' },
+            { test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]' },
+            { test: /\.woff2$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]' },
+            { test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
+            { test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' }
         ]
     },
-    plugins: [
-        // function() {
-        //     this.plugin('done', function(stats) {
-        //         var htmlSrc = path.join(__dirname, 'app', 'index.html');
-        //         var template = fs.readFileSync(htmlSrc, 'utf8');
-        //         var html = _.template(template)({hash: stats.hash});
-        //         fs.writeFile(path.join(__dirname, 'public', 'index.html'), html);
-        //     });
-        // }
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     }
-        // })
-    ]
+    plugins: [],
+    postcss: function () {
+        return [
+            autoprefixer({browsers: [
+                'last 2 Chrome versions',
+                'last 2 Firefox versions',
+                'Firefox ESR',
+                'Firefox 24',
+                'last 2 Opera versions',
+                'last 2 Safari versions',
+                'last 2 iOS versions',
+                'Explorer >= 10',
+                'last 2 ChromeAndroid versions',
+                'Android >= 4.0',
+            ]})
+        ];
+    }
 };

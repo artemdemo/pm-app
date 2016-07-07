@@ -1,0 +1,72 @@
+{
+    "extends": "airbnb",
+    "globals": {},
+    "rules": {
+        "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 1 }],
+        "no-return-assign": 0,
+        // Мы реквайрим картинки, стили и т.д.
+        "import/no-unresolved": 0,
+        "max-len": ["error", 120],
+        // Разрешаем перезаписывать переменные.
+        // Примеры: тесты (прокидываем done), object destructuring
+        "no-shadow": 0,
+        // мы не особо хотим делать так:
+        // const data = [];
+        // data[123] = '3'
+        // Логичнее смотрится:
+        // let data = [];
+        // data[123] = '3'
+        // http://eslint.org/docs/rules/prefer-const
+        "prefer-const": 0,
+        "arrow-body-style": 0,
+        // Нам важно иметь для destructuring пребелы перед переменными, а при построении объектов, наоброт, не иметь.
+        // Это правило, так не умеет =(
+        // http://eslint.org/docs/rules/object-curly-spacing
+        "object-curly-spacing": 0,
+        "no-param-reassign": ["error", { "props": false }],
+        "no-unused-expressions": ["error", { "allowShortCircuit": true }],
+        // Если этот ключ включен - если не нужен default нужно писать комменты в стиле "no default", что оверхед
+        // http://eslint.org/docs/rules/default-case
+        "default-case": 0,
+        "padded-blocks": 0,
+        // Для описания react css классов - 'block__element_mod'
+        "quote-props": 0,
+        "consistent-return": 0,
+        "no-use-before-define": 0,
+        "no-confusing-arrow": 0,
+        "wrap-iife": ["error", "inside"],
+        // http://eslint.org/docs/rules/no-restricted-syntax
+        "no-restricted-syntax": [
+            "error",
+            "DebuggerStatement",
+            "WithStatement"
+        ],
+        "func-names": 0,
+        "space-before-function-paren": ["error", "never"],
+        "keyword-spacing": ["error", {"overrides": {
+            "catch": { "after": false }
+        }}],
+        // Используем повсеместно в редьюсерах
+        // http://eslint.org/docs/rules/no-case-declarations
+        "no-case-declarations": 0,
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+
+        // ********** React ************
+        // Не используем
+        "react/prop-types": 0,
+        "react/jsx-indent": ["error", 4],
+        // Форматируем в xsl стиле. Такого правила, к сожалению нет
+        // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-indent-props.md
+        "react/jsx-indent-props": 0,
+        "react/jsx-first-prop-new-line": 0,
+        // Мы используем выравнивание по props (как after-props) но с пробелом в конце - за это отвечает другое свойство
+        // В тоже время мы не хотим делать лишние переносы. Поэтому нет правила, на 100% подходящего под нас
+        // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md
+        "react/jsx-closing-bracket-location": 0,
+        "react/prefer-stateless-function": 0,
+        "jsx-quotes": ["error", "prefer-single"],
+        "react/no-did-mount-set-state": 0,
+        "react/jsx-pascal-case": 0,
+        "react/jsx-no-bind": 0
+    }
+}
