@@ -3,25 +3,34 @@ import {Link} from 'react-router';
 
 import './form-signin.less';
 
-export class LoginView extends Component {
-    submitLogin() {
-        console.log('Submitting login');
+export class SignupView extends Component {
+    submitSignup() {
+        console.log('Submitting signup');
     }
 
     render() {
         return (
             <div className="container">
-                <form className="form-signin" onSubmit={this.submitLogin}>
-                    <h2 className="form-signin-heading">Please sign in</h2>
+                <form className="form-signin" onSubmit={this.submitSignup}>
+                    <h2 className="form-signin-heading">Sign up</h2>
+                    <label htmlFor="inputUsername" className="sr-only">
+                        Username
+                    </label>
+                    <input type="text"
+                           name="username"
+                           className="form-control form-signin__first-input"
+                           placeholder="Username"
+                           required=""
+                           autoFocus=""
+                           autoComplete="off" />
                     <label htmlFor="inputEmail" className="sr-only">
                         Email address
                     </label>
                     <input type="email"
                            name="email"
-                           className="form-control form-signin__first-input"
+                           className="form-control form-signin__input"
                            placeholder="Email address"
                            required=""
-                           autoFocus=""
                            autoComplete="off" />
                     <label htmlFor="inputPassword" className="sr-only">
                         Password
@@ -41,10 +50,10 @@ export class LoginView extends Component {
                     </div>
                     <button className="btn btn-lg btn-primary btn-block"
                             type="submit">
-                        Login
+                        Sign up
                     </button>
-                    <Link to="/signup" className="btn btn-link btn-block">
-                        Create new account - sign up
+                    <Link to="/login" className="btn btn-link btn-block">
+                        I have an account - login
                     </Link>
                 </form>
             </div>

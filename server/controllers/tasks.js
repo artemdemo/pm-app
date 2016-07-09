@@ -1,14 +1,14 @@
-'use strict';
-
 const boom = require('boom');
 const tasks = require('../models/tasks');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
 const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-exports.index = (request, reply) => {
-    reply.redirect('/');
-};
+// exports.index = (request, reply) => {
+//     reply.redirect('/');
+// };
+
+exports.index = (request, reply) => reply.file('index.html');
 
 exports.all = (request, reply) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
@@ -17,12 +17,12 @@ exports.all = (request, reply) => {
         return;
     }
     const tasksData = {
-        tokenId: tokenData.id
+        tokenId: tokenData.id,
     };
     tasks.getAll(tasksData).then((tasks) => {
         reply(tasks);
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR))
+        reply(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
@@ -34,12 +34,12 @@ exports.add = (request, reply) => {
     }
     const tasksData = {
         payload: request.payload,
-        tokenId: tokenData.id
+        tokenId: tokenData.id,
     };
     tasks.addNew(tasksData).then((result) => {
         reply(result);
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR))
+        reply(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
@@ -51,12 +51,12 @@ exports.update = (request, reply) => {
     }
     const tasksData = {
         payload: request.payload,
-        tokenId: tokenData.id
+        tokenId: tokenData.id,
     };
     tasks.updateTask(tasksData).then(() => {
         reply({});
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR))
+        reply(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
@@ -68,12 +68,12 @@ exports.delete = (request, reply) => {
     }
     const tasksData = {
         payload: request.params.taskId,
-        tokenId: tokenData.id
+        tokenId: tokenData.id,
     };
     tasks.deleteTask(tasksData).then(() => {
         reply({});
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR))
+        reply(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
@@ -82,8 +82,8 @@ exports.connectProject = (request, reply) => {
         .then(() => {
             reply({});
         }, () => {
-            reply(boom.badRequest(errConstants.DB_ERROR))
-        })
+            reply(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.disconnectProject = (request, reply) => {
@@ -91,6 +91,6 @@ exports.disconnectProject = (request, reply) => {
         .then(() => {
             reply({});
         }, () => {
-            reply(boom.badRequest(errConstants.DB_ERROR))
-        })
+            reply(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
