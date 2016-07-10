@@ -1,4 +1,5 @@
-/* eslint-disable no-console*/
+/* eslint-disable no-console, strict*/
+'use strict';
 
 const chalk = require('chalk');
 const moment = require('moment');

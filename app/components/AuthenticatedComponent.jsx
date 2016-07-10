@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { history } from '../configs';
 
-export function requireAuthentication(Component) {
+export function requireAuthentication(NComponent) {
 
     class AuthenticatedComponent extends Component {
 
@@ -24,8 +24,8 @@ export function requireAuthentication(Component) {
         render() {
             return (
                 <div>
-                    {this.props.token
-                        ? <Component {...this.props}/>
+                    {!!this.props.token
+                        ? <NComponent {...this.props}/>
                         : null
                     }
                 </div>

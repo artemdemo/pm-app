@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { login } from '../actions/user';
+import { history } from '../configs';
 
 import './form-signin.less';
 
@@ -17,6 +18,13 @@ class LoginView extends Component {
                 password: this.refs.password.value,
                 remember: this.refs.remember.checked,
             });
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { user } = nextProps;
+        if (user.token) {
+            history.push(`/tasks`);
         }
     }
 
@@ -69,7 +77,9 @@ class LoginView extends Component {
 
 export default connect(
     state => {
-        return {}
+        return {
+            user: state.user
+        }
     }, {
         login,
     }

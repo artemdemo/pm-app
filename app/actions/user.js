@@ -73,9 +73,6 @@ export function login(user) {
                 }
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));
-            })
-            .catch(() => {
-                dispatch(errorMessage('Login error'));
             });
     };
 }

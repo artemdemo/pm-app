@@ -11,9 +11,9 @@ import { store, history } from './configs';
 
 import AppView from './views/AppView';
 import LoginView from './views/LoginView';
+import TasksView from './views/TasksView';
 import { MainView } from './views/MainView';
 import { SignupView } from './views/SignupView';
-import { TasksView } from './views/TasksView';
 import { requireAuthentication } from './components/AuthenticatedComponent';
 
 promises.polyfill();
@@ -25,7 +25,7 @@ render(
                 <IndexRoute component={MainView} />
                 <Route path='login' component={LoginView} />
                 <Route path='signup' component={SignupView} />
-                <Route path='tasks' component={requireAuthentication(TasksView)} />
+                <Route path='tasks' component={TasksView} />
             </Route>
         </Router>
     </Provider>,

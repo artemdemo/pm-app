@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import './TasksList.less';
 
-export class TasksList extends Component {
+class TasksList extends Component {
     addNewTask() {
 
     }
@@ -12,13 +13,21 @@ export class TasksList extends Component {
 
         return (
             <div>
-                <div class="tasks-list">
+                <div className="tasks-list">
                     {tasks.map(task => (
                         task.name
                     ))}
                 </div>
-                <button class="btn btn-default" onClick={this.addNewTask} data-qa="add-new-task">New Task</button>
+                <button className="btn btn-default" onClick={this.addNewTask} data-qa="add-new-task">New Task</button>
             </div>
         );
     }
 }
+
+export default connect(
+    state => {
+        return {
+            tasks: state.tasks,
+        }
+    }
+)(TasksList);
