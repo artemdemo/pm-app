@@ -3,8 +3,6 @@ import { errorMessage, successMessage } from './notification';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
-const LS_ITEM_NAME = 'pm-token';
-
 /**
  * User authenticated
  * @param user {Object}
@@ -30,7 +28,7 @@ function authenticationError() {
 }
 
 export function checkAuthentication() {
-    const token = window.localStorage.getItem(LS_ITEM_NAME);
+    const token = window.localStorage.getItem(userConst.LS_ITEM_NAME);
 
     if (!token) {
         return errorMessage('Please, login');
@@ -40,7 +38,7 @@ export function checkAuthentication() {
         fetch('/user', token)
             .then((response) => {
                 if (response.status >= 400) {
-                    window.localStorage.removeItem(LS_ITEM_NAME);
+                    window.localStorage.removeItem(userConst.LS_ITEM_NAME);
                     dispatch(errorMessage('Please, login'));
                     dispatch(authenticationError());
                 } else {
@@ -69,7 +67,7 @@ export function login(user) {
             })
             .then((userData) => {
                 if (user.remember) {
-                    window.localStorage.setItem(LS_ITEM_NAME, token);
+                    window.localStorage.setItem(userConst.LS_ITEM_NAME, token);
                 }
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));

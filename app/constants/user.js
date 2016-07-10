@@ -1,3 +1,4 @@
 export const UPDATE_TOKEN = 'UPDATE_TOKEN';
 export const USER_AUTHENTICATED = 'USER_AUTHENTICATED';
 export const AUTHENTICATION_ERROR = 'AUTHENTICATION_ERROR';
+export const LS_ITEM_NAME = 'pm-token';
