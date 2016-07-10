@@ -1,0 +1,28 @@
+@import '../../styles/colors';
+
+.user-notificatior {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+}
+
+.user-notificatior-message {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    opacity: 0.8;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 3px;
+}
+
+    .user-notificatior-message_success {
+        background-color: @color-success;
+    }
+
+    .user-notificatior-message_error {
+        background-color: @color-danger;
+    }
