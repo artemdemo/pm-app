@@ -8,7 +8,7 @@
     "pack": "gulp build --pack",
     "pack-with-mangle": "gulp build --packWithMangle",
     "watch": "gulp watch",
-    "tslint": "./node_modules/tslint/bin/tslint ./app/**/*.ts ./app/components/**/*.ts",
+    "eslint": "./node_modules/eslint/bin/eslint.js ./app/**/*.js ./app/**/*.jsx",
     "start": "node ./server/index",
     "postinstall": "cp -i hooks/pre-commit.sh .git/hooks/pre-commit && cp -i hooks/pre-push.sh .git/hooks/pre-push",
     "test": "./e2e-test.sh"

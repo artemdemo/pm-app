@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { MainMenu } from '../components/MainMenu/MainMenu';
 import { checkAuthentication } from '../actions/user';
 import UserNotificator from '../components/UserNotificator/UserNotificator';
 
 class AppView extends Component {
-    constructor(props) {
-        super(props);
-        const { checkAuthentication } = props;
-        checkAuthentication();
+    componentWillMount() {
+        const { checkAuthentication, location } = this.props;
+        checkAuthentication(location);
     }
 
     render() {
         return (
             <div className='app'>
-                <UserNotificator></UserNotificator>
+                <UserNotificator />
                 {this.props.children}
             </div>
         );
@@ -23,10 +21,10 @@ class AppView extends Component {
 
 
 export default connect(
-    state => {
-        return {}
+    () => {
+        return {};
     },
     {
-        checkAuthentication
+        checkAuthentication,
     }
 )(AppView);

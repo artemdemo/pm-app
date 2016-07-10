@@ -1,5 +1,6 @@
 import * as userConst from '../constants/user';
 import { errorMessage, successMessage } from './notification';
+import { history } from '../configs';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -27,10 +28,20 @@ function authenticationError() {
     };
 }
 
-export function checkAuthentication() {
+function goToLoginPage(location) {
+    let regex = /login|signup/;
+    let redirectAfterLogin = location.pathname;
+    let match = regex.exec(redirectAfterLogin);
+    if (!match) {
+        history.push(`/login?next=${redirectAfterLogin}`);
+    }
+}
+
+export function checkAuthentication(location) {
     const token = window.localStorage.getItem(userConst.LS_ITEM_NAME);
 
     if (!token) {
+        goToLoginPage(location);
         return errorMessage('Please, login');
     }
 
@@ -41,6 +52,7 @@ export function checkAuthentication() {
                     window.localStorage.removeItem(userConst.LS_ITEM_NAME);
                     dispatch(errorMessage('Please, login'));
                     dispatch(authenticationError());
+                    goToLoginPage(location);
                 } else {
                     dispatch(successMessage('Welcome back!'));
                     dispatch(userAuthenticated(response.json()));

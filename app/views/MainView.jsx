@@ -5,7 +5,7 @@ export class MainView extends Component {
     render() {
         return (
             <div>
-                <MainMenu></MainMenu>
+                <MainMenu />
 
                 Main View
             </div>
