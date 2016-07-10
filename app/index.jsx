@@ -9,9 +9,9 @@ import './styles/general.less';
 
 import { store, history } from './configs';
 
-import { AppView } from './views/AppView';
+import AppView from './views/AppView';
+import LoginView from './views/LoginView';
 import { MainView } from './views/MainView';
-import { LoginView } from './views/LoginView';
 import { SignupView } from './views/SignupView';
 import { TasksView } from './views/TasksView';
 import { requireAuthentication } from './components/AuthenticatedComponent';

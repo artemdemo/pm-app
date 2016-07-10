@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import {MainMenu} from '../components/MainMenu/MainMenu';
-import {checkIfHasToken} from '../actions/user';
+import { connect } from 'react-redux';
+import { MainMenu } from '../components/MainMenu/MainMenu';
+import { checkAuthentication } from '../actions/user';
+import UserNotificator from '../components/UserNotificator/UserNotificator';
 
-export class AppView extends Component {
+class AppView extends Component {
     constructor(props) {
         super(props);
-        checkIfHasToken();
+        const { checkAuthentication } = props;
+        checkAuthentication();
     }
 
     render() {
         return (
             <div className='app'>
+                <UserNotificator></UserNotificator>
                 {this.props.children}
             </div>
         );
@@ -24,6 +27,6 @@ export default connect(
         return {}
     },
     {
-        checkIfHasToken
+        checkAuthentication
     }
 )(AppView);

@@ -1,11 +1,23 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { login } from '../actions/user';
 
 import './form-signin.less';
 
-export class LoginView extends Component {
-    submitLogin() {
-        console.log('Submitting login');
+class LoginView extends Component {
+    constructor(props) {
+        super(props);
+
+        this.submitLogin = (e) => {
+            e.preventDefault();
+            const { login } = this.props;
+            login({
+                email: this.refs.email.value,
+                password: this.refs.password.value,
+                remember: this.refs.remember.checked,
+            });
+        }
     }
 
     render() {
@@ -18,6 +30,7 @@ export class LoginView extends Component {
                     </label>
                     <input type="email"
                            name="email"
+                           ref="email"
                            className="form-control form-signin__first-input"
                            placeholder="Email address"
                            required=""
@@ -28,6 +41,7 @@ export class LoginView extends Component {
                     </label>
                     <input type="password"
                            name="password"
+                           ref="password"
                            className="form-control form-signin__last-input"
                            placeholder="Password"
                            required=""
@@ -36,6 +50,7 @@ export class LoginView extends Component {
                         <label>
                             <input type="checkbox"
                                    name="remember"
+                                   ref="remember"
                                    value="remember-me" /> Remember me
                         </label>
                     </div>
@@ -51,3 +66,11 @@ export class LoginView extends Component {
         );
     }
 }
+
+export default connect(
+    state => {
+        return {}
+    }, {
+        login,
+    }
+)(LoginView);

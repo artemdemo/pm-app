@@ -1,62 +1,68 @@
-'use strict';
+/* eslint-disable global-require*/
 
 module.exports = [
     {
         method: 'GET',
-        path:'/{path?}',
+        path: '/{path?}',
         config: { auth: false },
-        handler: require('../controllers/index').index
+        handler: require('../controllers/index').index,
     },
     {
         method: 'PUT',
-        path:'/login',
+        path: '/login',
         config: { auth: false },
-        handler: require('../controllers/index').login
+        handler: require('../controllers/index').login,
     },
     {
         method: 'POST',
-        path:'/signup',
+        path: '/signup',
         config: { auth: false },
-        handler: require('../controllers/index').signup
+        handler: require('../controllers/index').signup,
     },
     {
         method: 'GET',
-        path:'/js/{param*}',
-        config: { auth: false },
-        handler: {
-            directory: {
-                path: '../public/js'
-            }
-        }
+        path: '/user',
+        config: { auth: 'jwt' },
+        handler: require('../controllers/index').user,
     },
     {
         method: 'GET',
-        path:'/css/{param*}',
+        path: '/js/{param*}',
         config: { auth: false },
         handler: {
             directory: {
-                path: '../public/css'
-            }
-        }
+                path: '../public/js',
+            },
+        },
     },
     {
         method: 'GET',
-        path:'/fonts/{param*}',
+        path: '/css/{param*}',
         config: { auth: false },
         handler: {
             directory: {
-                path: '../public/fonts'
-            }
-        }
+                path: '../public/css',
+            },
+        },
     },
     {
         method: 'GET',
-        path:'/images/{param*}',
+        path: '/fonts/{param*}',
         config: { auth: false },
         handler: {
             directory: {
-                path: '../public/images'
-            }
-        }
-    }
+                path: '../public/fonts',
+            },
+        },
+    },
+    {
+        method: 'GET',
+        path: '/images/{param*}',
+        config: { auth: false },
+        handler: {
+            directory: {
+                path: '../public/images',
+            },
+        },
+    },
 ];
