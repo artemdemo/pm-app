@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MainMenu } from '../components/MainMenu/MainMenu';
-import { TasksList } from '../components/TasksList/TasksList';
+import TasksList from '../components/TasksList/TasksList';
 
 import './list-container.less';
 

@@ -1,6 +1,7 @@
 import * as userConst from '../constants/user';
 import { errorMessage, successMessage } from './notification';
 import { history } from '../configs';
+import { loadTasks } from './tasks';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -47,16 +48,20 @@ export function checkAuthentication(location) {
 
     return dispatch => {
         fetch('/user', token)
+            .then(checkResponseStatus)
             .then((response) => {
-                if (response.status >= 400) {
-                    window.localStorage.removeItem(userConst.LS_ITEM_NAME);
-                    dispatch(errorMessage('Please, login'));
-                    dispatch(authenticationError());
-                    goToLoginPage(location);
-                } else {
-                    dispatch(successMessage('Welcome back!'));
-                    dispatch(userAuthenticated(response.json()));
-                }
+                return response.json();
+            })
+            .then((userData) => {
+                dispatch(successMessage('Welcome back!'));
+                dispatch(userAuthenticated(userData, token));
+                dispatch(loadTasks(token));
+            })
+            .catch(() => {
+                window.localStorage.removeItem(userConst.LS_ITEM_NAME);
+                dispatch(errorMessage('Please, login'));
+                dispatch(authenticationError());
+                goToLoginPage(location);
             });
     };
 }
@@ -83,6 +88,9 @@ export function login(user) {
                 }
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));
+            })
+            .catch(() => {
+                dispatch(errorMessage('Error login'));
             });
     };
 }
