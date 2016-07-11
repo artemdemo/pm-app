@@ -21,9 +21,9 @@ export default class TasksListItem extends Component {
         return (
             <div className='tasks-list-item'>
                 <div className='tasks-list-item__cell
-                            tasks-list-item__cell_icon'
-                            onClick={this.toggleDone}>
-                    <OkCircle status={task.done} loading={this.isLoading} />
+                                tasks-list-item__cell_icon'
+                                onClick={this.toggleDone}>
+                    <OkCircle doneStatus={task.done} loading={this.isLoading} />
                 </div>
                 <div className='tasks-list-item__cell' onClick={this.selectTask}>
                     <span className={itemClass}>
@@ -31,10 +31,10 @@ export default class TasksListItem extends Component {
                     </span>
                 </div>
                 <div className='tasks-list-item__cell
-                            tasks-list-item__cell_labels'>
+                                tasks-list-item__cell_labels'>
                 </div>
                 <div className='tasks-list-item__cell
-                            tasks-list-item__cell_icon'>
+                                tasks-list-item__cell_icon'>
                 </div>
             </div>
         );
