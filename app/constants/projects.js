@@ -1,0 +1,1 @@
+export const PROJECTS_LOADED = 'PROJECTS_LOADED';

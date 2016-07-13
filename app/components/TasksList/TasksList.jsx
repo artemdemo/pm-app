@@ -25,6 +25,10 @@ class TasksList extends Component {
     }
 }
 
+TasksList.propTypes = {
+    tasks: React.PropTypes.arrayOf(React.PropTypes.object)
+}
+
 export default connect(
     state => {
         return {

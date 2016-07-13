@@ -12,6 +12,7 @@ import { store, history } from './configs';
 import AppView from './views/AppView';
 import LoginView from './views/LoginView';
 import { TasksView } from './views/TasksView';
+import { ProjectsView } from './views/ProjectsView';
 import { MainView } from './views/MainView';
 import { SignupView } from './views/SignupView';
 import { requireAuthentication } from './components/AuthenticatedComponent';
@@ -26,6 +27,7 @@ render(
                 <Route path='login' component={LoginView} />
                 <Route path='signup' component={SignupView} />
                 <Route path='tasks' component={TasksView} />
+                <Route path='projects' component={ProjectsView} />
             </Route>
         </Router>
     </Provider>,

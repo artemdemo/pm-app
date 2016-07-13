@@ -4,7 +4,7 @@ import { OkCircle } from '../OkCircle/OkCircle';
 
 import './TasksListItem.less';
 
-export default class TasksListItem extends Component {
+class TasksListItem extends Component {
     constructor(props) {
         super(props);
         this.isLoading = false;
@@ -43,7 +43,7 @@ export default class TasksListItem extends Component {
 
 export default connect(
     () => {
-        return {}
+        return {};
     },
     {}
 )(TasksListItem);
