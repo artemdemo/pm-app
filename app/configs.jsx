@@ -7,12 +7,14 @@ import tasks from './reducers/tasks';
 import projects from './reducers/projects';
 import user from './reducers/user';
 import notification from './reducers/notification';
+import selectedEntity from './reducers/selectedEntity';
 
 const pmApp = combineReducers({
     tasks,
     user,
     projects,
     notification,
+    selectedEntity,
     routing: routerReducer
 });
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ProjectsListItem from './ProjectsListItem';
 
 import './ProjectsList.less';
 
@@ -28,14 +29,18 @@ class ProjectsList extends Component {
         return (
             <div>
                 <h4>Active</h4>
-                <div className="projects-list">
-                    {this.filterProjects('active', projects).map(project => project.name)}
+                <div className='projects-list'>
+                    {this.filterProjects('active', projects).map(project => (
+                        <ProjectsListItem project={project} key={`project-${project.id}`} />
+                    ))}
                 </div>
                 <h4>Other</h4>
-                <div className="projects-list">
-                    {this.filterProjects('empty', projects).map(project => project.name)}
+                <div className='projects-list'>
+                    {this.filterProjects('empty', projects).map(project => (
+                        <ProjectsListItem project={project} key={`project-${project.id}`} />
+                    ))}
                 </div>
-                <button className="btn btn-default" onClick={this.addNewProject}>New Project</button>
+                <button className='btn btn-default' onClick={this.addNewProject}>New Project</button>
             </div>
         );
     }
