@@ -2,6 +2,7 @@ import * as userConst from '../constants/user';
 import { errorMessage, successMessage } from './notification';
 import { history } from '../configs';
 import { loadTasks } from './tasks';
+import { loadProjects } from './projects';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -56,6 +57,7 @@ export function checkAuthentication(location) {
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));
                 dispatch(loadTasks(token));
+                dispatch(loadProjects(token));
             })
             .catch(() => {
                 window.localStorage.removeItem(userConst.LS_ITEM_NAME);

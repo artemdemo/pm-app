@@ -1,4 +1,4 @@
-import * as projectsConst from '../constante/projects';
+import * as projectsConst from '../constants/projects';
 import { errorMessage } from './notification';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
@@ -10,7 +10,7 @@ function projectsLoaded(projects) {
     };
 }
 
-export function loadprojects(token) {
+export function loadProjects(token) {
     return dispatch => {
         fetch('/projects/all', token)
             .then(checkResponseStatus)
