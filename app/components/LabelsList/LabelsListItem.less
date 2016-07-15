@@ -1,0 +1,31 @@
+@import '../../styles/colors';
+
+.labels-list-item {
+    display: inline-block;
+    position: relative;
+    float: left;
+
+    .labels-list_short-content & {
+        max-width: 80px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+    .labels-list-item_delitable {
+        margin-right: 17px;
+    }
+
+    .labels-list-item_hide {
+        display: none;
+    }
+
+    .labels-list-item__close {
+        display: block;
+        position: absolute;
+        right: -13px;
+        top: 1px;
+        color: #B5B5B5;
+        cursor: pointer;
+    }
