@@ -1,0 +1,35 @@
+@import '../../styles/colors';
+
+@radio-menu-item-color: lighten(@color-info, 20%);
+
+.radio-menu-item {
+    float: left;
+    border-radius: 3px;
+    padding: 2px 6px;
+    border: 1px solid @radio-menu-item-color;
+    color: @radio-menu-item-color;
+    font-size: 90%;
+    margin-left: 5px;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    &:first-of-type {
+        margin-left: 0;
+    }
+
+    &:hover {
+        background-color: @radio-menu-item-color;
+        color: white;
+    }
+}
+
+    .radio-menu-item_selected {
+        background-color: @radio-menu-item-color;
+        border-color: lighten(@color-info, 10%);
+        color: white;
+    }

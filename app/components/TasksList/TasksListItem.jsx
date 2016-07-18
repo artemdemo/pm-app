@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { OkCircle } from '../OkCircle/OkCircle';
+import { LabelsList } from '../LabelsList/LabelsList';
 
 import './TasksListItem.less';
 
@@ -17,7 +18,17 @@ class TasksListItem extends Component {
     render() {
                         // tasks-list-item__text_done
         const itemClass = 'tasks-list-item__text';
-        const { task } = this.props;
+        const { task, projects } = this.props;
+
+        let selectedProjects = [];
+        let selectedProjectsId = [];
+        projects.forEach((project) => {
+            if (task && task.projects.indexOf(project.id) > -1 && selectedProjectsId.indexOf(project.id) === -1) {
+                selectedProjects.push(project);
+                selectedProjectsId.push(project.id);
+            }
+        });
+
         return (
             <div className='tasks-list-item'>
                 <div className='tasks-list-item__cell
@@ -32,6 +43,7 @@ class TasksListItem extends Component {
                 </div>
                 <div className='tasks-list-item__cell
                                 tasks-list-item__cell_labels'>
+                    <LabelsList list={selectedProjects} limit={1} />
                 </div>
                 <div className='tasks-list-item__cell
                                 tasks-list-item__cell_icon'>
@@ -41,9 +53,16 @@ class TasksListItem extends Component {
     }
 }
 
+TasksListItem.propTypes = {
+    task: React.PropTypes.object,
+    projects: React.PropTypes.arrayOf(React.PropTypes.object)
+};
+
 export default connect(
-    () => {
-        return {};
+    state => {
+        return {
+            projects: state.projects
+        };
     },
     {}
 )(TasksListItem);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { RadioMenu } from '../RadioMenu/RadioMenu';
 import TasksListItem from './TasksListItem';
 
 import './TasksList.less';
@@ -11,9 +12,14 @@ class TasksList extends Component {
 
     render() {
         const { tasks } = this.props;
-
+        const listMenu = [
+            { id: 1, name: 'All'},
+            { id: 2, name: 'Active' },
+            { id: 3, name: 'Completed' },
+        ];
         return (
             <div>
+                <RadioMenu list={listMenu} />
                 <div className="tasks-list">
                     {tasks.map(task => (
                         <TasksListItem task={task} key={`task-${task.id}`} />

@@ -27,7 +27,6 @@ export class LabelsList extends Component {
 
     render() {
         const { list, limit, delitable } = this.props;
-        console.log(limit);
         const ellipsisClass = classnames({
             'labels-list-item': true,
             'label': true,
