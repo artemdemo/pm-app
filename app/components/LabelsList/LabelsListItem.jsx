@@ -7,11 +7,18 @@ export class LabelsListItem extends Component {
     constructor(props) {
         super(props);
 
+        this.deleteItem = (item) => {
+            const { onDelete } = this.props;
+            if (onDelete) {
+                onDelete(item)
+            }
+        };
+
         this.renderCloseButton = (item, delitable) => {
             if (delitable) {
                 return (
                     <span className="labels-list-item__close"
-                          onClick={this.deleteItem(item)}>
+                          onClick={() => this.deleteItem(item)}>
                         <span className="glyphicon glyphicon-remove"></span>
                     </span>
                 );
@@ -20,8 +27,6 @@ export class LabelsListItem extends Component {
             }
         }
     }
-
-    deleteMoney() {}
 
     render() {
         const { item, delitable } = this.props;
@@ -42,5 +47,6 @@ export class LabelsListItem extends Component {
 
 LabelsListItem.propTypes = {
     item: React.PropTypes.object,
-    delitable: React.PropTypes.bool
+    delitable: React.PropTypes.bool,
+    onDelete: React.PropTypes.func
 }

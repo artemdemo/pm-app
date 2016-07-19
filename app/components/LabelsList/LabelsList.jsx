@@ -23,6 +23,13 @@ export class LabelsList extends Component {
                 return newList;
             }
         }
+
+        this.onDelete = (item) => {
+            const { onDelete } = this.props;
+            if (onDelete) {
+                onDelete(item)
+            }
+        }
     }
 
     render() {
@@ -36,7 +43,10 @@ export class LabelsList extends Component {
         return (
             <ul className='labels-list'>
                 {this.filterList(list, limit).map(label => (
-                    <LabelsListItem item={label} delitable={delitable} key={`label-${label.id}`}/>
+                    <LabelsListItem item={label}
+                                    delitable={delitable}
+                                    onDelete={this.onDelete}
+                                    key={`label-${label.id}`}/>
                 ))}
                 <li className={ellipsisClass}>
                     ...
@@ -49,5 +59,6 @@ export class LabelsList extends Component {
 LabelsList.propTypes = {
     list: React.PropTypes.arrayOf(React.PropTypes.object),
     limit: React.PropTypes.number,
-    delitable: React.PropTypes.bool
+    delitable: React.PropTypes.bool,
+    onDelete: React.PropTypes.func
 }

@@ -8,7 +8,7 @@ export default function(state = null, action) {
                 type: action.entityType,
             };
         case selectedEntityConst.CLEAR_SELECTED_ENTITY:
-            if (state.type === action.entityType) {
+            if (state && state.type === action.entityType) {
                 return null;
             }
             return state;

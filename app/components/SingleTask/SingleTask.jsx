@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import { getSelectedProjects } from '../../utils/taskUtils';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
@@ -12,8 +13,19 @@ class SingleTask extends Component {
         super(props);
         this.loadingData = false;
         this.submitTask = () => {}
-        this.disconnectProject = () => {}
+        this.disconnectProject = (project) => {
+            console.log('disconnectProject', project);
+        }
+    }
 
+    getTask(props = this.props) {
+        return props.task || {}
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const task = this.getTask(nextProps);
+        this.refs.name.value = task.name || '';
+        this.refs.description.value = task.description || '';
     }
 
     render() {
@@ -32,16 +44,16 @@ class SingleTask extends Component {
             }
             return null;
         }
-        const selectedProjects = [];
-        let { task, clearEntity } = this.props;
-        task = task || {};
-
+        const { clearEntity, projects } = this.props;
+        const task = this.getTask();
+        const selectedProjects = getSelectedProjects(task, projects);
         return (
             <div className='single-panel'>
                 <form onSubmit={this.submitTask}>
                     <div className='form-group'>
                         <input type='text'
                                name='name'
+                               ref='name'
                                className='flat-input'
                                placeholder='Task name'
                                data-qa='task-name' />
@@ -49,6 +61,7 @@ class SingleTask extends Component {
                     <div className='form-group'>
                         <textarea className='flat-input'
                                   name='description'
+                                  ref='description'
                                   rows='3'
                                   data-qa='task-description'></textarea>
                     </div>
@@ -97,12 +110,15 @@ class SingleTask extends Component {
 }
 
 SingleTask.propTypes = {
-    task: React.PropTypes.object
+    task: React.PropTypes.object,
+    projects: React.PropTypes.arrayOf(React.PropTypes.object)
 }
 
 export default connect(
     state => {
-        return {}
+        return {
+            projects: state.projects
+        }
     },
     {
         clearEntity

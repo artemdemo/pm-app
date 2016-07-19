@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
+import { getSelectedProjects } from '../../utils/taskUtils';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { selectTask } from '../../actions/selectedEntity';
-import classnames from 'classnames';
 
 import './TasksListItem.less';
 
@@ -23,14 +24,7 @@ class TasksListItem extends Component {
             'tasks-list-item__text_done': task.done
         });
 
-        let selectedProjects = [];
-        let selectedProjectsId = [];
-        projects.forEach((project) => {
-            if (task && task.projects.indexOf(project.id) > -1 && selectedProjectsId.indexOf(project.id) === -1) {
-                selectedProjects.push(project);
-                selectedProjectsId.push(project.id);
-            }
-        });
+        const selectedProjects = getSelectedProjects(task, projects);
 
         return (
             <div className='tasks-list-item'>
