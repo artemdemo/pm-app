@@ -38,10 +38,10 @@ export class OkCircle extends Component {
             'ok-circle-content': true,
             'ok-circle-content_done': doneStatus,
         });
-        const { doneStatus, loading } = this.props;
+        const { doneStatus, loading, onClick } = this.props;
 
         return (
-            <span className='ok-circle-container'>
+            <span className='ok-circle-container' onClick={onClick}>
                 {this.renderOkCircle(loading, doneStatus)}
                 {this.renderLoadingSpinner(loading, doneStatus)}
                 <span className={classOkCircleContent}>

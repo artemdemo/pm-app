@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { getSelectedProjects } from '../../utils/taskUtils';
+import { filterProjects } from '../../utils/taskUtils';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { selectTask } from '../../actions/selectedEntity';
@@ -24,7 +24,7 @@ class TasksListItem extends Component {
             'tasks-list-item__text_done': task.done
         });
 
-        const selectedProjects = getSelectedProjects(task, projects);
+        const { selectedProjects } = filterProjects(task, projects);
 
         return (
             <div className='tasks-list-item'>

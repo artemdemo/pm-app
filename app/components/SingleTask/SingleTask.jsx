@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { getSelectedProjects } from '../../utils/taskUtils';
+import { filterProjects } from '../../utils/taskUtils';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
+import { OkCircle } from '../OkCircle/OkCircle';
+import { DropdownList } from '../DropdownList/DropdownList';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { clearEntity } from '../../actions/selectedEntity';
 import * as entityConst from '../../constants/selectedEntity';
@@ -13,6 +15,12 @@ class SingleTask extends Component {
         super(props);
         this.loadingData = false;
         this.submitTask = () => {}
+        this.toggleDone = () => {
+            console.log('toggle done');
+        }
+        this.connectProject = (project) => {
+            console.log('connectProject', project);
+        }
         this.disconnectProject = (project) => {
             console.log('disconnectProject', project);
         }
@@ -46,7 +54,7 @@ class SingleTask extends Component {
         }
         const { clearEntity, projects } = this.props;
         const task = this.getTask();
-        const selectedProjects = getSelectedProjects(task, projects);
+        const { selectedProjects, availableProjects } = filterProjects(task, projects);
         return (
             <div className='single-panel'>
                 <form onSubmit={this.submitTask}>
@@ -66,8 +74,10 @@ class SingleTask extends Component {
                                   data-qa='task-description'></textarea>
                     </div>
                     <div className='form-group'>
-                        <ok-circle status='taskModel.done'
-                                   onClick={this.toggleDone}>Mark done</ok-circle>
+                        <OkCircle doneStatue={task.done}
+                                  onClick={this.toggleDone}>
+                                  Mark done
+                        </OkCircle>
                     </div>
                     <div className='form-group'>
                         <LabelsList list={selectedProjects}
@@ -75,6 +85,9 @@ class SingleTask extends Component {
                                     onDelete={this.disconnectProject} />
                     </div>
                     <div className='form-group'>
+                        <DropdownList list={availableProjects}
+                                      placeholder="Connect to project"
+                                      onSelect={this.connectProject} />
                     </div>
                     <div className='form-group'>
                         <select className='form-control'
