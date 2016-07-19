@@ -13,16 +13,36 @@ import * as entityConst from '../../constants/selectedEntity';
 class SingleTask extends Component {
     constructor(props) {
         super(props);
-        this.loadingData = false;
+
+        const { selectedProjects, availableProjects } = filterProjects(this.getTask(), props.projects);
+
+        this.state = {
+            name: '',
+            description: '',
+            board: 0,
+            loadingData: false,
+            selectedProjects,
+            availableProjects,
+        };
+
         this.submitTask = () => {}
+
         this.toggleDone = () => {
             console.log('toggle done');
         }
-        this.connectProject = (project) => {
-            console.log('connectProject', project);
+
+        this.connectProject = (newProject) => {
+            this.setState({
+                selectedProjects: this.state.selectedProjects.concat([newProject]),
+                availableProjects: this.state.availableProjects.filter((project) => project.id !== newProject.id),
+            })
         }
-        this.disconnectProject = (project) => {
-            console.log('disconnectProject', project);
+
+        this.disconnectProject = (newProject) => {
+            this.setState({
+                selectedProjects: this.state.selectedProjects.filter((project) => project.id !== newProject.id),
+                availableProjects: this.state.availableProjects.concat([newProject]),
+            })
         }
     }
 
@@ -32,18 +52,23 @@ class SingleTask extends Component {
 
     componentWillReceiveProps(nextProps) {
         const task = this.getTask(nextProps);
-        this.refs.name.value = task.name || '';
-        this.refs.description.value = task.description || '';
+        const { selectedProjects, availableProjects } = filterProjects(task, nextProps.projects);
+        this.setState({
+            name: task.name || '',
+            description: task.description || '',
+            selectedProjects,
+            availableProjects,
+        });
     }
 
     render() {
         const cancelButtonClass = classnames({
             'btn': true,
             'btn-default': true,
-            'btn_disabled': this.loadingData
+            'btn_disabled': this.state.loadingData
         });
         const renderLoadingSpinner = () => {
-            if (this.loadingData) {
+            if (this.state.loadingData) {
                 return (
                     <span className='btn btn-link'>
                         <LoadingSpinner />
@@ -52,16 +77,18 @@ class SingleTask extends Component {
             }
             return null;
         }
-        const { clearEntity, projects } = this.props;
+        const { clearEntity, projects, boards } = this.props;
         const task = this.getTask();
-        const { selectedProjects, availableProjects } = filterProjects(task, projects);
         return (
             <div className='single-panel'>
                 <form onSubmit={this.submitTask}>
                     <div className='form-group'>
                         <input type='text'
                                name='name'
-                               ref='name'
+                               value={this.state.name}
+                               onChange={(e) => this.setState({
+                                    name: e.target.value
+                               })}
                                className='flat-input'
                                placeholder='Task name'
                                data-qa='task-name' />
@@ -69,7 +96,10 @@ class SingleTask extends Component {
                     <div className='form-group'>
                         <textarea className='flat-input'
                                   name='description'
-                                  ref='description'
+                                  value={this.state.description}
+                                  onChange={(e) => this.setState({
+                                       name: e.target.value
+                                  })}
                                   rows='3'
                                   data-qa='task-description'></textarea>
                     </div>
@@ -80,19 +110,26 @@ class SingleTask extends Component {
                         </OkCircle>
                     </div>
                     <div className='form-group'>
-                        <LabelsList list={selectedProjects}
+                        <LabelsList list={this.state.selectedProjects}
                                     delitable={true}
                                     onDelete={this.disconnectProject} />
                     </div>
                     <div className='form-group'>
-                        <DropdownList list={availableProjects}
+                        <DropdownList list={this.state.availableProjects}
                                       placeholder="Connect to project"
                                       onSelect={this.connectProject} />
                     </div>
                     <div className='form-group'>
                         <select className='form-control'
+                                value={this.state.board}
+                                onChange={(e) => this.setState({
+                                    board: e.target.value
+                                })}
                                 name='board'>
-
+                            <option value="0">Select board</option>
+                            {boards.map((board) => (
+                                <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
+                            ))}
                         </select>
                     </div>
                     <div className='form-group text-muted'>
@@ -124,83 +161,18 @@ class SingleTask extends Component {
 
 SingleTask.propTypes = {
     task: React.PropTypes.object,
-    projects: React.PropTypes.arrayOf(React.PropTypes.object)
+    boards: React.PropTypes.arrayOf(React.PropTypes.object),
+    projects: React.PropTypes.arrayOf(React.PropTypes.object),
 }
 
 export default connect(
     state => {
         return {
-            projects: state.projects
+            boards: state.boards,
+            projects: state.projects,
         }
     },
     {
         clearEntity
     }
 )(SingleTask);
-
-
-// <div class="single-panel">
-//     <form (ngSubmit)="submitTask()" *ngIf="taskModel">
-//         <div class="form-group">
-//             <input type="text"
-//                    name="name"
-//                    class="flat-input"
-//                    placeholder="Task name"
-//                    [(ngModel)]="taskModel.name"
-//                    data-qa="task-name">
-//         </div>
-//         <div class="form-group">
-//             <textarea class="flat-input"
-//                       name="description"
-//                       rows="3"
-//                       [(ngModel)]="taskModel.description"
-//                       data-qa="task-description"></textarea>
-//         </div>
-//         <div class="form-group">
-//             <ok-circle [status]="taskModel.done" (click)="toggleDone()">Mark done</ok-circle>
-//         </div>
-//         <div class="form-group">
-//             <labels-list [list]="selectedProjects"
-//                          [delitable]="true"
-//                          (onDelete)="disconnectProject($event)">
-//             </labels-list>
-//         </div>
-//         <div class="form-group">
-//             <dropdown-list [list]="availableProjects"
-//                            placeholder="Connect to project"
-//                            (onSelect)="connectProject($event)"></dropdown-list>
-//         </div>
-//         <div class="form-group">
-//             <select class="form-control"
-//                     name="board"
-//                     [(ngModel)]="taskModel.board_id">
-//                 <option [value]="board.id" *ngFor="let board of boardsList">{{ board.name }}</option>
-//             </select>
-//         </div>
-//         <div class="form-group text-muted" *ngIf="task.added">
-//             <p>Task Added: {{ task.added }}</p>
-//             <p>Last updated: {{ task.updated }}</p>
-//         </div>
-//         <div class="clearfix">
-//             <div class="pull-left">
-//                 <button type="submit"
-//                         class="btn btn-primary"
-//                         [disabled]="loadingData"
-//                         data-qa="task-save">
-//                     <span *ngIf="!task.id">Add new</span>
-//                     <span *ngIf="task.id">Save</span>
-//                 </button>
-//                 <span class="btn btn-default"
-//                       (click)="cancel()"
-//                       [ngClass]="{btn_disabled: loadingData}"
-//                       data-qa="task-cancel">Cancel</span>
-//                 <span class="btn btn-link" *ngIf="loadingData">
-//                     <loading-spinner></loading-spinner>
-//                 </span>
-//             </div>
-//             <div class="pull-right" *ngIf="task.id">
-//                 <delete-btn (onDelete)="deleteTask()" data-qa="task-delete"></delete-btn>
-//             </div>
-//         </div>
-//     </form>
-// </div>
