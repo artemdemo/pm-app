@@ -2,6 +2,7 @@ import * as userConst from '../constants/user';
 import { errorMessage, successMessage } from './notification';
 import { history } from '../configs';
 import { loadTasks } from './tasks';
+import { loadBoards } from './boards';
 import { loadProjects } from './projects';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
@@ -57,6 +58,7 @@ export function checkAuthentication(location) {
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));
                 dispatch(loadTasks(token));
+                dispatch(loadBoards(token));
                 dispatch(loadProjects(token));
             })
             .catch(() => {
