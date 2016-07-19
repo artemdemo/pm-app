@@ -3,7 +3,7 @@ export default function checkResponseStatus(response) {
         return response;
     }
 
-    let error = new Error(response.statusText);
+    const error = new Error(response.statusText);
     error.response = response;
     throw error;
 }

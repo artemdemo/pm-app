@@ -10,13 +10,13 @@ export function requireAuthentication(NComponent) {
             this.checkAuth();
         }
 
-        componentWillReceiveProps(nextProps) {
+        componentWillReceiveProps() {
             this.checkAuth();
         }
 
         checkAuth() {
             if (!this.props.token) {
-                let redirectAfterLogin = this.props.location.pathname;
+                const redirectAfterLogin = this.props.location.pathname;
                 history.push(`/login?next=${redirectAfterLogin}`);
             }
         }
@@ -24,12 +24,12 @@ export function requireAuthentication(NComponent) {
         render() {
             return (
                 <div>
-                    {!!this.props.token
-                        ? <NComponent {...this.props}/>
-                        : null
+                    {!!this.props.token ?
+                        <NComponent {...this.props} /> :
+                        null
                     }
                 </div>
-            )
+            );
 
         }
     }
@@ -37,8 +37,8 @@ export function requireAuthentication(NComponent) {
     return connect(
         state => {
             return {
-                token: state.user.token
-            }
+                token: state.user.token,
+            };
         }
     )(AuthenticatedComponent);
 

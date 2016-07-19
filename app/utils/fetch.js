@@ -24,7 +24,7 @@ import domain from './domain';
  * })
  */
 export default (url, token = null, params = {}, host = domain) => {
-    let headers = {
+    const headers = {
         Accept: 'application/json',
     };
 

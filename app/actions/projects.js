@@ -20,7 +20,8 @@ export function loadProjects(token) {
             .then((projects) => {
                 dispatch(projectsLoaded(projects));
             })
-            .catch(() => {
+            .catch((e) => {
+                console.error(e);
                 dispatch(errorMessage('Error, while projects loading'));
             });
     };

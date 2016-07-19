@@ -2,66 +2,99 @@
     "extends": "airbnb",
     "globals": {},
     "rules": {
+        // 4 spaces indentation
         "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 1 }],
+        // return should be without assign action,
+        // but it's not good in cases like the following one:
+        // setProperty = (newValue) => property = newValue;
         "no-return-assign": 0,
-        // Мы реквайрим картинки, стили и т.д.
+        // Requiring of images and styles
         "import/no-unresolved": 0,
+        // Max line lingth
         "max-len": ["error", 120],
-        // Разрешаем перезаписывать переменные.
-        // Примеры: тесты (прокидываем done), object destructuring
+        // Allowing overrriding variables.
+        // For example in: tests (using `done`), object destructuring
         "no-shadow": 0,
-        // мы не особо хотим делать так:
-        // const data = [];
-        // data[123] = '3'
-        // Логичнее смотрится:
-        // let data = [];
-        // data[123] = '3'
-        // http://eslint.org/docs/rules/prefer-const
-        "prefer-const": 0,
+        // You can use "fat arrow" without parenthesis for variables:
+        // someArray.filter(item => item.done);
         "arrow-body-style": 0,
-        // Нам важно иметь для destructuring пребелы перед переменными, а при построении объектов, наоброт, не иметь.
-        // Это правило, так не умеет =(
-        // http://eslint.org/docs/rules/object-curly-spacing
+        // I use spaces whe importing variables from modules
+        // import { loadProjects } from './projects';
         "object-curly-spacing": 0,
+        // No reassigning function parameters
         "no-param-reassign": ["error", { "props": false }],
+        // Do not declare unused exprssions
         "no-unused-expressions": ["error", { "allowShortCircuit": true }],
-        // Если этот ключ включен - если не нужен default нужно писать комменты в стиле "no default", что оверхед
-        // http://eslint.org/docs/rules/default-case
+        // You can use `swith` without `default`
         "default-case": 0,
+        // Empty string in object decalration
+        // There is no need in such rule
         "padded-blocks": 0,
-        // Для описания react css классов - 'block__element_mod'
-        "quote-props": 0,
-        "consistent-return": 0,
-        "no-use-before-define": 0,
-        "no-confusing-arrow": 0,
+        // Don't use quotes in objects properties names. only when you should use it
+        "quote-props": ["error", "as-needed", {
+            "keywords": true
+        }],
+        // Consistency in what function is returnig
+        "consistent-return": ["warn"],
+        // You can't use variables before definition.
+        // Functions are exception in his rule, case of hoisting
+        "no-use-before-define": ["error", { "functions": false }],
+        // In some cases "fat arrow" looks like comparison operator (>, <, <=, and >=)
+        "no-confusing-arrow": ["warn"],
+        // Write IIFE with parenthesis and not some wired shit
         "wrap-iife": ["error", "inside"],
-        // http://eslint.org/docs/rules/no-restricted-syntax
+        // Disallowing some language features:
+        // Do not leave command `debugger` in your code
+        // Do not use `with`
         "no-restricted-syntax": [
             "error",
             "DebuggerStatement",
             "WithStatement"
         ],
         "func-names": 0,
+        // No space before function parenthesis
         "space-before-function-paren": ["error", "never"],
+        // After key operators (if, else, for, etc) should be at least one space
         "keyword-spacing": ["error", {"overrides": {
-            "catch": { "after": false }
+            "catch": { "after": true }
         }}],
-        // Используем повсеместно в редьюсерах
-        // http://eslint.org/docs/rules/no-case-declarations
         "no-case-declarations": 0,
         "no-console": ["error", { "allow": ["warn", "error"] }],
 
+        // You can import devDependencies, as well as dependencies, there is no problems with it
+        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-extraneous-dependencies.md
+        "import/no-extraneous-dependencies": 0,
+        // You're not obligated to declare variables in the beginning of the function
+        "vars-on-top": 0,
+        // Use underscore to mark "private" methods
+        "no-underscore-dangle": 0,
+        // Don't use spaces before or after unary operators: !, !!, ++, --, ~
+        "space-unary-ops": ["error"],
+        // Operator should be used before new line
+        "operator-linebreak": ["error", "after"],
+        // You have 2 optionsl names for context variables: "that", "self"
+        "consistent-this": ["error", "that", "self"],
+        // Не проверяем на первую заглавную букву на свойствах объектов
+        // иначе использование $.Deferred(); будет считаться ошибкой
+        "new-cap": ["error", {
+            "properties": false
+        }],
+        // require can be used not oly in the beginning of the file
+        "global-require": 0,
+        // It's not required to move each chain element to new line
+        "newline-per-chained-call": 0,
+        // Only warn if there is no check for hasOwnProperty inside `for in`
+        "guard-for-in": ["warn"],
+        // Warning if there is empty block
+        "no-empty": ["warn"],
+        "no-prototype-builtins": 0,
+
+
         // ********** React ************
-        // Не используем
         "react/prop-types": 0,
         "react/jsx-indent": ["error", 4],
-        // Форматируем в xsl стиле. Такого правила, к сожалению нет
-        // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-indent-props.md
         "react/jsx-indent-props": 0,
         "react/jsx-first-prop-new-line": 0,
-        // Мы используем выравнивание по props (как after-props) но с пробелом в конце - за это отвечает другое свойство
-        // В тоже время мы не хотим делать лишние переносы. Поэтому нет правила, на 100% подходящего под нас
-        // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md
         "react/jsx-closing-bracket-location": 0,
         "react/prefer-stateless-function": 0,
         "jsx-quotes": ["error", "prefer-single"],

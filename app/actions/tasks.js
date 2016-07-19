@@ -20,7 +20,8 @@ export function loadTasks(token) {
             .then((tasks) => {
                 dispatch(tasksLoaded(tasks));
             })
-            .catch(() => {
+            .catch((e) => {
+                console.error(e);
                 dispatch(errorMessage('Error, while tasks loading'));
             });
     };

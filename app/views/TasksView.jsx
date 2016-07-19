@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import  classnames from 'classnames';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 import * as entityConst from '../constants/selectedEntity';
 import { MainMenu } from '../components/MainMenu/MainMenu';
@@ -11,12 +11,12 @@ import './list-container.less';
 class TasksView extends Component {
     render() {
         const { selectedEntity } = this.props;
-        const selectedTask = !!selectedEntity && selectedEntity.type == entityConst.ENTITY_TASK ?
+        const selectedTask = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_TASK ?
                              selectedEntity.entity :
                              null;
         const classView = classnames({
             'list-container': true,
-            'list-container_open-right-panel': !!selectedTask
+            'list-container_open-right-panel': !!selectedTask,
         });
         return (
             <div>
@@ -38,7 +38,7 @@ class TasksView extends Component {
 export default connect(
     state => {
         return {
-            selectedEntity: state.selectedEntity
-        }
+            selectedEntity: state.selectedEntity,
+        };
     }
 )(TasksView);

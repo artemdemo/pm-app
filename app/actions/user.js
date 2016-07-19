@@ -31,9 +31,9 @@ function authenticationError() {
 }
 
 function goToLoginPage(location) {
-    let regex = /login|signup/;
-    let redirectAfterLogin = location.pathname;
-    let match = regex.exec(redirectAfterLogin);
+    const regex = /login|signup/;
+    const redirectAfterLogin = location.pathname;
+    const match = regex.exec(redirectAfterLogin);
     if (!match) {
         history.push(`/login?next=${redirectAfterLogin}`);
     }
