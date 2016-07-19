@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
+import { selectTask } from '../../actions/selectedEntity';
+import classnames from 'classnames';
 
 import './TasksListItem.less';
 
@@ -9,16 +11,17 @@ class TasksListItem extends Component {
     constructor(props) {
         super(props);
         this.isLoading = false;
+        this.toggleDone = () => {};
     }
 
     toggleDone() {}
 
-    selectTask() {}
-
     render() {
-                        // tasks-list-item__text_done
-        const itemClass = 'tasks-list-item__text';
-        const { task, projects } = this.props;
+        const { task, projects, selectTask } = this.props;
+        const itemClass = classnames({
+            'tasks-list-item__text': true,
+            'tasks-list-item__text_done': task.done
+        });
 
         let selectedProjects = [];
         let selectedProjectsId = [];
@@ -36,7 +39,8 @@ class TasksListItem extends Component {
                                 onClick={this.toggleDone}>
                     <OkCircle doneStatus={task.done} loading={this.isLoading} />
                 </div>
-                <div className='tasks-list-item__cell' onClick={this.selectTask}>
+                <div className='tasks-list-item__cell'
+                     onClick={() => selectTask(task)}>
                     <span className={itemClass}>
                         {task.name}
                     </span>
@@ -64,7 +68,9 @@ export default connect(
             projects: state.projects
         };
     },
-    {}
+    {
+        selectTask
+    }
 )(TasksListItem);
 
 /*

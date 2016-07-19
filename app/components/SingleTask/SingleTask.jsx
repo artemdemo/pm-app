@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { clearEntity } from '../../actions/selectedEntity';
+import * as entityConst from '../../constants/selectedEntity';
 
-export class SingleTask extends Component {
+class SingleTask extends Component {
     constructor(props) {
         super(props);
         this.loadingData = false;
         this.submitTask = () => {}
         this.disconnectProject = () => {}
+
     }
 
     render() {
@@ -29,7 +33,8 @@ export class SingleTask extends Component {
             return null;
         }
         const selectedProjects = [];
-        const task = {};
+        let { task, clearEntity } = this.props;
+        task = task || {};
 
         return (
             <div className='single-panel'>
@@ -77,7 +82,7 @@ export class SingleTask extends Component {
                                 <span>Save</span>
                             </button>
                             <span className={cancelButtonClass}
-                                  onClick={this.cancel}
+                                  onClick={() => clearEntity(entityConst.ENTITY_TASK)}
                                   data-qa='task-cancel'>Cancel</span>
                             {renderLoadingSpinner()}
                         </div>
@@ -90,6 +95,20 @@ export class SingleTask extends Component {
         );
     }
 }
+
+SingleTask.propTypes = {
+    task: React.PropTypes.object
+}
+
+export default connect(
+    state => {
+        return {}
+    },
+    {
+        clearEntity
+    }
+)(SingleTask);
+
 
 // <div class="single-panel">
 //     <form (ngSubmit)="submitTask()" *ngIf="taskModel">
