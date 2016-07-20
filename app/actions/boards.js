@@ -1,5 +1,6 @@
 import * as boardsConst from '../constants/boards';
 import { errorMessage } from './notification';
+import { getStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -10,7 +11,9 @@ function boardsLoaded(boards) {
     };
 }
 
-export function loadBoards(token) {
+export function loadBoards() {
+    const token = getStoredToken();
+
     return dispatch => {
         fetch('/boards/all', token)
             .then(checkResponseStatus)

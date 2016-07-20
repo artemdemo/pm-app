@@ -1,5 +1,6 @@
 import * as projectsConst from '../constants/projects';
 import { errorMessage } from './notification';
+import { getStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -10,7 +11,9 @@ function projectsLoaded(projects) {
     };
 }
 
-export function loadProjects(token) {
+export function loadProjects() {
+    const token = getStoredToken();
+
     return dispatch => {
         fetch('/projects/all', token)
             .then(checkResponseStatus)

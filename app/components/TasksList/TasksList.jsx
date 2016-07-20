@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as entityConst from '../../constants/selectedEntity';
 import { RadioMenu } from '../RadioMenu/RadioMenu';
 import TasksListItem from './TasksListItem';
 import { clearEntity } from '../../actions/selectedEntity';
@@ -7,11 +8,9 @@ import { clearEntity } from '../../actions/selectedEntity';
 import './TasksList.less';
 
 class TasksList extends Component {
-    addNewTask() {}
-
     componentWillUnmount() {
         const { clearEntity } = this.props;
-        clearEntity();
+        clearEntity(entityConst.ENTITY_TASK);
     }
 
     render() {
@@ -21,17 +20,19 @@ class TasksList extends Component {
             { id: 2, name: 'Active' },
             { id: 3, name: 'Completed' },
         ];
+        const newTask = {
+            name: '',
+            description: ''
+        }
         return (
             <div>
                 <RadioMenu list={listMenu} />
                 <div className='tasks-list'>
+                    <TasksListItem task={newTask} key={`task-0`} />
                     {tasks.map(task => (
                         <TasksListItem task={task} key={`task-${task.id}`} />
                     ))}
                 </div>
-                <button className='btn btn-default'
-                        onClick={this.addNewTask}
-                        data-qa='add-new-task'>New Task</button>
             </div>
         );
     }
@@ -47,6 +48,6 @@ export default connect(
             tasks: state.tasks,
         }
     }, {
-        clearEntity
+        clearEntity,
     }
 )(TasksList);

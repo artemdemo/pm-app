@@ -40,7 +40,8 @@
         // Functions are exception in his rule, case of hoisting
         "no-use-before-define": ["error", { "functions": false }],
         // In some cases "fat arrow" looks like comparison operator (>, <, <=, and >=)
-        "no-confusing-arrow": ["warn"],
+        // But I don't see how it's a problem
+        "no-confusing-arrow": 0,
         // Write IIFE with parenthesis and not some wired shit
         "wrap-iife": ["error", "inside"],
         // Disallowing some language features:

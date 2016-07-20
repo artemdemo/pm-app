@@ -14,7 +14,6 @@ export default function user(state = defaultState, action) {
     switch (action.type) {
         case userConst.USER_AUTHENTICATED:
             return {
-                token: action.token,
                 username: action.user.username,
                 email: action.user.email,
                 added: action.user.added,

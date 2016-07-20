@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { filterProjects } from '../../utils/taskUtils';
+import { filterProjects } from '../../utils/tasks';
+import { deleteTask, updateTask } from '../../actions/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { OkCircle } from '../OkCircle/OkCircle';
@@ -25,7 +26,26 @@ class SingleTask extends Component {
             availableProjects,
         };
 
-        this.submitTask = () => {}
+        this.submitTask = (e) => {
+            const { updateTask } = this.props;
+            const task = this.getTask();
+            const board = this.state.board;
+            e.preventDefault();
+            const updatedTaskData = {
+                id: task.id,
+                name: this.state.name,
+                description: this.state.description,
+                board: board > 0 ? board : null,
+                projects: this.state.selectedProjects.map(project => project.id),
+            }
+            updateTask(Object.assign(task, updatedTaskData));
+        }
+
+        this.deleteTask = () => {
+            const task = this.getTask();
+            const { deleteTask, clearEntity } = this.props;
+            deleteTask(task.id);
+        }
 
         this.toggleDone = () => {
             console.log('toggle done');
@@ -141,7 +161,6 @@ class SingleTask extends Component {
                             <button type='submit'
                                     className='btn btn-primary'
                                     data-qa='task-save'>
-                                <span>Add new</span>
                                 <span>Save</span>
                             </button>
                             <span className={cancelButtonClass}
@@ -150,7 +169,7 @@ class SingleTask extends Component {
                             {renderLoadingSpinner()}
                         </div>
                         <div className='pull-right'>
-                            <DeleteButton />
+                            <DeleteButton onDelete={this.deleteTask} />
                         </div>
                     </div>
                 </form>
@@ -173,6 +192,8 @@ export default connect(
         }
     },
     {
-        clearEntity
+        clearEntity,
+        deleteTask,
+        updateTask,
     }
 )(SingleTask);

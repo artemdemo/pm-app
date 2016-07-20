@@ -6,11 +6,19 @@ import './DeleteButton.less';
 export class DeleteButton extends Component {
     constructor(props) {
         super(props);
-        this.showDelete = false;
         this.loadingData = false;
-        this.showDeleteButtons = () => this.showDelete = true;
-        this.hideDeleteButtons = () => this.showDelete = false;
-        this.delete = () => {}
+
+        this.state = {
+            showDelete: false
+        }
+
+        this.showDeleteButtons = () => this.setState({ showDelete: true });
+        this.hideDeleteButtons = () => this.setState({ showDelete: false });
+
+        this.delete = () => {
+            const { onDelete } = this.props;
+            onDelete();
+        }
     }
 
     render() {
@@ -21,13 +29,13 @@ export class DeleteButton extends Component {
             'btn_disabled': this.loadingData
         });
         const renderDeleteButtons = () => {
-            if (!this.showDelete) {
+            if (!this.state.showDelete) {
                 return (
                     <span className={deleteTitleClass}
                       onClick={this.showDeleteButtons}>Delete</span>
                 );
             } else {
-                reutrn (
+                return (
                     <div className='delete-button'>
                         <div className='delete-button__title'>Delete?</div>
                         <div className='delete-button-buttons'>
@@ -52,4 +60,8 @@ export class DeleteButton extends Component {
             </div>
         );
     }
+}
+
+DeleteButton.propTypes = {
+    onDelete: React.PropTypes.func.isRequired
 }

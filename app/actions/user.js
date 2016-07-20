@@ -4,6 +4,7 @@ import { history } from '../configs';
 import { loadTasks } from './tasks';
 import { loadBoards } from './boards';
 import { loadProjects } from './projects';
+import { storeToken, getStoredToken, removeStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -17,11 +18,10 @@ import checkResponseStatus from '../utils/checkResponseStatus';
  * @param user.updated {String}
  * @param token {String}
  */
-function userAuthenticated(user, token) {
+function userAuthenticated(user) {
     return {
         type: userConst.USER_AUTHENTICATED,
         user,
-        token,
     };
 }
 
@@ -41,7 +41,7 @@ function goToLoginPage(location) {
 }
 
 export function checkAuthentication(location) {
-    const token = window.localStorage.getItem(userConst.LS_ITEM_NAME);
+    const token = getStoredToken();
 
     if (!token) {
         goToLoginPage(location);
@@ -56,13 +56,13 @@ export function checkAuthentication(location) {
             })
             .then((userData) => {
                 dispatch(successMessage('Welcome back!'));
-                dispatch(userAuthenticated(userData, token));
-                dispatch(loadTasks(token));
-                dispatch(loadBoards(token));
-                dispatch(loadProjects(token));
+                dispatch(userAuthenticated(userData));
+                dispatch(loadTasks());
+                dispatch(loadBoards());
+                dispatch(loadProjects());
             })
             .catch(() => {
-                window.localStorage.removeItem(userConst.LS_ITEM_NAME);
+                removeStoredToken();
                 dispatch(errorMessage('Please, login'));
                 dispatch(authenticationError());
                 goToLoginPage(location);
@@ -87,9 +87,7 @@ export function login(user) {
                 return response.json();
             })
             .then((userData) => {
-                if (user.remember) {
-                    window.localStorage.setItem(userConst.LS_ITEM_NAME, token);
-                }
+                storeToken(token, user.remember);
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));
             })

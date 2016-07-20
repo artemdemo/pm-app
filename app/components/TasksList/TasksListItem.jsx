@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import * as entityConst from '../../constants/selectedEntity';
 import { connect } from 'react-redux';
-import { filterProjects } from '../../utils/taskUtils';
+import { filterProjects } from '../../utils/tasks';
+import { addNewTask } from '../../actions/tasks';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
-import { selectTask } from '../../actions/selectedEntity';
+import { selectTask, clearEntity } from '../../actions/selectedEntity';
 
 import './TasksListItem.less';
 
@@ -12,13 +14,23 @@ class TasksListItem extends Component {
     constructor(props) {
         super(props);
         this.isLoading = false;
+
         this.toggleDone = () => {};
+
+        this.createNewTask = (e) => {
+            const { addNewTask } = this.props;
+            e.preventDefault();
+            addNewTask({
+                name: this.refs.nameInput.value
+            });
+
+            // ToDo: input should be cleaned only after task was successfully added
+            this.refs.nameInput.value = '';
+        };
     }
 
-    toggleDone() {}
-
     render() {
-        const { task, projects, selectTask } = this.props;
+        const { task, projects, selectTask, clearEntity } = this.props;
         const itemClass = classnames({
             'tasks-list-item__text': true,
             'tasks-list-item__text_done': task.done
@@ -26,18 +38,40 @@ class TasksListItem extends Component {
 
         const { selectedProjects } = filterProjects(task, projects);
 
+        const renderTaskName = () => {
+            if (task.id) {
+                return (
+                    <span className={itemClass}>
+                        {task.name}
+                    </span>
+                );
+            } else {
+                return (
+                    <form onSubmit={this.createNewTask}>
+                        <input className='tasks-list-item__name-input'
+                               ref='nameInput'
+                               placeholder='New task' />
+                    </form>
+                );
+            }
+        };
+
         return (
             <div className='tasks-list-item'>
                 <div className='tasks-list-item__cell
                                 tasks-list-item__cell_icon'
-                                onClick={this.toggleDone}>
+                                onClick={() => task.id && this.toggleDone()}>
                     <OkCircle doneStatus={task.done} loading={this.isLoading} />
                 </div>
                 <div className='tasks-list-item__cell'
-                     onClick={() => selectTask(task)}>
-                    <span className={itemClass}>
-                        {task.name}
-                    </span>
+                     onClick={() => {
+                        if (task.id) {
+                            selectTask(task);
+                        } else {
+                            clearEntity(entityConst.ENTITY_TASK);
+                        }
+                     }}>
+                    {renderTaskName()}
                 </div>
                 <div className='tasks-list-item__cell
                                 tasks-list-item__cell_labels'>
@@ -63,7 +97,9 @@ export default connect(
         };
     },
     {
-        selectTask
+        selectTask,
+        clearEntity,
+        addNewTask,
     }
 )(TasksListItem);
 

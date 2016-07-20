@@ -53,8 +53,8 @@ exports.update = (request, reply) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    tasks.updateTask(tasksData).then(() => {
-        reply({});
+    tasks.updateTask(tasksData).then((updatedData) => {
+        reply(updatedData);
     }, () => {
         reply(boom.badRequest(errConstants.DB_ERROR));
     });
