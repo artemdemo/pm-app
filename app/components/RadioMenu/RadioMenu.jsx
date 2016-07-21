@@ -4,12 +4,39 @@ import { RadioMenuItem } from './RadioMenuItem';
 import './RadioMenu.less';
 
 export class RadioMenu extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedList: props.list.map((item, i) => {
+                return Object.assign(item, {
+                    $$selected: i === 0,
+                });
+            }),
+        }
+
+        this.selectItem = (selectedItem) => {
+            const { onSelect } = this.props;
+            this.setState({
+                selectedList: this.state.selectedList.map((item) => {
+                    return Object.assign(item, {
+                        $$selected: selectedItem.id === item.id,
+                    });
+                }),
+            });
+            onSelect(selectedItem);
+        };
+    }
+
     render() {
-        const { list } = this.props;
+        const { onSelect } = this.props;
         return (
             <div className='radio-menu'>
-                {list.map((item) => (
-                    <RadioMenuItem item={item} key={`radio-menu-item-${item.id}`} />
+                {this.state.selectedList.map((item) => (
+                    <RadioMenuItem item={item}
+                                   selected={item.$$selected}
+                                   onClick={() => this.selectItem(item)}
+                                   key={`radio-menu-item-${item.id}`} />
                 ))}
             </div>
         );
@@ -17,5 +44,6 @@ export class RadioMenu extends Component {
 }
 
 RadioMenu.propTypes = {
-    list: React.PropTypes.arrayOf(React.PropTypes.object)
+    list: React.PropTypes.arrayOf(React.PropTypes.object),
+    onSelect: React.PropTypes.func,
 }

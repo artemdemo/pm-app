@@ -21,7 +21,8 @@ class TasksListItem extends Component {
             const { addNewTask } = this.props;
             e.preventDefault();
             addNewTask({
-                name: this.refs.nameInput.value
+                name: this.refs.nameInput.value,
+                done: false,
             });
 
             // ToDo: input should be cleaned only after task was successfully added
@@ -50,7 +51,7 @@ class TasksListItem extends Component {
                     <form onSubmit={this.createNewTask}>
                         <input className='tasks-list-item__name-input'
                                ref='nameInput'
-                               placeholder='New task' />
+                               placeholder='New task...' />
                     </form>
                 );
             }

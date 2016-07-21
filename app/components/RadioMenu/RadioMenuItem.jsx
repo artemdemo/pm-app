@@ -4,17 +4,15 @@ import classnames from 'classnames';
 import './RadioMenuItem.less';
 
 export class RadioMenuItem extends Component {
-    select() {}
-
     render() {
-        const { item } = this.props;
+        const { item, selected, onClick } = this.props;
         const itemClass = classnames({
             'radio-menu-item': true,
-            'radio-menu-item_selected': false
+            'radio-menu-item_selected': selected
         });
         return (
             <div className={itemClass}
-                 onClick={this.select(item)}>
+                 onClick={onClick}>
                 {item.name}
             </div>
         );
@@ -22,5 +20,7 @@ export class RadioMenuItem extends Component {
 }
 
 RadioMenuItem.propTypes = {
-    item: React.PropTypes.object
+    item: React.PropTypes.object,
+    selected: React.PropTypes.bool,
+    onClick: React.PropTypes.func,
 }

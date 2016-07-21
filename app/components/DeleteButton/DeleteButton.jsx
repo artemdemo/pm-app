@@ -21,6 +21,10 @@ export class DeleteButton extends Component {
         }
     }
 
+    componentWillReceiveProps() {
+        this.setState({ showDelete: false });
+    }
+
     render() {
         const deleteTitleClass = classnames({
             'btn': true,

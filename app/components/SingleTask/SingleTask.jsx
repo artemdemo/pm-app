@@ -97,7 +97,7 @@ class SingleTask extends Component {
             }
             return null;
         }
-        const { clearEntity, projects, boards } = this.props;
+        const { clearEntity, projects, boards, selectedEntity } = this.props;
         const task = this.getTask();
         return (
             <div className='single-panel'>
@@ -182,6 +182,7 @@ SingleTask.propTypes = {
     task: React.PropTypes.object,
     boards: React.PropTypes.arrayOf(React.PropTypes.object),
     projects: React.PropTypes.arrayOf(React.PropTypes.object),
+    selectedEntity: React.PropTypes.object,
 }
 
 export default connect(
@@ -189,6 +190,7 @@ export default connect(
         return {
             boards: state.boards,
             projects: state.projects,
+            selectedEntity: state.selectedEntity,
         }
     },
     {
