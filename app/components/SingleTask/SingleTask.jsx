@@ -15,12 +15,13 @@ class SingleTask extends Component {
     constructor(props) {
         super(props);
 
+        const task = this.getTask();
         const { selectedProjects, availableProjects } = filterProjects(this.getTask(), props.projects);
 
         this.state = {
             name: '',
             description: '',
-            board: 0,
+            board_id: task.board_id > 0 ? task.board_id : 0,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -29,15 +30,18 @@ class SingleTask extends Component {
         this.submitTask = (e) => {
             const { updateTask } = this.props;
             const task = this.getTask();
-            const board = this.state.board;
+            const board_id = this.state.board_id;
             e.preventDefault();
             const updatedTaskData = {
                 id: task.id,
                 name: this.state.name,
                 description: this.state.description,
-                board: board > 0 ? board : null,
+                board_id: board_id > 0 ? board_id : null,
                 projects: this.state.selectedProjects.map(project => project.id),
             }
+            this.setState({
+                loadingData: true,
+            });
             updateTask(Object.assign(task, updatedTaskData));
         }
 
@@ -76,6 +80,8 @@ class SingleTask extends Component {
         this.setState({
             name: task.name || '',
             description: task.description || '',
+            board_id: task.board_id > 0 ? task.board_id : 0,
+            loadingData: false,
             selectedProjects,
             availableProjects,
         });
@@ -141,12 +147,12 @@ class SingleTask extends Component {
                     </div>
                     <div className='form-group'>
                         <select className='form-control'
-                                value={this.state.board}
+                                value={this.state.board_id}
                                 onChange={(e) => this.setState({
-                                    board: e.target.value
+                                    board_id: e.target.value
                                 })}
                                 name='board'>
-                            <option value="0">Select board</option>
+                            <option value="0">No board selected</option>
                             {boards.map((board) => (
                                 <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
                             ))}
@@ -158,14 +164,16 @@ class SingleTask extends Component {
                     </div>
                     <div className='clearfix'>
                         <div className='pull-left'>
-                            <button type='submit'
+                            <span className='buttons-group'>
+                                <button type='submit'
                                     className='btn btn-primary'
                                     data-qa='task-save'>
-                                <span>Save</span>
-                            </button>
-                            <span className={cancelButtonClass}
-                                  onClick={() => clearEntity(entityConst.ENTITY_TASK)}
-                                  data-qa='task-cancel'>Cancel</span>
+                                    <span>Save</span>
+                                </button>
+                                <span className={cancelButtonClass}
+                                      onClick={() => clearEntity(entityConst.ENTITY_TASK)}
+                                      data-qa='task-cancel'>Cancel</span>
+                            </span>
                             {renderLoadingSpinner()}
                         </div>
                         <div className='pull-right'>

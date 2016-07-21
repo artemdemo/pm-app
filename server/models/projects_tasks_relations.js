@@ -1,7 +1,7 @@
+/* eslint-disable no-console, strict*/
 'use strict';
 
 const chalk = require('chalk');
-const moment = require('moment');
 const Q = require('q');
 
 const DB = require('sqlite-crud');
@@ -17,35 +17,61 @@ exports.addRelation = (projectId, taskId) => {
     const deferred = Q.defer();
     let query = '';
 
-    if (Number(projectId) != Number(projectId) || Number(projectId) < 1) {
+    if (Array.isArray(projectId)) {
+        const projectsIds = projectId.map((id) => `project_id=${id}`).join(' OR ');
+        if (projectId.length > 0) {
+            query = `SELECT * FROM ${tableName} WHERE (${projectsIds}) AND task_id=${taskId}`;
+        } else {
+            query = `SELECT * FROM ${tableName} WHERE task_id=${taskId}`;
+        }
+    } else if (!Array.isArray(projectId) && Number(projectId) === Number(projectId)) {
+        query = `SELECT * FROM ${tableName} WHERE project_id=${projectId} AND task_id=${taskId}`;
+    } else {
+        console.log(chalk.red.bold('[addRelations error]'), 'projectId should be a number or Array');
         deferred.reject();
-        console.log(chalk.red.bold('[addRelation error]'), 'projectId should be a number, greater than 1');
-        return deferred.promise;
-    } else if (Number(taskId) != Number(taskId) || Number(taskId) < 1) {
-        deferred.reject();
-        console.log(chalk.red.bold('[addRelation error]'), 'taskId should be a number, greater than 1');
         return deferred.promise;
     }
 
-    query = `SELECT * FROM ${tableName} WHERE project_id=${projectId} AND task_id=${taskId}`;
+    const addRelations = () => {
+        if (!Array.isArray(projectId)) {
+            const data = {
+                project_id: projectId,
+                task_id: taskId,
+            };
+            DB.insertRow(tableName, data).then(() => {
+                deferred.resolve();
+            }, (error) => {
+                console.log(chalk.red.bold('[addRelation error]'), error);
+                deferred.reject();
+            });
+        } else if (Array.isArray(projectId) && projectId.length > 0) {
+            const values = '(' + projectId.join(`, ${taskId}),(`) + `, ${taskId})`;
+            DB.run(`INSERT INTO ${tableName} (project_id, task_id) VALUES ${values};`).then(() => {
+                deferred.resolve();
+            }, (error) => {
+                console.log(chalk.red.bold('[addRelations error]'), error);
+                deferred.reject();
+            });
+        } else if (Array.isArray(projectId) && projectId.length === 0) {
+            deferred.resolve();
+        } else {
+            console.log(chalk.red.bold('[addRelations error]'), 'Error while adding relations');
+            deferred.reject();
+        }
+    };
 
     DB.queryRows(query)
         .then((rows) => {
-            const data = {
-                project_id: projectId,
-                task_id: taskId
-            };
-            console.log('addRelation -> getAll');
-            if (rows.length == 0) {
-                DB.insertRow(tableName, data).then(() => {
-                    deferred.resolve();
+            console.log('rows', rows);
+            if (rows.length === 0) {
+                addRelations();
+            } else {
+                DB.run(`DELETE FROM ${tableName} WHERE task_id=${taskId};`).then(() => {
+                    addRelations();
                 }, (error) => {
-                    console.log(chalk.red.bold('[addRelation error]'), error);
+                    console.log(chalk.red.bold('[addRelations error]'), error);
                     deferred.reject();
                 });
-            } else {
-                console.log(chalk.yellow.bold('[addRelation warning]'), 'Relation already exists:', data);
-                deferred.reject();
             }
         }, () => {
             deferred.reject();
@@ -63,13 +89,12 @@ exports.addRelation = (projectId, taskId) => {
  */
 exports.deleteRelation = (projectId, taskId) => {
     const deferred = Q.defer();
-    let query = '';
 
-    if (Number(projectId) != Number(projectId) || Number(projectId) < 1) {
+    if (Number(projectId) !== Number(projectId) || Number(projectId) < 1) {
         deferred.reject();
         console.log(chalk.red.bold('[deleteRelation error]'), 'projectId should be a number, greater than 1');
         return deferred.promise;
-    } else if (Number(taskId) != Number(taskId) || Number(taskId) < 1) {
+    } else if (Number(taskId) !== Number(taskId) || Number(taskId) < 1) {
         deferred.reject();
         console.log(chalk.red.bold('[deleteRelation error]'), 'taskId should be a number, greater than 1');
         return deferred.promise;
@@ -79,13 +104,13 @@ exports.deleteRelation = (projectId, taskId) => {
         {
             column: 'task_id',
             comparator: '=',
-            value: taskId
+            value: taskId,
         },
         {
             column: 'project_id',
             comparator: '=',
-            value: projectId
-        }
+            value: projectId,
+        },
     ]).then(() => {
         deferred.resolve();
     }, (error) => {
@@ -111,7 +136,7 @@ exports.getRelations = (type, typeId) => {
         deferred.reject();
         console.log(chalk.red.bold('[getRelations error]'), 'No type given');
         return deferred.promise;
-    } else if (allowedTypes.indexOf(type) == -1) {
+    } else if (allowedTypes.indexOf(type) === -1) {
         deferred.reject();
         console.log(chalk.red.bold('[getRelations error]'), 'Given type is not allowed:', type);
         return deferred.promise;
@@ -124,7 +149,7 @@ exports.getRelations = (type, typeId) => {
     query = `SELECT * FROM ${tableName} `;
 
     switch (true) {
-        case type == 'project':
+        case type === 'project':
             query += `WHERE project_id=${typeId};`;
             break;
         default:

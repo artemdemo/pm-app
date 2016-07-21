@@ -45,6 +45,8 @@ exports.add = (request, reply) => {
 
 exports.update = (request, reply) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
+    const projects = request.payload.projects;
+    const taskId = request.payload.id;
     if (!tokenData) {
         reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
@@ -54,7 +56,16 @@ exports.update = (request, reply) => {
         tokenId: tokenData.id,
     };
     tasks.updateTask(tasksData).then((updatedData) => {
-        reply(updatedData);
+        if (taskId && projects) {
+            projectsTasksRelations.addRelation(projects, taskId)
+                .then(() => {
+                    reply(updatedData);
+                }, () => {
+                    reply(boom.badRequest(errConstants.DB_ERROR));
+                });
+        } else {
+            reply(updatedData);
+        }
     }, () => {
         reply(boom.badRequest(errConstants.DB_ERROR));
     });
