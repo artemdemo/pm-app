@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import { logout } from '../../actions/user';
 
 import './MainMenu.less';
 
-export class MainMenu extends Component {
-    logOut() {
-        console.log('Logout');
+class MainMenu extends Component {
+    constructor(props) {
+        super(props);
+
+        this.logout = () => {
+            const { logout } = this.props;
+            logout()
+        }
     }
 
     render() {
@@ -29,7 +36,7 @@ export class MainMenu extends Component {
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             <li><span className="navbar-link"
-                                      onClick={this.logOut}
+                                      onClick={this.logout}
                                       data-qa="logout-main-menu-button">Logout</span></li>
                         </ul>
                     </div>
@@ -38,3 +45,11 @@ export class MainMenu extends Component {
         );
     }
 }
+
+export default connect(
+    () => {
+        return {}
+    }, {
+        logout
+    }
+)(MainMenu);

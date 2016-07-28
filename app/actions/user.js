@@ -33,10 +33,14 @@ function authenticationError() {
 
 function goToLoginPage(location) {
     const regex = /login|signup/;
-    const redirectAfterLogin = location.pathname;
+    const redirectAfterLogin = location && location.pathname;
     const match = regex.exec(redirectAfterLogin);
+    let loginPagePath = '/login';
+    if (redirectAfterLogin) {
+        loginPagePath += `?next=${redirectAfterLogin}`;
+    }
     if (!match) {
-        history.push(`/login?next=${redirectAfterLogin}`);
+        history.push(loginPagePath);
     }
 }
 
@@ -94,5 +98,14 @@ export function login(user) {
             .catch(() => {
                 dispatch(errorMessage('Error login'));
             });
+    };
+}
+
+export function logout() {
+    removeStoredToken();
+    goToLoginPage();
+
+    return dispatch => {
+        dispatch(successMessage('Logged out'));
     };
 }

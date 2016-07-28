@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import * as entityConst from '../constants/selectedEntity';
-import { MainMenu } from '../components/MainMenu/MainMenu';
+import MainMenu from '../components/MainMenu/MainMenu';
 import TasksList from '../components/TasksList/TasksList';
 import SingleTask from '../components/SingleTask/SingleTask';
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MainMenu } from '../components/MainMenu/MainMenu';
+import MainMenu from '../components/MainMenu/MainMenu';
 import ProjectsList from '../components/ProjectsList/ProjectsList';
 
 import './list-container.less';
