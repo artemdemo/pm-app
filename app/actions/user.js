@@ -120,6 +120,41 @@ export function login(user) {
     };
 }
 
+/**
+ * Signup
+ * @param user {Object}
+ * @param user.username {String}
+ * @param user.email {String}
+ * @param user.password {String}
+ * @param user.remember {Boolean}
+ */
+export function signup(user) {
+    return dispatch => {
+        let token;
+        fetch('/signup', null, {method: 'POST', body: user})
+            .then(checkResponseStatus)
+            .then((response) => {
+                token = response.headers.get('authorization');
+                return response.json();
+            })
+            .then((userData) => {
+                storeToken(token, user.remember);
+                dispatch(successMessage('Welcome!'));
+                dispatch(userAuthenticated(userData, token));
+                const nextPageUrl = urlParser.getParam('next');
+                if (nextPageUrl) {
+                    history.push(nextPageUrl);
+                } else {
+                    history.push('/');
+                }
+                loadDataAfterLogin(dispatch);
+            })
+            .catch(() => {
+                dispatch(errorMessage('Error signup'));
+            });
+    };
+}
+
 export function logout() {
     removeStoredToken();
     goToLoginPage();

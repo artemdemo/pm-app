@@ -1,11 +1,41 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { signup } from '../actions/user';
+import { checkAuthentication } from '../actions/user';
+import { errorMessage } from '../actions/notification';
 
 import './form-signin.less';
 
-export class SignupView extends Component {
-    submitSignup() {
+class SignupView extends Component {
+    constructor(props) {
+        super(props);
 
+        this.submitSignup = (e) => {
+            e.preventDefault();
+            const { signup, errorMessage } = this.props;
+            const username = this.refs.username;
+            const email = this.refs.email;
+            const password = this.refs.password;
+            const remember = this.refs.remember;
+            if (username.value !== '' &&
+                email.value !== '' &&
+                password.value !== '') {
+                signup({
+                    username: username.value,
+                    email: email.value,
+                    password: password.value,
+                    remember: remember.checked,
+                });
+            } else {
+                errorMessage('Please fill all fields');
+            }
+        }
+    }
+
+    componentWillMount() {
+        const { checkAuthentication, location } = this.props;
+        checkAuthentication(location);
     }
 
     render() {
@@ -18,6 +48,7 @@ export class SignupView extends Component {
                     </label>
                     <input type='text'
                            name='username'
+                           ref='username'
                            className='form-control form-signin__first-input'
                            placeholder='Username'
                            required=''
@@ -28,6 +59,7 @@ export class SignupView extends Component {
                     </label>
                     <input type='email'
                            name='email'
+                           ref='email'
                            className='form-control form-signin__input'
                            placeholder='Email address'
                            required=''
@@ -37,6 +69,7 @@ export class SignupView extends Component {
                     </label>
                     <input type='password'
                            name='password'
+                           ref='password'
                            className='form-control form-signin__last-input'
                            placeholder='Password'
                            required=''
@@ -45,6 +78,7 @@ export class SignupView extends Component {
                         <label>
                             <input type='checkbox'
                                    name='remember'
+                                   ref='remember'
                                    value='remember-me' /> Remember me
                         </label>
                     </div>
@@ -60,3 +94,13 @@ export class SignupView extends Component {
         );
     }
 }
+
+export default connect(
+    () => {
+        return {}
+    }, {
+        signup,
+        checkAuthentication,
+        errorMessage,
+    }
+)(SignupView);
