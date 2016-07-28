@@ -1,15 +1,5 @@
 import * as userConst from '../constants/user';
 
-if (!('localStorage' in window)) {
-    window.localStorage = {
-        _data: {},
-        setItem: (id, val) => this._data[id] = String(val),
-        getItem: (id) => this._data.hasOwnProperty(id) ? this._data[id] : null,
-        removeItem: (id) => delete this._data[id],
-        clear: () => this._data = {},
-    };
-}
-
 let storedToken = null;
 
 export function storeToken(token, saveInStorage) {

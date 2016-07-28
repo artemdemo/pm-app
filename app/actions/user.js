@@ -7,6 +7,7 @@ import { loadProjects } from './projects';
 import { storeToken, getStoredToken, removeStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
+import urlParser from '../utils/urlParser';
 
 /**
  * User authenticated
@@ -31,17 +32,27 @@ function authenticationError() {
     };
 }
 
-function goToLoginPage(location) {
+function isLoginSignupPage(pathname) {
     const regex = /login|signup/;
-    const redirectAfterLogin = location && location.pathname;
-    const match = regex.exec(redirectAfterLogin);
+    const match = regex.exec(pathname);
+    return !!match;
+}
+
+function goToLoginPage(location) {
     let loginPagePath = '/login';
-    if (redirectAfterLogin) {
-        loginPagePath += `?next=${redirectAfterLogin}`;
+    const pathname = location && location.pathname;
+    if (pathname) {
+        loginPagePath += `?next=${pathname}`;
     }
-    if (!match) {
+    if (!isLoginSignupPage(pathname)) {
         history.push(loginPagePath);
     }
+}
+
+function loadDataAfterLogin(dispatch) {
+    dispatch(loadTasks());
+    dispatch(loadBoards());
+    dispatch(loadProjects());
 }
 
 export function checkAuthentication(location) {
@@ -61,9 +72,10 @@ export function checkAuthentication(location) {
             .then((userData) => {
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData));
-                dispatch(loadTasks());
-                dispatch(loadBoards());
-                dispatch(loadProjects());
+                loadDataAfterLogin(dispatch);
+                if (isLoginSignupPage(location.pathname)) {
+                    history.goBack();
+                }
             })
             .catch(() => {
                 removeStoredToken();
@@ -94,6 +106,13 @@ export function login(user) {
                 storeToken(token, user.remember);
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData, token));
+                const nextPageUrl = urlParser.getParam('next');
+                if (nextPageUrl) {
+                    history.push(nextPageUrl);
+                } else {
+                    history.push('/');
+                }
+                loadDataAfterLogin(dispatch);
             })
             .catch(() => {
                 dispatch(errorMessage('Error login'));

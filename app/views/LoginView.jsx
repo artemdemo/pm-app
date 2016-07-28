@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { login } from '../actions/user';
 import { history } from '../configs';
+import { checkAuthentication } from '../actions/user';
 
 import './form-signin.less';
 
@@ -19,6 +20,11 @@ class LoginView extends Component {
                 remember: this.refs.remember.checked,
             });
         };
+    }
+
+    componentWillMount() {
+        const { checkAuthentication, location } = this.props;
+        checkAuthentication(location);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -82,5 +88,6 @@ export default connect(
         };
     }, {
         login,
+        checkAuthentication,
     }
 )(LoginView);
