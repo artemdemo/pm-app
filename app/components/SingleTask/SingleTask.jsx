@@ -28,10 +28,10 @@ class SingleTask extends Component {
         };
 
         this.submitTask = (e) => {
+            e.preventDefault();
             const { updateTask } = this.props;
             const task = this.getTask();
             const board_id = this.state.board_id;
-            e.preventDefault();
             const updatedTaskData = {
                 id: task.id,
                 name: this.state.name,

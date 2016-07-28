@@ -7,10 +7,15 @@ export class OkCircle extends Component {
     constructor(props) {
         super(props);
 
-        this.renderOkCircle = (loading, doneStatus) => {
+        this.state = {
+            doneStatus: props.doneStatus
+        };
+
+        this.renderOkCircle = (loading) => {
             const classOkCircle = classNames({
                 'ok-circle': true,
-                'ok-circle_done': doneStatus,
+                'ok-circle_with-text': !!this.props.children,
+                'ok-circle_done': this.state.doneStatus,
             });
             if (!loading) {
                 return (
@@ -23,7 +28,7 @@ export class OkCircle extends Component {
             return null;
         };
 
-        this.renderLoadingSpinner = (loading, doneStatus) => {
+        this.renderLoadingSpinner = (loading) => {
             if (loading) {
                 return (
                     <loading-spinner color='green' />
@@ -31,19 +36,26 @@ export class OkCircle extends Component {
             }
             return null;
         };
+
+        this.changeDoneStatus = () => {
+            const { onClick } = this.props;
+            this.setState({
+                doneStatus: !this.state.doneStatus
+            });
+        };
     }
 
     render() {
         const classOkCircleContent = classNames({
             'ok-circle-content': true,
-            'ok-circle-content_done': doneStatus,
+            'ok-circle-content_done': this.state.doneStatus,
         });
-        const { doneStatus, loading, onClick } = this.props;
+        const { loading } = this.props;
 
         return (
-            <span className='ok-circle-container' onClick={onClick}>
-                {this.renderOkCircle(loading, doneStatus)}
-                {this.renderLoadingSpinner(loading, doneStatus)}
+            <span className='ok-circle-container' onClick={this.changeDoneStatus}>
+                {this.renderOkCircle(loading)}
+                {this.renderLoadingSpinner(loading)}
                 <span className={classOkCircleContent}>
                     {this.props.children}
                 </span>
@@ -55,6 +67,7 @@ export class OkCircle extends Component {
 OkCircle.propTypes = {
     doneStatus: React.PropTypes.bool,
     loading: React.PropTypes.bool,
+    onClick: React.PropTypes.func,
 }
 
 OkCircle.defaultProps = {
