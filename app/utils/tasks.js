@@ -18,3 +18,24 @@ export function filterProjects(task, allProjects = []) {
 
     return { selectedProjects, availableProjects };
 }
+
+/**
+ * Return object that contain selected and available tasks
+ * (Project object has array of id's of selected tasks)
+ */
+export function filterTasks(project, allTasks = []) {
+    const selectedTasks = [];
+    const availableTasks = [];
+
+    allTasks.forEach((task) => {
+        if (project && project.tasks) {
+            if (project.tasks.indexOf(task.id) > -1) {
+                selectedTasks.push(task);
+            } else {
+                availableTasks.push(task);
+            }
+        }
+    });
+
+    return { selectedTasks, availableTasks };
+}

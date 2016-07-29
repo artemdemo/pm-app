@@ -13,7 +13,7 @@ import AppView from './views/AppView';
 import LoginView from './views/LoginView';
 import SignupView from './views/SignupView';
 import TasksView from './views/TasksView';
-import { ProjectsView } from './views/ProjectsView';
+import ProjectsView from './views/ProjectsView';
 import { MainView } from './views/MainView';
 import { requireAuthentication } from './components/AuthenticatedComponent';
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { selectProject, clearEntity } from '../../actions/selectedEntity';
 
 import './ProjectsListItem.less';
 
@@ -7,11 +8,13 @@ class ProjectsListItem extends Component {
     constructor(props) {
         super(props);
 
-        this.tasks = props.tasks;
-        this.project = props.project;
+        this.state = {
+            tasks: props.tasks,
+            project: props.project,
+        }
 
         this.renderTasks = () => {
-            if (this.project.tasks.length > 0) {
+            if (this.state.project.tasks.length > 0) {
                 return (
                     <div>
                         <div className='text-muted'>
@@ -27,31 +30,41 @@ class ProjectsListItem extends Component {
         }
     }
 
-    selectProject() {}
-
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            tasks: nextProps.tasks,
+            project: nextProps.project,
+        });
+    }
 
     filterTasks(filter) {
-        if (this.project.tasks.length === 0) {
+        if (this.state.project.tasks.length === 0) {
             return [];
         }
         switch (filter) {
             case 'done':
-                return this.tasks.filter((task) => {
-                    return task.done === true && this.project.tasks.indexOf(task.id) !== -1;
+                return this.state.tasks.filter((task) => {
+                    return task.done === true && this.state.project.tasks.indexOf(task.id) !== -1;
                 });
             case 'all':
             default:
-                return this.tasks.filter((task) => {
-                    return this.project.tasks.indexOf(task.id) !== -1;
+                return this.state.tasks.filter((task) => {
+                    return this.state.project.tasks.indexOf(task.id) !== -1;
                 });
         }
     }
 
     render() {
-        const { project } = this.props;
+        const { project, selectProject, clearEntity } = this.props;
         return (
             <div className='projects-list-item'
-                 onClick={this.selectProject}>
+                 onClick={() => {
+                    if (project.id) {
+                        selectProject(project);
+                    } else {
+                        clearEntity(entityConst.ENTITY_TASK);
+                    }
+                 }}>
                 <div className='projects-list-item__title'>
                     { project.name }
                 </div>
@@ -66,25 +79,8 @@ export default connect(
         return {
             tasks: state.tasks
         }
+    }, {
+        selectProject,
+        clearEntity,
     }
 )(ProjectsListItem);
-
-/*
-<div class="projects-list-item"
-     [ngClass]="{'projects-list-item_selected': selectedProject && selectedProject.id == project.id}"
-     (click)="selectTask()">
-    <div class="projects-list-item__title"
-         [ngClass]="{'projects-list-item__title_has-items': project.tasks.length > 0}">
-        {{ project.name }}
-    </div>
-    <div *ngIf="project.tasks.length > 0">
-        <canvas #chartСanvas class="projects-list-item__donut-tasks" height="100"></canvas>
-        <div class="text-muted">
-            Tasks: {{ filterTasks('all').length }}
-        </div>
-        <div class="text-muted">
-            Done: {{ filterTasks('done').length }}
-        </div>
-    </div>
-</div>
-*/

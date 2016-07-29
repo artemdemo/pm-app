@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as entityConst from '../../constants/selectedEntity';
 import ProjectsListItem from './ProjectsListItem';
+import { clearEntity } from '../../actions/selectedEntity';
 
 import './ProjectsList.less';
 
@@ -19,6 +21,11 @@ class ProjectsList extends Component {
                     return projects;
             }
         }
+    }
+
+    componentWillUnmount() {
+        const { clearEntity } = this.props;
+        clearEntity(entityConst.ENTITY_PROJECT);
     }
 
     addNewProject() {}
@@ -55,5 +62,7 @@ export default connect(
         return {
             projects: state.projects
         }
+    }, {
+        clearEntity,
     }
 )(ProjectsList);

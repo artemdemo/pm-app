@@ -4,19 +4,19 @@ import { connect } from 'react-redux';
 import * as entityConst from '../constants/selectedEntity';
 import MainMenu from '../components/MainMenu/MainMenu';
 import ProjectsList from '../components/ProjectsList/ProjectsList';
-// import SingleProject from '../components/SingleProject/SingleProject';
+import SingleProject from '../components/SingleProject/SingleProject';
 
 import './list-container.less';
 
 class ProjectsView extends Component {
     render() {
         const { selectedEntity } = this.props;
-        const selectedTask = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_PROJECT ?
-                             selectedEntity.entity :
-                             null;
+        const selectedProject = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_PROJECT ?
+                                selectedEntity.entity :
+                                null;
         const classView = classnames({
             'list-container': true,
-            'list-container_open-right-panel': !!selectedTask,
+            'list-container_open-right-panel': !!selectedProject,
         });
         return (
             <div>
@@ -27,7 +27,7 @@ class ProjectsView extends Component {
                         <ProjectsList />
                     </div>
                     <div className='list-container__panel'>
-
+                        <SingleProject project={selectedProject} />
                     </div>
                 </div>
             </div>

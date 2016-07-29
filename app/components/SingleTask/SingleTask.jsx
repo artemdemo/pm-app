@@ -74,10 +74,6 @@ class SingleTask extends Component {
         }
     }
 
-    getTask(props = this.props) {
-        return props.task || {}
-    }
-
     componentWillReceiveProps(nextProps) {
         const task = this.getTask(nextProps);
         const { selectedProjects, availableProjects } = filterProjects(task, nextProps.projects);
@@ -89,6 +85,10 @@ class SingleTask extends Component {
             selectedProjects,
             availableProjects,
         });
+    }
+
+    getTask(props = this.props) {
+        return props.task || {}
     }
 
     render() {
@@ -107,7 +107,7 @@ class SingleTask extends Component {
             }
             return null;
         }
-        const { clearEntity, projects, boards, selectedEntity } = this.props;
+        const { clearEntity, boards } = this.props;
         const task = this.getTask();
         return (
             <form onSubmit={this.submitTask} className='single-panel'>

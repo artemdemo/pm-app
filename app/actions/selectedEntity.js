@@ -14,3 +14,11 @@ export function selectTask(entity) {
         entity,
     };
 }
+
+export function selectProject(entity) {
+    return {
+        type: entityConst.SET_SELECTED_ENTITY,
+        entityType: entityConst.ENTITY_PROJECT,
+        entity,
+    };
+}
