@@ -16,12 +16,13 @@ class SingleTask extends Component {
         super(props);
 
         const task = this.getTask();
-        const { selectedProjects, availableProjects } = filterProjects(this.getTask(), props.projects);
+        const { selectedProjects, availableProjects } = filterProjects(task, props.projects);
 
         this.state = {
             name: '',
             description: '',
             board_id: task.board_id > 0 ? task.board_id : 0,
+            done: task.done,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -36,6 +37,7 @@ class SingleTask extends Component {
                 id: task.id,
                 name: this.state.name,
                 description: this.state.description,
+                done: this.state.done,
                 board_id: board_id > 0 ? board_id : null,
                 projects: this.state.selectedProjects.map(project => project.id),
             }
@@ -51,8 +53,10 @@ class SingleTask extends Component {
             deleteTask(task.id);
         }
 
-        this.toggleDone = () => {
-            console.log('toggle done');
+        this.toggleDone = (newDoneStatus) => {
+            this.setState({
+                done: newDoneStatus,
+            })
         }
 
         this.connectProject = (newProject) => {
@@ -106,82 +110,80 @@ class SingleTask extends Component {
         const { clearEntity, projects, boards, selectedEntity } = this.props;
         const task = this.getTask();
         return (
-            <div className='single-panel'>
-                <form onSubmit={this.submitTask}>
-                    <div className='form-group'>
-                        <input type='text'
-                               name='name'
-                               value={this.state.name}
-                               onChange={(e) => this.setState({
-                                    name: e.target.value
-                               })}
-                               className='flat-input'
-                               placeholder='Task name'
-                               data-qa='task-name' />
+            <form onSubmit={this.submitTask} className='single-panel'>
+                <div className='form-group'>
+                    <input type='text'
+                           name='name'
+                           value={this.state.name}
+                           onChange={(e) => this.setState({
+                                name: e.target.value
+                           })}
+                           className='flat-input'
+                           placeholder='Task name'
+                           data-qa='task-name' />
+                </div>
+                <div className='form-group'>
+                    <textarea className='flat-input'
+                              name='description'
+                              value={this.state.description}
+                              onChange={(e) => this.setState({
+                                   description: e.target.value
+                              })}
+                              rows='3'
+                              data-qa='task-description'></textarea>
+                </div>
+                <div className='form-group'>
+                    <OkCircle doneStatus={task.done}
+                              onChange={this.toggleDone}>
+                              Mark done
+                    </OkCircle>
+                </div>
+                <div className='form-group'>
+                    <LabelsList list={this.state.selectedProjects}
+                                delitable={true}
+                                onDelete={this.disconnectProject} />
+                </div>
+                <div className='form-group'>
+                    <DropdownList list={this.state.availableProjects}
+                                  placeholder="Connect to project"
+                                  onSelect={this.connectProject} />
+                </div>
+                <div className='form-group'>
+                    <select className='form-control'
+                            value={this.state.board_id}
+                            onChange={(e) => this.setState({
+                                board_id: e.target.value
+                            })}
+                            name='board'>
+                        <option value="0">No board selected</option>
+                        {boards.map((board) => (
+                            <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className='form-group text-muted'>
+                    <p>Task Added: { task.added }</p>
+                    <p>Last updated: { task.updated }</p>
+                </div>
+                <div className='clearfix'>
+                    <div className='pull-left'>
+                        <span className='buttons-group'>
+                            <button type='submit'
+                                className='btn btn-primary'
+                                data-qa='task-save'>
+                                <span>Save</span>
+                            </button>
+                            <span className={cancelButtonClass}
+                                  onClick={() => clearEntity(entityConst.ENTITY_TASK)}
+                                  data-qa='task-cancel'>Cancel</span>
+                        </span>
+                        {renderLoadingSpinner()}
                     </div>
-                    <div className='form-group'>
-                        <textarea className='flat-input'
-                                  name='description'
-                                  value={this.state.description}
-                                  onChange={(e) => this.setState({
-                                       name: e.target.value
-                                  })}
-                                  rows='3'
-                                  data-qa='task-description'></textarea>
+                    <div className='pull-right'>
+                        <DeleteButton onDelete={this.deleteTask} />
                     </div>
-                    <div className='form-group'>
-                        <OkCircle doneStatue={task.done}
-                                  onClick={this.toggleDone}>
-                                  Mark done
-                        </OkCircle>
-                    </div>
-                    <div className='form-group'>
-                        <LabelsList list={this.state.selectedProjects}
-                                    delitable={true}
-                                    onDelete={this.disconnectProject} />
-                    </div>
-                    <div className='form-group'>
-                        <DropdownList list={this.state.availableProjects}
-                                      placeholder="Connect to project"
-                                      onSelect={this.connectProject} />
-                    </div>
-                    <div className='form-group'>
-                        <select className='form-control'
-                                value={this.state.board_id}
-                                onChange={(e) => this.setState({
-                                    board_id: e.target.value
-                                })}
-                                name='board'>
-                            <option value="0">No board selected</option>
-                            {boards.map((board) => (
-                                <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className='form-group text-muted'>
-                        <p>Task Added: { task.added }</p>
-                        <p>Last updated: { task.updated }</p>
-                    </div>
-                    <div className='clearfix'>
-                        <div className='pull-left'>
-                            <span className='buttons-group'>
-                                <button type='submit'
-                                    className='btn btn-primary'
-                                    data-qa='task-save'>
-                                    <span>Save</span>
-                                </button>
-                                <span className={cancelButtonClass}
-                                      onClick={() => clearEntity(entityConst.ENTITY_TASK)}
-                                      data-qa='task-cancel'>Cancel</span>
-                            </span>
-                            {renderLoadingSpinner()}
-                        </div>
-                        <div className='pull-right'>
-                            <DeleteButton onDelete={this.deleteTask} />
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         );
     }
 }

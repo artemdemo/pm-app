@@ -38,11 +38,22 @@ export class OkCircle extends Component {
         };
 
         this.changeDoneStatus = () => {
-            const { onClick } = this.props;
+            const { onChange } = this.props;
+            const newDoneStatus = !this.state.doneStatus;
             this.setState({
-                doneStatus: !this.state.doneStatus
+                doneStatus: newDoneStatus
             });
+            if (onChange) {
+                onChange(newDoneStatus)
+            }
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { doneStatus } = nextProps;
+        this.setState({
+            doneStatus
+        });
     }
 
     render() {
@@ -67,7 +78,7 @@ export class OkCircle extends Component {
 OkCircle.propTypes = {
     doneStatus: React.PropTypes.bool,
     loading: React.PropTypes.bool,
-    onClick: React.PropTypes.func,
+    onChange: React.PropTypes.func,
 }
 
 OkCircle.defaultProps = {

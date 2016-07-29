@@ -123,8 +123,6 @@ exports.updateTask = (taskData) => {
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    console.log(updateData);
-
     sessions.getSession({
         id: taskData.tokenId,
     }).then((session) => {
