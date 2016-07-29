@@ -25,17 +25,20 @@ export function filterProjects(task, allProjects = []) {
  */
 export function filterTasks(project, allTasks = []) {
     const selectedTasks = [];
-    const availableTasks = [];
+    let availableTasks = [];
 
-    allTasks.forEach((task) => {
-        if (project && project.tasks) {
+    if (project && project.tasks) {
+        allTasks.forEach((task) => {
             if (project.tasks.indexOf(task.id) > -1) {
                 selectedTasks.push(task);
             } else {
                 availableTasks.push(task);
             }
-        }
-    });
+        });
+    } else {
+        availableTasks = allTasks;
+    }
+
 
     return { selectedTasks, availableTasks };
 }

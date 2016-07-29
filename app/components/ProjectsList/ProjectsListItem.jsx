@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectProject, clearEntity } from '../../actions/selectedEntity';
+import { selectProject } from '../../actions/selectedEntity';
 
 import './ProjectsListItem.less';
 
@@ -55,16 +55,10 @@ class ProjectsListItem extends Component {
     }
 
     render() {
-        const { project, selectProject, clearEntity } = this.props;
+        const { project, selectProject } = this.props;
         return (
             <div className='projects-list-item'
-                 onClick={() => {
-                    if (project.id) {
-                        selectProject(project);
-                    } else {
-                        clearEntity(entityConst.ENTITY_TASK);
-                    }
-                 }}>
+                 onClick={() => selectProject(project)}>
                 <div className='projects-list-item__title'>
                     { project.name }
                 </div>
@@ -81,6 +75,5 @@ export default connect(
         }
     }, {
         selectProject,
-        clearEntity,
     }
 )(ProjectsListItem);

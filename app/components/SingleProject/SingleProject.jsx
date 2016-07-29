@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { filterTasks } from '../../utils/tasks';
-import { deleteProject, updateProject } from '../../actions/projects';
+import { deleteProject, updateProject, addNewProject } from '../../actions/projects';
 import { DropdownList } from '../DropdownList/DropdownList';
 import { NarrowList } from '../NarrowList/NarrowList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
@@ -27,10 +27,9 @@ class SingleProject extends Component {
 
         this.submitProject = (e) => {
             e.preventDefault();
-            const { updateProject } = this.props;
+            const { updateProject, addNewProject } = this.props;
             const project = this.getProject();
             const updatedProjectData = {
-                id: project.id,
                 name: this.state.name,
                 description: this.state.description,
                 tasks: this.state.selectedTasks.map(project => project.id),
@@ -38,7 +37,12 @@ class SingleProject extends Component {
             this.setState({
                 loadingData: true,
             });
-            updateProject(Object.assign(project, updatedProjectData));
+            if (project.id) {
+                updatedProjectData.id = project.id
+                updateProject(Object.assign(project, updatedProjectData));
+            } else {
+                addNewProject(updatedProjectData);
+            }
         };
 
         this.connectTask = (newTask) => {
@@ -109,17 +113,25 @@ class SingleProject extends Component {
         const renderNarrowList = () => {
             if (this.state.selectedTasks.length > 0) {
                 return (
-                    <div className='form-group'>
-                        <div className='single-panel__subtitle'>
-                            Tasks
-                        </div>
-                        <NarrowList list={this.state.selectedTasks}
-                                    deletable={true}
-                                    onDelete={this.disconnectTask} />
+                    <NarrowList list={this.state.selectedTasks}
+                                deletable={true}
+                                onDelete={this.disconnectTask} />
+                );
+            }
+            return (
+                <div className='text-muted'>No tasks selected</div>
+            );
+        };
+        const renderTime = () => {
+            if (project.id) {
+                return (
+                    <div className='form-group text-muted'>
+                        <p>Project added: { project.added }</p>
+                        <p>Last updated: { project.updated }</p>
                     </div>
                 );
             }
-            return null
+            return null;
         };
         return (
             <form onSubmit={this.submitProject} className='single-panel'>
@@ -144,16 +156,18 @@ class SingleProject extends Component {
                               })}
                               data-qa='project-description'></textarea>
                 </div>
-                {renderNarrowList()}
+                <div className='form-group'>
+                    <div className='single-panel__subtitle'>
+                        Tasks
+                    </div>
+                    {renderNarrowList()}
+                </div>
                 <div className='form-group'>
                     <DropdownList list={this.state.availableTasks}
                                   placeholder="Connect tasks to project"
                                   onSelect={this.connectTask} />
                 </div>
-                <div className='form-group text-muted'>
-                    <p>Project added: { project.added }</p>
-                    <p>Last updated: { project.updated }</p>
-                </div>
+                {renderTime()}
                 <div className='clearfix'>
                     <div className='pull-left'>
                         <span className='buttons-group'>
@@ -188,5 +202,6 @@ export default connect(
         clearEntity,
         deleteProject,
         updateProject,
+        addNewProject,
     }
 )(SingleProject);

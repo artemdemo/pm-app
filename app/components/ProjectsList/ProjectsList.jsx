@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as entityConst from '../../constants/selectedEntity';
 import ProjectsListItem from './ProjectsListItem';
-import { clearEntity } from '../../actions/selectedEntity';
+import { clearEntity, selectProject } from '../../actions/selectedEntity';
 
 import './ProjectsList.less';
 
@@ -28,10 +28,8 @@ class ProjectsList extends Component {
         clearEntity(entityConst.ENTITY_PROJECT);
     }
 
-    addNewProject() {}
-
     render() {
-        const { projects } = this.props;
+        const { projects, selectProject } = this.props;
 
         return (
             <div>
@@ -47,7 +45,12 @@ class ProjectsList extends Component {
                         <ProjectsListItem project={project} key={`project-${project.id}`} />
                     ))}
                 </div>
-                <button className='btn btn-default' onClick={this.addNewProject}>New Project</button>
+                <button className='btn btn-default'
+                        onClick={() => {
+                            selectProject({})
+                        }}>
+                    New Project
+                </button>
             </div>
         );
     }
@@ -64,5 +67,6 @@ export default connect(
         }
     }, {
         clearEntity,
+        selectProject,
     }
 )(ProjectsList);

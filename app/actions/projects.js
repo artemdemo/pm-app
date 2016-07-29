@@ -72,6 +72,8 @@ export function addNewProject(newProject) {
             })
             .then((project) => {
                 dispatch(projectAdded(Object.assign({}, newProject, project)));
+                dispatch(clearEntity(entityConst.ENTITY_PROJECT));
+                dispatch(loadTasks());
             })
             .catch((e) => {
                 console.error(e);
