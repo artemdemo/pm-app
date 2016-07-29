@@ -1,6 +1,7 @@
 import * as tasksConst from '../constants/tasks';
 import * as entityConst from '../constants/selectedEntity';
 import { loadProjects } from './projects';
+import { loadBoards } from './boards';
 import { errorMessage } from './notification';
 import { getStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
@@ -97,6 +98,7 @@ export function deleteTask(id) {
                 dispatch(taskDeleted(id));
                 dispatch(clearEntity(entityConst.ENTITY_TASK));
                 dispatch(loadProjects());
+                dispatch(loadBoards());
             })
             .catch((e) => {
                 console.error(e);
@@ -127,6 +129,7 @@ export function updateTask(taskUpdate) {
                 dispatch(taskUpdated(Object.assign({}, taskUpdate, task)));
                 dispatch(clearEntity(entityConst.ENTITY_TASK));
                 dispatch(loadProjects());
+                dispatch(loadBoards());
             })
             .catch((e) => {
                 console.error(e);
