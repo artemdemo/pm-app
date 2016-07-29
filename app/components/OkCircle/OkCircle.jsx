@@ -40,9 +40,6 @@ export class OkCircle extends Component {
         this.changeDoneStatus = () => {
             const { onChange } = this.props;
             const newDoneStatus = !this.state.doneStatus;
-            this.setState({
-                doneStatus: newDoneStatus
-            });
             if (onChange) {
                 onChange(newDoneStatus)
             }

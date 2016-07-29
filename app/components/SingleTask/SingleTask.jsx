@@ -22,7 +22,7 @@ class SingleTask extends Component {
             name: '',
             description: '',
             board_id: task.board_id > 0 ? task.board_id : 0,
-            done: task.done,
+            done: task.done || false,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -81,6 +81,7 @@ class SingleTask extends Component {
             name: task.name || '',
             description: task.description || '',
             board_id: task.board_id > 0 ? task.board_id : 0,
+            done: task.done || false,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -133,7 +134,7 @@ class SingleTask extends Component {
                               data-qa='task-description'></textarea>
                 </div>
                 <div className='form-group'>
-                    <OkCircle doneStatus={task.done}
+                    <OkCircle doneStatus={this.state.done}
                               onChange={this.toggleDone}>
                               Mark done
                     </OkCircle>
