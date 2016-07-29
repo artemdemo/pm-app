@@ -22,14 +22,17 @@ export function filterProjects(task, allProjects = []) {
 /**
  * Return object that contain selected and available tasks
  * (Project object has array of id's of selected tasks)
+ *
+ * @param holder {Object} - has `tasks` property
+ * @param allTasks {Array}
  */
-export function filterTasks(project, allTasks = []) {
+export function filterTasks(holder, allTasks = []) {
     const selectedTasks = [];
     let availableTasks = [];
 
-    if (project && project.tasks) {
+    if (holder && holder.tasks) {
         allTasks.forEach((task) => {
-            if (project.tasks.indexOf(task.id) > -1) {
+            if (holder.tasks.indexOf(task.id) > -1) {
                 selectedTasks.push(task);
             } else {
                 availableTasks.push(task);
@@ -38,7 +41,6 @@ export function filterTasks(project, allTasks = []) {
     } else {
         availableTasks = allTasks;
     }
-
 
     return { selectedTasks, availableTasks };
 }

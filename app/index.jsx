@@ -13,6 +13,7 @@ import AppView from './views/AppView';
 import LoginView from './views/LoginView';
 import SignupView from './views/SignupView';
 import TasksView from './views/TasksView';
+import ScrumView from './views/ScrumView';
 import ProjectsView from './views/ProjectsView';
 import { MainView } from './views/MainView';
 import { requireAuthentication } from './components/AuthenticatedComponent';
@@ -27,6 +28,7 @@ render(
                 <Route path='login' component={LoginView} />
                 <Route path='signup' component={SignupView} />
                 <Route path='tasks' component={TasksView} />
+                <Route path='scrum' component={ScrumView} />
                 <Route path='projects' component={ProjectsView} />
             </Route>
         </Router>

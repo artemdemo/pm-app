@@ -18,7 +18,7 @@ class ProjectsListItem extends Component {
                 return (
                     <div>
                         <div className='text-muted'>
-                            Tasks: { this.filterTasks('all').length }
+                            Total: { this.filterTasks('all').length }
                         </div>
                         <div className='text-muted'>
                             Done: { this.filterTasks('done').length }
