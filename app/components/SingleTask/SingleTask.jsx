@@ -49,7 +49,7 @@ class SingleTask extends Component {
 
         this.deleteTask = () => {
             const task = this.getTask();
-            const { deleteTask, clearEntity } = this.props;
+            const { deleteTask } = this.props;
             deleteTask(task.id);
         }
 

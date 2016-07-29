@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { filterTasks } from '../../utils/tasks';
+import { deleteProject, updateProject } from '../../actions/projects';
 import { DropdownList } from '../DropdownList/DropdownList';
 import { NarrowList } from '../NarrowList/NarrowList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
@@ -26,6 +27,18 @@ class SingleProject extends Component {
 
         this.submitProject = (e) => {
             e.preventDefault();
+            const { updateProject } = this.props;
+            const project = this.getProject();
+            const updatedProjectData = {
+                id: project.id,
+                name: this.state.name,
+                description: this.state.description,
+                tasks: this.state.selectedTasks.map(project => project.id),
+            }
+            this.setState({
+                loadingData: true,
+            });
+            updateProject(Object.assign(project, updatedProjectData));
         };
 
         this.connectTask = (newTask) => {
@@ -42,7 +55,11 @@ class SingleProject extends Component {
             })
         }
 
-        this.deleteProject = () => {};
+        this.deleteProject = () => {
+            const task = this.getProject();
+            const { deleteProject } = this.props;
+            deleteProject(task.id);
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -169,5 +186,7 @@ export default connect(
         }
     }, {
         clearEntity,
+        deleteProject,
+        updateProject,
     }
 )(SingleProject);

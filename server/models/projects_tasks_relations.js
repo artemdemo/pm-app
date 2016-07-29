@@ -10,30 +10,28 @@ const tableName = 'projects_tasks_relations';
 /**
  * Add relation between project and task to the table
  *
- * @param projectId {Number}
- * @param taskId {Number}
+ * @param projectId {Number || Array}
+ * @param taskId {Number || Array}
  */
 exports.addRelation = (projectId, taskId) => {
     const deferred = Q.defer();
-    let query = '';
 
-    if (Array.isArray(projectId)) {
-        const projectsIds = projectId.map((id) => `project_id=${id}`).join(' OR ');
-        if (projectId.length > 0) {
-            query = `SELECT * FROM ${tableName} WHERE (${projectsIds}) AND task_id=${taskId}`;
-        } else {
-            query = `SELECT * FROM ${tableName} WHERE task_id=${taskId}`;
-        }
-    } else if (!Array.isArray(projectId) && Number(projectId) === Number(projectId)) {
-        query = `SELECT * FROM ${tableName} WHERE project_id=${projectId} AND task_id=${taskId}`;
-    } else {
+    if (Array.isArray(projectId) && Array.isArray(taskId)) {
+        console.log(chalk.red.bold('[addRelations error]'), 'projectId and taskId can\'t be both an Array');
+        deferred.reject();
+        return deferred.promise;
+    } else if (!Array.isArray(taskId) && Number(taskId) !== Number(taskId)) {
+        console.log(chalk.red.bold('[addRelations error]'), 'taskId should be a number or Array');
+        deferred.reject();
+        return deferred.promise;
+    } else if (!Array.isArray(projectId) && Number(projectId) !== Number(projectId)) {
         console.log(chalk.red.bold('[addRelations error]'), 'projectId should be a number or Array');
         deferred.reject();
         return deferred.promise;
     }
 
     const addRelations = () => {
-        if (!Array.isArray(projectId)) {
+        if (!Array.isArray(projectId) && !Array.isArray(taskId)) {
             const data = {
                 project_id: projectId,
                 task_id: taskId,
@@ -44,7 +42,15 @@ exports.addRelation = (projectId, taskId) => {
                 console.log(chalk.red.bold('[addRelation error]'), error);
                 deferred.reject();
             });
-        } else if (Array.isArray(projectId) && projectId.length > 0) {
+        } else if (!Array.isArray(projectId) && Array.isArray(taskId) && taskId.length > 0) {
+            const values = '(' + taskId.join(`, ${projectId}),(`) + `, ${projectId})`;
+            DB.run(`INSERT INTO ${tableName} (task_id, project_id) VALUES ${values};`).then(() => {
+                deferred.resolve();
+            }, (error) => {
+                console.log(chalk.red.bold('[addRelations error]'), error);
+                deferred.reject();
+            });
+        } else if (!Array.isArray(taskId) && Array.isArray(projectId) && projectId.length > 0) {
             const values = '(' + projectId.join(`, ${taskId}),(`) + `, ${taskId})`;
             DB.run(`INSERT INTO ${tableName} (project_id, task_id) VALUES ${values};`).then(() => {
                 deferred.resolve();
@@ -52,7 +58,9 @@ exports.addRelation = (projectId, taskId) => {
                 console.log(chalk.red.bold('[addRelations error]'), error);
                 deferred.reject();
             });
-        } else if (Array.isArray(projectId) && projectId.length === 0) {
+        } else if (!Array.isArray(projectId) && Array.isArray(taskId) && taskId.length === 0) {
+            deferred.resolve();
+        } else if (!Array.isArray(taskId) && Array.isArray(projectId) && projectId.length === 0) {
             deferred.resolve();
         } else {
             console.log(chalk.red.bold('[addRelations error]'), 'Error while adding relations');
@@ -60,23 +68,20 @@ exports.addRelation = (projectId, taskId) => {
         }
     };
 
-    DB.queryRows(query)
-        .then((rows) => {
-            console.log('rows', rows);
-            if (rows.length === 0) {
-                addRelations();
-            } else {
-                DB.run(`DELETE FROM ${tableName} WHERE task_id=${taskId};`).then(() => {
-                    addRelations();
-                }, (error) => {
-                    console.log(chalk.red.bold('[addRelations error]'), error);
-                    deferred.reject();
-                });
-            }
-        }, () => {
-            deferred.reject();
-            console.log(chalk.red.bold('[addRelation error]'), 'Error while fetching relations');
-        });
+    let query;
+
+    if (!Array.isArray(taskId)) {
+        query = `DELETE FROM ${tableName} WHERE task_id=${taskId};`;
+    } else {
+        query = `DELETE FROM ${tableName} WHERE project_id=${projectId};`;
+    }
+
+    DB.run(query).then(() => {
+        addRelations();
+    }, (error) => {
+        console.log(chalk.red.bold('[addRelations error]'), error);
+        deferred.reject();
+    });
 
     return deferred.promise;
 };

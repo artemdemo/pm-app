@@ -1,6 +1,7 @@
 const boom = require('boom');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
+const errConstants = require('../constants/error');
 
 // exports.index = (request, reply) => {
 //     reply.redirect('/');
@@ -25,8 +26,19 @@ exports.add = (request, reply) => {
 };
 
 exports.update = (request, reply) => {
-    projects.updateProject(request.payload).then(() => {
-        reply({});
+    const tasks = request.payload.tasks;
+    const projectId = request.payload.id;
+    projects.updateProject(request.payload).then((updatedData) => {
+        if (tasks && projectId) {
+            projectsTasksRelations.addRelation(projectId, tasks)
+                .then(() => {
+                    reply(updatedData);
+                }, () => {
+                    reply(boom.badRequest(errConstants.DB_ERROR));
+                });
+        } else {
+            reply(updatedData);
+        }
     }, () => {
         reply(boom.badRequest('DB error'));
     });
