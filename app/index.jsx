@@ -23,7 +23,7 @@ promises.polyfill();
 render(
     <Provider store={store}>
         <Router history={history}>
-            <Route path="/" component={AppView}>
+            <Route path='/' component={AppView}>
                 <IndexRoute component={MainView} />
                 <Route path='login' component={LoginView} />
                 <Route path='signup' component={SignupView} />

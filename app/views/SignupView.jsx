@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { signup } from '../actions/user';
-import { checkAuthentication } from '../actions/user';
+import { signup, checkAuthentication } from '../actions/user';
 import { errorMessage } from '../actions/notification';
 
 import './form-signin.less';
@@ -30,7 +29,7 @@ class SignupView extends Component {
             } else {
                 errorMessage('Please fill all fields');
             }
-        }
+        };
     }
 
     componentWillMount() {
@@ -97,7 +96,7 @@ class SignupView extends Component {
 
 export default connect(
     () => {
-        return {}
+        return {};
     }, {
         signup,
         checkAuthentication,

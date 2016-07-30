@@ -5,6 +5,8 @@ import { logout } from '../../actions/user';
 
 import './MainMenu.less';
 
+const ACTIVE_ITEM = 'navbar-link_active';
+
 class MainMenu extends Component {
     constructor(props) {
         super(props);
@@ -17,27 +19,27 @@ class MainMenu extends Component {
 
     render() {
         return (
-            <nav className="navbar navbar-default">
-                <div className="container">
-                    <div className="navbar-header">
-                        <button type="button" className="navbar-toggle collapsed">
-                            <span className="sr-only">Toggle navigation</span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
+            <nav className='navbar navbar-default'>
+                <div className='container'>
+                    <div className='navbar-header'>
+                        <button type='button' className='navbar-toggle collapsed'>
+                            <span className='sr-only'>Toggle navigation</span>
+                            <span className='icon-bar'></span>
+                            <span className='icon-bar'></span>
+                            <span className='icon-bar'></span>
                         </button>
-                        <a className="navbar-brand" href="/">&lt;PM&gt;</a>
+                        <Link className='navbar-brand' to='/'>&lt;PM&gt;</Link>
                     </div>
-                    <div id="navbar" className="collapse navbar-collapse">
-                        <ul className="nav navbar-nav">
-                            <li><Link to="/tasks" className="navbar-link">Tasks</Link></li>
-                            <li><Link to="/scrum" className="navbar-link">Scrum</Link></li>
-                            <li><Link to="/projects" className="navbar-link">Projects</Link></li>
+                    <div id='navbar' className='collapse navbar-collapse'>
+                        <ul className='nav navbar-nav'>
+                            <li><Link to='/tasks' activeClassName={ACTIVE_ITEM} className='navbar-link'>Tasks</Link></li>
+                            <li><Link to='/scrum' activeClassName={ACTIVE_ITEM} className='navbar-link'>Scrum</Link></li>
+                            <li><Link to='/projects' activeClassName={ACTIVE_ITEM} className='navbar-link'>Projects</Link></li>
                         </ul>
-                        <ul className="nav navbar-nav navbar-right">
-                            <li><span className="navbar-link"
+                        <ul className='nav navbar-nav navbar-right'>
+                            <li><span className='navbar-link'
                                       onClick={this.logout}
-                                      data-qa="logout-main-menu-button">Logout</span></li>
+                                      data-qa='logout-main-menu-button'>Logout</span></li>
                         </ul>
                     </div>
                 </div>
