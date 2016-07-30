@@ -8,12 +8,14 @@ export class DropdownListItem extends Component {
         const { item, onClick } = this.props;
         const itemClass = classnames({
             'dropdown-list-item': true,
-            'dropdown-list-item_done': item.done
+            'dropdown-list-item_done': item.done,
         });
         return (
             <div className={itemClass}
-                 onClick={(item) => onClick(item)}>
-                { item.name }
+                 onClick={(item) => {
+                     onClick(item);
+                 }}>
+                {item.name}
             </div>
         );
     }
@@ -21,5 +23,5 @@ export class DropdownListItem extends Component {
 
 DropdownListItem.propTypes = {
     item: React.PropTypes.object.isRequired,
-    onClick: React.PropTypes.func.isRequired
-}
+    onClick: React.PropTypes.func.isRequired,
+};

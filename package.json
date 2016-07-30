@@ -8,7 +8,7 @@
     "pack": "gulp build --pack",
     "pack-with-mangle": "gulp build --packWithMangle",
     "watch": "gulp watch",
-    "eslint": "./node_modules/eslint/bin/eslint.js ./app/**/*.js ./app/**/*.jsx",
+    "eslint": "./node_modules/eslint/bin/eslint.js ./app/**/*.js ./app/**/**/*.js ./app/**/*.jsx ./app/**/**/*.jsx",
     "start": "node ./server/index",
     "postinstall": "cp -i hooks/pre-commit.sh .git/hooks/pre-commit && cp -i hooks/pre-push.sh .git/hooks/pre-push",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",

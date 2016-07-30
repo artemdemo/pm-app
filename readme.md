@@ -14,6 +14,29 @@ Work in progress. There is still much to be done.
 
 ## Getting started
 
+First of all you need to run following command:
+(it will install all dependencies and copy all needed files after that)
+
+```
+$ npm i && npm run build
+```
+
+Then run the server:
+
+```
+$ npm start
+```
+
+And start watching files:
+
+```
+$ npm run watch
+```
+
+This is it, you are ready to go.
+
+## All npm commands
+
 Install all npm packages and dependencies
 
 ```

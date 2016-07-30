@@ -10,8 +10,8 @@ export class DropdownList extends Component {
 
         this.state = {
             dropdownIsVisible: false,
-            list: props.list
-        }
+            list: props.list,
+        };
 
         this.inputFocus = () => {
             this.setState({
@@ -26,7 +26,7 @@ export class DropdownList extends Component {
                 this.setState({
                     dropdownIsVisible: false,
                 });
-            }, 100);
+            }, 200);
         };
 
         this.handleInputChange = (e) => {
@@ -34,7 +34,7 @@ export class DropdownList extends Component {
             if (searchValue !== '') {
                 const regexp = new RegExp(searchValue, 'i');
                 const newList = this.props.list.filter((item) => {
-                    for (let key in item) {
+                    for (const key in item) {
                         if (typeof item[key] === 'string') {
                             return item[key].match(regexp);
                         }
@@ -42,11 +42,11 @@ export class DropdownList extends Component {
                     return false;
                 });
                 this.setState({
-                    list: newList
+                    list: newList,
                 });
             } else {
                 this.setState({
-                    list: this.props.list
+                    list: this.props.list,
                 });
             }
         };
@@ -54,7 +54,7 @@ export class DropdownList extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            list: nextProps.list
+            list: nextProps.list,
         });
     }
 
@@ -62,7 +62,7 @@ export class DropdownList extends Component {
         const { placeholder, onSelect } = this.props;
         const itemsClass = classnames({
             'dropdown-list-items': true,
-            'dropdown-list-items_show': this.state.dropdownIsVisible
+            'dropdown-list-items_show': this.state.dropdownIsVisible,
         });
         return (
             <div className='dropdown-list'>
@@ -85,5 +85,5 @@ export class DropdownList extends Component {
 
 DropdownList.propTypes = {
     list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    onSelect: React.PropTypes.func
+    onSelect: React.PropTypes.func,
 };
