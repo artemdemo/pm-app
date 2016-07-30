@@ -1,7 +1,7 @@
 import * as projectsConst from '../constants/projects';
 import * as entityConst from '../constants/selectedEntity';
 import { loadTasks } from './tasks';
-import { errorMessage } from './notification';
+import { errorMessage, successMessage } from './notification';
 import { getStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
@@ -59,7 +59,7 @@ export function loadProjects() {
  * @param newProject {Object}
  * @param newProject.name {String}
  * @param newProject.description {String}
- * @param projectUpdate.tasks {Array}
+ * @param newProject.tasks {Array}
  */
 export function addNewProject(newProject) {
     const token = getStoredToken();
@@ -74,6 +74,7 @@ export function addNewProject(newProject) {
                 dispatch(projectAdded(Object.assign({}, newProject, project)));
                 dispatch(clearEntity(entityConst.ENTITY_PROJECT));
                 dispatch(loadTasks());
+                dispatch(successMessage('Project added'));
             })
             .catch((e) => {
                 console.error(e);
@@ -99,6 +100,7 @@ export function deleteProject(id) {
                 dispatch(projectDeleted(id));
                 dispatch(clearEntity(entityConst.ENTITY_PROJECT));
                 dispatch(loadTasks());
+                dispatch(successMessage('Project deleted'));
             })
             .catch((e) => {
                 console.error(e);
@@ -128,6 +130,7 @@ export function updateProject(projectUpdate) {
                 dispatch(projectUpdated(Object.assign({}, projectUpdate, project)));
                 dispatch(clearEntity(entityConst.ENTITY_PROJECT));
                 dispatch(loadTasks());
+                dispatch(successMessage('Project updated'));
             })
             .catch((e) => {
                 console.error(e);

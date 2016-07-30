@@ -2,7 +2,7 @@ import * as tasksConst from '../constants/tasks';
 import * as entityConst from '../constants/selectedEntity';
 import { loadProjects } from './projects';
 import { loadBoards } from './boards';
-import { errorMessage } from './notification';
+import { errorMessage, successMessage } from './notification';
 import { getStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
@@ -73,6 +73,7 @@ export function addNewTask(newTask) {
             })
             .then((task) => {
                 dispatch(taskAdded(Object.assign({}, newTask, task)));
+                dispatch(successMessage('Task added'));
             })
             .catch((e) => {
                 console.error(e);
@@ -99,6 +100,7 @@ export function deleteTask(id) {
                 dispatch(clearEntity(entityConst.ENTITY_TASK));
                 dispatch(loadProjects());
                 dispatch(loadBoards());
+                dispatch(successMessage('Task deleted'));
             })
             .catch((e) => {
                 console.error(e);
@@ -130,6 +132,7 @@ export function updateTask(taskUpdate) {
                 dispatch(clearEntity(entityConst.ENTITY_TASK));
                 dispatch(loadProjects());
                 dispatch(loadBoards());
+                dispatch(successMessage('Task updated'));
             })
             .catch((e) => {
                 console.error(e);
