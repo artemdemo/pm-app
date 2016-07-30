@@ -6,12 +6,18 @@ Open Source Project Management app.
 
 Work in progress. There is still much to be done.
 
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-tasks.png)
+
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-scrum.png)
+
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-projects.png)
+
 ## Getting started
 
 Install all npm packages and dependencies
 
 ```
-$ npm i && tsd i
+$ npm i
 ```
 
 Compile client app
@@ -44,10 +50,10 @@ In development use `watch` command
 $ npm run watch
 ```
 
-You can proactively run tslint code style check (it will run automatically before each commit)
+You can proactively run eslint code style check (it will run automatically before each commit)
 
 ```
-$ npm run tslint
+$ npm run eslint
 ```
 
 ## e2e tests
