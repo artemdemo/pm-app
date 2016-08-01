@@ -33,12 +33,12 @@ class SingleProject extends Component {
                 name: this.state.name,
                 description: this.state.description,
                 tasks: this.state.selectedTasks.map(project => project.id),
-            }
+            };
             this.setState({
                 loadingData: true,
             });
             if (project.id) {
-                updatedProjectData.id = project.id
+                updatedProjectData.id = project.id;
                 updateProject(Object.assign(project, updatedProjectData));
             } else {
                 addNewProject(updatedProjectData);
@@ -49,15 +49,15 @@ class SingleProject extends Component {
             this.setState({
                 selectedTasks: this.state.selectedTasks.concat([newTask]),
                 availableTasks: this.state.availableTasks.filter((task) => task.id !== newTask.id),
-            })
-        }
+            });
+        };
 
         this.disconnectTask = (newTask) => {
             this.setState({
                 selectedTasks: this.state.selectedTasks.filter((task) => task.id !== newTask.id),
                 availableTasks: this.state.availableTasks.concat([newTask]),
-            })
-        }
+            });
+        };
 
         this.deleteProject = () => {
             const task = this.getProject();
@@ -79,16 +79,16 @@ class SingleProject extends Component {
     }
 
     getProject(props = this.props) {
-        return props.project || {}
+        return props.project || {};
     }
 
     render() {
-        const { clearEntity, selectedEntity } = this.props;
+        const { clearEntity } = this.props;
         const project = this.getProject();
         const cancelButtonClass = classnames({
-            'btn': true,
+            btn: true,
             'btn-default': true,
-            'btn_disabled': this.state.loadingData
+            btn_disabled: this.state.loadingData,
         });
         const renderLoadingSpinner = () => {
             if (this.state.loadingData) {
@@ -106,7 +106,7 @@ class SingleProject extends Component {
                 <button type='submit'
                         className='btn btn-primary'
                         disabled={this.state.loadingData}>
-                    <span>{ text }</span>
+                    <span>{text}</span>
                 </button>
             );
         };
@@ -126,8 +126,8 @@ class SingleProject extends Component {
             if (project.id) {
                 return (
                     <div className='form-group text-muted'>
-                        <p>Project added: { project.added }</p>
-                        <p>Last updated: { project.updated }</p>
+                        <p>Project added: {project.added}</p>
+                        <p>Last updated: {project.updated}</p>
                     </div>
                 );
             }
@@ -142,7 +142,7 @@ class SingleProject extends Component {
                            placeholder='Project name'
                            value={this.state.name}
                            onChange={(e) => this.setState({
-                                name: e.target.value
+                               name: e.target.value,
                            })}
                            data-qa='project-name' />
                 </div>
@@ -152,7 +152,7 @@ class SingleProject extends Component {
                               rows='3'
                               value={this.state.description}
                               onChange={(e) => this.setState({
-                                   description: e.target.value
+                                  description: e.target.value,
                               })}
                               data-qa='project-description'></textarea>
                 </div>
@@ -164,7 +164,7 @@ class SingleProject extends Component {
                 </div>
                 <div className='form-group'>
                     <DropdownList list={this.state.availableTasks}
-                                  placeholder="Connect tasks to project"
+                                  placeholder='Connect tasks to project'
                                   onSelect={this.connectTask} />
                 </div>
                 {renderTime()}
@@ -190,14 +190,14 @@ class SingleProject extends Component {
 SingleProject.propTypes = {
     project: React.PropTypes.object,
     selectedEntity: React.PropTypes.object,
-}
+};
 
 export default connect(
     state => {
         return {
             tasks: state.tasks,
             selectedEntity: state.selectedEntity,
-        }
+        };
     }, {
         clearEntity,
         deleteProject,

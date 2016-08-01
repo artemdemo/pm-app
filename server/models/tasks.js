@@ -16,7 +16,7 @@ const parseTasks = (tasks) => tasks.map(task => {
 exports.getAll = (tasksData) => {
     const deferred = Q.defer();
     const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done,
-                               tasks.added, tasks.updated, tasks.board_id
+                               tasks.added, tasks.updated, tasks.board_id, tasks.id_position_scrum
                         FROM tasks
                         INNER JOIN sessions ON sessions.user_id = tasks.user_id
                         WHERE sessions.id = '${tasksData.tokenId}';`;

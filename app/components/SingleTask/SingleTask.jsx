@@ -32,46 +32,46 @@ class SingleTask extends Component {
             e.preventDefault();
             const { updateTask } = this.props;
             const task = this.getTask();
-            const board_id = this.state.board_id;
+            const boardId = this.state.board_id;
             const updatedTaskData = {
                 id: task.id,
                 name: this.state.name,
                 description: this.state.description,
                 done: this.state.done,
-                board_id: board_id > 0 ? board_id : null,
+                board_id: boardId > 0 ? boardId : null,
                 projects: this.state.selectedProjects.map(project => project.id),
-            }
+            };
             this.setState({
                 loadingData: true,
             });
             updateTask(Object.assign(task, updatedTaskData));
-        }
+        };
 
         this.deleteTask = () => {
             const task = this.getTask();
             const { deleteTask } = this.props;
             deleteTask(task.id);
-        }
+        };
 
         this.toggleDone = (newDoneStatus) => {
             this.setState({
                 done: newDoneStatus,
-            })
-        }
+            });
+        };
 
         this.connectProject = (newProject) => {
             this.setState({
                 selectedProjects: this.state.selectedProjects.concat([newProject]),
                 availableProjects: this.state.availableProjects.filter((project) => project.id !== newProject.id),
-            })
-        }
+            });
+        };
 
         this.disconnectProject = (newProject) => {
             this.setState({
                 selectedProjects: this.state.selectedProjects.filter((project) => project.id !== newProject.id),
                 availableProjects: this.state.availableProjects.concat([newProject]),
-            })
-        }
+            });
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -89,14 +89,14 @@ class SingleTask extends Component {
     }
 
     getTask(props = this.props) {
-        return props.task || {}
+        return props.task || {};
     }
 
     render() {
         const cancelButtonClass = classnames({
-            'btn': true,
+            btn: true,
             'btn-default': true,
-            'btn_disabled': this.state.loadingData
+            btn_disabled: this.state.loadingData,
         });
         const renderLoadingSpinner = () => {
             if (this.state.loadingData) {
@@ -107,7 +107,7 @@ class SingleTask extends Component {
                 );
             }
             return null;
-        }
+        };
         const { clearEntity, boards } = this.props;
         const task = this.getTask();
         return (
@@ -117,7 +117,7 @@ class SingleTask extends Component {
                            name='name'
                            value={this.state.name}
                            onChange={(e) => this.setState({
-                                name: e.target.value
+                               name: e.target.value,
                            })}
                            className='flat-input'
                            placeholder='Task name'
@@ -128,7 +128,7 @@ class SingleTask extends Component {
                               name='description'
                               value={this.state.description}
                               onChange={(e) => this.setState({
-                                   description: e.target.value
+                                  description: e.target.value,
                               })}
                               rows='3'
                               data-qa='task-description'></textarea>
@@ -146,25 +146,25 @@ class SingleTask extends Component {
                 </div>
                 <div className='form-group'>
                     <DropdownList list={this.state.availableProjects}
-                                  placeholder="Connect to project"
+                                  placeholder='Connect to project'
                                   onSelect={this.connectProject} />
                 </div>
                 <div className='form-group'>
                     <select className='form-control'
                             value={this.state.board_id}
                             onChange={(e) => this.setState({
-                                board_id: e.target.value
+                                board_id: e.target.value,
                             })}
                             name='board'>
-                        <option value="0">No board selected</option>
+                        <option value='0'>No board selected</option>
                         {boards.map((board) => (
                             <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
                         ))}
                     </select>
                 </div>
                 <div className='form-group text-muted'>
-                    <p>Task Added: { task.added }</p>
-                    <p>Last updated: { task.updated }</p>
+                    <p>Task Added: {task.added}</p>
+                    <p>Last updated: {task.updated}</p>
                 </div>
                 <div className='clearfix'>
                     <div className='pull-left'>
@@ -194,7 +194,7 @@ SingleTask.propTypes = {
     boards: React.PropTypes.arrayOf(React.PropTypes.object),
     projects: React.PropTypes.arrayOf(React.PropTypes.object),
     selectedEntity: React.PropTypes.object,
-}
+};
 
 export default connect(
     state => {
@@ -202,7 +202,7 @@ export default connect(
             boards: state.boards,
             projects: state.projects,
             selectedEntity: state.selectedEntity,
-        }
+        };
     },
     {
         clearEntity,

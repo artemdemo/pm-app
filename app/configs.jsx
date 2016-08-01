@@ -17,7 +17,7 @@ const pmApp = combineReducers({
     projects,
     notification,
     selectedEntity,
-    routing: routerReducer
+    routing: routerReducer,
 });
 
 export const store = createStore(pmApp, applyMiddleware(thunk));

@@ -84,19 +84,19 @@ export function addNewTask(newTask) {
 
 /**
  * Delete task
- * @param id {Number}
+ * @param taskId {Number}
  */
-export function deleteTask(id) {
+export function deleteTask(taskId) {
     const token = getStoredToken();
 
     return dispatch => {
-        fetch(`/tasks/${id}`, token, {method: 'DELETE'})
+        fetch(`/tasks/${taskId}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
             .then((response) => {
                 return response.json();
             })
             .then(() => {
-                dispatch(taskDeleted(id));
+                dispatch(taskDeleted(taskId));
                 dispatch(clearEntity(entityConst.ENTITY_TASK));
                 dispatch(loadProjects());
                 dispatch(loadBoards());

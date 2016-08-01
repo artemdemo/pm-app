@@ -1,8 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import { createHistory } from 'history';
+import { Router, Route, IndexRoute } from 'react-router';
 import promises from 'es6-promise';
 
 import './styles/general.less';
@@ -16,7 +15,6 @@ import TasksView from './views/TasksView';
 import ScrumView from './views/ScrumView';
 import ProjectsView from './views/ProjectsView';
 import { MainView } from './views/MainView';
-import { requireAuthentication } from './components/AuthenticatedComponent';
 
 promises.polyfill();
 
