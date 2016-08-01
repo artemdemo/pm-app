@@ -5,7 +5,7 @@ BLUE='\033[1;34m'
 RED='\033[1;31m'
 NC='\033[0m'
 
-files=$(git diff --cached --name-only --diff-filter=ACMR | egrep '\.js$')
+files=$(git diff --cached --name-only --diff-filter=ACMR | egrep '\.js[x]?$')
 
 if [ -n "$files" ]; then
     PATH=$(npm bin):$PATH eslint $files
