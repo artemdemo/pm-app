@@ -1,5 +1,9 @@
 {
     "extends": "airbnb",
+    // This parser can handle object spread operator
+    // https://www.npmjs.com/package/babel-eslint
+    "parser": "babel-eslint",
+    "plugins": [],
     "globals": {},
     "rules": {
         // 4 spaces indentation

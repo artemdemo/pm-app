@@ -1,21 +1,17 @@
-var webpack = require('webpack');
-var path = require('path');
-var fs = require('fs');
-var _ = require('underscore');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
     entry: {
-        'app': './app/index.jsx'
+        app: './app/index.jsx',
     },
     output: {
-        path: __dirname + '/public/',
+        path: `${__dirname}/public/`,
         filename: './js/bundle-[hash].js',
-        publicPath: '/'
+        publicPath: '/',
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx'],
     },
     devtool: 'source-map',
     module: {
@@ -23,7 +19,7 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 loaders: ['babel-loader'],
-                exclude: /node_modules/
+                exclude: /node_modules/,
             },
             {
                 test: /\.(less|css)$/,
@@ -41,15 +37,15 @@ module.exports = {
                 loader: 'json',
             },
             // Font Definitions
-            { test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]' },
-            { test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]' },
-            { test: /\.woff2$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]' },
-            { test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]' },
-            { test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]' }
-        ]
+            {test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]'},
+            {test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]'},
+            {test: /\.woff2$/, loader: 'url?limit=65000&mimetype=application/font-woff2&name=fonts/[name].[ext]'},
+            {test: /\.[ot]tf$/, loader: 'url?limit=65000&mimetype=application/octet-stream&name=fonts/[name].[ext]'},
+            {test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
+        ],
     },
     plugins: [],
-    postcss: function () {
+    postcss: function() {
         return [
             autoprefixer({browsers: [
                 'last 2 Chrome versions',
@@ -62,7 +58,7 @@ module.exports = {
                 'Explorer >= 10',
                 'last 2 ChromeAndroid versions',
                 'Android >= 4.0',
-            ]})
+            ]}),
         ];
-    }
+    },
 };

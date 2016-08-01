@@ -1,22 +1,54 @@
 @import '../../styles/colors';
 
+.board-task-wrap {
+    padding-bottom: 6px;
+
+    &:last-of-type {
+        padding-bottom: 0;
+    }
+}
+
+    .board-task-wrap_is-dragged {
+        display: none;
+    }
+
 .board-task {
     border: 1px solid darken(@list-bg-color, 10%);
     background: white;
     border-radius: 3px;
     padding: 5px 7px;
-    margin-bottom: 6px;
-
-    &:last-of-type {
-        margin-bottom: 0;
-    }
 }
 
     .board-task_placeholder {
-        padding: 20px;
-        background-color: #ffffbd;
-        border-color: #eaea74;
+        padding: 20px 0;
+        position: relative;
     }
+
+        .board-task_placeholder__before {
+            &:before {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 100%;
+                top: 0;
+                bottom: 6px;
+                background-color: #ffffbd;
+                border: 1px solid #eaea74;
+            }
+        }
+
+        .board-task_placeholder__after {
+            &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 100%;
+                top: 6px;
+                bottom: 0;
+                background-color: #ffffbd;
+                border: 1px solid #eaea74;
+            }
+        }
 
     .board-task__menu-icon {
         cursor: pointer;
