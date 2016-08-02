@@ -140,3 +140,14 @@ export function updateTask(taskUpdate) {
             });
     };
 }
+
+/**
+ * After task has been dragged I need to update id of all tasks
+ * @param draggedTask {Object} - contain `task`, `nearTaskId`, `position` (`before` or `after`)
+ */
+export function updateDraggedTaskPosition(draggedTask) {
+    return {
+        type: tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING,
+        draggedTask,
+    };
+}

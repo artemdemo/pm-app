@@ -5,10 +5,6 @@ import ScrumBoard from './ScrumBoard';
 import './BoardsList.less';
 
 class BoardsList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const { boards } = this.props;
         return (
@@ -33,7 +29,7 @@ class BoardsList extends Component {
 export default connect(
     state => {
         return {
-            boards: state.boards
-        }
+            boards: state.boards,
+        };
     }
 )(BoardsList);

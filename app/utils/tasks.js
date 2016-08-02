@@ -44,3 +44,20 @@ export function filterTasks(holder, allTasks = []) {
 
     return { selectedTasks, availableTasks };
 }
+
+/**
+ * Callback function for `sort()` array method.
+ * Sorting tasks by `id_position_scrum`
+ * @param taskA
+ * @param taskB
+ * @returns {number}
+ */
+export function sortByIdPositionScrum(taskA, taskB) {
+    if (taskA.id_position_scrum < taskB.id_position_scrum) {
+        return -1;
+    }
+    if (taskA.id_position_scrum > taskB.id_position_scrum) {
+        return 1;
+    }
+    return 0;
+}

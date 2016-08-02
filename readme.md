@@ -7,9 +7,9 @@ Open Source Project Management app.
 Work in progress. There is still much to be done.
 
 ![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-tasks.png)
-
+---
 ![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-scrum.png)
-
+---
 ![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-projects.png)
 
 ## Getting started

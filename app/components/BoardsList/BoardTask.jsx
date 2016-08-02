@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { filterProjects } from '../../utils/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
-import { setDraggedTask, dropDraggedTask } from '../../actions/draggedTask';
+import { setDraggedTask, dropDraggedTask, setDraggedTaskDropPosition } from '../../actions/draggedTask';
+import { updateDraggedTaskPosition } from '../../actions/tasks';
 
 import './BoardTask.less';
 
@@ -34,7 +35,9 @@ class BoardTask extends Component {
         };
 
         this.dragEnd = () => {
-            const { dropDraggedTask } = this.props;
+            const { draggedTask, dropDraggedTask, updateDraggedTaskPosition } = this.props;
+
+            updateDraggedTaskPosition(draggedTask);
             dropDraggedTask();
         };
 
@@ -46,12 +49,16 @@ class BoardTask extends Component {
                     renderPlaceholder: false,
                 });
             }, 100);
-            if (e.target.className.indexOf('board-task_placeholder') > -1) return;
+            const { task, setDraggedTaskDropPosition } = this.props;
             const relY = e.clientY - e.target.offsetTop;
             const height = e.target.offsetHeight / 2;
+            const position = relY > height ? 'after' : 'before';
+            setDraggedTaskDropPosition(task.id, position);
+
+            if (e.target.className.indexOf('board-task_placeholder') > -1) return;
 
             this.setState({
-                renderPlaceholder: relY > height ? 'after' : 'before',
+                renderPlaceholder: position,
             });
         };
     }
@@ -61,7 +68,7 @@ class BoardTask extends Component {
         const { selectedProjects } = filterProjects(task, projects);
         const taskWrapClass = classnames({
             'board-task-wrap': true,
-            'board-task-wrap_is-dragged': draggedTask.task && draggedTask.task.id === task.id,
+            'board-task-wrap_is-dragged': draggedTask && draggedTask.task && draggedTask.task.id === task.id,
         });
 
         // `position` can be `before` or `after`
@@ -115,5 +122,7 @@ export default connect(
     }, {
         setDraggedTask,
         dropDraggedTask,
+        setDraggedTaskDropPosition,
+        updateDraggedTaskPosition,
     }
 )(BoardTask);

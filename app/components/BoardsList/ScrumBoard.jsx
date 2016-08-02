@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { filterTasks } from '../../utils/tasks';
+import { filterTasks, sortByIdPositionScrum } from '../../utils/tasks';
 import BoardTask from './BoardTask';
 
 import './ScrumBoard.less';
@@ -17,15 +17,7 @@ class ScrumBoard extends Component {
     render() {
         const { board, tasks } = this.props;
         const { selectedTasks } = filterTasks(board, tasks);
-        selectedTasks.sort((taskA, taskB) => {
-            if (taskA.id_position_scrum < taskB.id_position_scrum) {
-                return -1;
-            }
-            if (taskA.id_position_scrum > taskB.id_position_scrum) {
-                return 1;
-            }
-            return 0;
-        });
+        selectedTasks.sort(sortByIdPositionScrum);
         return (
             <div className='scrum-board'>
                 <div className='board__title'>

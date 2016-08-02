@@ -1,4 +1,5 @@
 import * as tasksConst from '../constants/tasks';
+import { sortByIdPositionScrum } from '../utils/tasks';
 
 function sortTasksByUpdate(inTasks = []) {
     const sortedByUpdate = inTasks.sort((taskA, taskB) => {
@@ -47,6 +48,31 @@ export default function tasks(state = [], action) {
                         ...state.slice(i + 1),
                     ]);
                 }
+            }
+            return state;
+        case tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING:
+            if (action.draggedTask) {
+                const sortedTasks = state.sort(sortByIdPositionScrum);
+                const newState = [];
+
+                for (let i = 0, len = sortedTasks.length; i < len; i++) {
+                    if (sortedTasks[i].id !== action.draggedTask.task.id) {
+                        if (sortedTasks[i].id === action.draggedTask.nearTaskId) {
+                            if (action.draggedTask.position === 'before') {
+                                newState.push(sortedTasks[i]);
+                                newState.push(action.draggedTask.task);
+                            } else {
+                                newState.push(action.draggedTask.task);
+                                newState.push(sortedTasks[i]);
+                            }
+                        } else {
+                            newState.push(sortedTasks[i]);
+                        }
+                    }
+                }
+                return newState.map((task, index) => Object.assign(task, {
+                    id_position_scrum: index,
+                }));
             }
             return state;
         default:

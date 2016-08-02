@@ -1,20 +1,18 @@
 import * as draggedTaskConst from '../constants/draggedTask';
 
-export default function setDraggedTask(state = {}, action) {
+export default function setDraggedTask(state = null, action) {
     switch (action.type) {
         case draggedTaskConst.SET_DRAGGED_TASK:
-            return {
+            return Object.assign({}, state, {
                 task: action.task,
-                ...state,
-            };
+            });
         case draggedTaskConst.SET_DRAGGED_TASK_POSITION:
-            return {
+            return Object.assign({}, state, {
                 nearTaskId: action.nearTaskId,
                 position: action.position,
-                ...state,
-            };
+            });
         case draggedTaskConst.DROP_DRAGGED_TASK:
-            return {};
+            return null;
         default:
             return state;
     }
