@@ -12,8 +12,8 @@ class TasksList extends Component {
         super(props);
 
         this.state = {
-            tasks: props.tasks
-        }
+            tasks: props.tasks,
+        };
 
         this.listMenu = [
             { id: 1, name: 'All' },
@@ -26,27 +26,14 @@ class TasksList extends Component {
         this.selectItem = (item) => {
             this.sortingMenuItem = item;
             this.setState({
-                tasks: this.filterTasks(this.props.tasks, this.sortingMenuItem)
+                tasks: this.filterTasks(this.props.tasks, this.sortingMenuItem),
             });
-        }
-    }
-
-    filterTasks(tasks, sortItem) {
-        return tasks.filter((item) => {
-            switch(sortItem.id) {
-                case 2: // active
-                    return item.done === false;
-                case 3: // completed
-                    return item.done === true;
-                default: // all
-                    return true;
-            }
-        })
+        };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            tasks: this.filterTasks(nextProps.tasks, this.sortingMenuItem)
+            tasks: this.filterTasks(nextProps.tasks, this.sortingMenuItem),
         });
     }
 
@@ -55,17 +42,29 @@ class TasksList extends Component {
         clearEntity(entityConst.ENTITY_TASK);
     }
 
+    filterTasks(tasks, sortItem) {
+        return tasks.filter((item) => {
+            switch (sortItem.id) {
+                case 2: // active
+                    return item.done === false;
+                case 3: // completed
+                    return item.done === true;
+                default: // all
+                    return true;
+            }
+        });
+    }
+
     render() {
-        const { tasks } = this.props;
         const newTask = {
             name: '',
-            description: ''
-        }
+            description: '',
+        };
         return (
             <div>
                 <RadioMenu list={this.listMenu} onSelect={this.selectItem} />
                 <div className='tasks-list'>
-                    <TasksListItem task={newTask} key={`task-0`} />
+                    <TasksListItem task={newTask} key='task-0' />
                     {this.state.tasks.map(task => (
                         <TasksListItem task={task} key={`task-${task.id}`} />
                     ))}
@@ -76,14 +75,14 @@ class TasksList extends Component {
 }
 
 TasksList.propTypes = {
-    tasks: React.PropTypes.arrayOf(React.PropTypes.object)
-}
+    tasks: React.PropTypes.arrayOf(React.PropTypes.object),
+};
 
 export default connect(
     state => {
         return {
             tasks: state.tasks,
-        }
+        };
     }, {
         clearEntity,
     }
