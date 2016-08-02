@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { filterTasks } from '../../utils/tasks';
 import { deleteProject, updateProject, addNewProject } from '../../actions/projects';
@@ -85,11 +84,6 @@ class SingleProject extends Component {
     render() {
         const { clearEntity } = this.props;
         const project = this.getProject();
-        const cancelButtonClass = classnames({
-            btn: true,
-            'btn-default': true,
-            btn_disabled: this.state.loadingData,
-        });
         const renderLoadingSpinner = () => {
             if (this.state.loadingData) {
                 return (
@@ -133,6 +127,14 @@ class SingleProject extends Component {
             }
             return null;
         };
+        const renderDeleteButton = () => {
+            if (project && project.id) {
+                return (
+                    <DeleteButton onDelete={this.deleteProject} />
+                );
+            }
+            return null;
+        };
         return (
             <form onSubmit={this.submitProject} className='single-panel'>
                 <div className='form-group'>
@@ -172,14 +174,15 @@ class SingleProject extends Component {
                     <div className='pull-left'>
                         <span className='buttons-group'>
                             {renderSaveButton()}
-                            <span className={cancelButtonClass}
+                            <span className='btn btn-default'
+                                  disabled={this.state.loadingData}
                                   onClick={() => clearEntity(entityConst.ENTITY_PROJECT)}
                                   data-qa='project-cancel'>Cancel</span>
                         </span>
                         {renderLoadingSpinner()}
                     </div>
                     <div className='pull-right'>
-                        <DeleteButton onDelete={this.deleteProject} />
+                        {renderDeleteButton()}
                     </div>
                 </div>
             </form>

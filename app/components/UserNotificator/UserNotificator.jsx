@@ -9,21 +9,21 @@ class UserNotificator extends Component {
     render() {
         const { notification, hideNotification } = this.props;
         const HIDE_TIMEOUT = 2000;
-        let msgClass = 'user-notificatior-message';
+        let msgClass = 'user-notificator-message';
 
         switch (notification.type) {
             case notificationConst.ERROR_MSG:
-                msgClass += ' user-notificatior-message_error';
+                msgClass += ' user-notificator-message_error';
                 break;
             case notificationConst.SUCCESS_MSG:
-                msgClass += ' user-notificatior-message_success';
+                msgClass += ' user-notificator-message_success';
                 break;
         }
 
         if (notification.type !== notificationConst.HIDE_MSG) {
             setTimeout(hideNotification, HIDE_TIMEOUT);
             return (
-                <div className="user-notificatior">
+                <div className='user-notificator'>
                     <div className={msgClass}>
                         {notification.message}
                     </div>
@@ -31,7 +31,7 @@ class UserNotificator extends Component {
             );
         }
         return (
-            <div className="user-notificatior"></div>
+            <div className='user-notificator'></div>
         );
     }
 }
@@ -39,9 +39,9 @@ class UserNotificator extends Component {
 export default connect(
     state => {
         return {
-            notification: state.notification
-        }
+            notification: state.notification,
+        };
     }, {
-        hideNotification
+        hideNotification,
     }
 )(UserNotificator);

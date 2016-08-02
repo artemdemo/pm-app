@@ -3,10 +3,21 @@ import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
 import * as entityConst from '../../constants/selectedEntity';
 import { clearEntity } from '../../actions/selectedEntity';
+import { showPopup } from '../../actions/popup';
+import SingleBoard from '../SingleBoard/SingleBoard';
 
 import './BoardsList.less';
 
 class BoardsList extends Component {
+    constructor(props) {
+        super(props);
+
+        this.addNewBoard = () => {
+            const { showPopup } = this.props;
+            showPopup(<SingleBoard />);
+        };
+    }
+
     componentWillUnmount() {
         const { clearEntity } = this.props;
         clearEntity(entityConst.ENTITY_TASK);
@@ -22,9 +33,7 @@ class BoardsList extends Component {
                     ))}
                 </div>
                 <button className='btn btn-default'
-                        onClick={() => {
-                            console.log('Add new board');
-                        }}
+                        onClick={this.addNewBoard}
                         data-qa='add-new-board'>
                     New Board
                 </button>
@@ -40,5 +49,6 @@ export default connect(
         };
     }, {
         clearEntity,
+        showPopup,
     }
 )(BoardsList);
