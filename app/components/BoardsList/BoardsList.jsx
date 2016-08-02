@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
+import * as entityConst from '../../constants/selectedEntity';
+import { clearEntity } from '../../actions/selectedEntity';
 
 import './BoardsList.less';
 
 class BoardsList extends Component {
+    componentWillUnmount() {
+        const { clearEntity } = this.props;
+        clearEntity(entityConst.ENTITY_TASK);
+    }
+
     render() {
         const { boards } = this.props;
         return (
@@ -31,5 +38,7 @@ export default connect(
         return {
             boards: state.boards,
         };
+    }, {
+        clearEntity,
     }
 )(BoardsList);

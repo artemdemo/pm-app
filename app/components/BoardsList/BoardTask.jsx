@@ -5,6 +5,7 @@ import { filterProjects } from '../../utils/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { setDraggedTask, dropDraggedTask, setDraggedTaskDropPosition } from '../../actions/draggedTask';
 import { updateDraggedTaskPosition } from '../../actions/tasks';
+import { selectTask } from '../../actions/selectedEntity';
 
 import './BoardTask.less';
 
@@ -61,6 +62,11 @@ class BoardTask extends Component {
                 renderPlaceholder: position,
             });
         };
+
+        this.openTask = () => {
+            const { task, selectTask } = this.props;
+            selectTask(task);
+        };
     }
 
     render() {
@@ -90,6 +96,7 @@ class BoardTask extends Component {
                 {renderPlaceholder('before')}
                 <div className='board-task'
                      draggable='true'
+                     onClick={this.openTask}
                      onDragOver={this.dragOver}
                      onDragStart={this.dragStart}
                      onDragEnd={this.dragEnd}>
@@ -124,5 +131,6 @@ export default connect(
         dropDraggedTask,
         setDraggedTaskDropPosition,
         updateDraggedTaskPosition,
+        selectTask,
     }
 )(BoardTask);

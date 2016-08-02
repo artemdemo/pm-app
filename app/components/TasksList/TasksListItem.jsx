@@ -34,7 +34,7 @@ class TasksListItem extends Component {
         const { task, projects, selectTask, clearEntity } = this.props;
         const itemClass = classnames({
             'tasks-list-item__text': true,
-            'tasks-list-item__text_done': task.done
+            'tasks-list-item__text_done': task.done,
         });
 
         const { selectedProjects } = filterProjects(task, projects);
@@ -46,15 +46,15 @@ class TasksListItem extends Component {
                         {task.name}
                     </span>
                 );
-            } else {
-                return (
-                    <form onSubmit={this.createNewTask}>
-                        <input className='tasks-list-item__name-input'
-                               ref='nameInput'
-                               placeholder='New task...' />
-                    </form>
-                );
             }
+
+            return (
+                <form onSubmit={this.createNewTask}>
+                    <input className='tasks-list-item__name-input'
+                           ref='nameInput'
+                           placeholder='New task...' />
+                </form>
+            );
         };
 
         return (
@@ -66,11 +66,11 @@ class TasksListItem extends Component {
                 </div>
                 <div className='tasks-list-item__cell'
                      onClick={() => {
-                        if (task.id) {
-                            selectTask(task);
-                        } else {
-                            clearEntity(entityConst.ENTITY_TASK);
-                        }
+                         if (task.id) {
+                             selectTask(task);
+                         } else {
+                             clearEntity(entityConst.ENTITY_TASK);
+                         }
                      }}>
                     {renderTaskName()}
                 </div>
@@ -88,13 +88,13 @@ class TasksListItem extends Component {
 
 TasksListItem.propTypes = {
     task: React.PropTypes.object,
-    projects: React.PropTypes.arrayOf(React.PropTypes.object)
+    projects: React.PropTypes.arrayOf(React.PropTypes.object),
 };
 
 export default connect(
     state => {
         return {
-            projects: state.projects
+            projects: state.projects,
         };
     },
     {
