@@ -10,13 +10,17 @@ class SingleBoard extends Component {
     constructor(props) {
         super(props);
 
+        const board = props.board || {};
+
         this.state = {
-            name: '',
-            description: '',
+            title: board.title || '',
+            description: board.description || '',
             loadingData: false,
         };
 
-        this.submitBoard = () => {};
+        this.submitBoard = (e) => {
+            e.preventDefault();
+        };
 
         this.deleteBoard = () => {};
     }
@@ -60,10 +64,10 @@ class SingleBoard extends Component {
                     <input type='text'
                            name='name'
                            className='flat-input'
-                           placeholder='Board name'
-                           value={this.state.name}
+                           placeholder='Board title'
+                           value={this.state.title}
                            onChange={(e) => this.setState({
-                               name: e.target.value,
+                               title: e.target.value,
                            })}
                            data-qa='board-name' />
                 </div>
