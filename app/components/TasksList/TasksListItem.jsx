@@ -7,6 +7,7 @@ import { addNewTask } from '../../actions/tasks';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { selectTask, clearEntity } from '../../actions/selectedEntity';
+import { errorMessage } from '../../actions/notification';
 
 import './TasksListItem.less';
 
@@ -18,10 +19,17 @@ class TasksListItem extends Component {
         this.toggleDone = () => {};
 
         this.createNewTask = (e) => {
-            const { addNewTask } = this.props;
+            const { addNewTask, errorMessage } = this.props;
+            const newTaskName = this.refs.nameInput.value;
             e.preventDefault();
+
+            if (newTaskName === '') {
+                errorMessage('Name can\'t be empty');
+                return;
+            }
+
             addNewTask({
-                name: this.refs.nameInput.value,
+                name: newTaskName,
                 done: false,
             });
 
@@ -101,5 +109,6 @@ export default connect(
         selectTask,
         clearEntity,
         addNewTask,
+        errorMessage,
     }
 )(TasksListItem);

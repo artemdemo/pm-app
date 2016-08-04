@@ -4,6 +4,7 @@ import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { hidePopup } from '../../actions/popup';
 import { addNewBoard, updateBoard, deleteBoard } from '../../actions/boards';
+import { errorMessage } from '../../actions/notification';
 
 import './SingleBoard.less';
 
@@ -22,11 +23,19 @@ class SingleBoard extends Component {
 
         this.submitBoard = (e) => {
             e.preventDefault();
-            const { addNewBoard, updateBoard } = this.props;
+            const { addNewBoard, updateBoard, errorMessage } = this.props;
             const board = this.getBoard();
+            const idPosition = this.state.id_position;
+
+            if (this.state.title === '') {
+                errorMessage('Title can\'t be empty');
+                return;
+            }
+
             const updatedBoardData = {
                 title: this.state.title,
                 description: this.state.description,
+                id_position: idPosition ? Number(idPosition) : idPosition,
             };
             this.setState({
                 loadingData: true,
@@ -51,8 +60,9 @@ class SingleBoard extends Component {
     }
 
     render() {
-        const { board, hidePopup } = this.props;
-        const boards = [];
+        const { boards, hidePopup } = this.props;
+        const board = this.getBoard();
+        const boardsList = boards.filter(item => item.id !== board.id);
 
         const renderSaveButton = () => {
             const text = board && board.id ? 'Save' : 'Add new';
@@ -95,6 +105,7 @@ class SingleBoard extends Component {
                            onChange={(e) => this.setState({
                                title: e.target.value,
                            })}
+                           autoComplete='off'
                            autoFocus
                            data-qa='board-name' />
                 </div>
@@ -115,9 +126,10 @@ class SingleBoard extends Component {
                                 id_position: e.target.value,
                             })}
                             name='board'>
-                        <option value='0'>Place board after</option>
-                        {boards.map((board) => (
-                            <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
+                        <option>Place board after all</option>
+                        <option disabled>&nbsp;&nbsp;Place before:</option>
+                        {boardsList.map((board) => (
+                            <option value={board.id_position} key={`board-${board.id}`}>{board.title}</option>
                         ))}
                     </select>
                 </div>
@@ -147,12 +159,15 @@ SingleBoard.propTypes = {
 };
 
 export default connect(
-    () => {
-        return {};
+    state => {
+        return {
+            boards: state.boards,
+        };
     }, {
         hidePopup,
         addNewBoard,
         updateBoard,
         deleteBoard,
+        errorMessage,
     }
 )(SingleBoard);

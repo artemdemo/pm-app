@@ -4,13 +4,9 @@ import classNames from 'classnames';
 import './NarrowList.less';
 
 export class NarrowList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const { list, deletable, onDelete } = this.props;
-        const renderDeletButton = (item) => {
+        const renderDeleteButton = (item) => {
             if (deletable) {
                 return (
                     <span className='narrow-list-item__close'
@@ -19,9 +15,9 @@ export class NarrowList extends Component {
                                          glyphicon-remove'></span>
                     </span>
                 );
-            } else {
-                return null;
             }
+
+            return null;
         };
         return (
             <ul className='narrow-list'>
@@ -36,12 +32,12 @@ export class NarrowList extends Component {
                             <div className='narrow-list-item__cell
                                             narrow-list-item__cell_name'>
                                 <span className='narrow-list-item__name'>
-                                    { item.name }
+                                    {item.name}
                                 </span>
                             </div>
                             <div className='narrow-list-item__cell
                                             narrow-list-item__cell_close'>
-                                {renderDeletButton(item)}
+                                {renderDeleteButton(item)}
                             </div>
                         </li>
                     );
@@ -55,4 +51,4 @@ NarrowList.propTypes = {
     list: React.PropTypes.arrayOf(React.PropTypes.object),
     deletable: React.PropTypes.bool,
     onDelete: React.PropTypes.func,
-}
+};

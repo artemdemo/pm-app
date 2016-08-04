@@ -7,6 +7,7 @@ import { NarrowList } from '../NarrowList/NarrowList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { clearEntity } from '../../actions/selectedEntity';
+import { errorMessage } from '../../actions/notification';
 import * as entityConst from '../../constants/selectedEntity';
 
 class SingleProject extends Component {
@@ -26,8 +27,14 @@ class SingleProject extends Component {
 
         this.submitProject = (e) => {
             e.preventDefault();
-            const { updateProject, addNewProject } = this.props;
+            const { updateProject, addNewProject, errorMessage } = this.props;
             const project = this.getProject();
+
+            if (this.state.name === '') {
+                errorMessage('Name can\'t be empty');
+                return;
+            }
+
             const updatedProjectData = {
                 name: this.state.name,
                 description: this.state.description,
@@ -108,7 +115,7 @@ class SingleProject extends Component {
             if (this.state.selectedTasks.length > 0) {
                 return (
                     <NarrowList list={this.state.selectedTasks}
-                                deletable={true}
+                                deletable
                                 onDelete={this.disconnectTask} />
                 );
             }
@@ -206,5 +213,6 @@ export default connect(
         deleteProject,
         updateProject,
         addNewProject,
+        errorMessage,
     }
 )(SingleProject);

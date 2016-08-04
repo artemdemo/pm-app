@@ -10,6 +10,7 @@ import { DropdownList } from '../DropdownList/DropdownList';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { clearEntity } from '../../actions/selectedEntity';
 import * as entityConst from '../../constants/selectedEntity';
+import { errorMessage } from '../../actions/notification';
 
 class SingleTask extends Component {
     constructor(props) {
@@ -30,9 +31,15 @@ class SingleTask extends Component {
 
         this.submitTask = (e) => {
             e.preventDefault();
-            const { updateTask } = this.props;
+            const { updateTask, errorMessage } = this.props;
             const task = this.getTask();
             const boardId = this.state.board_id;
+
+            if (this.state.name === '') {
+                errorMessage('Name can\'t be empty');
+                return;
+            }
+
             const updatedTaskData = {
                 id: task.id,
                 name: this.state.name,
@@ -141,7 +148,6 @@ class SingleTask extends Component {
                 </div>
                 <div className='form-group'>
                     <LabelsList list={this.state.selectedProjects}
-                                delitable={true}
                                 onDelete={this.disconnectProject} />
                 </div>
                 <div className='form-group'>
@@ -208,5 +214,6 @@ export default connect(
         clearEntity,
         deleteTask,
         updateTask,
+        errorMessage,
     }
 )(SingleTask);

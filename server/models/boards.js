@@ -52,6 +52,7 @@ exports.addNew = (newBoardData) => {
             DB.insertRow(tableName, {
                 title: newBoardData.payload.title,
                 description: newBoardData.payload.description,
+                // id_position: newBoardData.payload.id_position || null,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 user_id: session.user_id,
