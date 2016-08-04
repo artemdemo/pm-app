@@ -1,6 +1,6 @@
 /**
  * Callback function for `sort()` array method.
- * Sorting tasks by `id_position_scrum`
+ * Sorting tasks by `id_position`
  * @param boardA
  * @param boardB
  * @returns {number}

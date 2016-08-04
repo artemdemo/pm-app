@@ -24,10 +24,13 @@ export default function boards(state = [], action) {
         case boardsConst.BOARD_DELETED:
             for (let i = 0, len = state.length; i < len; i++) {
                 if (state[i].id === action.id) {
-                    return [
+                    const boardsList = [
                         ...state.slice(0, i),
                         ...state.slice(i + 1),
                     ];
+                    return boardsList.map((board, index) => Object.assign(board, {
+                        id_position: index,
+                    }));
                 }
             }
             return state;

@@ -8,6 +8,24 @@ const sessions = require('./sessions');
 const DB = require('sqlite-crud');
 const tableName = 'boards';
 
+
+/**
+ * Create SQL query to set position_id by order of given array
+ * @param boards {Array}
+ * @returns {string}
+ */
+const cratePositionsQuery = (boards) => {
+    let query = 'UPDATE boards SET id_position = CASE id';
+    const ids = [];
+    boards.forEach((board, index) => {
+        ids.push(board.id);
+        query += ` WHEN ${board.id} THEN ${index}`;
+    });
+    query += ' END';
+    query += ` WHERE id IN (${ids.join(', ')});`;
+    return query;
+};
+
 /**
  * Return all boards (without tasks), that related to given session id
  * @param tokenId {String} - for example: bbad4972-43d3-43fa-bb7f-35fb1ae64333
@@ -18,7 +36,8 @@ const getAllBoards = (tokenId) => {
     const boardsQuery = `SELECT boards.id, boards.title, boards.description, boards.id_position, sessions.user_id
                          FROM boards
                          INNER JOIN sessions ON sessions.user_id = boards.user_id
-                         WHERE sessions.id = '${tokenId}';`;
+                         WHERE sessions.id = '${tokenId}'
+                         ORDER BY id_position ASC;`;
 
     DB.queryRows(boardsQuery)
         .then((boards) => {
@@ -86,32 +105,50 @@ exports.addNew = (newBoardData) => {
     const deferred = Q.defer();
     const now = moment(new Date());
 
-    sessions.getSession({
-        id: newBoardData.tokenId,
-    }).then((session) => {
-        try {
-            DB.insertRow(tableName, {
+    getAllBoards(newBoardData.tokenId)
+        .then((boards) => {
+            const userId = boards[0].user_id;
+            const newBoard = {
                 title: newBoardData.payload.title,
                 description: newBoardData.payload.description,
-                // id_position: newBoardData.payload.id_position || null,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
-                user_id: session.user_id,
-            }).then((result) => {
-                deferred.resolve({
-                    id: result.id,
-                    added: now.format('YYYY-MM-DD HH:mm:ss'),
-                    updated: now.format('YYYY-MM-DD HH:mm:ss'),
+                user_id: userId,
+            };
+
+            DB.insertRow(tableName, newBoard)
+                .then((result) => {
+                    const resultData = {
+                        id: result.id,
+                        added: now.format('YYYY-MM-DD HH:mm:ss'),
+                        updated: now.format('YYYY-MM-DD HH:mm:ss'),
+                    };
+                    deferred.resolve(resultData);
+
+                    let boardsList = [];
+                    let newBoardAdded = false;
+                    newBoard.id_position = newBoardData.payload.id_position;
+                    boards.forEach((board, i) => {
+                        if (newBoardData.payload.id_position === i) {
+                            newBoardAdded = true;
+                            boardsList.push(Object.assign(newBoard, resultData));
+                        }
+                        boardsList.push(board);
+                    });
+                    if (!newBoardAdded) {
+                        boardsList.push(Object.assign(newBoard, resultData));
+                    }
+                    boardsList = boardsList.map((board, index) => Object.assign(board, {
+                        id_position: index,
+                    }));
+
+                    const query = cratePositionsQuery(boardsList);
+                    DB.run(query);
+                }, (error) => {
+                    console.log(chalk.red.bold('[addNew Board error]'), error);
+                    deferred.reject();
                 });
-            }, (error) => {
-                console.log(chalk.red.bold('[addNew Board error]'), error);
-                deferred.reject();
-            });
-        } catch (error) {
-            console.log(chalk.red.bold('[addNew Board error]'), error);
-            deferred.reject();
-        }
-    }, () => deferred.reject());
+        }, () => deferred.reject());
 
     return deferred.promise;
 };
@@ -208,6 +245,11 @@ exports.deleteBoard = (boardData) => {
                 comparator: '=',
                 value: session.user_id,
             }]).then(() => {
+                getAllBoards(boardData.tokenId)
+                    .then(boards => {
+                        const query = cratePositionsQuery(boards);
+                        DB.run(query);
+                    });
                 deferred.resolve();
             }, (error) => {
                 console.log(chalk.red.bold('[deleteBoard error]'), error);
