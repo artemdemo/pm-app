@@ -106,7 +106,7 @@ exports.addNew = (newBoardData) => {
     const now = moment(new Date());
 
     getAllBoards(newBoardData.tokenId)
-        .then((boards) => {
+        .then(boards => {
             const userId = boards[0].user_id;
             const newBoard = {
                 title: newBoardData.payload.title,
@@ -175,7 +175,7 @@ exports.updateBoard = (boardData) => {
         return deferred.promise;
     }
 
-    const allowedFields = ['title', 'description', 'id_position'];
+    const allowedFields = ['title', 'description'];
     allowedFields.forEach((field) => {
         if (boardData.payload.hasOwnProperty(field)) {
             updateData[field] = boardData.payload[field];
@@ -190,10 +190,14 @@ exports.updateBoard = (boardData) => {
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    sessions.getSession({
-        id: boardData.tokenId,
-    }).then((session) => {
-        try {
+    getAllBoards(boardData.tokenId)
+        .then(boards => {
+            const userId = boards[0].user_id;
+            const updatedBoard = Object.assign(updateData, {
+                id: boardData.payload.id,
+                id_position: boardData.payload.id_position,
+            });
+
             DB.updateRow(tableName, updateData, [{
                 column: 'id',
                 comparator: '=',
@@ -201,18 +205,36 @@ exports.updateBoard = (boardData) => {
             }, {
                 column: 'user_id',
                 comparator: '=',
-                value: session.user_id,
+                value: userId,
             }]).then(() => {
+                let boardsList = [];
+                let newBoardAdded = false;
+
+                boards.forEach((board, i) => {
+                    if (board.id !== updatedBoard.id) {
+                        if (updatedBoard.id_position === i) {
+                            newBoardAdded = true;
+                            boardsList.push(updatedBoard);
+                        }
+                        boardsList.push(board);
+                    }
+                });
+                if (!newBoardAdded) {
+                    boardsList.push(updatedBoard);
+                }
+                boardsList = boardsList.map((board, index) => Object.assign(board, {
+                    id_position: index,
+                }));
+
+                const query = cratePositionsQuery(boardsList);
+                DB.run(query);
+
                 deferred.resolve();
             }, (error) => {
                 console.log(chalk.red.bold('[updateBoard error]'), error);
                 deferred.reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[updateBoard error]'), error);
-            deferred.reject();
-        }
-    }, () => deferred.reject());
+        }, () => deferred.reject());
 
     return deferred.promise;
 };

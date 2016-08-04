@@ -1,13 +1,20 @@
 import * as boardsConst from '../constants/boards';
 import { sortByIdPosition } from '../utils/boards';
 
+function sortBoardsByPosition(boardsList) {
+    return boardsList.map((board, index) => Object.assign(board, {
+        id_position: index,
+    }));
+}
+
 export default function boards(state = [], action) {
+    const boardsList = [];
+    let newBoardAdded = false;
+
     switch (action.type) {
         case boardsConst.BOARDS_LOADED:
             return action.boards.sort(sortByIdPosition);
         case boardsConst.BOARDS_ADDED:
-            const boardsList = [];
-            let newBoardAdded = false;
             state.forEach((board, i) => {
                 if (action.board.id_position === i) {
                     newBoardAdded = true;
@@ -18,9 +25,7 @@ export default function boards(state = [], action) {
             if (!newBoardAdded) {
                 boardsList.push(action.board);
             }
-            return boardsList.map((board, index) => Object.assign(board, {
-                id_position: index,
-            }));
+            return sortBoardsByPosition(boardsList);
         case boardsConst.BOARD_DELETED:
             for (let i = 0, len = state.length; i < len; i++) {
                 if (state[i].id === action.id) {
@@ -28,23 +33,24 @@ export default function boards(state = [], action) {
                         ...state.slice(0, i),
                         ...state.slice(i + 1),
                     ];
-                    return boardsList.map((board, index) => Object.assign(board, {
-                        id_position: index,
-                    }));
+                    return sortBoardsByPosition(boardsList);
                 }
             }
             return state;
         case boardsConst.BOARD_UPDATED:
             for (let i = 0, len = state.length; i < len; i++) {
-                if (state[i].id === action.board.id) {
-                    return [
-                        ...state.slice(0, i),
-                        action.board,
-                        ...state.slice(i + 1),
-                    ];
+                if (action.board.id_position === i) {
+                    newBoardAdded = true;
+                    boardsList.push(action.board);
+                }
+                if (state[i].id !== action.board.id) {
+                    boardsList.push(state[i]);
                 }
             }
-            return state;
+            if (!newBoardAdded) {
+                boardsList.push(action.board);
+            }
+            return sortBoardsByPosition(boardsList);
         default:
             return state;
     }

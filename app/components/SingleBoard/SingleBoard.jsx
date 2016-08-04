@@ -13,11 +13,14 @@ class SingleBoard extends Component {
         super(props);
 
         const board = this.getBoard(props);
+        const { boards } = props;
+        const boardsList = boards.filter(item => item.id !== board.id);
+        const selectedBoardId = board.id_position + 1;
 
         this.state = {
             title: board.title || '',
             description: board.description || '',
-            id_position: board.id_position || null,
+            id_position: selectedBoardId > boardsList.length ? '' : selectedBoardId,
             loadingData: false,
         };
 
@@ -121,12 +124,12 @@ class SingleBoard extends Component {
                 </div>
                 <div className='form-group'>
                     <select className='form-control'
-                            value={this.state.board_id}
+                            value={this.state.id_position}
                             onChange={(e) => this.setState({
                                 id_position: e.target.value,
                             })}
                             name='board'>
-                        <option>Place board after all</option>
+                        <option>Place after all</option>
                         <option disabled>&nbsp;&nbsp;Place before:</option>
                         {boardsList.map((board) => (
                             <option value={board.id_position} key={`board-${board.id}`}>{board.title}</option>
