@@ -59,9 +59,9 @@ class SingleProject extends Component {
         };
 
         this.deleteProject = () => {
-            const task = this.getProject();
+            const project = this.getProject();
             const { deleteProject } = this.props;
-            deleteProject(task.id);
+            deleteProject(project.id);
         };
     }
 

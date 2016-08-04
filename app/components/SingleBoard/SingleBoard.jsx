@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { hidePopup } from '../../actions/popup';
+import { addNewBoard, updateBoard, deleteBoard } from '../../actions/boards';
 
 import './SingleBoard.less';
 
@@ -10,23 +11,48 @@ class SingleBoard extends Component {
     constructor(props) {
         super(props);
 
-        const board = props.board || {};
+        const board = this.getBoard(props);
 
         this.state = {
             title: board.title || '',
             description: board.description || '',
+            id_position: board.id_position || null,
             loadingData: false,
         };
 
         this.submitBoard = (e) => {
             e.preventDefault();
+            const { addNewBoard, updateBoard } = this.props;
+            const board = this.getBoard();
+            const updatedBoardData = {
+                title: this.state.title,
+                description: this.state.description,
+            };
+            this.setState({
+                loadingData: true,
+            });
+            if (board.id) {
+                updatedBoardData.id = board.id;
+                updateBoard(Object.assign(board, updatedBoardData));
+            } else {
+                addNewBoard(updatedBoardData);
+            }
         };
 
-        this.deleteBoard = () => {};
+        this.deleteBoard = () => {
+            const board = this.getBoard();
+            const { deleteBoard } = this.props;
+            deleteBoard(board.id);
+        };
+    }
+
+    getBoard(props = this.props) {
+        return props.board || {};
     }
 
     render() {
         const { board, hidePopup } = this.props;
+        const boards = [];
 
         const renderSaveButton = () => {
             const text = board && board.id ? 'Save' : 'Add new';
@@ -69,6 +95,7 @@ class SingleBoard extends Component {
                            onChange={(e) => this.setState({
                                title: e.target.value,
                            })}
+                           autoFocus
                            data-qa='board-name' />
                 </div>
                 <div className='form-group'>
@@ -81,6 +108,20 @@ class SingleBoard extends Component {
                               })}
                               data-qa='board-description'></textarea>
                 </div>
+                <div className='form-group'>
+                    <select className='form-control'
+                            value={this.state.board_id}
+                            onChange={(e) => this.setState({
+                                id_position: e.target.value,
+                            })}
+                            name='board'>
+                        <option value='0'>Place board after</option>
+                        {boards.map((board) => (
+                            <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
+                        ))}
+                    </select>
+                </div>
+
                 <div className='clearfix'>
                     <div className='pull-left'>
                         <span className='buttons-group'>
@@ -110,5 +151,8 @@ export default connect(
         return {};
     }, {
         hidePopup,
+        addNewBoard,
+        updateBoard,
+        deleteBoard,
     }
 )(SingleBoard);

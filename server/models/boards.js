@@ -1,3 +1,4 @@
+/* eslint-disable no-console, strict*/
 'use strict';
 
 const chalk = require('chalk');
@@ -9,24 +10,25 @@ const tableName = 'boards';
 
 exports.getAll = (boardsData) => {
     const deferred = Q.defer();
-    let boardsQuery = `SELECT boards.id, boards.title, boards.description FROM boards
-                       INNER JOIN sessions ON sessions.user_id = boards.user_id
-                       WHERE sessions.id = '${boardsData.tokenId}';`;
+    const boardsQuery = `SELECT boards.id, boards.title, boards.description, boards.id_position
+                         FROM boards
+                         INNER JOIN sessions ON sessions.user_id = boards.user_id
+                         WHERE sessions.id = '${boardsData.tokenId}';`;
 
     DB.queryRows(boardsQuery)
         .then((boards) => {
-            let promisesList = [];
+            const promisesList = [];
             boards.forEach((board, index) => {
-                let tasksQuery = `SELECT tasks.id FROM tasks
-                                  INNER JOIN sessions ON sessions.user_id = tasks.user_id
-                                  WHERE sessions.id = '${boardsData.tokenId}' AND tasks.board_id = ${board.id};`;
+                const tasksQuery = `SELECT tasks.id FROM tasks
+                                    INNER JOIN sessions ON sessions.user_id = tasks.user_id
+                                    WHERE sessions.id = '${boardsData.tokenId}' AND tasks.board_id = ${board.id};`;
                 promisesList.push(DB.queryRows(tasksQuery));
-                boards[index]['tasks'] = [];
+                boards[index].tasks = [];
             });
             Q.all(promisesList)
                 .then((resultsList) => {
                     resultsList.forEach((data, index) => {
-                        boards[index]['tasks'] = data.map(item => item.id);
+                        boards[index].tasks = data.map(item => item.id);
                     });
                     deferred.resolve(boards);
                 }, () => {
@@ -44,7 +46,7 @@ exports.addNew = (newBoardData) => {
     const now = moment(new Date());
 
     sessions.getSession({
-        id: newBoardData.tokenId
+        id: newBoardData.tokenId,
     }).then((session) => {
         try {
             DB.insertRow(tableName, {
@@ -52,18 +54,18 @@ exports.addNew = (newBoardData) => {
                 description: newBoardData.payload.description,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
-                user_id: session.user_id
+                user_id: session.user_id,
             }).then((result) => {
                 deferred.resolve({
                     id: result.id,
                     added: now.format('YYYY-MM-DD HH:mm:ss'),
-                    updated: now.format('YYYY-MM-DD HH:mm:ss')
+                    updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 });
             }, (error) => {
                 console.log(chalk.red.bold('[addNew Board error]'), error);
                 deferred.reject();
             });
-        } catch(error) {
+        } catch (error) {
             console.log(chalk.red.bold('[addNew Board error]'), error);
             deferred.reject();
         }
@@ -75,8 +77,8 @@ exports.addNew = (newBoardData) => {
 exports.updateBoard = (boardData) => {
     const deferred = Q.defer();
     const now = moment(new Date());
-    let updateData = {};
-    let updateAllowed = true;
+    const updateData = {};
+    const updateAllowed = true;
 
     if (!boardData.payload.id) {
         deferred.reject();
@@ -97,27 +99,27 @@ exports.updateBoard = (boardData) => {
         return deferred.promise;
     }
 
-    updateData['updated'] = now.format('YYYY-MM-DD HH:mm:ss');
+    updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
     sessions.getSession({
-        id: boardData.tokenId
+        id: boardData.tokenId,
     }).then((session) => {
         try {
             DB.updateRow(tableName, updateData, [{
                 column: 'id',
                 comparator: '=',
-                value: boardData.payload.id
-            },{
+                value: boardData.payload.id,
+            }, {
                 column: 'user_id',
                 comparator: '=',
-                value: session.user_id
+                value: session.user_id,
             }]).then(() => {
                 deferred.resolve();
             }, (error) => {
                 console.log(chalk.red.bold('[updateBoard error]'), error);
                 deferred.reject();
             });
-        } catch(error) {
+        } catch (error) {
             console.log(chalk.red.bold('[updateBoard error]'), error);
             deferred.reject();
         }
@@ -135,24 +137,24 @@ exports.deleteBoard = (boardData) => {
         return deferred.promise;
     }
     sessions.getSession({
-        id: boardData.tokenId
+        id: boardData.tokenId,
     }).then((session) => {
         try {
             DB.deleteRows(tableName, [{
                 column: 'id',
                 comparator: '=',
-                value: boardData.payload
-            },{
+                value: boardData.payload,
+            }, {
                 column: 'user_id',
                 comparator: '=',
-                value: session.user_id
+                value: session.user_id,
             }]).then(() => {
                 deferred.resolve();
             }, (error) => {
                 console.log(chalk.red.bold('[deleteBoard error]'), error);
                 deferred.reject();
             });
-        } catch(error) {
+        } catch (error) {
             console.log(chalk.red.bold('[deleteBoard error]'), error);
             deferred.reject();
         }

@@ -104,7 +104,7 @@ export function deleteTask(taskId) {
             })
             .catch((e) => {
                 console.error(e);
-                dispatch(errorMessage('Error, while adding task'));
+                dispatch(errorMessage('Error, while deleting task'));
             });
     };
 }
@@ -112,6 +112,7 @@ export function deleteTask(taskId) {
 /**
  * Update task
  * @param taskUpdate {Object}
+ * @param taskUpdate.id {String}
  * @param taskUpdate.name {String}
  * @param taskUpdate.description {String}
  * @param taskUpdate.done {Boolean}
@@ -136,7 +137,7 @@ export function updateTask(taskUpdate) {
             })
             .catch((e) => {
                 console.error(e);
-                dispatch(errorMessage('Error, while adding task'));
+                dispatch(errorMessage('Error, while updating task'));
             });
     };
 }
