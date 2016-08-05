@@ -31,6 +31,7 @@ class TasksListItem extends Component {
             addNewTask({
                 name: newTaskName,
                 done: false,
+                projects: [],
             });
 
             // ToDo: input should be cleaned only after task was successfully added
