@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
 import * as entityConst from '../../constants/selectedEntity';
 import { clearEntity } from '../../actions/selectedEntity';
-import { showPopup } from '../../actions/popup';
+import { showModal } from '../../actions/modal';
 import SingleBoard from '../SingleBoard/SingleBoard';
 
 import './BoardsList.less';
@@ -13,8 +13,8 @@ class BoardsList extends Component {
         super(props);
 
         this.addNewBoard = () => {
-            const { showPopup } = this.props;
-            showPopup(<SingleBoard />);
+            const { showModal } = this.props;
+            showModal(<SingleBoard />);
         };
     }
 
@@ -49,6 +49,6 @@ export default connect(
         };
     }, {
         clearEntity,
-        showPopup,
+        showModal,
     }
 )(BoardsList);

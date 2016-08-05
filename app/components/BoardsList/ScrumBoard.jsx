@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { filterTasks, sortByIdPositionScrum } from '../../utils/tasks';
 import BoardTask from './BoardTask';
-import { showPopup } from '../../actions/popup';
+import { showModal } from '../../actions/modal';
 import SingleBoard from '../SingleBoard/SingleBoard';
 
 import './ScrumBoard.less';
@@ -12,8 +12,8 @@ class ScrumBoard extends Component {
         super(props);
 
         this.editBoard = () => {
-            const { showPopup, board } = this.props;
-            showPopup(<SingleBoard board={board} />);
+            const { showModal, board } = this.props;
+            showModal(<SingleBoard board={board} />);
         };
     }
 
@@ -52,6 +52,6 @@ export default connect(
             tasks: state.tasks,
         };
     }, {
-        showPopup,
+        showModal,
     }
 )(ScrumBoard);

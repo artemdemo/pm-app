@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { checkAuthentication } from '../actions/user';
 import UserNotificator from '../components/UserNotificator/UserNotificator';
 import Popup from '../components/Popup/Popup';
+import Modal from '../components/Modal/Modal';
 
 class AppView extends Component {
     componentWillMount() {
@@ -15,6 +16,7 @@ class AppView extends Component {
             <div className='app'>
                 <UserNotificator />
                 <Popup />
+                <Modal />
                 {this.props.children}
             </div>
         );

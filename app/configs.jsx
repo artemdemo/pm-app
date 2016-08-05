@@ -8,6 +8,7 @@ import boards from './reducers/boards';
 import projects from './reducers/projects';
 import user from './reducers/user';
 import popup from './reducers/popup';
+import modal from './reducers/modal';
 import notification from './reducers/notification';
 import draggedTask from './reducers/draggedTask';
 import selectedEntity from './reducers/selectedEntity';
@@ -16,6 +17,7 @@ const pmApp = combineReducers({
     user,
     tasks,
     popup,
+    modal,
     boards,
     projects,
     draggedTask,

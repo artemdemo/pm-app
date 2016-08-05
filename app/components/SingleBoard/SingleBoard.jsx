@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
-import { hidePopup } from '../../actions/popup';
+import { hideModal } from '../../actions/modal';
 import { addNewBoard, updateBoard, deleteBoard } from '../../actions/boards';
 import { errorMessage } from '../../actions/notification';
 
@@ -63,7 +63,7 @@ class SingleBoard extends Component {
     }
 
     render() {
-        const { boards, hidePopup } = this.props;
+        const { boards, hideModal } = this.props;
         const board = this.getBoard();
         const boardsList = boards.filter(item => item.id !== board.id);
 
@@ -143,7 +143,7 @@ class SingleBoard extends Component {
                             {renderSaveButton()}
                             <span className='btn btn-default'
                                   disabled={this.state.loadingData}
-                                  onClick={() => hidePopup()}
+                                  onClick={() => hideModal()}
                                   data-qa='board-cancel'>Cancel</span>
                         </span>
                         {renderLoadingSpinner()}
@@ -167,7 +167,7 @@ export default connect(
             boards: state.boards,
         };
     }, {
-        hidePopup,
+        hideModal,
         addNewBoard,
         updateBoard,
         deleteBoard,
