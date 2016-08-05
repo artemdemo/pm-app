@@ -1,4 +1,3 @@
-@import '../../styles/colors';
 @comments-bg-color: #F3F3F3;
 
 narrow-list {
@@ -38,52 +37,3 @@ narrow-list {
         background-color: darken(@comments-bg-color, 13%);
     }
 }
-
-.narrow-list-item {
-    display: table;
-    width: 100%;
-    padding: 3px 0 3px 4px;
-    border-bottom: 1px dashed @list-line-color;
-
-    &:hover {
-        background-color: @list-hover-color;
-    }
-}
-
-    .narrow-list-item__cell {
-        position: relative;
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-        .narrow-list-item__cell_name {
-            height: 19px;
-        }
-
-        .narrow-list-item__cell_close {
-            width: 20px;
-        }
-
-    .narrow-list-item__name {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        .narrow-list-item_done & {
-            text-decoration: line-through;
-        }
-    }
-
-    .narrow-list-item__close {
-        display: table-cell;
-        width: 20px;
-        text-align: center;
-        color: #ADADAD;
-        vertical-align: middle;
-        font-size: 70%;
-        cursor: pointer;
-    }

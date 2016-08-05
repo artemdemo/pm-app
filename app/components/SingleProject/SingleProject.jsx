@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as entityConst from '../../constants/selectedEntity';
 import { filterTasks } from '../../utils/tasks';
 import { deleteProject, updateProject, addNewProject } from '../../actions/projects';
 import { DropdownList } from '../DropdownList/DropdownList';
@@ -8,7 +9,8 @@ import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { clearEntity } from '../../actions/selectedEntity';
 import { errorMessage } from '../../actions/notification';
-import * as entityConst from '../../constants/selectedEntity';
+import { showModal, hideModal } from '../../actions/modal';
+import SingleTask from '../SingleTask/SingleTask';
 
 class SingleProject extends Component {
     constructor(props) {
@@ -51,6 +53,12 @@ class SingleProject extends Component {
             }
         };
 
+        this.deleteProject = () => {
+            const project = this.getProject();
+            const { deleteProject } = this.props;
+            deleteProject(project.id);
+        };
+
         this.connectTask = (newTask) => {
             this.setState({
                 selectedTasks: this.state.selectedTasks.concat([newTask]),
@@ -65,10 +73,13 @@ class SingleProject extends Component {
             });
         };
 
-        this.deleteProject = () => {
-            const project = this.getProject();
-            const { deleteProject } = this.props;
-            deleteProject(project.id);
+        this.openTask = (task) => {
+            const { showModal, hideModal } = this.props;
+            showModal(<SingleTask task={task}
+                                  className='single-task-modal'
+                                  onSave={() => hideModal()}
+                                  onDelete={() => hideModal()}
+                                  onCancel={() => hideModal()} />);
         };
     }
 
@@ -116,6 +127,7 @@ class SingleProject extends Component {
                 return (
                     <NarrowList list={this.state.selectedTasks}
                                 deletable
+                                onClick={(item) => this.openTask(item)}
                                 onDelete={this.disconnectTask} />
                 );
             }
@@ -153,6 +165,7 @@ class SingleProject extends Component {
                            onChange={(e) => this.setState({
                                name: e.target.value,
                            })}
+                           autoComplete='off'
                            data-qa='project-name' />
                 </div>
                 <div className='form-group'>
@@ -214,5 +227,7 @@ export default connect(
         updateProject,
         addNewProject,
         errorMessage,
+        showModal,
+        hideModal,
     }
 )(SingleProject);

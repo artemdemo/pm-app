@@ -8,9 +8,9 @@ import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { DropdownList } from '../DropdownList/DropdownList';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
-import { clearEntity } from '../../actions/selectedEntity';
-import * as entityConst from '../../constants/selectedEntity';
 import { errorMessage } from '../../actions/notification';
+
+import './SingleTask.less';
 
 class SingleTask extends Component {
     constructor(props) {
@@ -20,8 +20,8 @@ class SingleTask extends Component {
         const { selectedProjects, availableProjects } = filterProjects(task, props.projects);
 
         this.state = {
-            name: '',
-            description: '',
+            name: task.name || '',
+            description: task.description || '',
             board_id: task.board_id > 0 ? task.board_id : 0,
             done: task.done || false,
             loadingData: false,
@@ -31,7 +31,7 @@ class SingleTask extends Component {
 
         this.submitTask = (e) => {
             e.preventDefault();
-            const { updateTask, errorMessage } = this.props;
+            const { updateTask, errorMessage, onSave } = this.props;
             const task = this.getTask();
             const boardId = this.state.board_id;
 
@@ -52,12 +52,14 @@ class SingleTask extends Component {
                 loadingData: true,
             });
             updateTask(Object.assign(task, updatedTaskData));
+            onSave();
         };
 
         this.deleteTask = () => {
             const task = this.getTask();
-            const { deleteTask } = this.props;
+            const { deleteTask, onDelete } = this.props;
             deleteTask(task.id);
+            onDelete();
         };
 
         this.toggleDone = (newDoneStatus) => {
@@ -115,10 +117,10 @@ class SingleTask extends Component {
             }
             return null;
         };
-        const { clearEntity, boards } = this.props;
+        const { boards, onCancel, className } = this.props;
         const task = this.getTask();
         return (
-            <form onSubmit={this.submitTask} className='single-panel'>
+            <form onSubmit={this.submitTask} className={className}>
                 <div className='form-group'>
                     <input type='text'
                            name='name'
@@ -128,6 +130,7 @@ class SingleTask extends Component {
                            })}
                            className='flat-input'
                            placeholder='Task name'
+                           autoComplete='off'
                            data-qa='task-name' />
                 </div>
                 <div className='form-group'>
@@ -181,7 +184,7 @@ class SingleTask extends Component {
                                 <span>Save</span>
                             </button>
                             <span className={cancelButtonClass}
-                                  onClick={() => clearEntity(entityConst.ENTITY_TASK)}
+                                  onClick={() => onCancel()}
                                   data-qa='task-cancel'>Cancel</span>
                         </span>
                         {renderLoadingSpinner()}
@@ -197,9 +200,10 @@ class SingleTask extends Component {
 
 SingleTask.propTypes = {
     task: React.PropTypes.object,
-    boards: React.PropTypes.arrayOf(React.PropTypes.object),
-    projects: React.PropTypes.arrayOf(React.PropTypes.object),
-    selectedEntity: React.PropTypes.object,
+    className: React.PropTypes.string,
+    onSave: React.PropTypes.func.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
+    onDelete: React.PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -207,11 +211,9 @@ export default connect(
         return {
             boards: state.boards,
             projects: state.projects,
-            selectedEntity: state.selectedEntity,
         };
     },
     {
-        clearEntity,
         deleteTask,
         updateTask,
         errorMessage,
