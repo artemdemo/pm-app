@@ -15,8 +15,8 @@ const tableName = 'users';
  */
 const getUserFields = (rawUser) => {
     const fields = ['id', 'username', 'email', 'added', 'updated'];
-    let user = {};
-    for (let key of Object.keys(rawUser)) {
+    const user = {};
+    for (const key of Object.keys(rawUser)) {
         if (fields.indexOf(key) > -1) {
             user[key] = rawUser[key];
         }
@@ -46,7 +46,7 @@ exports.addNew = (newUser) => {
             console.log(chalk.red.bold('[addNew User error]'), error);
             deferred.reject();
         });
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[addNew User error]'), error);
         deferred.reject();
     }
@@ -77,7 +77,7 @@ exports.getUser = (user) => {
             console.log(chalk.red.bold('[getUser User error]'), error);
             deferred.reject();
         });
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[getUser User error]'), error);
         deferred.reject();
     }
@@ -95,7 +95,6 @@ exports.getUserById = (userId) => {
             comparator: '=',
             value: userId,
         }]).then((result) => {
-            console.log(result);
             if (result.length === 1) {
                 deferred.resolve(getUserFields(result[0]));
             } else {
@@ -105,7 +104,7 @@ exports.getUserById = (userId) => {
             console.log(chalk.red.bold('[getUserById User error]'), error);
             deferred.reject();
         });
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[getUserById User error]'), error);
         deferred.reject();
     }

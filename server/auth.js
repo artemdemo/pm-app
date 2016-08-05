@@ -1,3 +1,4 @@
+/* eslint-disable strict*/
 'use strict';
 
 const atob = require('atob');
@@ -11,11 +12,11 @@ const sessions = require('./models/sessions');
  * @param callback
  * @returns void
  */
-exports.validate = function (decoded, request, callback) {
+exports.validate = (decoded, request, callback) => {
     const now = moment(new Date());
 
     sessions.getSession({
-        id: decoded.id
+        id: decoded.id,
     }).then(() => {
         if (now.format('YYYY-MM-DD HH:mm:ss') < decoded.expiration) {
             callback(null, true);
@@ -37,7 +38,7 @@ exports.validate = function (decoded, request, callback) {
  *   expiration: string;
  * }
  */
-exports.parseTokenData =  function(token) {
+exports.parseTokenData = (token) => {
     const tokenSections = token ? token.split('.') : null;
     let tokenData;
     if (tokenSections) {
@@ -47,7 +48,6 @@ exports.parseTokenData =  function(token) {
             return false;
         }
         return tokenData;
-    } else {
-        return false;
     }
+    return false;
 };

@@ -123,6 +123,11 @@ exports.updateTask = (taskData) => {
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
+    // If task is `done` it shouldn't be connected to any board
+    if (updateData.done) {
+        updateData.board_id = null;
+    }
+
     sessions.getSession({
         id: taskData.tokenId,
     }).then((session) => {
