@@ -64,11 +64,11 @@ export default function tasks(state = [], action) {
                     if (sortedTasks[i].id !== action.draggedTask.task.id) {
                         if (sortedTasks[i].id === action.draggedTask.nearTaskId) {
                             if (action.draggedTask.position === 'before') {
-                                newState.push(sortedTasks[i]);
                                 newState.push(action.draggedTask.task);
+                                newState.push(sortedTasks[i]);
                             } else {
-                                newState.push(action.draggedTask.task);
                                 newState.push(sortedTasks[i]);
+                                newState.push(action.draggedTask.task);
                             }
                         } else {
                             newState.push(sortedTasks[i]);
