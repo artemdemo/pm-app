@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { logout } from '../../actions/user';
@@ -11,18 +12,36 @@ class MainMenu extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            menuOpen: false,
+        };
+
         this.logout = () => {
             const { logout } = this.props;
-            logout()
-        }
+            logout();
+        };
+
+        this.toggleMenu = () => {
+            this.setState({
+                menuOpen: !this.state.menuOpen,
+            });
+        };
     }
 
     render() {
+        const menuClass = classnames({
+            collapse: true,
+            'navbar-collapse': true,
+            'in': this.state.menuOpen,
+        });
+
         return (
-            <nav className='navbar navbar-default'>
+            <nav className='navbar navbar-default navbar-fixed-top'>
                 <div className='container'>
                     <div className='navbar-header'>
-                        <button type='button' className='navbar-toggle collapsed'>
+                        <button type='button'
+                                className='navbar-toggle collapsed'
+                                onClick={this.toggleMenu}>
                             <span className='sr-only'>Toggle navigation</span>
                             <span className='icon-bar'></span>
                             <span className='icon-bar'></span>
@@ -30,16 +49,38 @@ class MainMenu extends Component {
                         </button>
                         <Link className='navbar-brand' to='/'>&lt;PM&gt;</Link>
                     </div>
-                    <div id='navbar' className='collapse navbar-collapse'>
+                    <div className={menuClass}>
                         <ul className='nav navbar-nav'>
-                            <li><Link to='/tasks' activeClassName={ACTIVE_ITEM} className='navbar-link'>Tasks</Link></li>
-                            <li><Link to='/scrum' activeClassName={ACTIVE_ITEM} className='navbar-link'>Scrum</Link></li>
-                            <li><Link to='/projects' activeClassName={ACTIVE_ITEM} className='navbar-link'>Projects</Link></li>
+                            <li>
+                                <Link to='/tasks'
+                                      activeClassName={ACTIVE_ITEM}
+                                      className='navbar-link'>
+                                    Tasks
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to='/scrum'
+                                      activeClassName={ACTIVE_ITEM}
+                                      className='navbar-link'>
+                                    Scrum
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to='/projects'
+                                      activeClassName={ACTIVE_ITEM}
+                                      className='navbar-link'>
+                                    Projects
+                                </Link>
+                            </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
-                            <li><span className='navbar-link'
+                            <li>
+                                <span className='navbar-link'
                                       onClick={this.logout}
-                                      data-qa='logout-main-menu-button'>Logout</span></li>
+                                      data-qa='logout-main-menu-button'>
+                                    Logout
+                                </span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -50,8 +91,8 @@ class MainMenu extends Component {
 
 export default connect(
     () => {
-        return {}
+        return {};
     }, {
-        logout
+        logout,
     }
 )(MainMenu);
