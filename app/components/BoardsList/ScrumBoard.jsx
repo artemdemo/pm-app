@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import BoardTask from './BoardTask';
-import { showModal } from '../../actions/modal';
+import { showModal, hideModal } from '../../actions/modal';
 import { setDraggedTaskDropPosition } from '../../actions/draggedTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
 import _ from 'underscore';
@@ -34,8 +34,12 @@ class ScrumBoard extends Component {
         }, 70);
 
         this.editBoard = () => {
-            const { showModal, board } = this.props;
-            showModal(<SingleBoard board={board} />);
+            const { showModal, board, hideModal } = this.props;
+            showModal(<SingleBoard board={board}
+                                   className='single-board'
+                                   onSave={() => hideModal()}
+                                   onDelete={() => hideModal()}
+                                   onCancel={() => hideModal()} />);
         };
 
         this.dragOver = (e) => {
@@ -104,6 +108,7 @@ export default connect(
         };
     }, {
         showModal,
+        hideModal,
         setDraggedTaskDropPosition,
     }
 )(ScrumBoard);

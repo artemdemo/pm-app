@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
-import { hideModal } from '../../actions/modal';
 import { addNewBoard, updateBoard, deleteBoard } from '../../actions/boards';
 import { errorMessage } from '../../actions/notification';
 
@@ -26,7 +25,7 @@ class SingleBoard extends Component {
 
         this.submitBoard = (e) => {
             e.preventDefault();
-            const { addNewBoard, updateBoard, errorMessage } = this.props;
+            const { addNewBoard, updateBoard, errorMessage, onSave } = this.props;
             const board = this.getBoard();
             const idPosition = this.state.id_position;
 
@@ -49,12 +48,14 @@ class SingleBoard extends Component {
             } else {
                 addNewBoard(updatedBoardData);
             }
+            onSave();
         };
 
         this.deleteBoard = () => {
             const board = this.getBoard();
-            const { deleteBoard } = this.props;
+            const { deleteBoard, onDelete } = this.props;
             deleteBoard(board.id);
+            onDelete();
         };
     }
 
@@ -63,7 +64,7 @@ class SingleBoard extends Component {
     }
 
     render() {
-        const { boards, hideModal } = this.props;
+        const { boards, onCancel, className } = this.props;
         const board = this.getBoard();
         const boardsList = boards.filter(item => item.id !== board.id);
 
@@ -98,7 +99,7 @@ class SingleBoard extends Component {
 
         return (
             <form onSubmit={this.submitBoard}
-                  className='single-board'>
+                  className={className}>
                 <div className='form-group'>
                     <input type='text'
                            name='name'
@@ -143,7 +144,7 @@ class SingleBoard extends Component {
                             {renderSaveButton()}
                             <span className='btn btn-default'
                                   disabled={this.state.loadingData}
-                                  onClick={() => hideModal()}
+                                  onClick={() => onCancel()}
                                   data-qa='board-cancel'>Cancel</span>
                         </span>
                         {renderLoadingSpinner()}
@@ -159,6 +160,10 @@ class SingleBoard extends Component {
 
 SingleBoard.propTypes = {
     board: React.PropTypes.object,
+    className: React.PropTypes.string,
+    onSave: React.PropTypes.func.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
+    onDelete: React.PropTypes.func.isRequired,
 };
 
 export default connect(
@@ -167,7 +172,6 @@ export default connect(
             boards: state.boards,
         };
     }, {
-        hideModal,
         addNewBoard,
         updateBoard,
         deleteBoard,

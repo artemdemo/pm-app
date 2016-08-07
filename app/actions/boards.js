@@ -2,7 +2,6 @@ import * as boardsConst from '../constants/boards';
 import { errorMessage, successMessage } from './notification';
 import { getStoredToken } from '../utils/user';
 import { loadTasks } from './tasks';
-import { hideModal } from './modal';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
@@ -70,7 +69,6 @@ export function addNewBoard(newBoard) {
             })
             .then((board) => {
                 dispatch(boardAdded(Object.assign({}, newBoard, board)));
-                dispatch(hideModal());
                 dispatch(successMessage('Board added'));
             })
             .catch((e) => {
@@ -96,7 +94,6 @@ export function deleteBoard(boardId) {
             .then(() => {
                 dispatch(boardDeleted(boardId));
                 dispatch(loadTasks());
-                dispatch(hideModal());
                 dispatch(successMessage('Board deleted'));
             })
             .catch((e) => {
@@ -124,7 +121,6 @@ export function updateBoard(boardUpdate) {
             })
             .then((board) => {
                 dispatch(boardUpdated(Object.assign({}, boardUpdate, board)));
-                dispatch(hideModal());
                 dispatch(successMessage('Board updated'));
             })
             .catch((e) => {
