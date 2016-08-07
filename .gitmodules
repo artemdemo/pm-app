@@ -1,3 +1,0 @@
-[submodule "pm-database"]
-	path = pm-database
-	url = git@bitbucket.org:artemdemo/pm-database.git

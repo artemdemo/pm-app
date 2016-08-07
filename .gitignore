@@ -3,8 +3,9 @@
 .DS_Store
 node_modules
 *.log
-e2e-test-terminal.pid
+e2e-test-*.pid
 e2e-test.db
+pm-database
 pm.db
 selenium-*
 reports
