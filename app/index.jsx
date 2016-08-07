@@ -14,7 +14,7 @@ import SignupView from './views/SignupView';
 import TasksView from './views/TasksView';
 import ScrumView from './views/ScrumView';
 import ProjectsView from './views/ProjectsView';
-import { MainView } from './views/MainView';
+import MainView from './views/MainView';
 
 promises.polyfill();
 

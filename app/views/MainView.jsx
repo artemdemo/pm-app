@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import MainMenu from '../components/MainMenu/MainMenu';
 
-export class MainView extends Component {
+class MainView extends Component {
     render() {
+        const { tasks, projects } = this.props;
+        const doneTasks = tasks.filter(task => task.done).length;
+
         return (
             <div>
                 <MainMenu />
@@ -11,16 +15,14 @@ export class MainView extends Component {
                     <div className='list-container__list'>
                         <h4>Tasks</h4>
                         <p>
-                            Total: <br/>
-                            In process: <br/>
-                            Done: <br/>
+                            Total: {tasks.length}<br />
+                            In process: {tasks.length - doneTasks}<br />
+                            Done: {doneTasks}<br />
                         </p>
 
                         <h4>Projects</h4>
                         <p>
-                            Total: <br/>
-                            In process: <br/>
-                            Done: <br/>
+                            Total: {projects.length}<br />
                         </p>
                     </div>
                 </div>
@@ -28,3 +30,12 @@ export class MainView extends Component {
         );
     }
 }
+
+export default connect(
+    state => {
+        return {
+            tasks: state.tasks,
+            projects: state.projects,
+        };
+    }
+)(MainView);
