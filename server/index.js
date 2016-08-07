@@ -8,9 +8,20 @@ const inert = require('inert');
 const chalk = require('chalk');
 const hapiAuthJwt = require('hapi-auth-jwt2');
 const DB = require('sqlite-crud');
-const defaultDBPath = './pm-database/pm.db';
+let pathToTheDB;
 let cliDBPath = '';
 let migrateDB = false;
+let appSettings = {};
+
+try {
+    appSettings = require('../app-settings.json');
+} catch (e) {
+    console.log(chalk.yellow('[Info]') + ' app-settings.json - not found');
+}
+
+if (appSettings.db) {
+    pathToTheDB = appSettings.db;
+}
 
 // node ./server/index --db=e2e-test.db --migrate
 process.argv.forEach((value) => {
@@ -24,15 +35,13 @@ process.argv.forEach((value) => {
     }
 });
 
-let pathToTheDB = defaultDBPath;
 if (cliDBPath) {
     pathToTheDB = cliDBPath;
 } else {
     try {
         fs.lstatSync(pathToTheDB);
     } catch (e) {
-        // If there is no default DB, then I assume that user has no access to the repository
-        // and I will create new DB
+        // If there is no DB, then I will create new DB in default path
         pathToTheDB = './pm.db';
         try {
             fs.lstatSync(pathToTheDB);
