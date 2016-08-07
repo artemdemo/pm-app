@@ -45,7 +45,7 @@ class SingleTask extends Component {
                 name: this.state.name,
                 description: this.state.description,
                 done: this.state.done,
-                board_id: boardId > 0 ? boardId : null,
+                board_id: boardId > 0 ? Number(boardId) : null,
                 projects: this.state.selectedProjects.map(project => project.id),
             };
             this.setState({

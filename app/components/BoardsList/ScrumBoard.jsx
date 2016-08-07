@@ -39,12 +39,6 @@ class ScrumBoard extends Component {
         };
 
         this.dragOver = (e) => {
-            // clearTimeout(this.dropPlaceholderTimeoutId);
-            // this.dropPlaceholderTimeoutId = setTimeout(() => {
-            //     this.setState({
-            //         renderPlaceholder: false,
-            //     });
-            // }, 70);
             const { board, setDraggedTaskDropPosition } = this.props;
             const relY = e.clientY - e.target.offsetTop;
             const height = e.target.offsetHeight / 2;
@@ -52,10 +46,6 @@ class ScrumBoard extends Component {
             setDraggedTaskDropPosition(null, position, board.id);
 
             updatePlaceholderState(position);
-
-            // this.setState({
-            //     renderPlaceholder: position,
-            // });
         };
     }
 
