@@ -6,36 +6,18 @@ import { getStoredToken } from '../utils/user';
 import fetch from '../utils/fetch';
 import checkResponseStatus from '../utils/checkResponseStatus';
 
-function tasksLoaded(tasks) {
-    return {
-        type: tasksConst.TASKS_LOADED,
-        tasks,
-    };
-}
-
-function taskAdded(task) {
-    return {
-        type: tasksConst.TASKS_ADDED,
-        task,
-    };
-}
-
-function taskDeleted(id) {
-    return {
-        type: tasksConst.TASK_DELETED,
-        id,
-    };
-}
-
-function taskUpdated(task) {
-    return {
-        type: tasksConst.TASK_UPDATED,
-        task,
-    };
-}
-
+/**
+ * Load tasks from the server
+ */
 export function loadTasks() {
     const token = getStoredToken();
+
+    function tasksLoaded(tasks) {
+        return {
+            type: tasksConst.TASKS_LOADED,
+            tasks,
+        };
+    }
 
     return dispatch => {
         fetch('/tasks/all', token)
@@ -63,6 +45,13 @@ export function loadTasks() {
 export function addNewTask(newTask) {
     const token = getStoredToken();
 
+    function taskAdded(task) {
+        return {
+            type: tasksConst.TASKS_ADDED,
+            task,
+        };
+    }
+
     return dispatch => {
         fetch('/tasks', token, {method: 'POST', body: newTask})
             .then(checkResponseStatus)
@@ -86,6 +75,13 @@ export function addNewTask(newTask) {
  */
 export function deleteTask(taskId) {
     const token = getStoredToken();
+
+    function taskDeleted(id) {
+        return {
+            type: tasksConst.TASK_DELETED,
+            id,
+        };
+    }
 
     return dispatch => {
         fetch(`/tasks/${taskId}`, token, {method: 'DELETE'})
@@ -119,6 +115,13 @@ export function deleteTask(taskId) {
 export function updateTask(taskUpdate) {
     const token = getStoredToken();
 
+    function taskUpdated(task) {
+        return {
+            type: tasksConst.TASK_UPDATED,
+            task,
+        };
+    }
+
     return dispatch => {
         fetch('/tasks', token, {method: 'PUT', body: taskUpdate})
             .then(checkResponseStatus)
@@ -140,11 +143,42 @@ export function updateTask(taskUpdate) {
 
 /**
  * After task has been dragged I need to update id of all tasks
- * @param draggedTask {Object} - contain `task`, `nearTaskId`, `position` (`before` or `after`)
+ * @param draggedTask {Object}
+ * @param draggedTask.task {Object}
+ * @param draggedTask.task.id {Number}
+ * @param draggedTask.nearTaskId {Number|null} - in case there is no near task it will be `null`
+ * @param draggedTask.position {String} - `before` or `after`
+ * @param draggedTask.boardId {Number}
  */
 export function updateDraggedTaskPosition(draggedTask) {
-    return {
-        type: tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING,
-        draggedTask,
+    const token = getStoredToken();
+
+    function updateTaskPosition(draggedTask) {
+        return {
+            type: tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING,
+            draggedTask,
+        };
+    }
+
+    return dispatch => {
+        dispatch(updateTaskPosition(draggedTask));
+
+        fetch('/tasks/position', token, {method: 'PUT', body: {
+            taskId: draggedTask.task.id,
+            nearTaskId: draggedTask.nearTaskId,
+            position: draggedTask.position,
+            boardId: draggedTask.boardId,
+        }})
+            .then(checkResponseStatus)
+            .then((response) => {
+                return response.json();
+            })
+            .then(() => {
+                dispatch(successMessage('Task position updated'));
+            })
+            .catch((e) => {
+                console.error(e);
+                dispatch(errorMessage('Error, while updating task position'));
+            });
     };
 }

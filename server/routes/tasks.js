@@ -1,46 +1,53 @@
+/* eslint-disable no-console, strict*/
 'use strict';
 
 module.exports = [
     {
         method: 'GET',
-        path:'/tasks',
+        path: '/tasks',
         config: { auth: false },
-        handler: require('../controllers/tasks').index
+        handler: require('../controllers/tasks').index,
     },
     {
         method: 'GET',
-        path:'/tasks/all',
+        path: '/tasks/all',
         config: { auth: 'jwt' },
-        handler: require('../controllers/tasks').all
+        handler: require('../controllers/tasks').all,
     },
     {
         method: 'POST',
-        path:'/tasks',
+        path: '/tasks',
         config: { auth: 'jwt' },
-        handler: require('../controllers/tasks').add
+        handler: require('../controllers/tasks').add,
     },
     {
         method: 'PUT',
-        path:'/tasks',
+        path: '/tasks',
         config: { auth: 'jwt' },
-        handler: require('../controllers/tasks').update
+        handler: require('../controllers/tasks').update,
     },
     {
         method: 'DELETE',
-        path:'/tasks/{taskId}',
+        path: '/tasks/{taskId}',
         config: { auth: 'jwt' },
-        handler: require('../controllers/tasks').delete
+        handler: require('../controllers/tasks').delete,
     },
     {
         method: 'GET',
-        path:'/tasks/{taskId}/project/{projectId}',
+        path: '/tasks/{taskId}/project/{projectId}',
         config: { auth: 'jwt' },
-        handler: require('../controllers/tasks').connectProject
+        handler: require('../controllers/tasks').connectProject,
     },
     {
         method: 'DELETE',
-        path:'/tasks/{taskId}/project/{projectId}',
+        path: '/tasks/{taskId}/project/{projectId}',
         config: { auth: 'jwt' },
-        handler: require('../controllers/tasks').disconnectProject
-    }
+        handler: require('../controllers/tasks').disconnectProject,
+    },
+    {
+        method: 'PUT',
+        path: '/tasks/position',
+        config: { auth: 'jwt' },
+        handler: require('../controllers/tasks').updatePositions,
+    },
 ];

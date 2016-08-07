@@ -19,7 +19,7 @@ exports.getAll = () => {
                 const tasksQuery = `SELECT projects_tasks_relations.task_id, projects_tasks_relations.project_id
                                     FROM projects
                                     INNER JOIN projects_tasks_relations
-                                    ON projects.id = projects_tasks_relations.project_id
+                                            ON projects.id = projects_tasks_relations.project_id
                                     WHERE projects.id = ${project.id};`;
                 promisesList.push(DB.queryRows(tasksQuery));
             });

@@ -17,11 +17,13 @@ export function dropDraggedTask() {
  * Set position of the task after it dropped
  * @param nearTaskId {Number} - next to this task dragged one should be placed
  * @param position {String} - where to place it: `before` or `after`
+ * @param boardId {Number} - board id of the board where task should be placed
  */
-export function setDraggedTaskDropPosition(nearTaskId, position) {
+export function setDraggedTaskDropPosition(nearTaskId, position, boardId) {
     return {
         type: draggedTaskConst.SET_DRAGGED_TASK_POSITION,
         nearTaskId,
         position,
+        boardId,
     };
 }

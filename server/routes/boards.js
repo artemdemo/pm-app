@@ -1,29 +1,30 @@
+/* eslint-disable no-console, strict*/
 'use strict';
 
 module.exports = [
     {
         method: 'GET',
-        path:'/boards/all',
+        path: '/boards/all',
         config: { auth: 'jwt' },
-        handler: require('../controllers/boards').all
+        handler: require('../controllers/boards').all,
     },
     {
         method: 'POST',
-        path:'/boards',
+        path: '/boards',
         config: { auth: 'jwt' },
-        handler: require('../controllers/boards').add
+        handler: require('../controllers/boards').add,
     },
     {
         method: 'PUT',
-        path:'/boards',
+        path: '/boards',
         config: { auth: 'jwt' },
-        handler: require('../controllers/boards').update
+        handler: require('../controllers/boards').update,
     },
     {
         method: 'DELETE',
-        path:'/boards/{boardId}',
+        path: '/boards/{boardId}',
         config: { auth: 'jwt' },
-        handler: require('../controllers/boards').delete
+        handler: require('../controllers/boards').delete,
     },
     // {
     //     method: 'GET',

@@ -3,32 +3,32 @@ const boards = require('../models/boards');
 const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-// exports.index = (request, reply) => {
-//     reply.redirect('/');
+// exports.index = (request, replay) => {
+//     replay.redirect('/');
 // };
 
-exports.index = (request, reply) => reply.file('index.html');
+exports.index = (request, replay) => replay.file('index.html');
 
-exports.all = (request, reply) => {
+exports.all = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
     if (!tokenData) {
-        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
     }
     const boardsData = {
         tokenId: tokenData.id,
     };
     boards.getAll(boardsData).then((tasks) => {
-        reply(tasks);
+        replay(tasks);
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.add = (request, reply) => {
+exports.add = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
     if (!tokenData) {
-        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
     }
     const boardsData = {
@@ -36,16 +36,16 @@ exports.add = (request, reply) => {
         tokenId: tokenData.id,
     };
     boards.addNew(boardsData).then((result) => {
-        reply(result);
+        replay(result);
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.update = (request, reply) => {
+exports.update = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
     if (!tokenData) {
-        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
     }
     const boardsData = {
@@ -53,16 +53,16 @@ exports.update = (request, reply) => {
         tokenId: tokenData.id,
     };
     boards.updateBoard(boardsData).then(() => {
-        reply({});
+        replay({});
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.delete = (request, reply) => {
+exports.delete = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
     if (!tokenData) {
-        reply(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
     }
     const boardsData = {
@@ -70,8 +70,8 @@ exports.delete = (request, reply) => {
         tokenId: tokenData.id,
     };
     boards.deleteBoard(boardsData).then(() => {
-        reply({});
+        replay({});
     }, () => {
-        reply(boom.badRequest(errConstants.DB_ERROR));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };

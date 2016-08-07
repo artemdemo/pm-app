@@ -18,7 +18,8 @@ exports.getAll = (tasksData) => {
     const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done,
                                tasks.added, tasks.updated, tasks.board_id, tasks.id_position_scrum
                         FROM tasks
-                        INNER JOIN sessions ON sessions.user_id = tasks.user_id
+                        INNER JOIN sessions 
+                                ON sessions.user_id = tasks.user_id
                         WHERE sessions.id = '${tasksData.tokenId}';`;
 
     DB.queryRows(tasksQuery)
@@ -30,7 +31,7 @@ exports.getAll = (tasksData) => {
                                               projects_tasks_relations.project_id
                                        FROM tasks
                                        INNER JOIN projects_tasks_relations
-                                                ON tasks.id = projects_tasks_relations.task_id
+                                               ON tasks.id = projects_tasks_relations.task_id
                                        WHERE tasks.id = ${task.id};`;
                 promisesList.push(DB.queryRows(projectsQuery));
             });
@@ -189,6 +190,77 @@ exports.deleteTask = (taskData) => {
         }
     }, () => deferred.reject());
 
+    return deferred.promise;
+};
+
+/**
+ * Update task position
+ * @param taskData {Object}
+ * @param taskData.tokenId {String}
+ * @param taskData.taskId {Number}
+ * @param taskData.nearTaskId {Number|null}
+ * @param taskData.position {String} `before` or `after`
+ * @param taskData.boardId {Number}
+ */
+exports.updateTaskPosition = (taskData) => {
+    const deferred = Q.defer();
+    const tasksQuery = `SELECT tasks.id, tasks.id_position_scrum
+                        FROM tasks
+                        INNER JOIN sessions 
+                                ON sessions.user_id = tasks.user_id
+                        WHERE sessions.id = '${taskData.tokenId}' AND tasks.board_id = ${taskData.boardId}
+                        ORDER BY tasks.id_position_scrum ASC;`;
+
+    DB.queryRows(tasksQuery)
+        .then((tasks) => {
+            let taskList = [];
+            const newTask = {
+                id: taskData.taskId,
+                id_position_scrum: 888, // this number doesn't matter for now, it will be corrected later
+            };
+            let newTaskAdded = false;
+            for (let i = 0, len = tasks.length; i < len; i++) {
+                const task = tasks[i];
+                if (task.id !== taskData.taskId) {
+                    if (task.id === taskData.nearTaskId) {
+                        newTaskAdded = true;
+                        if (taskData.position === 'before') {
+                            taskList.push(newTask);
+                            taskList.push(task);
+                        } else {
+                            taskList.push(task);
+                            taskList.push(newTask);
+                        }
+                    } else {
+                        taskList.push(task);
+                    }
+                }
+            }
+            if (!newTaskAdded) {
+                taskList.push(newTask);
+            }
+            taskList = taskList.map((task, index) => Object.assign(task, {
+                id_position_scrum: index,
+            }));
+            let query = 'UPDATE tasks SET id_position_scrum = CASE id';
+            const ids = [];
+            taskList.forEach((task, index) => {
+                ids.push(task.id);
+                query += ` WHEN ${task.id} THEN ${index}`;
+            });
+            query += ' END,';
+            query += ` board_id = ${taskData.boardId}`;
+            query += ` WHERE id IN (${ids.join(', ')});`;
+
+            DB.run(query)
+                .then(
+                    () => deferred.resolve(taskList),
+                    () => {
+                        deferred.reject();
+                    });
+        }, () => {
+            deferred.reject();
+        });
 
     return deferred.promise;
 };

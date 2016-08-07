@@ -49,12 +49,12 @@ class BoardTask extends Component {
                 this.setState({
                     renderPlaceholder: false,
                 });
-            }, 100);
+            }, 70);
             const { task, setDraggedTaskDropPosition } = this.props;
             const relY = e.clientY - e.target.offsetTop;
             const height = e.target.offsetHeight / 2;
             const position = relY > height ? 'after' : 'before';
-            setDraggedTaskDropPosition(task.id, position);
+            setDraggedTaskDropPosition(task.id, position, task.board_id);
 
             if (e.target.className.indexOf('board-task_placeholder') > -1) return;
 
@@ -123,6 +123,7 @@ BoardTask.proptypes = {
 export default connect(
     state => {
         return {
+            tasks: state.tasks,
             projects: state.projects,
             draggedTask: state.draggedTask,
         };

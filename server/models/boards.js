@@ -61,29 +61,15 @@ exports.getAll = (boardsData) => {
 
     getAllBoards(boardsData.tokenId)
         .then((boards) => {
-            const promisesList = [];
             const boardsList = boards.map((board) => {
-                const tasksQuery = `SELECT tasks.id FROM tasks
-                                    INNER JOIN sessions ON sessions.user_id = tasks.user_id
-                                    WHERE sessions.id = '${boardsData.tokenId}' AND tasks.board_id = ${board.id};`;
-                promisesList.push(DB.queryRows(tasksQuery));
                 return {
                     id: board.id,
                     title: board.title,
                     description: board.description,
                     id_position: board.id_position,
-                    tasks: [],
                 };
             });
-            Q.all(promisesList)
-                .then((resultsList) => {
-                    resultsList.forEach((data, index) => {
-                        boardsList[index].tasks = data.map(item => item.id);
-                    });
-                    deferred.resolve(boardsList);
-                }, () => {
-                    deferred.reject();
-                });
+            deferred.resolve(boardsList);
         }, () => {
             deferred.reject();
         });

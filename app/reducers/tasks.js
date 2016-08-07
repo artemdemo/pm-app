@@ -57,27 +57,58 @@ export default function tasks(state = [], action) {
             return state;
         case tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING:
             if (action.draggedTask) {
-                const sortedTasks = state.sort(sortByIdPositionScrum);
-                const newState = [];
+                const sortedTasks = state
+                    .filter(task => task.board_id === action.draggedTask.boardId)
+                    .sort(sortByIdPositionScrum);
+                let boardTasks = [];
 
                 for (let i = 0, len = sortedTasks.length; i < len; i++) {
                     if (sortedTasks[i].id !== action.draggedTask.task.id) {
                         if (sortedTasks[i].id === action.draggedTask.nearTaskId) {
+                            const task = Object.assign(action.draggedTask.task, {
+                                board_id: action.draggedTask.boardId,
+                            });
                             if (action.draggedTask.position === 'before') {
-                                newState.push(action.draggedTask.task);
-                                newState.push(sortedTasks[i]);
+                                boardTasks.push(task);
+                                boardTasks.push(sortedTasks[i]);
                             } else {
-                                newState.push(sortedTasks[i]);
-                                newState.push(action.draggedTask.task);
+                                boardTasks.push(sortedTasks[i]);
+                                boardTasks.push(task);
                             }
                         } else {
-                            newState.push(sortedTasks[i]);
+                            boardTasks.push(sortedTasks[i]);
                         }
                     }
                 }
-                return newState.map((task, index) => Object.assign(task, {
+                if (!action.draggedTask.nearTaskId) {
+                    const task = Object.assign(action.draggedTask.task, {
+                        board_id: action.draggedTask.boardId,
+                    });
+                    if (action.draggedTask.position === 'before') {
+                        boardTasks.unshift(task);
+                    } else {
+                        boardTasks.push(task);
+                    }
+                }
+
+                const newState = [];
+                boardTasks = boardTasks.map((task, index) => Object.assign(task, {
                     id_position_scrum: index,
                 }));
+
+                state.forEach(task => {
+                    let boardTaskAdded = false;
+                    for (let i = 0, len = boardTasks.length; i < len; i++) {
+                        if (task.id === boardTasks[i].id) {
+                            boardTaskAdded = true;
+                            newState.push(boardTasks[i]);
+                        }
+                    }
+                    if (!boardTaskAdded) {
+                        newState.push(task);
+                    }
+                });
+                return newState;
             }
             return state;
         default:
