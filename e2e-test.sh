@@ -23,7 +23,7 @@ else
     echo 'Unknown OS'
 fi
 
-./node_modules/.bin/nightwatch app/e2e
+./node_modules/.bin/nightwatch app/e2e/*.js
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     ps aux | grep node | egrep -o "(\d+).+server\/index" | cut -d' ' -f1 | xargs kill

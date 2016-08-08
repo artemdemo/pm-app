@@ -71,7 +71,7 @@ class LoginView extends Component {
                             type='submit'>
                         Login
                     </button>
-                    <Link to='/signup' className='btn btn-link btn-block'>
+                    <Link to='/signup' className='btn btn-link btn-block' data-qa='link-to-signup'>
                         Create new account - sign up
                     </Link>
                 </form>

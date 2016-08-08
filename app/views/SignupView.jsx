@@ -85,7 +85,7 @@ class SignupView extends Component {
                             type='submit'>
                         Sign up
                     </button>
-                    <Link to='/login' className='btn btn-link btn-block'>
+                    <Link to='/login' className='btn btn-link btn-block' data-qa='link-to-login'>
                         I have an account - login
                     </Link>
                 </form>
