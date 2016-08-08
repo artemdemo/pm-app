@@ -5,4 +5,4 @@ It's unique for each project and ignored in repository.
 
 ## Settings
 
-* `db` - path to the database. If omitted app will create db in th root directory.
+* `db` - path to the database. If omitted, app will create db in the root directory.

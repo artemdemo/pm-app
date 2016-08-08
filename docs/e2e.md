@@ -4,6 +4,8 @@ I'm using [NigthWatch](http://nightwatchjs.org/)
 
 If you want to go deep and read tutorial about setting up nightwatch - read this article: [End to End testing of React apps with Nightwatch](https://www.syncano.io/blog/testing-syncano/)
 
+Nightwatch is using java, therefore you need to check that JDK is installed on your machine.
+
 In short what I'm doing is this:
 
 1. install `nightwatch`
