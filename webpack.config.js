@@ -1,4 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
@@ -36,6 +37,10 @@ module.exports = {
                 test: /\.json$/,
                 loader: 'json',
             },
+            {
+                test: /\.html$/,
+                loader: 'html',
+            },
             // Font Definitions
             {test: /\.svg$/, loader: 'url?limit=65000&mimetype=image/svg+xml&name=fonts/[name].[ext]'},
             {test: /\.woff$/, loader: 'url?limit=65000&mimetype=application/font-woff&name=fonts/[name].[ext]'},
@@ -44,7 +49,9 @@ module.exports = {
             {test: /\.eot$/, loader: 'url?limit=65000&mimetype=application/vnd.ms-fontobject&name=fonts/[name].[ext]'},
         ],
     },
-    plugins: [],
+    plugins: [new HtmlWebpackPlugin({
+        template: './app/index.html',
+    })],
     postcss: function() {
         return [
             autoprefixer({browsers: [

@@ -6,10 +6,7 @@ import del from 'del';
 import webpack from 'webpack';
 import webpackConfig from './webpack.config';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import path from 'path';
-import fs from 'fs';
 import yargs from 'yargs';
-import _ from 'underscore';
 
 const extractTextPluginFileName = 'css/styles-[hash].css';
 
@@ -17,12 +14,12 @@ let hash;
 
 let args = yargs
     .options({
-        'pack': {
+        pack: {
             alias: 'min',
             describe: 'uglify code',
-            boolean: true,
+            'boolean': true,
         },
-        'packWithMangle': {
+        packWithMangle: {
             describe: 'uglify code with mangle',
         },
     }).argv;
@@ -60,7 +57,7 @@ gulp.task('js', ['clean'], (callback) => {
             compiler.run(report.bind(null, resolve));
         }),
     ]).then(() => {
-        runSequence('clean', 'html');
+        runSequence('clean');
         callback();
     });
 });
@@ -76,20 +73,13 @@ gulp.task('js-watch', ['clean'], () => {
         }
 
         hash = stats.compilation.hash;
-        runSequence('clean', 'html');
+        runSequence('clean');
 
         gutil.log('[webpack]', stats.toString({
             chunks: false,
             colors: true,
         }));
     });
-});
-
-gulp.task('html', () => {
-    const htmlSrc = path.join(__dirname, 'app', 'index.html');
-    const template = fs.readFileSync(htmlSrc, 'utf8');
-    const html = _.template(template)({hash});
-    fs.writeFile(path.join(__dirname, 'public', 'index.html'), html);
 });
 
 gulp.task('clean', (callback) => {
