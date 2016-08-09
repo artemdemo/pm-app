@@ -4,7 +4,7 @@
 const userService = require('../services/user');
 
 module.exports = {
-    login: (browser) => {
+    login: (browser, endSession = true) => {
         const user = userService.getUserData();
 
         browser
@@ -17,7 +17,9 @@ module.exports = {
 
         browser.expect.element('nav').to.be.present.before(500);
 
-        browser.end();
+        if (endSession) {
+            browser.end();
+        }
     },
 
     logout: (browser) => {

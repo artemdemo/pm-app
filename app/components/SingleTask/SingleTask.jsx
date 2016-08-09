@@ -165,7 +165,8 @@ class SingleTask extends Component {
                                 board_id: e.target.value,
                             })}
                             name='board'
-                            disabled={this.state.done}>
+                            disabled={this.state.done}
+                            data-qa='select-board'>
                         <option value='0'>No board selected</option>
                         {boards.map((board) => (
                             <option value={board.id} key={`board-${board.id}`}>{board.title}</option>

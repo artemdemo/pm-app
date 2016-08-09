@@ -1,18 +1,19 @@
+/* eslint-disable strict*/
 'use strict';
 
 /**
  * Generate random word
- * @param length {Number}
+ * @param wLength {Number}
  * @returns {string}
  */
-const getRandomWord = (length) => {
+const getRandomWord = (wLength) => {
     let consonants = 'bcdfghjklmnpqrstvwxyz';
     let vowels = 'aeiou';
     const rand = function(limit) {
         return Math.floor(Math.random() * limit);
     };
     let word = '';
-    length = parseInt(length, 10);
+    const length = parseInt(wLength, 10);
     consonants = consonants.split('');
     vowels = vowels.split('');
     for (let i = 0; i < length / 2; i++) {

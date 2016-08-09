@@ -129,7 +129,8 @@ class SingleBoard extends Component {
                             onChange={(e) => this.setState({
                                 id_position: e.target.value,
                             })}
-                            name='board'>
+                            name='board'
+                            data-qa='select-board'>
                         <option>Place after all</option>
                         <option disabled>&nbsp;&nbsp;Place before:</option>
                         {boardsList.map((board) => (

@@ -61,7 +61,8 @@ class TasksListItem extends Component {
                 <form onSubmit={this.createNewTask}>
                     <input className='tasks-list-item__name-input'
                            ref='nameInput'
-                           placeholder='New task...' />
+                           placeholder='New task...'
+                           data-qa='new-task-input' />
                 </form>
             );
         };
