@@ -12,7 +12,7 @@ const extractTextPluginFileName = 'css/styles-[hash].css';
 
 let hash;
 
-let args = yargs
+const args = yargs
     .options({
         pack: {
             alias: 'min',

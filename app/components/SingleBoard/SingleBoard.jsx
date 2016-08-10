@@ -73,7 +73,8 @@ class SingleBoard extends Component {
             return (
                 <button type='submit'
                         className='btn btn-primary'
-                        disabled={this.state.loadingData}>
+                        disabled={this.state.loadingData}
+                        data-qa='board-save'>
                     <span>{text}</span>
                 </button>
             );

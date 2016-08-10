@@ -37,7 +37,7 @@ class BoardsList extends Component {
                 </div>
                 <button className='btn btn-default'
                         onClick={this.addNewBoard}
-                        data-qa='add-new-board'>
+                        data-qa='new-board'>
                     New Board
                 </button>
             </div>
