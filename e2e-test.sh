@@ -9,6 +9,9 @@ if [ -f ${TMP_DB_FILE} ]; then
   rm ${TMP_DB_FILE}
 fi
 
+# Run server with custom db and create all tables:
+# node ./server/index --db=e2e-test.db --migrate
+
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     gnome-terminal --command="node ./server/index --db=${TMP_DB_FILE} --migrate" --title "node server for e2e test" --disable-factory &
     echo ${!} > ${TMP_PID_FILE_NODE}
