@@ -53,11 +53,17 @@ $ npm test
 
 More [about e2e tests](docs/e2e.md)
 
-## Technologies
+## Main technologies
 
 * ReactJS - https://facebook.github.io/react/
+* Redux - http://redux.js.org/
 * Bootstrap css - http://getbootstrap.com/
 * Hapi.js - http://hapijs.com/
+* Webpack - https://webpack.github.io/
+* Nightwatch - http://nightwatchjs.org/
+* Gulp - http://gulpjs.com/
+* Less - http://lesscss.org/
+* Babel - https://babeljs.io/ 
 
 ## Compilation
 
