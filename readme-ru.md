@@ -5,49 +5,33 @@
 Приложение для управления проектами и задачами. Это больше скрам, нежели канбан,
 потому что я доверяю спринтам и итерациям :smile:
 
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-tasks.png)
+---
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-scrum.png)
+---
+![alt tag](https://github.com/artemdemo/pm-app/blob/master/img/pm-projects.png)
+
 ## Для запуска
 
-Скачиваем все модули и зависимости
+Скачиваем все модули, зависимости и компилируем
 
 ```
-$ npm i && typings i
+$ npm i && npm run build
 ```
 
-Компилируем приложение
-
-```
-$ npm run build
-```
-
-Так же можно собрать минифицированную версию:
-
-```
-$ npm run pack
-```
-
-Можно также минифицировать с манглингом (сохраняя имена файлов):
-
-```
-$ npm run pack-with-mangle
-```
-
-Стартуем сервер
+Запускаем сервер:
 
 ```
 $ npm start
 ```
 
-Во время разработки используйте команду `watch`
+Во время разработки используйте команду `watch`:
 
 ```
 $ npm run watch
 ```
 
-Вы можете проактивно запустить проверку кода tslint (эта проверка будет запускаться автоматически перед каждым коммитом)
-
-```
-$ npm run tslint
-```
+[All npm commands](docs/npm.md)
 
 ## Технологии
 
