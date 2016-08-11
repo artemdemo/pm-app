@@ -112,6 +112,9 @@ exports.updatePositions = (request, replay) => {
         replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
     }
+
+    // ToDo: This is different from other requests
+    // `payload` and `tokenId` are properties in `tasksData` object
     tasks.updateTaskPosition(Object.assign(request.payload, {tokenId: tokenData.id}))
         .then();
     replay({});

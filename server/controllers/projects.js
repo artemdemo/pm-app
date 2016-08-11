@@ -1,71 +1,103 @@
 const boom = require('boom');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
+const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-// exports.index = (request, reply) => {
-//     reply.redirect('/');
+// exports.index = (request, replay) => {
+//     replay.redirect('/');
 // };
 
-exports.index = (request, reply) => reply.file('index.html');
+exports.index = (request, replay) => replay.file('index.html');
 
-exports.all = (request, reply) => {
-    projects.getAll().then((projects) => {
-        reply(projects);
+exports.all = (request, replay) => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    if (!tokenData) {
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const projectsData = {
+        tokenId: tokenData.id,
+    };
+    projects.getAll(projectsData).then((projects) => {
+        replay(projects);
     }, () => {
-        reply(boom.badRequest('DB error'));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.add = (request, reply) => {
-    projects.addNew(request.payload).then((result) => {
-        reply(result);
+exports.add = (request, replay) => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    if (!tokenData) {
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const projectsData = {
+        payload: request.payload,
+        tokenId: tokenData.id,
+    };
+    projects.addNew(projectsData).then((result) => {
+        replay(result);
     }, () => {
-        reply(boom.badRequest('DB error'));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.update = (request, reply) => {
+exports.update = (request, replay) => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
     const tasks = request.payload.tasks;
     const projectId = request.payload.id;
-    projects.updateProject(request.payload).then((updatedData) => {
+    if (!tokenData) {
+        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
+        return;
+    }
+    const projectsData = {
+        payload: request.payload,
+        tokenId: tokenData.id,
+    };
+    projects.updateProject(projectsData).then((updatedData) => {
         if (tasks && projectId) {
             projectsTasksRelations.addRelation(projectId, tasks)
                 .then(() => {
-                    reply(updatedData);
+                    replay(updatedData);
                 }, () => {
-                    reply(boom.badRequest(errConstants.DB_ERROR));
+                    replay(boom.badRequest(errConstants.DB_ERROR));
                 });
         } else {
-            reply(updatedData);
+            replay(updatedData);
         }
     }, () => {
-        reply(boom.badRequest('DB error'));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.delete = (request, reply) => {
-    projects.deleteProject(request.params.projectId).then(() => {
-        reply({});
+exports.delete = (request, replay) => {
+    const tokenData = auth.parseTokenData(request.headers.authorization);
+    const projectsData = {
+        payload: request.params.projectId,
+        tokenId: tokenData.id,
+    };
+    projects.deleteProject(projectsData).then(() => {
+        replay({});
     }, () => {
-        reply(boom.badRequest('DB error'));
+        replay(boom.badRequest(errConstants.DB_ERROR));
     });
 };
 
-exports.connectTask = (request, reply) => {
+exports.connectTask = (request, replay) => {
     projectsTasksRelations.addRelation(request.params.projectId, request.params.taskId)
         .then(() => {
-            reply({});
+            replay({});
         }, () => {
-            reply(boom.badRequest('DB error'));
+            replay(boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.disconnectTask = (request, reply) => {
+exports.disconnectTask = (request, replay) => {
     projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
         .then(() => {
-            reply({});
+            replay({});
         }, () => {
-            reply(boom.badRequest('DB error'));
+            replay(boom.badRequest(errConstants.DB_ERROR));
         });
 };
