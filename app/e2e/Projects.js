@@ -2,6 +2,7 @@
 'use strict';
 
 const helper = require('./services/helper');
+const mainMenu = require('./services/mainMenu');
 const auth = require('./suits/auth');
 
 const getProjectName = (() => {
@@ -46,8 +47,7 @@ module.exports = {
     'Add projects': (browser) => {
         auth.login(browser, false);
 
-        // Click on "Projects" in Main Menu
-        browser.click('.navbar .navbar-nav li:nth-of-type(3) a');
+        browser.click(mainMenu.getMainMenuPath('projects'));
 
         for (; projectIndex < 4; projectIndex++) {
             browser

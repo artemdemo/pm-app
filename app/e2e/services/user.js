@@ -2,18 +2,18 @@
 'use strict';
 
 const helper = require('./helper');
-let user = null;
+const user = {};
 
-const getUserData = () => {
-    if (!user) {
+const getUserData = (userId) => {
+    if (!user[userId]) {
         const username = helper.getRandomWord(10);
-        user = {
+        user[userId] = {
             username,
             email: username + '@' + helper.getRandomWord(5) + '.' + helper.getRandomWord(3),
             password: helper.getRandomWord(10),
         };
     }
-    return user;
+    return user[userId];
 };
 
 module.exports = {

@@ -2,6 +2,7 @@
 'use strict';
 
 const helper = require('./services/helper');
+const mainMenu = require('./services/mainMenu');
 const auth = require('./suits/auth');
 
 const getBoardName = (() => {
@@ -39,8 +40,7 @@ module.exports = {
     'Add boards': (browser) => {
         auth.login(browser, false);
 
-        // Click on "Boards" in Main Menu
-        browser.click('.navbar .navbar-nav li:nth-of-type(2) a');
+        browser.click(mainMenu.getMainMenuPath('boards'));
 
         for (; boardIndex < 4; boardIndex++) {
             browser

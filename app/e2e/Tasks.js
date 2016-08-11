@@ -2,6 +2,7 @@
 'use strict';
 
 const helper = require('./services/helper');
+const mainMenu = require('./services/mainMenu');
 const auth = require('./suits/auth');
 
 const getTaskName = (() => {
@@ -36,7 +37,7 @@ module.exports = {
         auth.login(browser, false);
 
         // Click on "Tasks" in Main Menu
-        browser.click('.navbar .navbar-nav li:first-of-type a');
+        browser.click(mainMenu.getMainMenuPath('tasks'));
 
         for (; taskIndex < 4; taskIndex++) {
             browser
