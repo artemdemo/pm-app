@@ -90,10 +90,21 @@ exports.getAll = (boardsData) => {
 exports.addNew = (newBoardData) => {
     const deferred = Q.defer();
     const now = moment(new Date());
+    const promisesList = [];
 
-    getAllBoards(newBoardData.tokenId)
-        .then(boards => {
-            const userId = boards[0].user_id;
+    promisesList.push(getAllBoards(newBoardData.tokenId));
+
+    // In case there are no boards `getAllBoards` will return empty array
+    promisesList.push(sessions.getSession({
+        id: newBoardData.tokenId,
+    }));
+
+    Q.all(promisesList)
+        .then(results => {
+            const boards = results[0];
+            const session = results[1];
+
+            const userId = session.user_id;
             const newBoard = {
                 title: newBoardData.payload.title,
                 description: newBoardData.payload.description,
@@ -134,7 +145,10 @@ exports.addNew = (newBoardData) => {
                     console.log(chalk.red.bold('[addNew Board error]'), error);
                     deferred.reject();
                 });
-        }, () => deferred.reject());
+        }, (error) => {
+            console.log(chalk.red.bold('[addNew Board error]'), error);
+            deferred.reject();
+        });
 
     return deferred.promise;
 };

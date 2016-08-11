@@ -14,7 +14,7 @@ class SingleBoard extends Component {
         const board = this.getBoard(props);
         const { boards } = props;
         const boardsList = boards.filter(item => item.id !== board.id);
-        const selectedBoardId = board.id_position + 1;
+        const selectedBoardId = board.id_position ? board.id_position + 1 : '';
 
         this.state = {
             title: board.title || '',
