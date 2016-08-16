@@ -21,8 +21,15 @@ module.exports = {
         browser.expect.element('nav').to.be.present.before(500);
     },
 
-    login: (browser, endSession = true) => {
-        const user = userService.getUserData();
+    /**
+     * Login method
+     * @param browser
+     * @param options {Object}
+     * @param options.endSession {Boolean} - `false` by default
+     * @param options.userId {String}
+     */
+    login: (browser, options = {}) => {
+        const user = userService.getUserData(options.userId);
 
         browser
             .url('http://localhost:8000/')
@@ -34,7 +41,7 @@ module.exports = {
 
         browser.expect.element('nav').to.be.present.before(500);
 
-        if (endSession) {
+        if (options.endSession) {
             browser.end();
         }
     },

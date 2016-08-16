@@ -45,7 +45,7 @@ let projectIndex = 1;
 
 module.exports = {
     'Add projects': (browser) => {
-        auth.login(browser, false);
+        auth.login(browser);
 
         browser.click(mainMenu.getMainMenuPath('projects'));
 

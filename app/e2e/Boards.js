@@ -38,7 +38,7 @@ let boardIndex = 1;
 
 module.exports = {
     'Add boards': (browser) => {
-        auth.login(browser, false);
+        auth.login(browser);
 
         browser.click(mainMenu.getMainMenuPath('boards'));
 
