@@ -40,7 +40,7 @@ module.exports = {
     'Add boards': (browser) => {
         auth.login(browser);
 
-        browser.click(mainMenu.getMainMenuPath('boards'));
+        browser.click(mainMenu.getMainMenuPath('scrum'));
 
         for (; boardIndex < 4; boardIndex++) {
             browser
