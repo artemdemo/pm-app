@@ -32,7 +32,7 @@ module.exports = {
         browser.click(mainMenu.getMainMenuPath('tasks'));
         browser
             .setValue('input[data-qa=new-task-input]', [tasks.first, browser.Keys.ENTER])
-            .pause(100)
+            .pause(1200)
             .setValue('input[data-qa=new-task-input]', [tasks.second, browser.Keys.ENTER]);
 
         browser.click(mainMenu.getMainMenuPath('projects'));
@@ -47,34 +47,76 @@ module.exports = {
             .pause(200);
     },
 
+    'Mark task as done': (browser) => {
+        browser.click(mainMenu.getMainMenuPath('tasks'));
+        browser
+            .click(tasksService.getTaskPath(3))
+            .click('.single-panel .ok-circle-container')
+            .assert.cssClassPresent('.single-panel .ok-circle-container .ok-circle', 'ok-circle_done')
+            .click('.single-panel button[data-qa=task-save]');
+    },
+
     'Connect - tasks page': (browser) => {
         browser.click(mainMenu.getMainMenuPath('tasks'));
         browser
             .click(tasksService.getTaskPath(2))
-            .assert.value('.single-panel input[data-qa=task-name]', tasks.first)
+            .assert.value('.single-panel input[data-qa=task-name]', tasks.second)
             .click('.single-panel .dropdown-list__input')
             .assert.cssClassPresent('.single-panel .dropdown-list-items', 'dropdown-list-items_show')
             .click('.single-panel .dropdown-list-items .dropdown-list-item:first-of-type')
-            .assert.containsText('.single-panel .labels-list .labels-list-item:first-of-type', projects.second)
+            .assert.containsText('.single-panel .labels-list .labels-list-item:first-of-type', projects.second);
+
+        browser
+            .click('.single-panel .dropdown-list__input')
+            .click('.single-panel .dropdown-list-items .dropdown-list-item:first-of-type');
+
+        browser
             .click('.single-panel button[data-qa=task-save]')
             .assert.containsText(`${tasksService.getTaskPath(2)} .labels-list-item:first-of-type`, projects.second);
+    },
 
-        // ToDo: Mark second task as `done`
+    'Remove connection - tasks page': (browser) => {
+        browser.click(mainMenu.getMainMenuPath('tasks'));
+        browser
+            .click(tasksService.getTaskPath(2))
+            .assert.value('.single-panel input[data-qa=task-name]', tasks.second)
+            .click('.single-panel .labels-list .labels-list-item:nth-child(2) .labels-list-item__close')
+            .click('.single-panel button[data-qa=task-save]');
     },
 
     'Connect - projects page': (browser) => {
+        const dropDownItemPath = '.single-panel .dropdown-list-items .dropdown-list-item';
         browser.click(mainMenu.getMainMenuPath('projects'));
         browser
             .click(projectsService.getProjectPath('first', 'active'))
             .assert.value('.single-panel input[data-qa=project-name]', projects.second)
             .click('.single-panel .dropdown-list__input')
-            .click('.single-panel .dropdown-list-items .dropdown-list-item:first-of-type')
+            .assert.cssClassPresent(`${dropDownItemPath}:last-of-type`, 'dropdown-list-item_done')
+            .click(`${dropDownItemPath}:first-of-type`)
             .assert.containsText(
                 '.single-panel .narrow-list .narrow-list-item:first-of-type .narrow-list-item__name',
+                tasks.second
+            )
+            .assert.containsText(
+                '.single-panel .narrow-list .narrow-list-item:last-of-type .narrow-list-item__name',
                 tasks.first
-            );
+            )
+            .assert.cssClassPresent(
+                '.single-panel .narrow-list .narrow-list-item:last-of-type',
+                'narrow-list-item_done'
+            )
+            .click('.single-panel button[data-qa=project-save]');
+    },
 
-        // ToDo: Check that last task is marked as `done`
+    'Remove connection - projects page': (browser) => {
+        browser.click(mainMenu.getMainMenuPath('projects'));
+
+        browser
+            .click(projectsService.getProjectPath('first', 'active'))
+            .click('.single-panel .narrow-list .narrow-list-item:first-of-type .narrow-list-item__cell_close')
+            .click('.single-panel .narrow-list .narrow-list-item:first-of-type .narrow-list-item__cell_close')
+            .assert.elementPresent('.single-panel div[data-qa=no-tasks-label]')
+            .click('.single-panel button[data-qa=project-save]');
 
         auth.logout(browser);
     },
