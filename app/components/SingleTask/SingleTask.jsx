@@ -151,6 +151,7 @@ class SingleTask extends Component {
                 </div>
                 <div className='form-group'>
                     <LabelsList list={this.state.selectedProjects}
+                                delitable
                                 onDelete={this.disconnectProject} />
                 </div>
                 <div className='form-group'>
