@@ -133,7 +133,7 @@ class SingleProject extends Component {
                 );
             }
             return (
-                <div className='text-muted'>No tasks selected</div>
+                <div className='text-muted' data-qa='no-tasks-label'>No tasks selected</div>
             );
         };
         const renderTime = () => {

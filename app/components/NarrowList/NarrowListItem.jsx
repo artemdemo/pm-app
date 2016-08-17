@@ -40,10 +40,10 @@ export class NarrowListItem extends Component {
         };
 
         return (
-            <li className={classItem}
-                onClick={this.itemClicked}>
+            <li className={classItem}>
                 <div className='narrow-list-item__cell
-                                narrow-list-item__cell_name'>
+                                narrow-list-item__cell_name'
+                     onClick={this.itemClicked}>
                     <span className='narrow-list-item__name'>
                         {item.name}
                     </span>
