@@ -33,7 +33,7 @@ And start watching files:
 $ npm run watch
 ```
 
-This is it, you are ready to go.
+This is it, you are ready to go, open http://localhost:8000/signup and create your first user.
 
 [All npm commands](docs/npm.md)
 
