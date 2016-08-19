@@ -20,9 +20,9 @@ exports.getAll = (tasksData) => {
                         FROM tasks
                         INNER JOIN sessions 
                                 ON sessions.user_id = tasks.user_id
-                        WHERE sessions.id = '${tasksData.tokenId}';`;
+                        WHERE sessions.id = ?;`;
 
-    DB.queryRows(tasksQuery)
+    DB.queryRows(tasksQuery, [tasksData.tokenId])
         .then((rows) => {
             const promisesList = [];
             const tasks = parseTasks(rows);
@@ -32,8 +32,8 @@ exports.getAll = (tasksData) => {
                                        FROM tasks
                                        INNER JOIN projects_tasks_relations
                                                ON tasks.id = projects_tasks_relations.task_id
-                                       WHERE tasks.id = ${task.id};`;
-                promisesList.push(DB.queryRows(projectsQuery));
+                                       WHERE tasks.id = ?;`;
+                promisesList.push(DB.queryRows(projectsQuery, [task.id]));
             });
             Q.all(promisesList)
                 .then((resultsList) => {
@@ -208,10 +208,10 @@ exports.updateTaskPosition = (taskData) => {
                         FROM tasks
                         INNER JOIN sessions 
                                 ON sessions.user_id = tasks.user_id
-                        WHERE sessions.id = '${taskData.tokenId}' AND tasks.board_id = ${taskData.boardId}
+                        WHERE sessions.id = ? AND tasks.board_id = ?
                         ORDER BY tasks.id_position_scrum ASC;`;
 
-    DB.queryRows(tasksQuery)
+    DB.queryRows(tasksQuery, [taskData.tokenId, taskData.boardId])
         .then((tasks) => {
             let taskList = [];
             const newTask = {

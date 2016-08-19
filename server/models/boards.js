@@ -36,10 +36,10 @@ const getAllBoards = (tokenId) => {
     const boardsQuery = `SELECT boards.id, boards.title, boards.description, boards.id_position, sessions.user_id
                          FROM boards
                          INNER JOIN sessions ON sessions.user_id = boards.user_id
-                         WHERE sessions.id = '${tokenId}'
+                         WHERE sessions.id = ?
                          ORDER BY id_position ASC;`;
 
-    DB.queryRows(boardsQuery)
+    DB.queryRows(boardsQuery, [tokenId])
         .then((boards) => {
             deferred.resolve(boards);
         }, () => {

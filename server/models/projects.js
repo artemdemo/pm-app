@@ -15,9 +15,9 @@ exports.getAll = (projectsData) => {
                         FROM projects
                         INNER JOIN sessions 
                                 ON sessions.user_id = projects.user_id
-                        WHERE sessions.id = '${projectsData.tokenId}';`;
+                        WHERE sessions.id = ?;`;
 
-    DB.queryRows(projectsQuery)
+    DB.queryRows(projectsQuery, [projectsData.tokenId])
         .then((projects) => {
             const promisesList = [];
             projects.forEach(project => {
@@ -26,8 +26,8 @@ exports.getAll = (projectsData) => {
                                     FROM projects
                                     INNER JOIN projects_tasks_relations
                                             ON projects.id = projects_tasks_relations.project_id
-                                    WHERE projects.id = ${project.id};`;
-                promisesList.push(DB.queryRows(tasksQuery));
+                                    WHERE projects.id = ?;`;
+                promisesList.push(DB.queryRows(tasksQuery, [project.id]));
             });
             Q.all(promisesList)
                 .then((resultsList) => {
