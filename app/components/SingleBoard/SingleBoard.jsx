@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { TextareaMd } from '../TextareaMd/TextareaMd';
 import { addNewBoard, updateBoard, deleteBoard } from '../../actions/boards';
 import { errorMessage } from '../../actions/notification';
 
@@ -115,14 +116,14 @@ class SingleBoard extends Component {
                            data-qa='board-name' />
                 </div>
                 <div className='form-group'>
-                    <textarea className='flat-input'
-                              name='description'
-                              rows='3'
-                              value={this.state.description}
-                              onChange={(e) => this.setState({
-                                  description: e.target.value,
-                              })}
-                              data-qa='board-description'></textarea>
+                    <TextareaMd className='flat-input'
+                                name='description'
+                                rows='3'
+                                value={this.state.description}
+                                onChange={(e) => this.setState({
+                                    description: e.target.value,
+                                })}
+                                data-qa='board-description' />
                 </div>
                 <div className='form-group'>
                     <select className='form-control'

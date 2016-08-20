@@ -8,6 +8,7 @@ import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { DropdownList } from '../DropdownList/DropdownList';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { TextareaMd } from '../TextareaMd/TextareaMd';
 import { errorMessage } from '../../actions/notification';
 
 import './SingleTask.less';
@@ -134,14 +135,15 @@ class SingleTask extends Component {
                            data-qa='task-name' />
                 </div>
                 <div className='form-group'>
-                    <textarea className='flat-input'
-                              name='description'
-                              value={this.state.description}
-                              onChange={(e) => this.setState({
-                                  description: e.target.value,
-                              })}
-                              rows='3'
-                              data-qa='task-description'></textarea>
+                    <TextareaMd className='flat-input'
+                                name='description'
+                                rows='5'
+                                value={this.state.description}
+                                onChange={(e) => this.setState({
+                                    description: e.target.value,
+                                })}
+                                placeholder='No description'
+                                data-qa='task-description' />
                 </div>
                 <div className='form-group'>
                     <OkCircle doneStatus={this.state.done}

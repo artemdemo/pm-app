@@ -7,6 +7,7 @@ import { DropdownList } from '../DropdownList/DropdownList';
 import { NarrowList } from '../NarrowList/NarrowList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { TextareaMd } from '../TextareaMd/TextareaMd';
 import { clearEntity } from '../../actions/selectedEntity';
 import { errorMessage } from '../../actions/notification';
 import { showModal, hideModal } from '../../actions/modal';
@@ -170,14 +171,14 @@ class SingleProject extends Component {
                            data-qa='project-name' />
                 </div>
                 <div className='form-group'>
-                    <textarea className='flat-input'
-                              name='description'
-                              rows='3'
-                              value={this.state.description}
-                              onChange={(e) => this.setState({
-                                  description: e.target.value,
-                              })}
-                              data-qa='project-description'></textarea>
+                    <TextareaMd className='flat-input'
+                                name='description'
+                                rows='5'
+                                value={this.state.description}
+                                onChange={(e) => this.setState({
+                                    description: e.target.value,
+                                })}
+                                data-qa='project-description' />
                 </div>
                 <div className='form-group'>
                     <div className='single-panel__subtitle'>
