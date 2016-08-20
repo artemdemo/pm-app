@@ -72,6 +72,11 @@ More [about e2e tests](docs/e2e.md)
 * Less - http://lesscss.org/
 * Babel - https://babeljs.io/ 
 
+## 3rd party packages
+
+* markdown-it - https://github.com/markdown-it/markdown-it
+* moment - https://www.npmjs.com/package/moment
+
 ## Compilation
 
 I'm using webpack with some plugins

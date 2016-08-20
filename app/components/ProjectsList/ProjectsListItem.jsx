@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import emoji from '../../utils/emoji/emoji';
 import { selectProject } from '../../actions/selectedEntity';
 
 import './ProjectsListItem.less';
@@ -11,23 +12,23 @@ class ProjectsListItem extends Component {
         this.state = {
             tasks: props.tasks,
             project: props.project,
-        }
+        };
 
         this.renderTasks = () => {
             if (this.state.project.tasks.length > 0) {
                 return (
                     <div>
                         <div className='text-muted'>
-                            Total: { this.filterTasks('all').length }
+                            Total: {this.filterTasks('all').length}
                         </div>
                         <div className='text-muted'>
-                            Done: { this.filterTasks('done').length }
+                            Done: {this.filterTasks('done').length}
                         </div>
                     </div>
                 );
             }
             return null;
-        }
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -60,9 +61,9 @@ class ProjectsListItem extends Component {
             <div className='projects-list-item'
                  onClick={() => selectProject(project)}>
                 <div className='projects-list-item__title'>
-                    { project.name }
+                    {emoji(project.name)}
                 </div>
-                { this.renderTasks() }
+                {this.renderTasks()}
             </div>
         );
     }
@@ -71,8 +72,8 @@ class ProjectsListItem extends Component {
 export default connect(
     state => {
         return {
-            tasks: state.tasks
-        }
+            tasks: state.tasks,
+        };
     }, {
         selectProject,
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import emoji from '../../utils/emoji/emoji';
 
 import './NarrowListItem.less';
 
@@ -45,7 +46,7 @@ export class NarrowListItem extends Component {
                                 narrow-list-item__cell_name'
                      onClick={this.itemClicked}>
                     <span className='narrow-list-item__name'>
-                        {item.name}
+                        {emoji(item.name)}
                     </span>
                 </div>
                 <div className='narrow-list-item__cell

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { setDraggedTask, dropDraggedTask, setDraggedTaskDropPosition } from '../../actions/draggedTask';
@@ -104,7 +105,7 @@ class BoardTask extends Component {
                         <span className='glyphicon glyphicon-option-vertical'
                               aria-hidden='true'></span>
                     </div>
-                    {task.name}
+                    {emoji(task.name)}
                     <div className='board-task__labels-list'>
                         <LabelsList list={selectedProjects}
                                     delitable={false} />

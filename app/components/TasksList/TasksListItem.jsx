@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import * as entityConst from '../../constants/selectedEntity';
 import { connect } from 'react-redux';
 import { filterProjects } from '../../utils/tasks';
+import emoji from '../../utils/emoji/emoji';
 import { addNewTask } from '../../actions/tasks';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
@@ -52,7 +53,7 @@ class TasksListItem extends Component {
             if (task.id) {
                 return (
                     <span className={itemClass}>
-                        {task.name}
+                        {emoji(task.name)}
                     </span>
                 );
             }
