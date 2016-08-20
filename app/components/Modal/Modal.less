@@ -1,5 +1,7 @@
 // bootstrap already has `modal` class therefore I'm using slightly different name
 
+@import '../../styles/animated/fade/fadeIn';
+
 .pm-modal-bg {
     position: absolute;
     left: 0;
@@ -10,6 +12,10 @@
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+    .pm-modal-bg_fadeIn {
+        .fadeIn(0.2s);
+    }
+
 .pm-modal {
     position: absolute;
     background-color: white;
@@ -18,3 +24,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+    .pm-modal_fadeIn {
+        .fadeIn(0.35s);
+    }
