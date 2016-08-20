@@ -87,6 +87,7 @@ class SingleProject extends Component {
     componentWillReceiveProps(nextProps) {
         const project = this.getProject(nextProps);
         const { selectedTasks, availableTasks } = filterTasks(project, nextProps.tasks);
+
         this.setState({
             name: project.name || '',
             description: project.description || '',
@@ -129,7 +130,7 @@ class SingleProject extends Component {
                 return (
                     <NarrowList list={this.state.selectedTasks}
                                 deletable
-                                onClick={(item) => this.openTask(item)}
+                                onClick={(task) => this.openTask(task)}
                                 onDelete={this.disconnectTask} />
                 );
             }

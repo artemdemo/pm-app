@@ -11,7 +11,7 @@ export class TextareaMd extends Component {
 
         this.state = {
             editMode: false,
-            value: '',
+            value: props.value || '',
         };
 
         this.md = new MarkdownIt();
