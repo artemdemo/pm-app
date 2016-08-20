@@ -14,7 +14,7 @@ class Modal extends Component {
 
         this.bgClick = (e) => {
             const { hideModal } = this.props;
-            if (e.target.className === MODAL_BG_CLASS) {
+            if (e.target.className.indexOf(MODAL_BG_CLASS) > -1) {
                 hideModal();
             }
         };

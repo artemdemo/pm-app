@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 import { hideNotification } from '../../actions/notification';
 import * as notificationConst from '../../constants/notification';
 
@@ -9,16 +10,22 @@ class UserNotificator extends Component {
     render() {
         const { notification, hideNotification } = this.props;
         const HIDE_TIMEOUT = 2000;
-        let msgClass = 'user-notificator-message';
+        let msgTypeClass;
 
         switch (notification.type) {
             case notificationConst.ERROR_MSG:
-                msgClass += ' user-notificator-message_error';
+                msgTypeClass = 'user-notificator-message_error';
                 break;
             case notificationConst.SUCCESS_MSG:
-                msgClass += ' user-notificator-message_success';
+                msgTypeClass = 'user-notificator-message_success';
                 break;
         }
+
+        const msgClass = classnames({
+            'user-notificator-message': true,
+            [msgTypeClass]: true,
+            'user-notificator-message_fadeIn': true,
+        });
 
         if (notification.type !== notificationConst.HIDE_MSG) {
             setTimeout(hideNotification, HIDE_TIMEOUT);
