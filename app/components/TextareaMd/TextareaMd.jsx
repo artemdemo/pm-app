@@ -51,7 +51,7 @@ export class TextareaMd extends Component {
         const renderPlaceholder = () => {
             if (renderedContent === '' && placeholder) {
                 return (
-                    <div className='text-muted'>
+                    <div className='textarea-md-content__placeholder'>
                         {placeholder}
                     </div>
                 );

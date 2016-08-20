@@ -123,6 +123,7 @@ class SingleBoard extends Component {
                                 onChange={(e) => this.setState({
                                     description: e.target.value,
                                 })}
+                                placeholder='No description'
                                 data-qa='board-description' />
                 </div>
                 <div className='form-group'>
