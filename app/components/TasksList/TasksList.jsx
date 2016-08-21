@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import emoji from '../../utils/emoji/emoji';
 import * as entityConst from '../../constants/selectedEntity';
 import { RadioMenu } from '../RadioMenu/RadioMenu';
 import TasksListItem from './TasksListItem';
@@ -7,33 +8,99 @@ import { clearEntity } from '../../actions/selectedEntity';
 
 import './TasksList.less';
 
+const tasksFilterService = (function() {
+    const filterFunctions = {};
+    const filterData = {};
+
+    const addFilterData = (name, newFilterData = null) => {
+        filterData[name] = newFilterData;
+    };
+
+    const addFilter = (name, filterFunc = null, newFilterData = null) => {
+        filterFunctions[name] = filterFunc;
+        addFilterData(name, newFilterData);
+    };
+
+    const runFilter = (name, tasks) => {
+        if (filterFunctions[name]) {
+            return filterFunctions[name](tasks, filterData[name]);
+        }
+        return tasks;
+    };
+
+    const runAllFilters = (startTasks) => {
+        let tasks = startTasks;
+        for (const filter in filterFunctions) {
+            tasks = runFilter(filter, tasks);
+        }
+        return tasks;
+    };
+
+    return {
+        addFilter,
+        addFilterData,
+        runAllFilters,
+    };
+})();
+
+const FILTER_BY_DONE_STATUS = 'FILTER_BY_DONE_STATUS';
+const FILTER_BY_PROJECTS = 'FILTER_BY_PROJECTS';
+
+tasksFilterService.addFilter(FILTER_BY_DONE_STATUS, (tasks, data) => {
+    return tasks.filter((task) => {
+        switch (data) {
+            case 'active':
+                return task.done === false;
+            case 'completed':
+                return task.done === true;
+            default:
+                return true;
+        }
+    });
+});
+
+tasksFilterService.addFilter(FILTER_BY_PROJECTS, (tasks, data) => {
+    if (data) {
+        return tasks.filter(task => {
+            return task.projects.indexOf(data) > -1;
+        });
+    }
+    return tasks;
+});
+
 class TasksList extends Component {
     constructor(props) {
         super(props);
 
+        this.allTasks = props.tasks || [];
+
         this.state = {
-            tasks: props.tasks,
+            tasks: tasksFilterService.runAllFilters(this.allTasks),
+            projects: [],
         };
 
         this.listMenu = [
-            { id: 1, name: 'All' },
-            { id: 2, name: 'Active' },
-            { id: 3, name: 'Completed' },
+            { id: 'all', name: 'All' },
+            { id: 'active', name: 'Active' },
+            { id: 'completed', name: 'Completed' },
         ];
 
         this.sortingMenuItem = this.listMenu[0];
 
-        this.selectItem = (item) => {
+        this.selectRadioItem = (item) => {
             this.sortingMenuItem = item;
+            tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, this.sortingMenuItem.id);
             this.setState({
-                tasks: this.filterTasks(this.props.tasks, this.sortingMenuItem),
+                tasks: tasksFilterService.runAllFilters(this.allTasks),
             });
         };
     }
 
     componentWillReceiveProps(nextProps) {
+        this.allTasks = nextProps.tasks;
         this.setState({
-            tasks: this.filterTasks(nextProps.tasks, this.sortingMenuItem),
+            tasks: tasksFilterService.runAllFilters(this.allTasks),
+            projects: this.filterProjects(nextProps.projects),
         });
     }
 
@@ -42,17 +109,8 @@ class TasksList extends Component {
         clearEntity(entityConst.ENTITY_TASK);
     }
 
-    filterTasks(tasks, sortItem) {
-        return tasks.filter((item) => {
-            switch (sortItem.id) {
-                case 2: // active
-                    return item.done === false;
-                case 3: // completed
-                    return item.done === true;
-                default: // all
-                    return true;
-            }
-        });
+    filterProjects(projects) {
+        return projects.filter(project => project.tasks.length > 0);
     }
 
     render() {
@@ -62,7 +120,33 @@ class TasksList extends Component {
         };
         return (
             <div>
-                <RadioMenu list={this.listMenu} onSelect={this.selectItem} />
+                <div className='fluid-oneline-grid'>
+                    <div className='fluid-oneline-grid__cell'>
+                        <RadioMenu list={this.listMenu} onSelect={this.selectRadioItem} />
+                    </div>
+                    <div className='fluid-oneline-grid__cell'>
+                        <select className='form-control input-sm'
+                                onChange={(e) => {
+                                    const projectId = Number(e.target.value);
+                                    if (projectId > 0) {
+                                        tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
+                                    } else {
+                                        tasksFilterService.addFilterData(FILTER_BY_PROJECTS, null);
+                                    }
+                                    this.setState({
+                                        tasks: tasksFilterService.runAllFilters(this.allTasks),
+                                    });
+                                }}>
+                            <option value='0'>All projects</option>
+                            {this.state.projects.map(project => (
+                                <option value={project.id}
+                                        key={`project-filter-${project.id}`}>
+                                    {emoji(project.name)}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
                 <div className='tasks-list'>
                     <TasksListItem task={newTask} key='task-0' />
                     {this.state.tasks.map(task => (
@@ -74,14 +158,11 @@ class TasksList extends Component {
     }
 }
 
-TasksList.propTypes = {
-    tasks: React.PropTypes.arrayOf(React.PropTypes.object),
-};
-
 export default connect(
     state => {
         return {
             tasks: state.tasks,
+            projects: state.projects,
         };
     }, {
         clearEntity,
