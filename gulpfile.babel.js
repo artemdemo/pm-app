@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import gutil from 'gulp-util';
-import rename from 'gulp-rename';
 import runSequence from 'run-sequence';
 import del from 'del';
 import webpack from 'webpack';
@@ -97,31 +96,5 @@ gulp.task('clean', (callback) => {
     });
 });
 
-gulp.task('copy', () => {
-    const fonts = [
-        './node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.eot',
-        './node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.svg',
-        './node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf',
-        './node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.woff',
-        './node_modules/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
-    ];
-    gulp
-        .src([
-            './node_modules/bootstrap/dist/css/bootstrap.css',
-        ])
-        .pipe(rename('bootstrap.less'))
-        .pipe(gulp.dest('app/styles/bootstrap/css'));
-    gulp
-        .src(fonts)
-        .pipe(gulp.dest('app/styles/bootstrap/fonts'));
-    // gulp
-    //     .src(fonts)
-    //     .pipe(gulp.dest('public/fonts'));
-});
-
-gulp.task('less-watch', () => {
-    gulp.watch('./app/less/**/*.less', ['less']);
-});
-
-gulp.task('build', ['copy', 'js']);
+gulp.task('build', ['js']);
 gulp.task('watch', ['clean', 'js-watch']);

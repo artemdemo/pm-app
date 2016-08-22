@@ -76,7 +76,7 @@ class TasksList extends Component {
 
         this.state = {
             tasks: tasksFilterService.runAllFilters(this.allTasks),
-            projects: [],
+            projects: this.filterProjects(props.projects || []),
         };
 
         this.listMenu = [
