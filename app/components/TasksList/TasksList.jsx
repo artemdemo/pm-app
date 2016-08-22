@@ -77,6 +77,7 @@ class TasksList extends Component {
         this.state = {
             tasks: tasksFilterService.runAllFilters(this.allTasks),
             projects: this.filterProjects(props.projects || []),
+            filteredByProjectId: null,
         };
 
         this.listMenu = [
@@ -135,6 +136,7 @@ class TasksList extends Component {
                                     }
                                     this.setState({
                                         tasks: tasksFilterService.runAllFilters(this.allTasks),
+                                        filteredByProjectId: e.target.value,
                                     });
                                 }}>
                             <option value='0'>All projects</option>
@@ -148,7 +150,9 @@ class TasksList extends Component {
                     </div>
                 </div>
                 <div className='tasks-list'>
-                    <TasksListItem task={newTask} key='task-0' />
+                    <TasksListItem task={newTask}
+                                   projectId={this.state.filteredByProjectId}
+                                   key='task-0' />
                     {this.state.tasks.map(task => (
                         <TasksListItem task={task} key={`task-${task.id}`} />
                     ))}

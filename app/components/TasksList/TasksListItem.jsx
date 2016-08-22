@@ -20,7 +20,7 @@ class TasksListItem extends Component {
         this.toggleDone = () => {};
 
         this.createNewTask = (e) => {
-            const { addNewTask, errorMessage } = this.props;
+            const { addNewTask, errorMessage, projectId } = this.props;
             const newTaskName = this.refs.nameInput.value;
             e.preventDefault();
 
@@ -29,10 +29,12 @@ class TasksListItem extends Component {
                 return;
             }
 
+            const projects = Number(projectId) === Number(projectId) ? [Number(projectId)] : [];
+
             addNewTask({
                 name: newTaskName,
                 done: false,
-                projects: [],
+                projects,
             });
 
             // ToDo: input should be cleaned only after task was successfully added
@@ -100,6 +102,7 @@ class TasksListItem extends Component {
 TasksListItem.propTypes = {
     task: React.PropTypes.object,
     projects: React.PropTypes.arrayOf(React.PropTypes.object),
+    projectId: React.PropTypes.string,
 };
 
 export default connect(

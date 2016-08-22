@@ -28,6 +28,7 @@ exports.all = (request, replay) => {
 
 exports.add = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
+    const projects = request.payload.projects;
     if (!tokenData) {
         replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
@@ -37,7 +38,16 @@ exports.add = (request, replay) => {
         tokenId: tokenData.id,
     };
     tasks.addNew(tasksData).then((result) => {
-        replay(result);
+        if (Array.isArray(projects) && projects.length > 0) {
+            projectsTasksRelations.addRelation(projects, result.id)
+                .then(() => {
+                    replay(result);
+                }, () => {
+                    replay(boom.badRequest(errConstants.DB_ERROR));
+                });
+        } else {
+            replay(result);
+        }
     }, () => {
         replay(boom.badRequest(errConstants.DB_ERROR));
     });

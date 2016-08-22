@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
+import emoji from '../../utils/emoji/emoji';
 
 import './DropdownListItem.less';
 
@@ -15,7 +16,7 @@ export class DropdownListItem extends Component {
                  onClick={(item) => {
                      onClick(item);
                  }}>
-                {item.name}
+                {emoji(item.name)}
             </div>
         );
     }
