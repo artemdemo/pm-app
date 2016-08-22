@@ -60,12 +60,19 @@ tasksFilterService.addFilter(FILTER_BY_DONE_STATUS, (tasks, data) => {
 });
 
 tasksFilterService.addFilter(FILTER_BY_PROJECTS, (tasks, data) => {
-    if (data) {
-        return tasks.filter(task => {
-            return task.projects.indexOf(data) > -1;
-        });
+    switch (true) {
+        case data === 'free':
+            return tasks.filter(task => {
+                return task.projects.length === 0;
+            });
+        case data && Number(data) === Number(data):
+            return tasks.filter(task => {
+                return task.projects.indexOf(Number(data)) > -1;
+            });
+        case data === 'all':
+        default:
+            return tasks;
     }
-    return tasks;
 });
 
 class TasksList extends Component {
@@ -128,18 +135,15 @@ class TasksList extends Component {
                     <div className='fluid-oneline-grid__cell'>
                         <select className='form-control input-sm'
                                 onChange={(e) => {
-                                    const projectId = Number(e.target.value);
-                                    if (projectId > 0) {
-                                        tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
-                                    } else {
-                                        tasksFilterService.addFilterData(FILTER_BY_PROJECTS, null);
-                                    }
+                                    const projectId = e.target.value;
+                                    tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
                                     this.setState({
                                         tasks: tasksFilterService.runAllFilters(this.allTasks),
-                                        filteredByProjectId: e.target.value,
+                                        filteredByProjectId: projectId,
                                     });
                                 }}>
-                            <option value='0'>All projects</option>
+                            <option value='all'>All projects</option>
+                            <option value='free'>Tasks without project</option>
                             {this.state.projects.map(project => (
                                 <option value={project.id}
                                         key={`project-filter-${project.id}`}>
