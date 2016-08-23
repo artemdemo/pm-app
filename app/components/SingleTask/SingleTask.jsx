@@ -27,6 +27,7 @@ class SingleTask extends Component {
             description: task.description || '',
             board_id: task.board_id > 0 ? task.board_id : 0,
             done: task.done || false,
+            sp: task.sp || 0,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -48,6 +49,7 @@ class SingleTask extends Component {
                 name: this.state.name,
                 description: this.state.description,
                 done: this.state.done,
+                sp: Number(this.state.sp) === Number(this.state.sp) ? Number(this.state.sp) : null,
                 board_id: boardId > 0 ? Number(boardId) : null,
                 projects: this.state.selectedProjects.map(project => project.id),
             };
@@ -94,6 +96,7 @@ class SingleTask extends Component {
             description: task.description || '',
             board_id: task.board_id > 0 ? task.board_id : 0,
             done: task.done || false,
+            sp: task.sp || 0,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -164,19 +167,33 @@ class SingleTask extends Component {
                                   onSelect={this.connectProject} />
                 </div>
                 <div className='form-group'>
-                    <select className='form-control'
-                            value={this.state.board_id}
-                            onChange={(e) => this.setState({
-                                board_id: e.target.value,
-                            })}
-                            name='board'
-                            disabled={this.state.done}
-                            data-qa='select-board'>
-                        <option value='0'>No board selected</option>
-                        {boards.map((board) => (
-                            <option value={board.id} key={`board-${board.id}`}>{emoji(board.title)}</option>
-                        ))}
-                    </select>
+                    <div className='row'>
+                        <div className='col-xs-5'>
+                            <input type='number'
+                                   name='sp'
+                                   value={this.state.sp}
+                                   onChange={(e) => this.setState({
+                                       sp: e.target.value,
+                                   })}
+                                   className='form-control'
+                                   placeholder='SP' />
+                        </div>
+                        <div className='col-xs-7'>
+                            <select className='form-control'
+                                    value={this.state.board_id}
+                                    onChange={(e) => this.setState({
+                                        board_id: e.target.value,
+                                    })}
+                                    name='board'
+                                    disabled={this.state.done}
+                                    data-qa='select-board'>
+                                <option value='0'>No board selected</option>
+                                {boards.map((board) => (
+                                    <option value={board.id} key={`board-${board.id}`}>{emoji(board.title)}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div className='form-group text-muted'>
                     <p>Task Added: {task.added}</p>

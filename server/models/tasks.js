@@ -15,7 +15,7 @@ const parseTasks = (tasks) => tasks.map(task => {
 
 exports.getAll = (tasksData) => {
     const deferred = Q.defer();
-    const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done,
+    const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.sp,
                                tasks.added, tasks.updated, tasks.board_id, tasks.id_position_scrum
                         FROM tasks
                         INNER JOIN sessions 
@@ -70,6 +70,7 @@ exports.addNew = (newTaskData) => {
                 description: newTaskData.payload.description || '',
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
+                sp: newTaskData.sp || null,
                 board_id: newTaskData.board_id || null,
                 user_id: session.user_id,
             }).then((result) => {
@@ -103,7 +104,7 @@ exports.updateTask = (taskData) => {
         return deferred.promise;
     }
 
-    const allowedFields = ['name', 'description', 'done', 'board_id'];
+    const allowedFields = ['name', 'description', 'done', 'sp', 'board_id'];
     allowedFields.forEach((field) => {
         if (taskData.payload.hasOwnProperty(field)) {
             let data;
