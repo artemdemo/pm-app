@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { InputMd } from '../InputMd/InputMd';
 import { TextareaMd } from '../TextareaMd/TextareaMd';
 import { addNewBoard, updateBoard, deleteBoard } from '../../actions/boards';
 import { errorMessage } from '../../actions/notification';
+import emoji from '../../utils/emoji/emoji';
 
 import './SingleBoard.less';
 
@@ -103,17 +105,16 @@ class SingleBoard extends Component {
             <form onSubmit={this.submitBoard}
                   className={className}>
                 <div className='form-group'>
-                    <input type='text'
-                           name='name'
-                           className='flat-input'
-                           placeholder='Board title'
-                           value={this.state.title}
-                           onChange={(e) => this.setState({
-                               title: e.target.value,
-                           })}
-                           autoComplete='off'
-                           autoFocus
-                           data-qa='board-name' />
+                    <InputMd type='text'
+                             name='name'
+                             value={this.state.title}
+                             onChange={(e) => this.setState({
+                                 title: e.target.value,
+                             })}
+                             className='flat-input'
+                             placeholder='Board name'
+                             autoComplete='off'
+                             data-qa='task-name' />
                 </div>
                 <div className='form-group'>
                     <TextareaMd className='flat-input'
@@ -137,7 +138,7 @@ class SingleBoard extends Component {
                         <option>Place after all</option>
                         <option disabled>&nbsp;&nbsp;Place before:</option>
                         {boardsList.map((board) => (
-                            <option value={board.id_position} key={`board-${board.id}`}>{board.title}</option>
+                            <option value={board.id_position} key={`board-${board.id}`}>{emoji(board.title)}</option>
                         ))}
                     </select>
                 </div>

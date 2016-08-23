@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { filterProjects } from '../../utils/tasks';
+import emoji from '../../utils/emoji/emoji';
 import { deleteTask, updateTask } from '../../actions/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { DropdownList } from '../DropdownList/DropdownList';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { InputMd } from '../InputMd/InputMd';
 import { TextareaMd } from '../TextareaMd/TextareaMd';
 import { errorMessage } from '../../actions/notification';
 
@@ -123,16 +125,16 @@ class SingleTask extends Component {
         return (
             <form onSubmit={this.submitTask} className={className}>
                 <div className='form-group'>
-                    <input type='text'
-                           name='name'
-                           value={this.state.name}
-                           onChange={(e) => this.setState({
-                               name: e.target.value,
-                           })}
-                           className='flat-input'
-                           placeholder='Task name'
-                           autoComplete='off'
-                           data-qa='task-name' />
+                    <InputMd type='text'
+                             name='name'
+                             value={this.state.name}
+                             onChange={(e) => this.setState({
+                                 name: e.target.value,
+                             })}
+                             className='flat-input'
+                             placeholder='Task name'
+                             autoComplete='off'
+                             data-qa='task-name' />
                 </div>
                 <div className='form-group'>
                     <TextareaMd className='flat-input'
@@ -172,7 +174,7 @@ class SingleTask extends Component {
                             data-qa='select-board'>
                         <option value='0'>No board selected</option>
                         {boards.map((board) => (
-                            <option value={board.id} key={`board-${board.id}`}>{board.title}</option>
+                            <option value={board.id} key={`board-${board.id}`}>{emoji(board.title)}</option>
                         ))}
                     </select>
                 </div>

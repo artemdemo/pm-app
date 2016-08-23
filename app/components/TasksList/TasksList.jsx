@@ -144,6 +144,7 @@ class TasksList extends Component {
                                 }}>
                             <option value='all'>All projects</option>
                             <option value='free'>Tasks without project</option>
+                            <option disabled>—</option>
                             {this.state.projects.map(project => (
                                 <option value={project.id}
                                         key={`project-filter-${project.id}`}>

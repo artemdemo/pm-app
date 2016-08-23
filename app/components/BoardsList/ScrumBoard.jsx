@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import { sortByIdPositionScrum } from '../../utils/tasks';
 import BoardTask from './BoardTask';
 import { showModal, hideModal } from '../../actions/modal';
 import { setDraggedTaskDropPosition } from '../../actions/draggedTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
+import { sortByIdPositionScrum } from '../../utils/tasks';
+import emoji from '../../utils/emoji/emoji';
 import _ from 'underscore';
 
 import './ScrumBoard.less';
@@ -77,7 +78,7 @@ class ScrumBoard extends Component {
             <div className='scrum-board'
                  onDragOver={this.dragOver}>
                 <div className='board__title'>
-                    <div className='board__name'>{board.title}</div>
+                    <div className='board__name'>{emoji(board.title)}</div>
                     <div className='board__edit-board'
                          onClick={this.editBoard}>
                         <span className='glyphicon glyphicon-pencil'></span>

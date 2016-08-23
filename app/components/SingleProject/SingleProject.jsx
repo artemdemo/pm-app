@@ -7,6 +7,7 @@ import { DropdownList } from '../DropdownList/DropdownList';
 import { NarrowList } from '../NarrowList/NarrowList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
+import { InputMd } from '../InputMd/InputMd';
 import { TextareaMd } from '../TextareaMd/TextareaMd';
 import { clearEntity } from '../../actions/selectedEntity';
 import { errorMessage } from '../../actions/notification';
@@ -160,16 +161,16 @@ class SingleProject extends Component {
         return (
             <form onSubmit={this.submitProject} className='single-panel'>
                 <div className='form-group'>
-                    <input type='text'
-                           name='name'
-                           className='flat-input'
-                           placeholder='Project name'
-                           value={this.state.name}
-                           onChange={(e) => this.setState({
-                               name: e.target.value,
-                           })}
-                           autoComplete='off'
-                           data-qa='project-name' />
+                    <InputMd type='text'
+                             name='name'
+                             value={this.state.name}
+                             onChange={(e) => this.setState({
+                                 name: e.target.value,
+                             })}
+                             className='flat-input'
+                             placeholder='Project name'
+                             autoComplete='off'
+                             data-qa='task-name' />
                 </div>
                 <div className='form-group'>
                     <TextareaMd className='flat-input'

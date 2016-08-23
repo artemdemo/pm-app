@@ -1,6 +1,6 @@
 import * as selectedEntityConst from '../constants/selectedEntity';
 
-export default function(state = null, action) {
+export default function(state = {}, action) {
     switch (action.type) {
         case selectedEntityConst.SET_SELECTED_ENTITY:
             return {
@@ -9,7 +9,7 @@ export default function(state = null, action) {
             };
         case selectedEntityConst.CLEAR_SELECTED_ENTITY:
             if (state && state.type === action.entityType) {
-                return null;
+                return {};
             }
             return state;
         default:
