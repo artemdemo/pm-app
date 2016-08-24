@@ -76,6 +76,7 @@ More [about e2e tests](docs/e2e.md)
 
 * markdown-it - https://github.com/markdown-it/markdown-it
 * moment - https://www.npmjs.com/package/moment
+* flatpickr - https://chmln.github.io/flatpickr/
 
 ## Compilation
 

@@ -15,7 +15,7 @@ const parseTasks = (tasks) => tasks.map(task => {
 
 exports.getAll = (tasksData) => {
     const deferred = Q.defer();
-    const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.sp,
+    const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.sp, tasks.due,
                                tasks.added, tasks.updated, tasks.board_id, tasks.id_position_scrum
                         FROM tasks
                         INNER JOIN sessions 
@@ -71,6 +71,7 @@ exports.addNew = (newTaskData) => {
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 sp: newTaskData.sp || null,
+                due: newTaskData.due || null,
                 board_id: newTaskData.board_id || null,
                 user_id: session.user_id,
             }).then((result) => {
@@ -104,14 +105,27 @@ exports.updateTask = (taskData) => {
         return deferred.promise;
     }
 
-    const allowedFields = ['name', 'description', 'done', 'sp', 'board_id'];
+    const allowedFields = ['name', 'description', 'done', 'sp', 'due', 'board_id'];
     allowedFields.forEach((field) => {
         if (taskData.payload.hasOwnProperty(field)) {
             let data;
-            if (field === 'board_id') {
-                data = taskData.payload[field] || null;
-            } else {
-                data = taskData.payload[field];
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            const dateTimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+            switch (field) {
+                case 'board_id':
+                    data = taskData.payload[field] || null;
+                    break;
+                case 'due':
+                    if (Array.isArray(dateTimeRegex.exec(taskData.payload[field]))) {
+                        data = taskData.payload[field];
+                    } else if (Array.isArray(dateRegex.exec(taskData.payload[field]))) {
+                        data = `${taskData.payload[field]} 00:01:00`;
+                    } else {
+                        data = null;
+                    }
+                    break;
+                default:
+                    data = taskData.payload[field];
             }
             updateData[field] = data;
         }

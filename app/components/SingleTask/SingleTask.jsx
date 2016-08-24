@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import Flatpickr from 'flatpickr';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
 import { deleteTask, updateTask } from '../../actions/tasks';
@@ -38,6 +39,7 @@ class SingleTask extends Component {
             const { updateTask, errorMessage, onSave } = this.props;
             const task = this.getTask();
             const boardId = this.state.board_id;
+            const due = this.refs.dueDateInput.value || null;
 
             if (this.state.name === '') {
                 errorMessage('Name can\'t be empty');
@@ -52,6 +54,7 @@ class SingleTask extends Component {
                 sp: Number(this.state.sp) === Number(this.state.sp) ? Number(this.state.sp) : null,
                 board_id: boardId > 0 ? Number(boardId) : null,
                 projects: this.state.selectedProjects.map(project => project.id),
+                due,
             };
             this.setState({
                 loadingData: true,
@@ -88,6 +91,10 @@ class SingleTask extends Component {
         };
     }
 
+    componentDidMount() {
+        this.dueInstance = new Flatpickr(this.refs.dueDateInput);
+    }
+
     componentWillReceiveProps(nextProps) {
         const task = this.getTask(nextProps);
         const { selectedProjects, availableProjects } = filterProjects(task, nextProps.projects);
@@ -101,6 +108,7 @@ class SingleTask extends Component {
             selectedProjects,
             availableProjects,
         });
+        this.dueInstance.setDate(task.due);
     }
 
     getTask(props = this.props) {
@@ -169,14 +177,17 @@ class SingleTask extends Component {
                 <div className='form-group'>
                     <div className='row'>
                         <div className='col-xs-5'>
-                            <input type='number'
-                                   name='sp'
-                                   value={this.state.sp}
-                                   onChange={(e) => this.setState({
-                                       sp: e.target.value,
-                                   })}
-                                   className='form-control'
-                                   placeholder='SP' />
+                            <div className='input-group'>
+                                <input type='number'
+                                       name='sp'
+                                       value={this.state.sp}
+                                       onChange={(e) => this.setState({
+                                           sp: e.target.value,
+                                       })}
+                                       className='form-control'
+                                       placeholder='SP' />
+                                <div className='input-group-addon'>SP</div>
+                            </div>
                         </div>
                         <div className='col-xs-7'>
                             <select className='form-control'
@@ -193,6 +204,16 @@ class SingleTask extends Component {
                                 ))}
                             </select>
                         </div>
+                    </div>
+                </div>
+                <div className='form-group'>
+                    <div className='input-group'>
+                        <div className='input-group-addon'>Due</div>
+                        <input type='text'
+                               name='due'
+                               placeholder='Due date'
+                               ref='dueDateInput'
+                               className='form-control' />
                     </div>
                 </div>
                 <div className='form-group text-muted'>
