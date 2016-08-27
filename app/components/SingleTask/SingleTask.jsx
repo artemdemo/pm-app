@@ -29,6 +29,7 @@ class SingleTask extends Component {
             board_id: task.board_id > 0 ? task.board_id : 0,
             done: task.done || false,
             sp: task.sp || 0,
+            priority: task.priority || 0,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -54,6 +55,7 @@ class SingleTask extends Component {
                 sp: Number(this.state.sp) === Number(this.state.sp) ? Number(this.state.sp) : null,
                 board_id: boardId > 0 ? Number(boardId) : null,
                 projects: this.state.selectedProjects.map(project => project.id),
+                priority: this.state.priority,
                 due,
             };
             this.setState({
@@ -104,6 +106,7 @@ class SingleTask extends Component {
             board_id: task.board_id > 0 ? task.board_id : 0,
             done: task.done || false,
             sp: task.sp || 0,
+            priority: task.priority || 0,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -207,13 +210,31 @@ class SingleTask extends Component {
                     </div>
                 </div>
                 <div className='form-group'>
-                    <div className='input-group'>
-                        <div className='input-group-addon'>Due</div>
-                        <input type='text'
-                               name='due'
-                               placeholder='Due date'
-                               ref='dueDateInput'
-                               className='form-control' />
+                    <div className='row'>
+                        <div className='col-xs-5'>
+                            <select className='form-control'
+                                    name='priority'
+                                    value={this.state.priority}
+                                    onChange={(e) => this.setState({
+                                        priority: e.target.value,
+                                    })}
+                                    data-qa='select-priority'>
+                                <option value='0'>Select priority</option>
+                                <option value='1'>1⃣️</option>
+                                <option value='2'>2⃣️☝️</option>
+                                <option value='3'>3⃣️❗ </option>
+                            </select>
+                        </div>
+                        <div className='col-xs-7'>
+                            <div className='input-group'>
+                                <div className='input-group-addon'>Due</div>
+                                <input type='text'
+                                       name='due'
+                                       placeholder='Due date'
+                                       ref='dueDateInput'
+                                       className='form-control' />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className='form-group text-muted'>

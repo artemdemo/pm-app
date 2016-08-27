@@ -16,7 +16,7 @@ let appSettings = {};
 try {
     appSettings = require('../app-settings.json');
 } catch (e) {
-    console.log(chalk.yellow('[Info]') + ' app-settings.json - not found');
+    console.log(`${chalk.yellow('[Info]')} app-settings.json - not found`);
 }
 
 if (appSettings.db) {
