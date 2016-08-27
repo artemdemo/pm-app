@@ -1,4 +1,5 @@
 @import '../styles/functions';
+@import '../styles/variables';
 
 .list-container {
     .clearFix();
@@ -30,7 +31,7 @@
         padding: 15px 10px 10px 15px;
     }
 
-@media (max-width: 768px) {
+@media (max-width: @screen-sm-min) {
     .list-container_open-right-panel {
         .list-container__list {
             width: 50%;

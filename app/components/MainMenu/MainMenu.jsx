@@ -14,6 +14,7 @@ class MainMenu extends Component {
 
         this.state = {
             menuOpen: false,
+            profileDropdownOpen: false,
         };
 
         this.logout = () => {
@@ -26,13 +27,24 @@ class MainMenu extends Component {
                 menuOpen: !this.state.menuOpen,
             });
         };
+
+        this.toggleProfileDropdown = () => {
+            this.setState({
+                profileDropdownOpen: !this.state.profileDropdownOpen,
+            });
+        };
     }
 
     render() {
+        const { user } = this.props;
         const menuClass = classnames({
             collapse: true,
             'navbar-collapse': true,
             'in': this.state.menuOpen,
+        });
+        const profileClass = classnames({
+            dropdown: true,
+            open: this.state.profileDropdownOpen,
         });
 
         return (
@@ -74,12 +86,27 @@ class MainMenu extends Component {
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
-                            <li>
+                            <li className={profileClass}>
                                 <span className='navbar-link'
-                                      onClick={this.logout}
-                                      data-qa='logout-main-menu-button'>
-                                    Logout
+                                      role='button'
+                                      onClick={this.toggleProfileDropdown}>
+                                    {user.username} <span className='caret'></span>
                                 </span>
+                                <ul className='dropdown-menu'>
+                                    <li>
+                                        <Link to='/profile'>
+                                            Profile
+                                        </Link>
+                                    </li>
+                                    <li role='separator' className='divider'></li>
+                                    <li>
+                                        <span className='dropdown-menu-link'
+                                              onClick={this.logout}
+                                              data-qa='logout-main-menu-button'>
+                                            Logout
+                                        </span>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -90,8 +117,10 @@ class MainMenu extends Component {
 }
 
 export default connect(
-    () => {
-        return {};
+    state => {
+        return {
+            user: state.user,
+        };
     }, {
         logout,
     }
