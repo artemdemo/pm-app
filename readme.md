@@ -16,6 +16,8 @@ Work in progress. There is still much to be done.
 
 ## Getting started
 
+I assume that you have at least `node v4.x.x` and `npm 3.x.x`.
+
 First of all you need to run following command:
 (it will install all dependencies and copy all needed files after that)
 
