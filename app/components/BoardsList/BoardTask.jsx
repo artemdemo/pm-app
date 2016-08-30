@@ -91,6 +91,18 @@ class BoardTask extends Component {
             }
             return null;
         };
+
+        const renderSP = () => {
+            if (task.sp > 0) {
+                return (
+                    <div className='board-task-description__sp'>
+                        SP: {task.sp}
+                    </div>
+                );
+            }
+            return null;
+        };
+
         return (
             <div className={taskWrapClass}
                  onDragOver={this.dragOver}>
@@ -106,6 +118,10 @@ class BoardTask extends Component {
                               aria-hidden='true'></span>
                     </div>
                     {emoji(task.name)}
+                    <div className='board-task-description
+                                    text-muted'>
+                        {renderSP()}
+                    </div>
                     <div className='board-task__labels-list'>
                         <LabelsList list={selectedProjects}
                                     delitable={false} />
