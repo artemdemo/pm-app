@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import _ from 'underscore';
 import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
@@ -43,6 +44,9 @@ class BoardTask extends Component {
             dropDraggedTask();
         };
 
+        const { setDraggedTaskDropPosition } = this.props;
+        const _setDraggedTaskDropPosition = _.debounce(setDraggedTaskDropPosition, 20);
+
         this.dragOver = (e) => {
             e.stopPropagation();
             clearTimeout(this.dropPlaceholderTimeoutId);
@@ -51,13 +55,14 @@ class BoardTask extends Component {
                     renderPlaceholder: false,
                 });
             }, 70);
-            const { task, setDraggedTaskDropPosition } = this.props;
+
+            if (e.target.className.indexOf('board-task_placeholder') > -1) return;
+
+            const { task } = this.props;
             const relY = e.clientY - e.target.offsetTop;
             const height = e.target.offsetHeight / 2;
             const position = relY > height ? 'after' : 'before';
-            setDraggedTaskDropPosition(task.id, position, task.board_id);
-
-            if (e.target.className.indexOf('board-task_placeholder') > -1) return;
+            _setDraggedTaskDropPosition(task.id, position, task.board_id);
 
             this.setState({
                 renderPlaceholder: position,

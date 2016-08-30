@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
+import _ from 'underscore';
 import BoardTask from './BoardTask';
 import { showModal, hideModal } from '../../actions/modal';
 import { setDraggedTaskDropPosition } from '../../actions/draggedTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
-import _ from 'underscore';
 
 import './ScrumBoard.less';
 
@@ -21,7 +21,7 @@ class ScrumBoard extends Component {
 
         this.dropPlaceholderTimeoutId = null;
 
-        const updatePlaceholderState = _.throttle(position => {
+        const updatePlaceholderState = _.throttle(() => {
             clearTimeout(this.dropPlaceholderTimeoutId);
             this.dropPlaceholderTimeoutId = setTimeout(() => {
                 this.setState({
@@ -30,7 +30,7 @@ class ScrumBoard extends Component {
             }, 70);
 
             this.setState({
-                renderPlaceholder: position,
+                renderPlaceholder: 'before', //position,
             });
         }, 70);
 
@@ -43,26 +43,40 @@ class ScrumBoard extends Component {
                                    onCancel={() => hideModal()} />);
         };
 
-        this.dragOver = (e) => {
-            const { board, setDraggedTaskDropPosition } = this.props;
-            const relY = e.clientY - e.target.offsetTop;
-            const height = e.target.offsetHeight / 2;
-            const position = relY > height ? 'after' : 'before';
-            setDraggedTaskDropPosition(null, position, board.id);
+        const { setDraggedTaskDropPosition, tasks, board } = this.props;
+        const _setDraggedTaskDropPosition = _.debounce(setDraggedTaskDropPosition, 20);
 
-            updatePlaceholderState(position);
+        this.filterSelectedTasks = (tasks, board) => {
+            this.selectedTasks = tasks
+                .filter(task => task.board_id === board.id)
+                .sort(sortByIdPositionScrum);
+        };
+        this.filterSelectedTasks(tasks, board);
+
+        this.dragOver = (e) => {
+            if (this.selectedTasks.length === 0) {
+                const { board } = this.props;
+                const relY = e.clientY - e.target.offsetTop;
+                const height = e.target.offsetHeight / 2;
+                const position = relY > height ? 'after' : 'before';
+                _setDraggedTaskDropPosition(null, position, board.id);
+
+                updatePlaceholderState(position);
+            }
         };
     }
 
+    componentWillReceiveProps(newProps) {
+        const { tasks, board } = newProps;
+        this.filterSelectedTasks(tasks, board);
+    }
+
     render() {
-        const { board, tasks } = this.props;
-        const selectedTasks = tasks
-            .filter(task => task.board_id === board.id)
-            .sort(sortByIdPositionScrum);
+        const { board } = this.props;
 
         // `position` can be `before` or `after`
         const renderPlaceholder = (position) => {
-            if (this.state.renderPlaceholder === position) {
+            if (this.state.renderPlaceholder === position && this.selectedTasks.length === 0) {
                 const placeholderClass = classnames({
                     'scrum-board_placeholder': true,
                     [`scrum-board_placeholder__${position}`]: true,
@@ -86,7 +100,7 @@ class ScrumBoard extends Component {
                 </div>
                 <div className='board-tasks'>
                     {renderPlaceholder('before')}
-                    {selectedTasks.map(task => {
+                    {this.selectedTasks.map(task => {
                         return (
                             <BoardTask task={task} key={`board-task-${task.id}`} />
                         );
