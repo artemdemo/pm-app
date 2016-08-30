@@ -94,9 +94,10 @@ class MainMenu extends Component {
                                 </span>
                                 <ul className='dropdown-menu'>
                                     <li>
-                                        <Link to='/profile'>
-                                            Profile
-                                        </Link>
+                                        <Link to='/profile'>Profile</Link>
+                                    </li>
+                                    <li>
+                                        <Link to='/settings'>Settings</Link>
                                     </li>
                                     <li role='separator' className='divider'></li>
                                     <li>

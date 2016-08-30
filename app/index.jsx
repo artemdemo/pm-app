@@ -14,6 +14,8 @@ import SignupView from './views/SignupView';
 import TasksView from './views/TasksView';
 import ScrumView from './views/ScrumView';
 import ProjectsView from './views/ProjectsView';
+import ProfileView from './views/ProfileView';
+import SettingsView from './views/SettingsView';
 import MainView from './views/MainView';
 
 promises.polyfill();
@@ -25,6 +27,8 @@ render(
                 <IndexRoute component={MainView} />
                 <Route path='login' component={LoginView} />
                 <Route path='signup' component={SignupView} />
+                <Route path='profile' component={ProfileView} />
+                <Route path='settings' component={SettingsView} />
                 <Route path='tasks' component={TasksView} />
                 <Route path='scrum' component={ScrumView} />
                 <Route path='projects' component={ProjectsView} />
