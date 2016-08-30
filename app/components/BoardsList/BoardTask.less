@@ -1,4 +1,5 @@
 @import '../../styles/colors';
+@import '../../styles/functions';
 
 .board-task-wrap {
     padding-bottom: 6px;
@@ -61,5 +62,19 @@
     }
 
 .board-task-description {
+    .clearFix();
     margin: 4px 0 5px 2px;
 }
+
+    .board-task-description__item {
+        float: left;
+        margin-right: 10px;
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+
+        .glyphicon {
+            margin-right: 3px;
+        }
+    }

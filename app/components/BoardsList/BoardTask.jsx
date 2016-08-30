@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import _ from 'underscore';
+import moment from 'moment';
 import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
+import * as taskConst from '../../constants/tasks';
 import { setDraggedTask, dropDraggedTask, setDraggedTaskDropPosition } from '../../actions/draggedTask';
 import { updateDraggedTaskPosition } from '../../actions/tasks';
 import { selectTask } from '../../actions/selectedEntity';
@@ -100,8 +102,20 @@ class BoardTask extends Component {
         const renderSP = () => {
             if (task.sp > 0) {
                 return (
-                    <div className='board-task-description__sp'>
+                    <div className='board-task-description__item'>
                         SP: {task.sp}
+                    </div>
+                );
+            }
+            return null;
+        };
+
+        const renderDue = () => {
+            if (task.due && task.due !== '') {
+                return (
+                    <div className='board-task-description__item'>
+                        <span className='glyphicon glyphicon-calendar'></span>
+                        {moment(task.due, taskConst.DUE_BASE_TIME_FORMAT).format('MMM, D')}
                     </div>
                 );
             }
@@ -126,6 +140,7 @@ class BoardTask extends Component {
                     <div className='board-task-description
                                     text-muted'>
                         {renderSP()}
+                        {renderDue()}
                     </div>
                     <div className='board-task__labels-list'>
                         <LabelsList list={selectedProjects}
