@@ -17,6 +17,7 @@ Work in progress. There is still much to be done.
 ## Getting started
 
 I assume that you have at least `node v4.x.x` and `npm 3.x.x`.
+(Everything tested in following environment: `node v6.3.1` and `npm 3.10.3`)
 
 First of all you need to run following command:
 (it will install all dependencies and copy all needed files after that)
@@ -73,12 +74,14 @@ More [about e2e tests](docs/e2e.md)
 * Gulp - http://gulpjs.com/
 * Less - http://lesscss.org/
 * Babel - https://babeljs.io/ 
+* Jasmine - http://jasmine.github.io/
 
 ## 3rd party packages
 
 * markdown-it - https://github.com/markdown-it/markdown-it
 * moment - https://www.npmjs.com/package/moment
 * flatpickr - https://chmln.github.io/flatpickr/
+* jasmine-node - https://github.com/mhevery/jasmine-node
 
 ## Compilation
 

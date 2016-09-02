@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import tasks from './reducers/tasks';
 import boards from './reducers/boards';
 import projects from './reducers/projects';
+import settings from './reducers/settings';
 import user from './reducers/user';
 import popup from './reducers/popup';
 import modal from './reducers/modal';
@@ -20,6 +21,7 @@ const pmApp = combineReducers({
     modal,
     boards,
     projects,
+    settings,
     draggedTask,
     notification,
     selectedEntity,

@@ -1,3 +1,3 @@
 {
-"query": "CREATE TABLE settings (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER REFERENCES users (id) ON DELETE CASCADE);"
+    "query": "CREATE TABLE settings (name CHAR (150), value CHAR (100), user_id INTEGER REFERENCES users (id) ON DELETE CASCADE);"
 }

@@ -134,7 +134,7 @@ class SingleTask extends Component {
             }
             return null;
         };
-        const { boards, onCancel, className } = this.props;
+        const { boards, settings, onCancel, className } = this.props;
         const task = this.getTask();
         return (
             <form onSubmit={this.submitTask} className={className}>
@@ -219,10 +219,10 @@ class SingleTask extends Component {
                                         priority: e.target.value,
                                     })}
                                     data-qa='select-priority'>
-                                <option value='0'>Select priority</option>
-                                <option value='1'>1⃣️</option>
-                                <option value='2'>2⃣️☝️</option>
-                                <option value='3'>3⃣️❗ </option>
+                                <option>Select priority</option>
+                                {settings.priority && settings.priority.map(item => (
+                                    <option value={item.id} key={`priority-${item.id}`}>{item.value}</option>
+                                ))}
                             </select>
                         </div>
                         <div className='col-xs-7'>
@@ -277,6 +277,7 @@ export default connect(
         return {
             boards: state.boards,
             projects: state.projects,
+            settings: state.settings,
         };
     },
     {

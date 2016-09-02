@@ -78,7 +78,7 @@ class BoardTask extends Component {
     }
 
     render() {
-        const { task, projects, draggedTask } = this.props;
+        const { task, projects, settings, draggedTask } = this.props;
         const { selectedProjects } = filterProjects(task, projects);
         const taskWrapClass = classnames({
             'board-task-wrap': true,
@@ -122,6 +122,28 @@ class BoardTask extends Component {
             return null;
         };
 
+        const renderPriority = () => {
+            const { priority } = settings;
+            const priorityId = Number(task.priority);
+
+            // eslint-disable-next-line
+            if (priority && priorityId === priorityId && priorityId > -1) {
+                let selectedPriority;
+                for (let i = 0, len = priority.length; i < len; i++) {
+                    if (priorityId === Number(priority[i].id)) {
+                        selectedPriority = priority[i];
+                    }
+                }
+                return (
+                    <div className='board-task-description__item'>
+                        <span className='glyphicon glyphicon-exclamation-sign'></span>
+                        {selectedPriority && selectedPriority.value}
+                    </div>
+                );
+            }
+            return null;
+        };
+
         return (
             <div className={taskWrapClass}
                  onDragOver={this.dragOver}>
@@ -141,6 +163,7 @@ class BoardTask extends Component {
                                     text-muted'>
                         {renderSP()}
                         {renderDue()}
+                        {renderPriority()}
                     </div>
                     <div className='board-task__labels-list'>
                         <LabelsList list={selectedProjects}
@@ -162,6 +185,7 @@ export default connect(
         return {
             tasks: state.tasks,
             projects: state.projects,
+            settings: state.settings,
             draggedTask: state.draggedTask,
         };
     }, {

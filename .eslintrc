@@ -2,6 +2,11 @@
     "extends": "airbnb",
     "plugins": [],
     "globals": {},
+    "env": {
+        "jasmine": true,
+        "browser": true,
+        "node": true
+    },
     "rules": {
         // 4 spaces indentation
         "indent": ["error", 4, { "SwitchCase": 1, "VariableDeclarator": 1 }],

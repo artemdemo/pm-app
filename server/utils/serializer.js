@@ -81,6 +81,17 @@ const strArrToObj = (dataArr) => {
  *
  * @param dataObj {Object}
  * @return {Array}
+ * @example
+ * [
+ *   {
+ *       name: 'priority[0]name',
+ *       value: 'name-0',
+ *   },
+ *   {
+ *       name: 'priority[0]value',
+ *       value: 'value-0',
+ *   },
+ * ]
  */
 const objToStrArr = (dataObj) => {
     const result = [];
