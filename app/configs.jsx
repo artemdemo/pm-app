@@ -11,7 +11,6 @@ import user from './reducers/user';
 import popup from './reducers/popup';
 import modal from './reducers/modal';
 import notification from './reducers/notification';
-import draggedTask from './reducers/draggedTask';
 import selectedEntity from './reducers/selectedEntity';
 
 const pmApp = combineReducers({
@@ -22,7 +21,6 @@ const pmApp = combineReducers({
     boards,
     projects,
     settings,
-    draggedTask,
     notification,
     selectedEntity,
     routing: routerReducer,

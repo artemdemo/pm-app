@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
-import _ from 'underscore';
 import BoardTask from './BoardTask';
-import { showModal, hideModal } from '../../actions/modal';
-import { setDraggedTaskDropPosition } from '../../actions/draggedTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
+import { DragItemsContainer } from '../DragNDrop/DragItemsContainer';
+import { DragItem } from '../DragNDrop/DragItem';
+import { showModal, hideModal } from '../../actions/modal';
 import { sortByIdPositionScrum } from '../../utils/tasks';
+import { updateDraggedTaskPosition } from '../../actions/tasks';
 import emoji from '../../utils/emoji/emoji';
 
 import './ScrumBoard.less';
@@ -19,21 +19,6 @@ class ScrumBoard extends Component {
             renderPlaceholder: false,
         };
 
-        this.dropPlaceholderTimeoutId = null;
-
-        const updatePlaceholderState = _.throttle(() => {
-            clearTimeout(this.dropPlaceholderTimeoutId);
-            this.dropPlaceholderTimeoutId = setTimeout(() => {
-                this.setState({
-                    renderPlaceholder: false,
-                });
-            }, 70);
-
-            this.setState({
-                renderPlaceholder: 'before', //position,
-            });
-        }, 70);
-
         this.editBoard = () => {
             const { showModal, board, hideModal } = this.props;
             showModal(<SingleBoard board={board}
@@ -43,8 +28,7 @@ class ScrumBoard extends Component {
                                    onCancel={() => hideModal()} />);
         };
 
-        const { setDraggedTaskDropPosition, tasks, board } = this.props;
-        const _setDraggedTaskDropPosition = _.debounce(setDraggedTaskDropPosition, 20);
+        const { tasks, board } = this.props;
 
         this.filterSelectedTasks = (tasks, board) => {
             this.selectedTasks = tasks
@@ -53,16 +37,9 @@ class ScrumBoard extends Component {
         };
         this.filterSelectedTasks(tasks, board);
 
-        this.dragOver = (e) => {
-            if (this.selectedTasks.length === 0) {
-                const { board } = this.props;
-                const relY = e.clientY - e.target.offsetTop;
-                const height = e.target.offsetHeight / 2;
-                const position = relY > height ? 'after' : 'before';
-                _setDraggedTaskDropPosition(null, position, board.id);
-
-                updatePlaceholderState(position);
-            }
+        this.dragStopped = (task, itemData) => {
+            const { updateDraggedTaskPosition } = this.props;
+            updateDraggedTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
         };
     }
 
@@ -74,23 +51,8 @@ class ScrumBoard extends Component {
     render() {
         const { board } = this.props;
 
-        // `position` can be `before` or `after`
-        const renderPlaceholder = (position) => {
-            if (this.state.renderPlaceholder === position && this.selectedTasks.length === 0) {
-                const placeholderClass = classnames({
-                    'scrum-board_placeholder': true,
-                    [`scrum-board_placeholder__${position}`]: true,
-                });
-                return (
-                    <div className={placeholderClass}></div>
-                );
-            }
-            return null;
-        };
-
         return (
-            <div className='scrum-board'
-                 onDragOver={this.dragOver}>
+            <div className='scrum-board'>
                 <div className='board__title'>
                     <div className='board__name'>{emoji(board.title)}</div>
                     <div className='board__edit-board'
@@ -98,15 +60,17 @@ class ScrumBoard extends Component {
                         <span className='glyphicon glyphicon-pencil'></span>
                     </div>
                 </div>
-                <div className='board-tasks'>
-                    {renderPlaceholder('before')}
-                    {this.selectedTasks.map(task => {
-                        return (
-                            <BoardTask task={task} key={`board-task-${task.id}`} />
-                        );
-                    })}
-                    {renderPlaceholder('after')}
-                </div>
+                <DragItemsContainer className='board-tasks'
+                                    container={board.id}>
+                    {this.selectedTasks.map(task => (
+                        <DragItem className='board-task'
+                                  key={`task-${task.id}`}
+                                  item={task.id}
+                                  dragStopped={(event, itemData) => this.dragStopped(task, itemData)}>
+                            <BoardTask task={task} />
+                        </DragItem>
+                    ))}
+                </DragItemsContainer>
             </div>
         );
     }
@@ -124,6 +88,6 @@ export default connect(
     }, {
         showModal,
         hideModal,
-        setDraggedTaskDropPosition,
+        updateDraggedTaskPosition,
     }
 )(ScrumBoard);

@@ -58,17 +58,17 @@ export default function tasks(state = [], action) {
         case tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING:
             if (action.draggedTask) {
                 const sortedTasks = state
-                    .filter(task => task.board_id === action.draggedTask.boardId)
+                    .filter(task => task.board_id === action.boardId)
                     .sort(sortByIdPositionScrum);
                 let boardTasks = [];
 
                 for (let i = 0, len = sortedTasks.length; i < len; i++) {
-                    if (sortedTasks[i].id !== action.draggedTask.task.id) {
-                        if (sortedTasks[i].id === action.draggedTask.nearTaskId) {
-                            const task = Object.assign(action.draggedTask.task, {
-                                board_id: action.draggedTask.boardId,
+                    if (sortedTasks[i].id !== action.draggedTask.id) {
+                        if (sortedTasks[i].id === action.nearTaskId) {
+                            const task = Object.assign(action.draggedTask, {
+                                board_id: action.boardId,
                             });
-                            if (action.draggedTask.position === 'before') {
+                            if (action.position === 'before') {
                                 boardTasks.push(task);
                                 boardTasks.push(sortedTasks[i]);
                             } else {
@@ -80,11 +80,11 @@ export default function tasks(state = [], action) {
                         }
                     }
                 }
-                if (!action.draggedTask.nearTaskId) {
-                    const task = Object.assign(action.draggedTask.task, {
-                        board_id: action.draggedTask.boardId,
+                if (!action.nearTaskId) {
+                    const task = Object.assign(action.draggedTask, {
+                        board_id: action.boardId,
                     });
-                    if (action.draggedTask.position === 'before') {
+                    if (action.position === 'before') {
                         boardTasks.unshift(task);
                     } else {
                         boardTasks.push(task);

@@ -144,19 +144,20 @@ export function updateTask(taskUpdate) {
 /**
  * After task has been dragged I need to update id of all tasks
  * @param draggedTask {Object}
- * @param draggedTask.task {Object}
- * @param draggedTask.task.id {Number}
- * @param draggedTask.nearTaskId {Number|null} - in case there is no near task it will be `null`
- * @param draggedTask.position {String} - `before` or `after`
- * @param draggedTask.boardId {Number}
+ * @param boardId {Number}
+ * @param nearTaskId {Number|null} - in case there is no near task it will be `null`
+ * @param position {String} - `before` or `after`
  */
-export function updateDraggedTaskPosition(draggedTask) {
+export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, position) {
     const token = getStoredToken();
 
     function updateTaskPosition(draggedTask) {
         return {
             type: tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING,
             draggedTask,
+            boardId,
+            nearTaskId,
+            position,
         };
     }
 
@@ -164,10 +165,10 @@ export function updateDraggedTaskPosition(draggedTask) {
         dispatch(updateTaskPosition(draggedTask));
 
         fetch('/tasks/position', token, {method: 'PUT', body: {
-            taskId: draggedTask.task.id,
-            nearTaskId: draggedTask.nearTaskId,
-            position: draggedTask.position,
-            boardId: draggedTask.boardId,
+            taskId: draggedTask.id,
+            nearTaskId,
+            position,
+            boardId,
         }})
             .then(checkResponseStatus)
             .then((response) => {
