@@ -15,10 +15,6 @@ class ScrumBoard extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            renderPlaceholder: false,
-        };
-
         this.editBoard = () => {
             const { showModal, board, hideModal } = this.props;
             showModal(<SingleBoard board={board}

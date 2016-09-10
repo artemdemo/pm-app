@@ -13,10 +13,6 @@ class BoardTask extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            renderPlaceholder: false,
-        };
-
         this.openTask = () => {
             const { task, selectTask } = this.props;
             selectTask(task);
