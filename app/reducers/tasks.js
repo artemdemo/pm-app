@@ -58,26 +58,24 @@ export default function tasks(state = [], action) {
         case tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING:
             if (action.draggedTask) {
                 const sortedTasks = state
-                    .filter(task => task.board_id === action.boardId)
+                    .filter(task => task.board_id === action.boardId && task.id !== action.draggedTask.id)
                     .sort(sortByIdPositionScrum);
                 let boardTasks = [];
 
                 for (let i = 0, len = sortedTasks.length; i < len; i++) {
-                    if (sortedTasks[i].id !== action.draggedTask.id) {
-                        if (sortedTasks[i].id === action.nearTaskId) {
-                            const task = Object.assign(action.draggedTask, {
-                                board_id: action.boardId,
-                            });
-                            if (action.position === 'before') {
-                                boardTasks.push(task);
-                                boardTasks.push(sortedTasks[i]);
-                            } else {
-                                boardTasks.push(sortedTasks[i]);
-                                boardTasks.push(task);
-                            }
+                    if (sortedTasks[i].id === action.nearTaskId) {
+                        const task = Object.assign(action.draggedTask, {
+                            board_id: action.boardId,
+                        });
+                        if (action.position === 'before') {
+                            boardTasks.push(task);
+                            boardTasks.push(sortedTasks[i]);
                         } else {
                             boardTasks.push(sortedTasks[i]);
+                            boardTasks.push(task);
                         }
+                    } else {
+                        boardTasks.push(sortedTasks[i]);
                     }
                 }
                 if (!action.nearTaskId) {
@@ -91,24 +89,13 @@ export default function tasks(state = [], action) {
                     }
                 }
 
-                const newState = [];
                 boardTasks = boardTasks.map((task, index) => Object.assign(task, {
                     id_position_scrum: index,
                 }));
 
-                state.forEach(task => {
-                    let boardTaskAdded = false;
-                    for (let i = 0, len = boardTasks.length; i < len; i++) {
-                        if (task.id === boardTasks[i].id) {
-                            boardTaskAdded = true;
-                            newState.push(boardTasks[i]);
-                        }
-                    }
-                    if (!boardTaskAdded) {
-                        newState.push(task);
-                    }
-                });
-                return newState;
+                return state
+                    .filter(task => task.board_id !== action.boardId && task.id !== action.draggedTask.id)
+                    .concat(boardTasks);
             }
             return state;
         default:
