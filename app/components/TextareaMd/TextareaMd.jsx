@@ -9,9 +9,11 @@ export class TextareaMd extends Component {
     constructor(props) {
         super(props);
 
+        const { editMode = false } = props;
+
         this.state = {
-            editMode: false,
             value: props.value || '',
+            editMode,
         };
 
         this.md = new MarkdownIt();
@@ -25,14 +27,18 @@ export class TextareaMd extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { value = '' } = nextProps;
-        this.setState({
+        const { value = '', editMode } = nextProps;
+        const newState = {
             value,
-        });
+        };
+        if (editMode !== undefined) {
+            newState.editMode = editMode;
+        }
+        this.setState(newState);
     }
 
     render() {
-        const { className = '', name = '', rows = 3, placeholder } = this.props;
+        const { className = '', name = '', rows = 3, placeholder = '' } = this.props;
         const dataQa = this.props['data-qa'] ? this.props['data-qa'] : '';
         const editorClass = classnames({
             'textarea-md-editor': true,
@@ -49,7 +55,7 @@ export class TextareaMd extends Component {
             };
         };
         const renderPlaceholder = () => {
-            if (renderedContent === '' && placeholder) {
+            if (this.state.value === '') {
                 return (
                     <div className='textarea-md-content__placeholder'>
                         {placeholder}
@@ -79,6 +85,7 @@ export class TextareaMd extends Component {
                                       this.props.onChange(e);
                                   }
                               }}
+                              placeholder={placeholder}
                               data-qa={`${dataQa}__textarea`}></textarea>
                     <div className='textarea-md-editor__post-text'>
                         <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>
@@ -110,4 +117,5 @@ TextareaMd.propTypes = {
     placeholder: React.PropTypes.string,
     'data-qa': React.PropTypes.string,
     onChange: React.PropTypes.func,
+    editMode: React.PropTypes.bool,
 };

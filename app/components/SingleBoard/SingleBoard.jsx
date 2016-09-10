@@ -107,6 +107,7 @@ class SingleBoard extends Component {
                 <div className='form-group'>
                     <InputMd type='text'
                              name='name'
+                             editMode={!board.id}
                              value={this.state.title}
                              onChange={(e) => this.setState({
                                  title: e.target.value,
@@ -120,11 +121,12 @@ class SingleBoard extends Component {
                     <TextareaMd className='flat-input'
                                 name='description'
                                 rows='3'
+                                editMode={!board.id || this.state.description === ''}
                                 value={this.state.description}
                                 onChange={(e) => this.setState({
                                     description: e.target.value,
                                 })}
-                                placeholder='No description'
+                                placeholder='Board description'
                                 data-qa='board-description' />
                 </div>
                 <div className='form-group'>

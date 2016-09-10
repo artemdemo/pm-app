@@ -163,6 +163,7 @@ class SingleProject extends Component {
                 <div className='form-group'>
                     <InputMd type='text'
                              name='name'
+                             editMode={!project.id}
                              value={this.state.name}
                              onChange={(e) => this.setState({
                                  name: e.target.value,
@@ -176,11 +177,12 @@ class SingleProject extends Component {
                     <TextareaMd className='flat-input'
                                 name='description'
                                 rows='5'
+                                editMode={!project.id || this.state.description === ''}
                                 value={this.state.description}
                                 onChange={(e) => this.setState({
                                     description: e.target.value,
                                 })}
-                                placeholder='No description'
+                                placeholder='Project description'
                                 data-qa='project-description' />
                 </div>
                 <div className='form-group'>

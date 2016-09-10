@@ -8,9 +8,11 @@ export class InputMd extends Component {
     constructor(props) {
         super(props);
 
+        const { editMode = false } = props;
+
         this.state = {
-            editMode: false,
             value: props.value || '',
+            editMode,
         };
 
         this.togglePreview = () => {
@@ -21,10 +23,14 @@ export class InputMd extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { value = '' } = nextProps;
-        this.setState({
+        const { value = '', editMode } = nextProps;
+        const newState = {
             value,
-        });
+        };
+        if (editMode !== undefined) {
+            newState.editMode = editMode;
+        }
+        this.setState(newState);
     }
 
     render() {
@@ -88,4 +94,5 @@ InputMd.propTypes = {
     autoComplete: React.PropTypes.string,
     'data-qa': React.PropTypes.string,
     onChange: React.PropTypes.func,
+    editMode: React.PropTypes.bool,
 };

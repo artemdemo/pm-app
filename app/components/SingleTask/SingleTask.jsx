@@ -141,6 +141,7 @@ class SingleTask extends Component {
                 <div className='form-group'>
                     <InputMd type='text'
                              name='name'
+                             editMode={!task.id}
                              value={this.state.name}
                              onChange={(e) => this.setState({
                                  name: e.target.value,
@@ -154,6 +155,7 @@ class SingleTask extends Component {
                     <TextareaMd className='flat-input'
                                 name='description'
                                 rows='5'
+                                editMode={!task.id || this.state.description === ''}
                                 value={this.state.description}
                                 onChange={(e) => this.setState({
                                     description: e.target.value,
