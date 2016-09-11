@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 import { throttleLead } from './utils/throttle';
 import { nerve } from './utils/nerve';
-import { setLandingContainer, setNearItem, setPosition } from './services/dragService';
+import { setLandingContainer, setNearItem, setPosition, getDraggedItemKey } from './services/dragService';
 
 export class DragItemsContainer extends Component {
     constructor(props) {
         super(props);
 
-        this.hasDragItems = false;
+        this.draggedItemCount = 0;
+        this.singleItemKey = null;
 
         this.state = {
             renderPlaceholder: false,
         };
 
         this.dragOver = throttleLead(() => {
-            if (!this.hasDragItems) {
+            if (
+                this.draggedItemCount === 0 ||
+                (this.draggedItemCount === 1 && this.singleItemKey === getDraggedItemKey())
+            ) {
                 this.setState({
                     renderPlaceholder: true,
                 });
@@ -56,7 +60,7 @@ export class DragItemsContainer extends Component {
 
     render() {
         const { className = '' } = this.props;
-        this.hasDragItems = this.props.children.length > 0;
+        this.draggedItemCount = this.props.children.length;
 
         const renderPlaceholder = () => {
             if (this.state.renderPlaceholder) {
@@ -68,11 +72,20 @@ export class DragItemsContainer extends Component {
             return null;
         };
 
+        const children = React.Children.map(
+            this.props.children,
+            child => {
+                this.singleItemKey = this.draggedItemCount === 1 ? child.key : null;
+                return React.cloneElement(child, {
+                    $$key: child.key,
+                });
+            });
+
         return (
             <div className={className}
                  onDragOver={this.dragOver}>
                 {renderPlaceholder()}
-                {this.props.children}
+                {children}
             </div>
         );
     }

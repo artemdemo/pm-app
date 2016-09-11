@@ -7,6 +7,15 @@ export const getDraggedItem = () => {
 };
 
 
+let draggedItemKey;
+export const setDraggedItemKey = (newDraggedItemKey) => {
+    draggedItemKey = newDraggedItemKey;
+};
+export const getDraggedItemKey = () => {
+    return draggedItemKey;
+};
+
+
 let landingContainer;
 export const setLandingContainer = (newLandingContainer) => {
     landingContainer = newLandingContainer;

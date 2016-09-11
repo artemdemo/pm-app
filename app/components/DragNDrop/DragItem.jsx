@@ -6,6 +6,7 @@ import {
     setDraggedItem, getDraggedItem,
     setNearItem, getNearItem,
     getLandingContainer,
+    setDraggedItemKey,
     setPosition, getPosition } from './services/dragService';
 
 import './DragItem.less';
@@ -34,13 +35,14 @@ export class DragItem extends Component {
                 });
             }, 16);
 
-            const { dragStarted, item } = this.props;
+            const { dragStarted, item, $$key } = this.props;
 
             if (dragStarted) {
                 dragStarted(e);
             }
 
             setDraggedItem(item);
+            setDraggedItemKey($$key);
         };
 
         const setNewPosition = throttleLead((position) => {
@@ -152,5 +154,6 @@ export class DragItem extends Component {
 DragItem.propTypes = {
     dragStarted: React.PropTypes.func,
     dragStopped: React.PropTypes.func,
-    item: React.PropTypes.any,
+    item: React.PropTypes.any.isRequired,
+    $$key: React.PropTypes.any,
 };
