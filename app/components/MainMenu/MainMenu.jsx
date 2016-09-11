@@ -89,7 +89,8 @@ class MainMenu extends Component {
                             <li className={profileClass}>
                                 <span className='navbar-link'
                                       role='button'
-                                      onClick={this.toggleProfileDropdown}>
+                                      onClick={this.toggleProfileDropdown}
+                                      data-qa='profile-menu-toggle'>
                                     {user.username} <span className='caret'></span>
                                 </span>
                                 <ul className='dropdown-menu'>

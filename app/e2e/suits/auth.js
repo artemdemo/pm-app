@@ -48,6 +48,7 @@ module.exports = {
 
     logout: (browser) => {
         browser
+            .click('span[data-qa=profile-menu-toggle]')
             .click('span[data-qa=logout-main-menu-button]')
             .pause(200);
 
