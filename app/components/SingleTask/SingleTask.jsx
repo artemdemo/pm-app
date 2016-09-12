@@ -181,20 +181,7 @@ class SingleTask extends Component {
                 </div>
                 <div className='form-group'>
                     <div className='row'>
-                        <div className='col-xs-5'>
-                            <div className='input-group'>
-                                <input type='number'
-                                       name='sp'
-                                       value={this.state.sp}
-                                       onChange={(e) => this.setState({
-                                           sp: e.target.value,
-                                       })}
-                                       className='form-control'
-                                       placeholder='SP' />
-                                <div className='input-group-addon'>SP</div>
-                            </div>
-                        </div>
-                        <div className='col-xs-7'>
+                        <div className='col-xs-6'>
                             <select className='form-control'
                                     value={this.state.board_id}
                                     onChange={(e) => this.setState({
@@ -209,11 +196,34 @@ class SingleTask extends Component {
                                 ))}
                             </select>
                         </div>
+                        <div className='col-xs-6'>
+                            <div className='input-group'>
+                                <input type='number'
+                                       name='sp'
+                                       value={this.state.sp}
+                                       onChange={(e) => this.setState({
+                                           sp: e.target.value,
+                                       })}
+                                       className='form-control'
+                                       placeholder='SP' />
+                                <div className='input-group-addon'>SP</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className='form-group'>
                     <div className='row'>
-                        <div className='col-xs-5'>
+                        <div className='col-xs-6'>
+                            <div className='input-group'>
+                                <div className='input-group-addon'>Due</div>
+                                <input type='text'
+                                       name='due'
+                                       placeholder='Due date'
+                                       ref='dueDateInput'
+                                       className='form-control' />
+                            </div>
+                        </div>
+                        <div className='col-xs-6'>
                             <select className='form-control'
                                     name='priority'
                                     value={this.state.priority}
@@ -226,16 +236,6 @@ class SingleTask extends Component {
                                     <option value={item.id} key={`priority-${item.id}`}>{item.value}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div className='col-xs-7'>
-                            <div className='input-group'>
-                                <div className='input-group-addon'>Due</div>
-                                <input type='text'
-                                       name='due'
-                                       placeholder='Due date'
-                                       ref='dueDateInput'
-                                       className='form-control' />
-                            </div>
                         </div>
                     </div>
                 </div>
