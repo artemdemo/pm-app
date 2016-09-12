@@ -52,8 +52,11 @@ module.exports = {
         for (; projectIndex < 4; projectIndex++) {
             browser
                 .click('button[data-qa=new-project]')
-                .setValue('.single-panel input[data-qa=project-name]', getProjectName(projectIndex))
-                .setValue('.single-panel textarea[data-qa=project-description]', getProjectDescription(projectIndex))
+                .setValue('.single-panel input[data-qa=project-name__input]', getProjectName(projectIndex))
+                .setValue(
+                    '.single-panel textarea[data-qa=project-description__textarea]',
+                    getProjectDescription(projectIndex)
+                )
                 .click('.single-panel button[data-qa=project-save]')
                 .pause(200)
                 .assert.containsText(getProjectNamePath('first', 'other'), getProjectName(projectIndex));
@@ -67,7 +70,7 @@ module.exports = {
 
         browser
             .click('button[data-qa=new-project]')
-            .setValue('.single-panel input[data-qa=project-name]', newProjectName)
+            .setValue('.single-panel input[data-qa=project-name__input]', newProjectName)
             .click('.single-panel button[data-qa=project-save]')
             .pause(200)
             .assert.containsText(getProjectNamePath('first', 'other'), newProjectName)

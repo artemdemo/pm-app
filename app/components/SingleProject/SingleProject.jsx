@@ -171,7 +171,7 @@ class SingleProject extends Component {
                              className='flat-input'
                              placeholder='Project name'
                              autoComplete='off'
-                             data-qa='task-name' />
+                             data-qa='project-name' />
                 </div>
                 <div className='form-group'>
                     <TextareaMd className='flat-input'

@@ -38,11 +38,11 @@ module.exports = {
         browser.click(mainMenu.getMainMenuPath('projects'));
         browser
             .click('button[data-qa=new-project]')
-            .setValue('.single-panel input[data-qa=project-name]', projects.first)
+            .setValue('.single-panel input[data-qa=project-name__input]', projects.first)
             .click('.single-panel button[data-qa=project-save]')
             .pause(1200)
             .click('button[data-qa=new-project]')
-            .setValue('.single-panel input[data-qa=project-name]', projects.second)
+            .setValue('.single-panel input[data-qa=project-name__input]', projects.second)
             .click('.single-panel button[data-qa=project-save]')
             .pause(200);
     },
@@ -60,7 +60,7 @@ module.exports = {
         browser.click(mainMenu.getMainMenuPath('tasks'));
         browser
             .click(tasksService.getTaskPath(2))
-            .assert.value('.single-panel input[data-qa=task-name]', tasks.second)
+            .assert.value('.single-panel input[data-qa=task-name__input]', tasks.second)
             .click('.single-panel .dropdown-list__input')
             .assert.cssClassPresent('.single-panel .dropdown-list-items', 'dropdown-list-items_show')
             .click('.single-panel .dropdown-list-items .dropdown-list-item:first-of-type')

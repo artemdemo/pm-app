@@ -45,7 +45,7 @@ module.exports = {
         for (; boardIndex < 4; boardIndex++) {
             browser
                 .click('button[data-qa=new-board]')
-                .setValue('.single-board input[data-qa=board-name]', getBoardName(boardIndex))
+                .setValue('.single-board input[data-qa=board-name__input]', getBoardName(boardIndex))
                 .click('.single-board button[data-qa=board-save]')
                 .pause(200)
                 .assert.containsText(getBoardNamePath('last'), getBoardName(boardIndex));
@@ -60,7 +60,7 @@ module.exports = {
 
         browser
             .click('button[data-qa=new-board]')
-            .setValue('.single-board input[data-qa=board-name]', boardName)
+            .setValue('.single-board input[data-qa=board-name__input]', boardName)
             .click('.single-board button[data-qa=board-save]')
             .pause(200)
             .assert.containsText(getBoardNamePath('last'), boardName)

@@ -115,7 +115,7 @@ class SingleBoard extends Component {
                              className='flat-input'
                              placeholder='Board name'
                              autoComplete='off'
-                             data-qa='task-name' />
+                             data-qa='board-name' />
                 </div>
                 <div className='form-group'>
                     <TextareaMd className='flat-input'
