@@ -93,9 +93,9 @@ export default function tasks(state = [], action) {
                     id_position_scrum: index,
                 }));
 
-                return state
+                return sortTasksByUpdate(state
                     .filter(task => task.board_id !== action.boardId && task.id !== action.draggedTask.id)
-                    .concat(boardTasks);
+                    .concat(boardTasks));
             }
             return state;
         default:
