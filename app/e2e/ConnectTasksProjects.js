@@ -79,7 +79,7 @@ module.exports = {
         browser.click(mainMenu.getMainMenuPath('tasks'));
         browser
             .click(tasksService.getTaskPath(2))
-            .assert.value('.single-panel input[data-qa=task-name]', tasks.second)
+            .assert.containsText('.single-panel div[data-qa=task-name__rendered]', tasks.second)
             .click('.single-panel .labels-list .labels-list-item:nth-child(2) .labels-list-item__close')
             .click('.single-panel button[data-qa=task-save]');
     },
@@ -89,7 +89,7 @@ module.exports = {
         browser.click(mainMenu.getMainMenuPath('projects'));
         browser
             .click(projectsService.getProjectPath('first', 'active'))
-            .assert.value('.single-panel input[data-qa=project-name]', projects.second)
+            .assert.containsText('.single-panel div[data-qa=project-name__rendered]', projects.second)
             .click('.single-panel .dropdown-list__input')
             .assert.cssClassPresent(`${dropDownItemPath}:last-of-type`, 'dropdown-list-item_done')
             .click(`${dropDownItemPath}:first-of-type`)
