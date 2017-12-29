@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { LabelsListItem } from './LabelsListItem';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { LabelsListItem } from './LabelsListItem';
 
 import './LabelsList.less';
 
@@ -42,10 +43,12 @@ export class LabelsList extends Component {
         return (
             <ul className='labels-list'>
                 {this.filterList(list, limit).map(label => (
-                    <LabelsListItem item={label}
-                                    delitable={delitable}
-                                    onDelete={this.onDelete}
-                                    key={`label-${label.id}`} />
+                    <LabelsListItem
+                        item={label}
+                        delitable={delitable}
+                        onDelete={this.onDelete}
+                        key={`label-${label.id}`}
+                    />
                 ))}
                 <li className={ellipsisClass}>
                     ...
@@ -56,8 +59,8 @@ export class LabelsList extends Component {
 }
 
 LabelsList.propTypes = {
-    list: React.PropTypes.arrayOf(React.PropTypes.object),
-    limit: React.PropTypes.number,
-    delitable: React.PropTypes.bool,
-    onDelete: React.PropTypes.func,
+    list: PropTypes.arrayOf(PropTypes.object),
+    limit: PropTypes.number,
+    delitable: PropTypes.bool,
+    onDelete: PropTypes.func,
 };

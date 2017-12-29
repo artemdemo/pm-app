@@ -52,46 +52,54 @@ class MainMenu extends Component {
                 <div className='container'>
                     <div className='navbar-header'>
                         <button type='button'
-                                className='navbar-toggle collapsed'
-                                onClick={this.toggleMenu}>
+                            className='navbar-toggle collapsed'
+                            onClick={this.toggleMenu}>
                             <span className='sr-only'>Toggle navigation</span>
-                            <span className='icon-bar'></span>
-                            <span className='icon-bar'></span>
-                            <span className='icon-bar'></span>
+                            <span className='icon-bar' />
+                            <span className='icon-bar' />
+                            <span className='icon-bar' />
                         </button>
                         <Link className='navbar-brand' to='/'>&lt;PM&gt;</Link>
                     </div>
                     <div className={menuClass}>
                         <ul className='nav navbar-nav'>
                             <li>
-                                <Link to='/tasks'
-                                      activeClassName={ACTIVE_ITEM}
-                                      className='navbar-link'>
+                                <Link
+                                    to='/tasks'
+                                    activeClassName={ACTIVE_ITEM}
+                                    className='navbar-link'
+                                >
                                     Tasks
                                 </Link>
                             </li>
                             <li>
-                                <Link to='/scrum'
-                                      activeClassName={ACTIVE_ITEM}
-                                      className='navbar-link'>
+                                <Link
+                                    to='/scrum'
+                                    activeClassName={ACTIVE_ITEM}
+                                    className='navbar-link'
+                                >
                                     Scrum
                                 </Link>
                             </li>
                             <li>
-                                <Link to='/projects'
-                                      activeClassName={ACTIVE_ITEM}
-                                      className='navbar-link'>
+                                <Link
+                                    to='/projects'
+                                    activeClassName={ACTIVE_ITEM}
+                                    className='navbar-link'
+                                >
                                     Projects
                                 </Link>
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
                             <li className={profileClass}>
-                                <span className='navbar-link'
-                                      role='button'
-                                      onClick={this.toggleProfileDropdown}
-                                      data-qa='profile-menu-toggle'>
-                                    {user.username} <span className='caret'></span>
+                                <span
+                                    className='navbar-link'
+                                    role='button'
+                                    onClick={this.toggleProfileDropdown}
+                                    data-qa='profile-menu-toggle'
+                                >
+                                    {user.username} <span className='caret' />
                                 </span>
                                 <ul className='dropdown-menu'>
                                     <li>
@@ -100,11 +108,13 @@ class MainMenu extends Component {
                                     <li>
                                         <Link to='/settings'>Settings</Link>
                                     </li>
-                                    <li role='separator' className='divider'></li>
+                                    <li role='separator' className='divider' />
                                     <li>
-                                        <span className='dropdown-menu-link'
-                                              onClick={this.logout}
-                                              data-qa='logout-main-menu-button'>
+                                        <span
+                                            className='dropdown-menu-link'
+                                            onClick={this.logout}
+                                            data-qa='logout-main-menu-button'
+                                        >
                                             Logout
                                         </span>
                                     </li>
@@ -119,11 +129,9 @@ class MainMenu extends Component {
 }
 
 export default connect(
-    state => {
-        return {
-            user: state.user,
-        };
-    }, {
+    state => ({
+        user: state.user,
+    }), {
         logout,
     }
 )(MainMenu);

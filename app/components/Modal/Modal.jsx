@@ -47,11 +47,9 @@ class Modal extends Component {
 }
 
 export default connect(
-    state => {
-        return {
-            modal: state.modal,
-        };
-    }, {
+    state => ({
+        modal: state.modal,
+    }), {
         hideModal,
     }
 )(Modal);

@@ -4,7 +4,7 @@ export default (() => {
     /**
      * Main object of the plugin
      */
-    var UrlParser = {};
+    const UrlParser = {};
 
     /**
      * Return value of given key<br>
@@ -13,9 +13,9 @@ export default (() => {
      * @param key {String}
      * @return {String || null || undefined}
      */
-    UrlParser.getParam = function( key ) {
-        var allObject = this.getAll();
-        if ( allObject.hasOwnProperty( key ) === false ) return undefined;
+    UrlParser.getParam = function(key) {
+        const allObject = this.getAll();
+        if (allObject.hasOwnProperty(key) === false) return undefined;
         return allObject[key];
     };
 
@@ -24,13 +24,13 @@ export default (() => {
      * @return {Object}
      */
     UrlParser.getAll = function() {
-        var urlParams;
-        var match,
+        let urlParams;
+        let match,
             _param,
-            pl     = /\+/g,  // Regex for replacing addition symbol with a space
+            pl = /\+/g,  // Regex for replacing addition symbol with a space
             search = /([^&=]+)=?([^&]*)/g,
-            decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-            query  = window.location.href,
+            decode = function(s) { return decodeURIComponent(s.replace(pl, ' ')); },
+            query = window.location.href,
             qMarkIndex = query.indexOf('?'),
             hashIndex = query.indexOf('#/');
 
@@ -41,19 +41,19 @@ export default (() => {
         // 2) http://someurl.com/app/#/pagename?param1=somedata
         // In both ways it should work properly
         // Therefore I'm cutting only relevant part from the URL - part between # and ?
-        switch(true) {
+        switch (true) {
             case qMarkIndex > hashIndex:
-                query = query.substr( qMarkIndex + 1 );
+                query = query.substr(qMarkIndex + 1);
                 break;
             case qMarkIndex < hashIndex:
-                query = query.substr( qMarkIndex + 1 , hashIndex - qMarkIndex - 1 );
+                query = query.substr(qMarkIndex + 1, hashIndex - qMarkIndex - 1);
                 break;
         }
 
         urlParams = {};
         while (match = search.exec(query)) {
             _param = decode(match[2]);
-            urlParams[decode(match[1])] = _param == "" ? null : _param;
+            urlParams[decode(match[1])] = _param == '' ? null : _param;
         }
 
         return urlParams;
@@ -65,9 +65,9 @@ export default (() => {
      * @param key {String}
      * @return {Boolean}
      */
-    UrlParser.checkIfExist = function( key ) {
-        var allObject = this.getAll();
-        return allObject.hasOwnProperty( key );
+    UrlParser.checkIfExist = function(key) {
+        const allObject = this.getAll();
+        return allObject.hasOwnProperty(key);
     };
 
     return UrlParser;

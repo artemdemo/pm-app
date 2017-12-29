@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './DeleteButton.less';
@@ -36,24 +37,29 @@ export class DeleteButton extends Component {
             if (!this.state.showDelete) {
                 return (
                     <span className={deleteTitleClass}
-                          onClick={this.showDeleteButtons}
-                          data-qa='delete-button'>Delete</span>
+                        onClick={this.showDeleteButtons}
+                        data-qa='delete-button'>Delete
+                    </span>
                 );
             }
             return (
                 <div className='delete-button'>
                     <div className='delete-button__title'>Delete?</div>
                     <div className='delete-button-buttons'>
-                        <span className='glyphicon
-                                         glyphicon-ok-sign
-                                         delete-button-buttons__ok'
-                              aria-hidden='true'
-                              onClick={this.delete}></span>
-                        <span className='glyphicon
-                                             glyphicon-remove-sign
-                                             delete-button-buttons__cancel'
-                              aria-hidden='true'
-                              onClick={this.hideDeleteButtons}></span>
+                        <span
+                            className='glyphicon
+                                       glyphicon-ok-sign
+                                       delete-button-buttons__ok'
+                            aria-hidden='true'
+                            onClick={this.delete}
+                        />
+                        <span
+                            className='glyphicon
+                                       glyphicon-remove-sign
+                                       delete-button-buttons__cancel'
+                            aria-hidden='true'
+                            onClick={this.hideDeleteButtons}
+                        />
                     </div>
                 </div>
             );
@@ -67,5 +73,5 @@ export class DeleteButton extends Component {
 }
 
 DeleteButton.propTypes = {
-    onDelete: React.PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };

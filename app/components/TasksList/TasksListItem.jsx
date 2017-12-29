@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import * as entityConst from '../../constants/selectedEntity';
 import { connect } from 'react-redux';
+import * as entityConst from '../../constants/selectedEntity';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
 import { addNewTask } from '../../actions/tasks';
@@ -62,29 +63,33 @@ class TasksListItem extends Component {
 
             return (
                 <form onSubmit={this.createNewTask}>
-                    <input className='tasks-list-item__name-input'
-                           ref='nameInput'
-                           placeholder='New task...'
-                           data-qa='new-task-input' />
+                    <input
+                        className='tasks-list-item__name-input'
+                        ref='nameInput'
+                        placeholder='New task...'
+                        data-qa='new-task-input'
+                    />
                 </form>
             );
         };
 
         return (
             <div className='tasks-list-item'>
-                <div className='tasks-list-item__cell
-                                tasks-list-item__cell_icon'
-                                onClick={() => task.id && this.toggleDone()}>
+                <div
+                    className='tasks-list-item__cell
+                               tasks-list-item__cell_icon'
+                    onClick={() => task.id && this.toggleDone()}
+                >
                     <OkCircle doneStatus={task.done} loading={this.isLoading} />
                 </div>
                 <div className='tasks-list-item__cell'
-                     onClick={() => {
-                         if (task.id) {
-                             selectTask(task);
-                         } else {
-                             clearEntity(entityConst.ENTITY_TASK);
-                         }
-                     }}>
+                    onClick={() => {
+                        if (task.id) {
+                            selectTask(task);
+                        } else {
+                            clearEntity(entityConst.ENTITY_TASK);
+                        }
+                    }}>
                     {renderTaskName()}
                 </div>
                 <div className='tasks-list-item__cell
@@ -92,25 +97,22 @@ class TasksListItem extends Component {
                     <LabelsList list={selectedProjects} limit={1} />
                 </div>
                 <div className='tasks-list-item__cell
-                                tasks-list-item__cell_icon'>
-                </div>
+                                tasks-list-item__cell_icon' />
             </div>
         );
     }
 }
 
 TasksListItem.propTypes = {
-    task: React.PropTypes.object,
-    projects: React.PropTypes.arrayOf(React.PropTypes.object),
-    projectId: React.PropTypes.string,
+    task: PropTypes.shape({}),
+    projects: PropTypes.arrayOf(PropTypes.shape({})),
+    projectId: PropTypes.string,
 };
 
 export default connect(
-    state => {
-        return {
-            projects: state.projects,
-        };
-    },
+    state => ({
+        projects: state.projects,
+    }),
     {
         selectTask,
         clearEntity,

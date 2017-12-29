@@ -58,8 +58,10 @@ class ProjectsListItem extends Component {
     render() {
         const { project, selectProject } = this.props;
         return (
-            <div className='projects-list-item'
-                 onClick={() => selectProject(project)}>
+            <div
+                className='projects-list-item'
+                onClick={() => selectProject(project)}
+            >
                 <div className='projects-list-item__title'>
                     {emoji(project.name)}
                 </div>
@@ -70,11 +72,9 @@ class ProjectsListItem extends Component {
 }
 
 export default connect(
-    state => {
-        return {
-            tasks: state.tasks,
-        };
-    }, {
+    state => ({
+        tasks: state.tasks,
+    }), {
         selectProject,
     }
 )(ProjectsListItem);

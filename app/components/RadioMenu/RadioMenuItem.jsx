@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './RadioMenuItem.less';
 
-export class RadioMenuItem extends Component {
-    render() {
-        const { item, selected, onClick } = this.props;
-        const itemClass = classnames({
-            'radio-menu-item': true,
-            'radio-menu-item_selected': selected
-        });
-        return (
-            <div className={itemClass}
-                 onClick={onClick}>
-                {item.name}
-            </div>
-        );
-    }
-}
+export const RadioMenuItem = (props) => {
+    const { item, selected, onClick } = props;
+    const itemClass = classnames({
+        'radio-menu-item': true,
+        'radio-menu-item_selected': selected,
+    });
+    return (
+        <div
+            className={itemClass}
+            onClick={onClick}>
+            {item.name}
+        </div>
+    );
+};
 
 RadioMenuItem.propTypes = {
-    item: React.PropTypes.object,
-    selected: React.PropTypes.bool,
-    onClick: React.PropTypes.func,
-}
+    item: PropTypes.shape({}),
+    selected: PropTypes.bool,
+    onClick: PropTypes.func,
+};

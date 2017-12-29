@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import './OkCircle.less';
@@ -8,7 +9,7 @@ export class OkCircle extends Component {
         super(props);
 
         this.state = {
-            doneStatus: props.doneStatus
+            doneStatus: props.doneStatus,
         };
 
         this.renderOkCircle = (loading) => {
@@ -20,8 +21,10 @@ export class OkCircle extends Component {
             if (!loading) {
                 return (
                     <span className={classOkCircle}>
-                        <span className='glyphicon glyphicon-ok-circle'
-                              aria-hidden='true'></span>
+                        <span
+                            className='glyphicon glyphicon-ok-circle'
+                            aria-hidden='true'
+                        />
                     </span>
                 );
             }
@@ -41,7 +44,7 @@ export class OkCircle extends Component {
             const { onChange } = this.props;
             const newDoneStatus = !this.state.doneStatus;
             if (onChange) {
-                onChange(newDoneStatus)
+                onChange(newDoneStatus);
             }
         };
     }
@@ -49,7 +52,7 @@ export class OkCircle extends Component {
     componentWillReceiveProps(nextProps) {
         const { doneStatus } = nextProps;
         this.setState({
-            doneStatus
+            doneStatus,
         });
     }
 
@@ -61,7 +64,10 @@ export class OkCircle extends Component {
         const { loading } = this.props;
 
         return (
-            <span className='ok-circle-container' onClick={this.changeDoneStatus}>
+            <span
+                className='ok-circle-container'
+                onClick={this.changeDoneStatus}
+            >
                 {this.renderOkCircle(loading)}
                 {this.renderLoadingSpinner(loading)}
                 <span className={classOkCircleContent}>
@@ -73,12 +79,12 @@ export class OkCircle extends Component {
 }
 
 OkCircle.propTypes = {
-    doneStatus: React.PropTypes.bool,
-    loading: React.PropTypes.bool,
-    onChange: React.PropTypes.func,
-}
+    doneStatus: PropTypes.bool,
+    loading: PropTypes.bool,
+    onChange: PropTypes.func,
+};
 
 OkCircle.defaultProps = {
     doneStatus: false,
     loading: false,
-}
+};

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DropdownListItem } from './DropdownListItem';
 
@@ -67,15 +68,15 @@ export class DropdownList extends Component {
         return (
             <div className='dropdown-list'>
                 <input className='flat-input dropdown-list__input'
-                       onFocus={this.inputFocus}
-                       onBlur={this.inputBlur}
-                       onChange={this.handleInputChange}
-                       placeholder={placeholder} />
+                    onFocus={this.inputFocus}
+                    onBlur={this.inputBlur}
+                    onChange={this.handleInputChange}
+                    placeholder={placeholder} />
                 <div className={itemsClass}>
-                    {this.state.list.map((item) => (
+                    {this.state.list.map(item => (
                         <DropdownListItem item={item}
-                                          key={`dropdown-item-${item.id}`}
-                                          onClick={() => onSelect(item)} />
+                            key={`dropdown-item-${item.id}`}
+                            onClick={() => onSelect(item)} />
                     ))}
                 </div>
             </div>
@@ -84,6 +85,6 @@ export class DropdownList extends Component {
 }
 
 DropdownList.propTypes = {
-    list: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    onSelect: React.PropTypes.func,
+    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onSelect: PropTypes.func,
 };

@@ -1,4 +1,5 @@
-/* eslint-disable strict*/
+/* eslint-disable strict */
+
 'use strict';
 
 const tasksService = require('./services/tasks');

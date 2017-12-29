@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { RadioMenuItem } from './RadioMenuItem';
 
 import './RadioMenu.less';
@@ -13,7 +14,7 @@ export class RadioMenu extends Component {
                     $$selected: i === 0,
                 });
             }),
-        }
+        };
 
         this.selectItem = (selectedItem) => {
             const { onSelect } = this.props;
@@ -29,14 +30,15 @@ export class RadioMenu extends Component {
     }
 
     render() {
-        const { onSelect } = this.props;
         return (
             <div className='radio-menu'>
-                {this.state.selectedList.map((item) => (
-                    <RadioMenuItem item={item}
-                                   selected={item.$$selected}
-                                   onClick={() => this.selectItem(item)}
-                                   key={`radio-menu-item-${item.id}`} />
+                {this.state.selectedList.map(item => (
+                    <RadioMenuItem
+                        item={item}
+                        selected={item.$$selected}
+                        onClick={() => this.selectItem(item)}
+                        key={`radio-menu-item-${item.id}`}
+                    />
                 ))}
             </div>
         );
@@ -44,6 +46,6 @@ export class RadioMenu extends Component {
 }
 
 RadioMenu.propTypes = {
-    list: React.PropTypes.arrayOf(React.PropTypes.object),
-    onSelect: React.PropTypes.func,
-}
+    list: PropTypes.arrayOf(PropTypes.object),
+    onSelect: PropTypes.func,
+};

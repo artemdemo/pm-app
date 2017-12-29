@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Flatpickr from 'flatpickr';
@@ -81,13 +82,13 @@ class SingleTask extends Component {
         this.connectProject = (newProject) => {
             this.setState({
                 selectedProjects: this.state.selectedProjects.concat([newProject]),
-                availableProjects: this.state.availableProjects.filter((project) => project.id !== newProject.id),
+                availableProjects: this.state.availableProjects.filter(project => project.id !== newProject.id),
             });
         };
 
         this.disconnectProject = (newProject) => {
             this.setState({
-                selectedProjects: this.state.selectedProjects.filter((project) => project.id !== newProject.id),
+                selectedProjects: this.state.selectedProjects.filter(project => project.id !== newProject.id),
                 availableProjects: this.state.availableProjects.concat([newProject]),
             });
         };
@@ -139,73 +140,87 @@ class SingleTask extends Component {
         return (
             <form onSubmit={this.submitTask} className={className}>
                 <div className='form-group'>
-                    <InputMd type='text'
-                             name='name'
-                             editMode={!task.id}
-                             value={this.state.name}
-                             onChange={(e) => this.setState({
-                                 name: e.target.value,
-                             })}
-                             className='flat-input'
-                             placeholder='Task name'
-                             autoComplete='off'
-                             data-qa='task-name' />
+                    <InputMd
+                        type='text'
+                        name='name'
+                        editMode={!task.id}
+                        value={this.state.name}
+                        onChange={e => this.setState({
+                            name: e.target.value,
+                        })}
+                        className='flat-input'
+                        placeholder='Task name'
+                        autoComplete='off'
+                        data-qa='task-name'
+                    />
                 </div>
                 <div className='form-group'>
-                    <TextareaMd className='flat-input'
-                                name='description'
-                                rows='5'
-                                editMode={!task.id || this.state.description === ''}
-                                value={this.state.description}
-                                onChange={(e) => this.setState({
-                                    description: e.target.value,
-                                })}
-                                placeholder='No description'
-                                data-qa='task-description' />
+                    <TextareaMd
+                        className='flat-input'
+                        name='description'
+                        rows='5'
+                        editMode={!task.id || this.state.description === ''}
+                        value={this.state.description}
+                        onChange={e => this.setState({
+                            description: e.target.value,
+                        })}
+                        placeholder='No description'
+                        data-qa='task-description'
+                    />
                 </div>
                 <div className='form-group'>
-                    <OkCircle doneStatus={this.state.done}
-                              onChange={this.toggleDone}>
-                              Mark done
+                    <OkCircle
+                        doneStatus={this.state.done}
+                        onChange={this.toggleDone}
+                    >
+                        Mark done
                     </OkCircle>
                 </div>
                 <div className='form-group'>
-                    <LabelsList list={this.state.selectedProjects}
-                                delitable
-                                onDelete={this.disconnectProject} />
+                    <LabelsList
+                        list={this.state.selectedProjects}
+                        delitable
+                        onDelete={this.disconnectProject}
+                    />
                 </div>
                 <div className='form-group'>
-                    <DropdownList list={this.state.availableProjects}
-                                  placeholder='Connect to project'
-                                  onSelect={this.connectProject} />
+                    <DropdownList
+                        list={this.state.availableProjects}
+                        placeholder='Connect to project'
+                        onSelect={this.connectProject}
+                    />
                 </div>
                 <div className='form-group'>
                     <div className='row'>
                         <div className='col-xs-6'>
-                            <select className='form-control'
-                                    value={this.state.board_id}
-                                    onChange={(e) => this.setState({
-                                        board_id: e.target.value,
-                                    })}
-                                    name='board'
-                                    disabled={this.state.done}
-                                    data-qa='select-board'>
+                            <select
+                                className='form-control'
+                                value={this.state.board_id}
+                                onChange={e => this.setState({
+                                    board_id: e.target.value,
+                                })}
+                                name='board'
+                                disabled={this.state.done}
+                                data-qa='select-board'
+                            >
                                 <option value='0'>No board selected</option>
-                                {boards.map((board) => (
+                                {boards.map(board => (
                                     <option value={board.id} key={`board-${board.id}`}>{emoji(board.title)}</option>
                                 ))}
                             </select>
                         </div>
                         <div className='col-xs-6'>
                             <div className='input-group'>
-                                <input type='number'
-                                       name='sp'
-                                       value={this.state.sp}
-                                       onChange={(e) => this.setState({
-                                           sp: e.target.value,
-                                       })}
-                                       className='form-control'
-                                       placeholder='SP' />
+                                <input
+                                    type='number'
+                                    name='sp'
+                                    value={this.state.sp}
+                                    onChange={e => this.setState({
+                                        sp: e.target.value,
+                                    })}
+                                    className='form-control'
+                                    placeholder='SP'
+                                />
                                 <div className='input-group-addon'>SP</div>
                             </div>
                         </div>
@@ -216,21 +231,24 @@ class SingleTask extends Component {
                         <div className='col-xs-6'>
                             <div className='input-group'>
                                 <div className='input-group-addon'>Due</div>
-                                <input type='text'
-                                       name='due'
-                                       placeholder='Due date'
-                                       ref='dueDateInput'
-                                       className='form-control' />
+                                <input
+                                    type='text'
+                                    name='due'
+                                    placeholder='Due date'
+                                    ref='dueDateInput'
+                                    className='form-control' />
                             </div>
                         </div>
                         <div className='col-xs-6'>
-                            <select className='form-control'
-                                    name='priority'
-                                    value={this.state.priority}
-                                    onChange={(e) => this.setState({
-                                        priority: e.target.value,
-                                    })}
-                                    data-qa='select-priority'>
+                            <select
+                                className='form-control'
+                                name='priority'
+                                value={this.state.priority}
+                                onChange={e => this.setState({
+                                    priority: e.target.value,
+                                })}
+                                data-qa='select-priority'
+                            >
                                 <option>Select priority</option>
                                 {settings.priority && settings.priority.map(item => (
                                     <option value={item.id} key={`priority-${item.id}`}>{item.value}</option>
@@ -246,14 +264,20 @@ class SingleTask extends Component {
                 <div className='clearfix'>
                     <div className='pull-left'>
                         <span className='buttons-group'>
-                            <button type='submit'
+                            <button
+                                type='submit'
                                 className='btn btn-primary'
-                                data-qa='task-save'>
+                                data-qa='task-save'
+                            >
                                 <span>Save</span>
                             </button>
-                            <span className={cancelButtonClass}
-                                  onClick={() => onCancel()}
-                                  data-qa='task-cancel'>Cancel</span>
+                            <span
+                                className={cancelButtonClass}
+                                onClick={() => onCancel()}
+                                data-qa='task-cancel'
+                            >
+                                Cancel
+                            </span>
                         </span>
                         {renderLoadingSpinner()}
                     </div>
@@ -267,15 +291,15 @@ class SingleTask extends Component {
 }
 
 SingleTask.propTypes = {
-    task: React.PropTypes.object,
-    className: React.PropTypes.string,
-    onSave: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
-    onDelete: React.PropTypes.func.isRequired,
+    task: PropTypes.shape({}),
+    className: PropTypes.string,
+    onSave: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 export default connect(
-    state => {
+    (state) => {
         return {
             boards: state.boards,
             projects: state.projects,

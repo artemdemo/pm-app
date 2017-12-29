@@ -36,12 +36,10 @@ function boardUpdated(board) {
 export function loadBoards() {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/boards/all', token)
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((boards) => {
                 dispatch(boardsLoaded(boards));
             })
@@ -61,12 +59,10 @@ export function loadBoards() {
 export function addNewBoard(newBoard) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/boards', token, {method: 'POST', body: newBoard})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((board) => {
                 dispatch(boardAdded(Object.assign({}, newBoard, board)));
                 dispatch(successMessage('Board added'));
@@ -85,12 +81,10 @@ export function addNewBoard(newBoard) {
 export function deleteBoard(boardId) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch(`/boards/${boardId}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then(() => {
                 dispatch(boardDeleted(boardId));
                 dispatch(loadTasks());
@@ -113,12 +107,10 @@ export function deleteBoard(boardId) {
 export function updateBoard(boardUpdate) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/boards', token, {method: 'PUT', body: boardUpdate})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((board) => {
                 dispatch(boardUpdated(Object.assign({}, boardUpdate, board)));
                 dispatch(successMessage('Board updated'));

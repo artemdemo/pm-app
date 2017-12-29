@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BoardTask from './BoardTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
@@ -17,11 +18,13 @@ class ScrumBoard extends Component {
 
         this.editBoard = () => {
             const { showModal, board, hideModal } = this.props;
-            showModal(<SingleBoard board={board}
-                                   className='single-board'
-                                   onSave={() => hideModal()}
-                                   onDelete={() => hideModal()}
-                                   onCancel={() => hideModal()} />);
+            showModal(<SingleBoard
+                board={board}
+                className='single-board'
+                onSave={() => hideModal()}
+                onDelete={() => hideModal()}
+                onCancel={() => hideModal()}
+            />);
         };
 
         const { tasks, board } = this.props;
@@ -51,18 +54,22 @@ class ScrumBoard extends Component {
             <div className='scrum-board'>
                 <div className='board__title'>
                     <div className='board__name'>{emoji(board.title)}</div>
-                    <div className='board__edit-board'
-                         onClick={this.editBoard}>
-                        <span className='glyphicon glyphicon-pencil'></span>
+                    <div
+                        className='board__edit-board'
+                        onClick={this.editBoard}
+                    >
+                        <span className='glyphicon glyphicon-pencil' />
                     </div>
                 </div>
                 <DragItemsContainer className='board-tasks'
-                                    container={board.id}>
+                    container={board.id}>
                     {this.selectedTasks.map(task => (
-                        <DragItem className='board-task'
-                                  key={`task-${task.id}`}
-                                  item={task.id}
-                                  dragStopped={(event, itemData) => this.dragStopped(task, itemData)}>
+                        <DragItem
+                            className='board-task'
+                            key={`task-${task.id}`}
+                            item={task.id}
+                            dragStopped={(event, itemData) => this.dragStopped(task, itemData)}
+                        >
                             <BoardTask task={task} />
                         </DragItem>
                     ))}
@@ -73,15 +80,13 @@ class ScrumBoard extends Component {
 }
 
 ScrumBoard.propTypes = {
-    board: React.PropTypes.object,
+    board: PropTypes.shape({}),
 };
 
 export default connect(
-    state => {
-        return {
-            tasks: state.tasks,
-        };
-    }, {
+    state => ({
+        tasks: state.tasks,
+    }), {
         showModal,
         hideModal,
         updateDraggedTaskPosition,

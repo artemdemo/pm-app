@@ -21,12 +21,10 @@ function settingsUpdated(settings) {
 export function loadSettings() {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/settings/all', token)
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((settings) => {
                 dispatch(settingsLoaded(settings));
             })
@@ -45,12 +43,10 @@ export function loadSettings() {
 export function updateSettings(settingsUpdate) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/settings', token, {method: 'PUT', body: settingsUpdate})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((setting) => {
                 dispatch(settingsUpdated(Object.assign({}, settingsUpdate, setting)));
                 dispatch(successMessage('Project updated'));

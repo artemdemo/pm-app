@@ -14,10 +14,12 @@ class BoardsList extends Component {
 
         this.addNewBoard = () => {
             const { showModal, hideModal } = this.props;
-            showModal(<SingleBoard className='single-board'
-                                   onSave={() => hideModal()}
-                                   onDelete={() => hideModal()}
-                                   onCancel={() => hideModal()} />);
+            showModal(<SingleBoard
+                className='single-board'
+                onSave={() => hideModal()}
+                onDelete={() => hideModal()}
+                onCancel={() => hideModal()}
+            />);
         };
     }
 
@@ -35,9 +37,11 @@ class BoardsList extends Component {
                         <ScrumBoard board={board} key={`board-${board.id}`} />
                     ))}
                 </div>
-                <button className='btn btn-default'
-                        onClick={this.addNewBoard}
-                        data-qa='new-board'>
+                <button
+                    className='btn btn-default'
+                    onClick={this.addNewBoard}
+                    data-qa='new-board'
+                >
                     New Board
                 </button>
             </div>
@@ -46,11 +50,9 @@ class BoardsList extends Component {
 }
 
 export default connect(
-    state => {
-        return {
-            boards: state.boards,
-        };
-    }, {
+    state => ({
+        boards: state.boards,
+    }), {
         clearEntity,
         showModal,
         hideModal,

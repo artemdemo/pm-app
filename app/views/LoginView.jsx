@@ -41,34 +41,42 @@ class LoginView extends Component {
                     <label htmlFor='inputEmail' className='sr-only'>
                         Email address
                     </label>
-                    <input type='email'
-                           name='email'
-                           ref='email'
-                           className='form-control form-signin__first-input'
-                           placeholder='Email address'
-                           required=''
-                           autoFocus=''
-                           autoComplete='off' />
+                    <input
+                        type='email'
+                        name='email'
+                        ref='email'
+                        className='form-control form-signin__first-input'
+                        placeholder='Email address'
+                        required=''
+                        autoFocus=''
+                        autoComplete='off'
+                    />
                     <label htmlFor='inputPassword' className='sr-only'>
                         Password
                     </label>
-                    <input type='password'
-                           name='password'
-                           ref='password'
-                           className='form-control form-signin__last-input'
-                           placeholder='Password'
-                           required=''
-                           autoComplete='off' />
+                    <input
+                        type='password'
+                        name='password'
+                        ref='password'
+                        className='form-control form-signin__last-input'
+                        placeholder='Password'
+                        required=''
+                        autoComplete='off'
+                    />
                     <div className='checkbox'>
                         <label>
-                            <input type='checkbox'
-                                   name='remember'
-                                   ref='remember'
-                                   value='remember-me' /> Remember me
+                            <input
+                                type='checkbox'
+                                name='remember'
+                                ref='remember'
+                                value='remember-me'
+                            /> Remember me
                         </label>
                     </div>
-                    <button className='btn btn-lg btn-primary btn-block'
-                            type='submit'>
+                    <button
+                        className='btn btn-lg btn-primary btn-block'
+                        type='submit'
+                    >
                         Login
                     </button>
                     <Link to='/signup' className='btn btn-link btn-block' data-qa='link-to-signup'>
@@ -81,11 +89,9 @@ class LoginView extends Component {
 }
 
 export default connect(
-    state => {
-        return {
-            user: state.user,
-        };
-    }, {
+    state => ({
+        user: state.user,
+    }), {
         login,
         checkAuthentication,
     }

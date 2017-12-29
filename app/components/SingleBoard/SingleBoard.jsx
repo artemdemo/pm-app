@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
@@ -74,10 +75,12 @@ class SingleBoard extends Component {
         const renderSaveButton = () => {
             const text = board && board.id ? 'Save' : 'Add new';
             return (
-                <button type='submit'
-                        className='btn btn-primary'
-                        disabled={this.state.loadingData}
-                        data-qa='board-save'>
+                <button
+                    type='submit'
+                    className='btn btn-primary'
+                    disabled={this.state.loadingData}
+                    data-qa='board-save'
+                >
                     <span>{text}</span>
                 </button>
             );
@@ -103,43 +106,49 @@ class SingleBoard extends Component {
 
         return (
             <form onSubmit={this.submitBoard}
-                  className={className}>
+                className={className}>
                 <div className='form-group'>
-                    <InputMd type='text'
-                             name='name'
-                             editMode={!board.id}
-                             value={this.state.title}
-                             onChange={(e) => this.setState({
-                                 title: e.target.value,
-                             })}
-                             className='flat-input'
-                             placeholder='Board name'
-                             autoComplete='off'
-                             data-qa='board-name' />
+                    <InputMd
+                        type='text'
+                        name='name'
+                        editMode={!board.id}
+                        value={this.state.title}
+                        onChange={e => this.setState({
+                            title: e.target.value,
+                        })}
+                        className='flat-input'
+                        placeholder='Board name'
+                        autoComplete='off'
+                        data-qa='board-name'
+                    />
                 </div>
                 <div className='form-group'>
-                    <TextareaMd className='flat-input'
-                                name='description'
-                                rows='3'
-                                editMode={!board.id || this.state.description === ''}
-                                value={this.state.description}
-                                onChange={(e) => this.setState({
-                                    description: e.target.value,
-                                })}
-                                placeholder='Board description'
-                                data-qa='board-description' />
+                    <TextareaMd
+                        className='flat-input'
+                        name='description'
+                        rows='3'
+                        editMode={!board.id || this.state.description === ''}
+                        value={this.state.description}
+                        onChange={e => this.setState({
+                            description: e.target.value,
+                        })}
+                        placeholder='Board description'
+                        data-qa='board-description'
+                    />
                 </div>
                 <div className='form-group'>
-                    <select className='form-control'
-                            value={this.state.id_position}
-                            onChange={(e) => this.setState({
-                                id_position: e.target.value,
-                            })}
-                            name='board'
-                            data-qa='select-board'>
+                    <select
+                        className='form-control'
+                        value={this.state.id_position}
+                        onChange={e => this.setState({
+                            id_position: e.target.value,
+                        })}
+                        name='board'
+                        data-qa='select-board'
+                    >
                         <option>Place after all</option>
                         <option disabled>&nbsp;&nbsp;Place before:</option>
-                        {boardsList.map((board) => (
+                        {boardsList.map(board => (
                             <option value={board.id_position} key={`board-${board.id}`}>{emoji(board.title)}</option>
                         ))}
                     </select>
@@ -149,10 +158,14 @@ class SingleBoard extends Component {
                     <div className='pull-left'>
                         <span className='buttons-group'>
                             {renderSaveButton()}
-                            <span className='btn btn-default'
-                                  disabled={this.state.loadingData}
-                                  onClick={() => onCancel()}
-                                  data-qa='board-cancel'>Cancel</span>
+                            <span
+                                className='btn btn-default'
+                                disabled={this.state.loadingData}
+                                onClick={() => onCancel()}
+                                data-qa='board-cancel'
+                            >
+                                Cancel
+                            </span>
                         </span>
                         {renderLoadingSpinner()}
                     </div>
@@ -166,15 +179,15 @@ class SingleBoard extends Component {
 }
 
 SingleBoard.propTypes = {
-    board: React.PropTypes.object,
-    className: React.PropTypes.string,
-    onSave: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
-    onDelete: React.PropTypes.func.isRequired,
+    board: PropTypes.shape({}),
+    className: PropTypes.string,
+    onSave: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
 };
 
 export default connect(
-    state => {
+    (state) => {
         return {
             boards: state.boards,
         };

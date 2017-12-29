@@ -45,44 +45,52 @@ class SignupView extends Component {
                     <label htmlFor='inputUsername' className='sr-only'>
                         Username
                     </label>
-                    <input type='text'
-                           name='username'
-                           ref='username'
-                           className='form-control form-signin__first-input'
-                           placeholder='Username'
-                           required=''
-                           autoFocus=''
-                           autoComplete='off' />
+                    <input
+                        type='text'
+                        name='username'
+                        ref='username'
+                        className='form-control form-signin__first-input'
+                        placeholder='Username'
+                        required=''
+                        autoFocus=''
+                        autoComplete='off'
+                    />
                     <label htmlFor='inputEmail' className='sr-only'>
                         Email address
                     </label>
-                    <input type='email'
-                           name='email'
-                           ref='email'
-                           className='form-control form-signin__input'
-                           placeholder='Email address'
-                           required=''
-                           autoComplete='off' />
+                    <input
+                        type='email'
+                        name='email'
+                        ref='email'
+                        className='form-control form-signin__input'
+                        placeholder='Email address'
+                        required=''
+                        autoComplete='off'
+                    />
                     <label htmlFor='inputPassword' className='sr-only'>
                         Password
                     </label>
-                    <input type='password'
-                           name='password'
-                           ref='password'
-                           className='form-control form-signin__last-input'
-                           placeholder='Password'
-                           required=''
-                           autoComplete='off' />
+                    <input
+                        type='password'
+                        name='password'
+                        ref='password'
+                        className='form-control form-signin__last-input'
+                        placeholder='Password'
+                        required=''
+                        autoComplete='off'
+                    />
                     <div className='checkbox'>
                         <label>
-                            <input type='checkbox'
-                                   name='remember'
-                                   ref='remember'
-                                   value='remember-me' /> Remember me
+                            <input
+                                type='checkbox'
+                                name='remember'
+                                ref='remember'
+                                value='remember-me'
+                            /> Remember me
                         </label>
                     </div>
                     <button className='btn btn-lg btn-primary btn-block'
-                            type='submit'>
+                        type='submit'>
                         Sign up
                     </button>
                     <Link to='/login' className='btn btn-link btn-block' data-qa='link-to-login'>
@@ -95,9 +103,7 @@ class SignupView extends Component {
 }
 
 export default connect(
-    () => {
-        return {};
-    }, {
+    () => ({}), {
         signup,
         checkAuthentication,
         errorMessage,

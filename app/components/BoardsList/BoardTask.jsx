@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import emoji from '../../utils/emoji/emoji';
@@ -38,7 +39,7 @@ class BoardTask extends Component {
             if (task.due && task.due !== '') {
                 return (
                     <div className='board-task-description__item'>
-                        <span className='glyphicon glyphicon-calendar'></span>
+                        <span className='glyphicon glyphicon-calendar' />
                         {moment(task.due, taskConst.DUE_BASE_TIME_FORMAT).format('MMM, D')}
                     </div>
                 );
@@ -60,7 +61,7 @@ class BoardTask extends Component {
                 }
                 return (
                     <div className='board-task-description__item'>
-                        <span className='glyphicon glyphicon-exclamation-sign'></span>
+                        <span className='glyphicon glyphicon-exclamation-sign' />
                         {selectedPriority && selectedPriority.value}
                     </div>
                 );
@@ -71,8 +72,10 @@ class BoardTask extends Component {
         return (
             <div onClick={this.openTask}>
                 <div className='board-task__menu-icon'>
-                    <span className='glyphicon glyphicon-option-vertical'
-                          aria-hidden='true'></span>
+                    <span
+                        className='glyphicon glyphicon-option-vertical'
+                        aria-hidden='true'
+                    />
                 </div>
                 {emoji(task.name)}
                 <div className='board-task-description
@@ -82,8 +85,10 @@ class BoardTask extends Component {
                     {renderPriority()}
                 </div>
                 <div className='board-task__labels-list'>
-                    <LabelsList list={selectedProjects}
-                                delitable={false} />
+                    <LabelsList
+                        list={selectedProjects}
+                        delitable={false}
+                    />
                 </div>
             </div>
         );
@@ -91,17 +96,15 @@ class BoardTask extends Component {
 }
 
 BoardTask.proptypes = {
-    task: React.PropTypes.object,
+    task: PropTypes.object,
 };
 
 export default connect(
-    state => {
-        return {
-            tasks: state.tasks,
-            projects: state.projects,
-            settings: state.settings,
-        };
-    }, {
+    state => ({
+        tasks: state.tasks,
+        projects: state.projects,
+        settings: state.settings,
+    }), {
         selectTask,
     }
 )(BoardTask);

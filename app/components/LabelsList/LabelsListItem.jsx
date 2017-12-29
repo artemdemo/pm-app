@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import emoji from '../../utils/emoji/emoji';
 
@@ -18,9 +19,11 @@ export class LabelsListItem extends Component {
         this.renderCloseButton = (item, delitable) => {
             if (delitable) {
                 return (
-                    <span className='labels-list-item__close'
-                          onClick={() => this.deleteItem(item)}>
-                        <span className='glyphicon glyphicon-remove'></span>
+                    <span
+                        className='labels-list-item__close'
+                        onClick={() => this.deleteItem(item)}
+                    >
+                        <span className='glyphicon glyphicon-remove' />
                     </span>
                 );
             }
@@ -46,7 +49,7 @@ export class LabelsListItem extends Component {
 }
 
 LabelsListItem.propTypes = {
-    item: React.PropTypes.object,
-    delitable: React.PropTypes.bool,
-    onDelete: React.PropTypes.func,
+    item: PropTypes.shape({}),
+    delitable: PropTypes.bool,
+    onDelete: PropTypes.func,
 };

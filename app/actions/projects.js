@@ -38,12 +38,10 @@ function projectUpdated(project) {
 export function loadProjects() {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/projects/all', token)
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((projects) => {
                 dispatch(projectsLoaded(projects));
             })
@@ -64,12 +62,10 @@ export function loadProjects() {
 export function addNewProject(newProject) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/projects', token, {method: 'POST', body: newProject})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((project) => {
                 dispatch(projectAdded(Object.assign({}, newProject, project)));
                 dispatch(clearEntity(entityConst.ENTITY_PROJECT));
@@ -90,12 +86,10 @@ export function addNewProject(newProject) {
 export function deleteProject(id) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch(`/projects/${id}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then(() => {
                 dispatch(projectDeleted(id));
                 dispatch(clearEntity(entityConst.ENTITY_PROJECT));
@@ -120,12 +114,10 @@ export function deleteProject(id) {
 export function updateProject(projectUpdate) {
     const token = getStoredToken();
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/projects', token, {method: 'PUT', body: projectUpdate})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((project) => {
                 dispatch(projectUpdated(Object.assign({}, projectUpdate, project)));
                 dispatch(clearEntity(entityConst.ENTITY_PROJECT));

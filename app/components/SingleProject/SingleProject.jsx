@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as entityConst from '../../constants/selectedEntity';
 import { filterTasks } from '../../utils/tasks';
@@ -64,24 +65,26 @@ class SingleProject extends Component {
         this.connectTask = (newTask) => {
             this.setState({
                 selectedTasks: this.state.selectedTasks.concat([newTask]),
-                availableTasks: this.state.availableTasks.filter((task) => task.id !== newTask.id),
+                availableTasks: this.state.availableTasks.filter(task => task.id !== newTask.id),
             });
         };
 
         this.disconnectTask = (newTask) => {
             this.setState({
-                selectedTasks: this.state.selectedTasks.filter((task) => task.id !== newTask.id),
+                selectedTasks: this.state.selectedTasks.filter(task => task.id !== newTask.id),
                 availableTasks: this.state.availableTasks.concat([newTask]),
             });
         };
 
         this.openTask = (task) => {
             const { showModal, hideModal } = this.props;
-            showModal(<SingleTask task={task}
-                                  className='single-task-modal'
-                                  onSave={() => hideModal()}
-                                  onDelete={() => hideModal()}
-                                  onCancel={() => hideModal()} />);
+            showModal(<SingleTask
+                task={task}
+                className='single-task-modal'
+                onSave={() => hideModal()}
+                onDelete={() => hideModal()}
+                onCancel={() => hideModal()}
+            />);
         };
     }
 
@@ -118,10 +121,12 @@ class SingleProject extends Component {
         const renderSaveButton = () => {
             const text = project.id ? 'Save' : 'Add new';
             return (
-                <button type='submit'
-                        className='btn btn-primary'
-                        disabled={this.state.loadingData}
-                        data-qa='project-save'>
+                <button
+                    type='submit'
+                    className='btn btn-primary'
+                    disabled={this.state.loadingData}
+                    data-qa='project-save'
+                >
                     <span>{text}</span>
                 </button>
             );
@@ -129,10 +134,12 @@ class SingleProject extends Component {
         const renderNarrowList = () => {
             if (this.state.selectedTasks.length > 0) {
                 return (
-                    <NarrowList list={this.state.selectedTasks}
-                                deletable
-                                onClick={(task) => this.openTask(task)}
-                                onDelete={this.disconnectTask} />
+                    <NarrowList
+                        list={this.state.selectedTasks}
+                        deletable
+                        onClick={task => this.openTask(task)}
+                        onDelete={this.disconnectTask}
+                    />
                 );
             }
             return (
@@ -161,29 +168,33 @@ class SingleProject extends Component {
         return (
             <form onSubmit={this.submitProject} className='single-panel'>
                 <div className='form-group'>
-                    <InputMd type='text'
-                             name='name'
-                             editMode={!project.id}
-                             value={this.state.name}
-                             onChange={(e) => this.setState({
-                                 name: e.target.value,
-                             })}
-                             className='flat-input'
-                             placeholder='Project name'
-                             autoComplete='off'
-                             data-qa='project-name' />
+                    <InputMd
+                        type='text'
+                        name='name'
+                        editMode={!project.id}
+                        value={this.state.name}
+                        onChange={e => this.setState({
+                            name: e.target.value,
+                        })}
+                        className='flat-input'
+                        placeholder='Project name'
+                        autoComplete='off'
+                        data-qa='project-name'
+                    />
                 </div>
                 <div className='form-group'>
-                    <TextareaMd className='flat-input'
-                                name='description'
-                                rows='5'
-                                editMode={!project.id || this.state.description === ''}
-                                value={this.state.description}
-                                onChange={(e) => this.setState({
-                                    description: e.target.value,
-                                })}
-                                placeholder='Project description'
-                                data-qa='project-description' />
+                    <TextareaMd
+                        className='flat-input'
+                        name='description'
+                        rows='5'
+                        editMode={!project.id || this.state.description === ''}
+                        value={this.state.description}
+                        onChange={e => this.setState({
+                            description: e.target.value,
+                        })}
+                        placeholder='Project description'
+                        data-qa='project-description'
+                    />
                 </div>
                 <div className='form-group'>
                     <div className='single-panel__subtitle'>
@@ -192,19 +203,25 @@ class SingleProject extends Component {
                     {renderNarrowList()}
                 </div>
                 <div className='form-group'>
-                    <DropdownList list={this.state.availableTasks}
-                                  placeholder='Connect tasks to project'
-                                  onSelect={this.connectTask} />
+                    <DropdownList
+                        list={this.state.availableTasks}
+                        placeholder='Connect tasks to project'
+                        onSelect={this.connectTask}
+                    />
                 </div>
                 {renderTime()}
                 <div className='clearfix'>
                     <div className='pull-left'>
                         <span className='buttons-group'>
                             {renderSaveButton()}
-                            <span className='btn btn-default'
-                                  disabled={this.state.loadingData}
-                                  onClick={() => clearEntity(entityConst.ENTITY_PROJECT)}
-                                  data-qa='project-cancel'>Cancel</span>
+                            <span
+                                className='btn btn-default'
+                                disabled={this.state.loadingData}
+                                onClick={() => clearEntity(entityConst.ENTITY_PROJECT)}
+                                data-qa='project-cancel'
+                            >
+                                Cancel
+                            </span>
                         </span>
                         {renderLoadingSpinner()}
                     </div>
@@ -218,17 +235,15 @@ class SingleProject extends Component {
 }
 
 SingleProject.propTypes = {
-    project: React.PropTypes.object,
-    selectedEntity: React.PropTypes.object,
+    project: PropTypes.shape({}),
+    selectedEntity: PropTypes.shape({}),
 };
 
 export default connect(
-    state => {
-        return {
-            tasks: state.tasks,
-            selectedEntity: state.selectedEntity,
-        };
-    }, {
+    state => ({
+        tasks: state.tasks,
+        selectedEntity: state.selectedEntity,
+    }), {
         clearEntity,
         deleteProject,
         updateProject,

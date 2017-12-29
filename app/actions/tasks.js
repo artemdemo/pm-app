@@ -19,12 +19,10 @@ export function loadTasks() {
         };
     }
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/tasks/all', token)
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((tasks) => {
                 dispatch(tasksLoaded(tasks));
             })
@@ -52,12 +50,10 @@ export function addNewTask(newTask) {
         };
     }
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/tasks', token, {method: 'POST', body: newTask})
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((task) => {
                 dispatch(taskAdded(Object.assign({}, newTask, task)));
                 dispatch(successMessage('Task added'));
@@ -83,7 +79,7 @@ export function deleteTask(taskId) {
         };
     }
 
-    return dispatch => {
+    return (dispatch) => {
         fetch(`/tasks/${taskId}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
             .then((response) => {
@@ -122,7 +118,7 @@ export function updateTask(taskUpdate) {
         };
     }
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/tasks', token, {method: 'PUT', body: taskUpdate})
             .then(checkResponseStatus)
             .then((response) => {
@@ -161,15 +157,16 @@ export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, posi
         };
     }
 
-    return dispatch => {
+    return (dispatch) => {
         dispatch(updateTaskPosition(draggedTask));
 
-        fetch('/tasks/position', token, {method: 'PUT', body: {
-            taskId: draggedTask.id,
-            nearTaskId,
-            position,
-            boardId,
-        }})
+        fetch('/tasks/position', token, {method: 'PUT',
+            body: {
+                taskId: draggedTask.id,
+                nearTaskId,
+                position,
+                boardId,
+            }})
             .then(checkResponseStatus)
             .then((response) => {
                 return response.json();

@@ -18,7 +18,6 @@ import urlParser from '../utils/urlParser';
  * @param user.token {String}
  * @param user.added {String}
  * @param user.updated {String}
- * @param token {String}
  */
 function userAuthenticated(user) {
     return {
@@ -65,12 +64,10 @@ export function checkAuthentication(location) {
         return errorMessage('Please, login');
     }
 
-    return dispatch => {
+    return (dispatch) => {
         fetch('/user', token)
             .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then((userData) => {
                 dispatch(successMessage('Welcome back!'));
                 dispatch(userAuthenticated(userData));
@@ -96,7 +93,7 @@ export function checkAuthentication(location) {
  * @param user.remember {Boolean}
  */
 export function login(user) {
-    return dispatch => {
+    return (dispatch) => {
         let token;
         fetch('/login', null, {method: 'PUT', body: user})
             .then(checkResponseStatus)
@@ -131,7 +128,7 @@ export function login(user) {
  * @param user.remember {Boolean}
  */
 export function signup(user) {
-    return dispatch => {
+    return (dispatch) => {
         let token;
         fetch('/signup', null, {method: 'POST', body: user})
             .then(checkResponseStatus)
@@ -161,7 +158,7 @@ export function logout() {
     removeStoredToken();
     goToLoginPage();
 
-    return dispatch => {
+    return (dispatch) => {
         dispatch(successMessage('Logged out'));
     };
 }

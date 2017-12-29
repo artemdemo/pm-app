@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { throttleLead } from './utils/throttle';
 import { nerve } from './utils/nerve';
 import { setLandingContainer, setNearItem, setPosition, getDraggedItemKey } from './services/dragService';
@@ -74,16 +75,17 @@ export class DragItemsContainer extends Component {
 
         const children = React.Children.map(
             this.props.children,
-            child => {
+            (child) => {
                 this.singleItemKey = this.draggedItemCount === 1 ? child.key : null;
                 return React.cloneElement(child, {
                     $$key: child.key,
                 });
-            });
+            }
+        );
 
         return (
             <div className={className}
-                 onDragOver={this.dragOver}>
+                onDragOver={this.dragOver}>
                 {renderPlaceholder()}
                 {children}
             </div>
@@ -92,5 +94,5 @@ export class DragItemsContainer extends Component {
 }
 
 DragItemsContainer.PropTypes = {
-    container: React.PropTypes.any,
+    container: PropTypes.any,
 };

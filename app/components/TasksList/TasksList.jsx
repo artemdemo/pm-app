@@ -62,11 +62,11 @@ tasksFilterService.addFilter(FILTER_BY_DONE_STATUS, (tasks, data) => {
 tasksFilterService.addFilter(FILTER_BY_PROJECTS, (tasks, data) => {
     switch (true) {
         case data === 'free':
-            return tasks.filter(task => {
+            return tasks.filter((task) => {
                 return task.projects.length === 0;
             });
         case data && Number(data) === Number(data):
-            return tasks.filter(task => {
+            return tasks.filter((task) => {
                 return task.projects.indexOf(Number(data)) > -1;
             });
         case data === 'all':
@@ -133,21 +133,22 @@ class TasksList extends Component {
                         <RadioMenu list={this.listMenu} onSelect={this.selectRadioItem} />
                     </div>
                     <div className='fluid-oneline-grid__cell'>
-                        <select className='form-control input-sm'
-                                onChange={(e) => {
-                                    const projectId = e.target.value;
-                                    tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
-                                    this.setState({
-                                        tasks: tasksFilterService.runAllFilters(this.allTasks),
-                                        filteredByProjectId: projectId,
-                                    });
-                                }}>
+                        <select
+                            className='form-control input-sm'
+                            onChange={(e) => {
+                                const projectId = e.target.value;
+                                tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
+                                this.setState({
+                                    tasks: tasksFilterService.runAllFilters(this.allTasks),
+                                    filteredByProjectId: projectId,
+                                });
+                            }}>
                             <option value='all'>All projects</option>
                             <option value='free'>Tasks without project</option>
                             <option disabled>—</option>
                             {this.state.projects.map(project => (
                                 <option value={project.id}
-                                        key={`project-filter-${project.id}`}>
+                                    key={`project-filter-${project.id}`}>
                                     {emoji(project.name)}
                                 </option>
                             ))}
@@ -156,8 +157,8 @@ class TasksList extends Component {
                 </div>
                 <div className='tasks-list'>
                     <TasksListItem task={newTask}
-                                   projectId={this.state.filteredByProjectId}
-                                   key='task-0' />
+                        projectId={this.state.filteredByProjectId}
+                        key='task-0' />
                     {this.state.tasks.map(task => (
                         <TasksListItem task={task} key={`task-${task.id}`} />
                     ))}
@@ -168,12 +169,10 @@ class TasksList extends Component {
 }
 
 export default connect(
-    state => {
-        return {
-            tasks: state.tasks,
-            projects: state.projects,
-        };
-    }, {
+    state => ({
+        tasks: state.tasks,
+        projects: state.projects,
+    }), {
         clearEntity,
     }
 )(TasksList);

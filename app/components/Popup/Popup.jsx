@@ -4,28 +4,24 @@ import * as popupConst from '../../constants/popup';
 
 import './Popup.less';
 
-class Popup extends Component {
-    render() {
-        const { popup } = this.props;
+const Popup = (props) => {
+    const { popup } = props;
 
-        if (popup.type === popupConst.SHOW_POPUP) {
-            return (
-                <div className='popup-bg'>
-                    <div className='popup'>
-                        {popup.content}
-                    </div>
+    if (popup.type === popupConst.SHOW_POPUP) {
+        return (
+            <div className='popup-bg'>
+                <div className='popup'>
+                    {popup.content}
                 </div>
-            );
-        }
-
-        return null;
+            </div>
+        );
     }
-}
+
+    return null;
+};
 
 export default connect(
-    state => {
-        return {
-            popup: state.popup,
-        };
-    }
+    state => ({
+        popup: state.popup,
+    }), {}
 )(Popup);

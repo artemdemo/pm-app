@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { throttleLead } from './utils/throttle';
 import { nerve } from './utils/nerve';
@@ -136,11 +137,13 @@ export class DragItem extends Component {
         };
 
         return (
-            <div className={dragItemClass}
-                 draggable='true'
-                 onDragOver={this.dragOver}
-                 onDragStart={this.dragStart}
-                 onDragEnd={this.dragEnd}>
+            <div
+                className={dragItemClass}
+                draggable='true'
+                onDragOver={this.dragOver}
+                onDragStart={this.dragStart}
+                onDragEnd={this.dragEnd}
+            >
                 {renderPlaceholder('before')}
                 <div className={className}>
                     {this.props.children}
@@ -152,8 +155,8 @@ export class DragItem extends Component {
 }
 
 DragItem.propTypes = {
-    dragStarted: React.PropTypes.func,
-    dragStopped: React.PropTypes.func,
-    item: React.PropTypes.any.isRequired,
-    $$key: React.PropTypes.any,
+    dragStarted: PropTypes.func,
+    dragStopped: PropTypes.func,
+    item: PropTypes.any.isRequired,
+    $$key: PropTypes.any,
 };

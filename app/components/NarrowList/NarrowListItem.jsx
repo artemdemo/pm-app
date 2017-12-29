@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import emoji from '../../utils/emoji/emoji';
 
@@ -30,9 +31,9 @@ export class NarrowListItem extends Component {
             if (deletable) {
                 return (
                     <span className='narrow-list-item__close'
-                          onClick={() => onDelete(item)}>
+                        onClick={() => onDelete(item)}>
                         <span className='glyphicon
-                                         glyphicon-remove'></span>
+                                         glyphicon-remove' />
                     </span>
                 );
             }
@@ -44,7 +45,7 @@ export class NarrowListItem extends Component {
             <li className={classItem}>
                 <div className='narrow-list-item__cell
                                 narrow-list-item__cell_name'
-                     onClick={this.itemClicked}>
+                    onClick={this.itemClicked}>
                     <span className='narrow-list-item__name'>
                         {emoji(item.name)}
                     </span>
@@ -59,8 +60,8 @@ export class NarrowListItem extends Component {
 }
 
 NarrowListItem.propTypes = {
-    deletable: React.PropTypes.bool,
-    item: React.PropTypes.object,
-    onDelete: React.PropTypes.func,
-    onClick: React.PropTypes.func,
+    deletable: PropTypes.bool,
+    item: PropTypes.object,
+    onDelete: PropTypes.func,
+    onClick: PropTypes.func,
 };
