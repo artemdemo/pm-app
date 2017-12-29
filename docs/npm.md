@@ -18,12 +18,6 @@ You can build uglified version of the code:
 $ npm run pack
 ```
 
-You also can pack with mangle (keep variable names):
-
-```
-$ npm run pack-with-mangle
-```
-
 Start server
 
 ```

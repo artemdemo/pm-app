@@ -86,7 +86,7 @@ const server = new Hapi.Server({
 
 server.connection({
     host: 'localhost',
-    port: normalizePort(process.env.PORT || 8000),
+    port: normalizePort(process.env.PORT || 3000),
 });
 
 // inert provides new handler methods for serving static files and directories,

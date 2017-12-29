@@ -1,18 +1,16 @@
-[Русская версия](readme-ru.md)
-
 # Project Management App
 
 Open Source Project Management app.
 
 Work in progress. There is still much to be done.
 
-![alt tag](img/tasks.png)
+![alt tag](screenshots/tasks.png)
 ---
-![alt tag](img/scrum.png)
+![alt tag](screenshots/scrum.png)
 ---
-![alt tag](img/projects.png)
+![alt tag](screenshots/projects.png)
 ---
-![alt tag](img/projects-open.png)
+![alt tag](screenshots/projects-open.png)
 
 ## Getting started
 
@@ -38,12 +36,12 @@ And start watching files:
 $ npm run watch
 ```
 
-This is it, you are ready to go - open [http://localhost:8000/login](http://localhost:8000/login) and login with test user:
+This is it, you are ready to go - open [http://localhost:3000/login](http://localhost:3000/login) and login with test user:
 
 Email: `test@test.com`<br>
 Password: `test`
 
-Alternatively you can open [http://localhost:8000/signup](http://localhost:8000/signup) and create your first user.
+Alternatively you can open [http://localhost:3000/signup](http://localhost:3000/signup) and create your first user.
 
 [All npm commands](docs/npm.md)
 
