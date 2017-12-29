@@ -13,7 +13,7 @@ const TasksView = (props) => {
     const { selectedEntity, clearEntity } = props;
     const selectedTask = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_TASK ?
         selectedEntity.entity :
-        null;
+        undefined;
     const classView = classnames({
         'list-container': true,
         'list-container_open-right-panel': !!selectedTask,

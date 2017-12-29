@@ -41,8 +41,8 @@ export default function tasks(state = [], action) {
             return state;
         case tasksConst.TASK_UPDATED:
             for (let i = 0, len = state.length; i < len; i++) {
-                if (state[i].id === action.task.id) {
-                    const task = action.task;
+                const { task } = action;
+                if (state[i].id === task.id) {
                     // If task is `done` it shouldn't be connected to any board
                     if (task.done) {
                         task.board_id = null;

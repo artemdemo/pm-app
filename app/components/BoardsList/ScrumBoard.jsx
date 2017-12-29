@@ -61,8 +61,10 @@ class ScrumBoard extends Component {
                         <span className='glyphicon glyphicon-pencil' />
                     </div>
                 </div>
-                <DragItemsContainer className='board-tasks'
-                    container={board.id}>
+                <DragItemsContainer
+                    className='board-tasks'
+                    container={board.id}
+                >
                     {this.selectedTasks.map(task => (
                         <DragItem
                             className='board-task'

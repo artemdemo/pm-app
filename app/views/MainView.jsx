@@ -28,7 +28,7 @@ const MainView = (props) => {
         </div>
     );
 
-}
+};
 
 export default connect(
     state => ({

@@ -95,7 +95,6 @@ class MainMenu extends Component {
                             <li className={profileClass}>
                                 <span
                                     className='navbar-link'
-                                    role='button'
                                     onClick={this.toggleProfileDropdown}
                                     data-qa='profile-menu-toggle'
                                 >

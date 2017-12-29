@@ -12,7 +12,7 @@ const ProjectsView = (props) => {
     const { selectedEntity } = props;
     const selectedProject = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_PROJECT ?
         selectedEntity.entity :
-        null;
+        undefined;
     const classView = classnames({
         'list-container': true,
         'list-container_open-right-panel': !!selectedProject,

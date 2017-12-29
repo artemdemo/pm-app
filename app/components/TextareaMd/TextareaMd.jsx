@@ -95,7 +95,11 @@ export class TextareaMd extends Component {
                         data-qa={`${dataQa}__textarea`}
                     />
                     <div className='textarea-md-editor__post-text'>
-                        <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>
+                        <a
+                            href='http://www.webpagefx.com/tools/emoji-cheat-sheet/'
+                            target='_blank'
+                            rel='noopener noreferrer'
+                        >
                             emoji
                         </a>
                     </div>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _isNumber from 'lodash/isNumber';
 import emoji from '../../utils/emoji/emoji';
 import * as entityConst from '../../model/constants/selectedEntity';
 import { RadioMenu } from '../RadioMenu/RadioMenu';
@@ -65,7 +66,7 @@ tasksFilterService.addFilter(FILTER_BY_PROJECTS, (tasks, data) => {
             return tasks.filter((task) => {
                 return task.projects.length === 0;
             });
-        case data && Number(data) === Number(data):
+        case _isNumber(data):
             return tasks.filter((task) => {
                 return task.projects.indexOf(Number(data)) > -1;
             });
@@ -93,6 +94,7 @@ class TasksList extends Component {
             { id: 'completed', name: 'Completed' },
         ];
 
+        // eslint-disable-next-line prefer-destructuring
         this.sortingMenuItem = this.listMenu[0];
 
         this.selectRadioItem = (item) => {

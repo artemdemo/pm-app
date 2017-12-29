@@ -15,11 +15,10 @@ class SingleBoard extends Component {
     constructor(props) {
         super(props);
 
-        const board = this.getBoard(props);
-        const { boards } = props;
+        // ToDo: This code is working here? Assigning state in constructor??
+        const { board, boards } = props;
         const boardsList = boards.filter(item => item.id !== board.id);
         const selectedBoardId = board.id_position ? board.id_position + 1 : '';
-
         this.state = {
             title: board.title || '',
             description: board.description || '',
@@ -29,8 +28,7 @@ class SingleBoard extends Component {
 
         this.submitBoard = (e) => {
             e.preventDefault();
-            const { addNewBoard, updateBoard, errorMessage, onSave } = this.props;
-            const board = this.getBoard();
+            const { board, addNewBoard, updateBoard, errorMessage, onSave } = this.props;
             const idPosition = this.state.id_position;
 
             if (this.state.title === '') {
@@ -56,20 +54,14 @@ class SingleBoard extends Component {
         };
 
         this.deleteBoard = () => {
-            const board = this.getBoard();
-            const { deleteBoard, onDelete } = this.props;
+            const { board, deleteBoard, onDelete } = this.props;
             deleteBoard(board.id);
             onDelete();
         };
     }
 
-    getBoard(props = this.props) {
-        return props.board || {};
-    }
-
     render() {
-        const { boards, onCancel, className } = this.props;
-        const board = this.getBoard();
+        const { board, boards, onCancel, className } = this.props;
         const boardsList = boards.filter(item => item.id !== board.id);
 
         const renderSaveButton = () => {
@@ -184,6 +176,11 @@ SingleBoard.propTypes = {
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
+};
+
+SingleBoard.defaultProps = {
+    board: {},
+    className: '',
 };
 
 export default connect(

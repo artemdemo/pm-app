@@ -1,5 +1,7 @@
 // https://github.com/artemdemo/url-parser
 
+// ToDo: Can't we use some npm package
+
 export default (() => {
     /**
      * Main object of the plugin
@@ -24,17 +26,17 @@ export default (() => {
      * @return {Object}
      */
     UrlParser.getAll = function() {
-        let urlParams;
-        let match,
-            _param,
-            pl = /\+/g,  // Regex for replacing addition symbol with a space
-            search = /([^&=]+)=?([^&]*)/g,
-            decode = function(s) { return decodeURIComponent(s.replace(pl, ' ')); },
-            query = window.location.href,
-            qMarkIndex = query.indexOf('?'),
-            hashIndex = query.indexOf('#/');
+        const urlParams = {};
+        let match;
+        let _param;
+        const pl = /\+/g;  // Regex for replacing addition symbol with a space
+        const search = /([^&=]+)=?([^&]*)/g;
+        const decode = function(s) { return decodeURIComponent(s.replace(pl, ' ')); };
+        let query = window.location.href;
+        const qMarkIndex = query.indexOf('?');
+        let hashIndex = query.indexOf('#/');
 
-        hashIndex = hashIndex == -1 ? 0 : hashIndex;
+        hashIndex = hashIndex === -1 ? 0 : hashIndex;
 
         // It can be 2 different cases:
         // 1) http://someurl.com/app/?param1=somedata#/pagename
@@ -50,10 +52,10 @@ export default (() => {
                 break;
         }
 
-        urlParams = {};
+        // eslint-disable-next-line
         while (match = search.exec(query)) {
             _param = decode(match[2]);
-            urlParams[decode(match[1])] = _param == '' ? null : _param;
+            urlParams[decode(match[1])] = _param === '' ? null : _param;
         }
 
         return urlParams;

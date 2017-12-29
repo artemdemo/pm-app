@@ -157,6 +157,6 @@ export class DragItem extends Component {
 DragItem.propTypes = {
     dragStarted: PropTypes.func,
     dragStopped: PropTypes.func,
-    item: PropTypes.any.isRequired,
-    $$key: PropTypes.any,
+    item: PropTypes.number.isRequired,
+    $$key: PropTypes.string,
 };

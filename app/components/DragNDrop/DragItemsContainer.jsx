@@ -93,6 +93,6 @@ export class DragItemsContainer extends Component {
     }
 }
 
-DragItemsContainer.PropTypes = {
-    container: PropTypes.any,
+DragItemsContainer.propTypes = {
+    container: PropTypes.number,
 };

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import _isNumber from 'lodash/isNumber';
 import * as entityConst from '../../model/constants/selectedEntity';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
@@ -16,35 +17,54 @@ import './TasksListItem.less';
 class TasksListItem extends Component {
     constructor(props) {
         super(props);
-        this.isLoading = false;
 
-        this.toggleDone = () => {};
-
-        this.createNewTask = (e) => {
-            const { addNewTask, errorMessage, projectId } = this.props;
-            const newTaskName = this.refs.nameInput.value;
-            e.preventDefault();
-
-            if (newTaskName === '') {
-                errorMessage('Name can\'t be empty');
-                return;
-            }
-
-            const projects = Number(projectId) === Number(projectId) ? [Number(projectId)] : [];
-
-            addNewTask({
-                name: newTaskName,
-                done: false,
-                projects,
-            });
-
-            // ToDo: input should be cleaned only after task was successfully added
-            this.refs.nameInput.value = '';
+        this.state = {
+            name: '',
         };
     }
 
+    changeName(e) {
+        this.setState({
+            name: e.target.value,
+        });
+    }
+
+    toggleDone() {}
+
+    taskClick() {
+        const { task, selectTask, clearEntity } = this.props;
+        if (task.id) {
+            selectTask(task);
+        } else {
+            clearEntity(entityConst.ENTITY_TASK);
+        }
+    }
+
+    createNewTask(e) {
+        const { addNewTask, errorMessage, projectId } = this.props;
+        const newTaskName = this.state.name;
+        e.preventDefault();
+
+        if (newTaskName === '') {
+            errorMessage('Name can\'t be empty');
+            return;
+        }
+
+        const projects = _isNumber(projectId) ? [Number(projectId)] : [];
+
+        addNewTask({
+            name: newTaskName,
+            done: false,
+            projects,
+        });
+
+        this.setState({
+            name: '',
+        });
+    }
+
     render() {
-        const { task, projects, selectTask, clearEntity } = this.props;
+        const { task, projects } = this.props;
         const itemClass = classnames({
             'tasks-list-item__text': true,
             'tasks-list-item__text_done': task.done,
@@ -62,11 +82,12 @@ class TasksListItem extends Component {
             }
 
             return (
-                <form onSubmit={this.createNewTask}>
+                <form onSubmit={this.createNewTask.bind(this)}>
                     <input
                         className='tasks-list-item__name-input'
-                        ref='nameInput'
                         placeholder='New task...'
+                        value={this.state.name}
+                        onChange={this.changeName.bind(this)}
                         data-qa='new-task-input'
                     />
                 </form>
@@ -78,22 +99,19 @@ class TasksListItem extends Component {
                 <div
                     className='tasks-list-item__cell
                                tasks-list-item__cell_icon'
-                    onClick={() => task.id && this.toggleDone()}
+                    onClick={this.toggleDone.bind(this)}
                 >
-                    <OkCircle doneStatus={task.done} loading={this.isLoading} />
+                    <OkCircle doneStatus={task.done} />
                 </div>
-                <div className='tasks-list-item__cell'
-                    onClick={() => {
-                        if (task.id) {
-                            selectTask(task);
-                        } else {
-                            clearEntity(entityConst.ENTITY_TASK);
-                        }
-                    }}>
+                <div
+                    className='tasks-list-item__cell'
+                    onClick={this.taskClick.bind(this)}
+                >
                     {renderTaskName()}
                 </div>
                 <div className='tasks-list-item__cell
-                                tasks-list-item__cell_labels'>
+                                tasks-list-item__cell_labels'
+                >
                     <LabelsList list={selectedProjects} limit={1} />
                 </div>
                 <div className='tasks-list-item__cell

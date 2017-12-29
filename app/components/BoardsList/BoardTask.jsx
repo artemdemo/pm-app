@@ -95,8 +95,8 @@ class BoardTask extends Component {
     }
 }
 
-BoardTask.proptypes = {
-    task: PropTypes.object,
+BoardTask.propTypes = {
+    task: PropTypes.shape({}),
 };
 
 export default connect(

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Flatpickr from 'flatpickr';
+import _isNumber from 'lodash/isNumber';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
 import { deleteTask, updateTask } from '../../model/actions/tasks';
@@ -21,9 +22,9 @@ class SingleTask extends Component {
     constructor(props) {
         super(props);
 
-        const task = this.getTask();
+        // ToDo: This code is working here? Assigning state in constructor??
+        const { task } = props;
         const { selectedProjects, availableProjects } = filterProjects(task, props.projects);
-
         this.state = {
             name: task.name || '',
             description: task.description || '',
@@ -36,70 +37,15 @@ class SingleTask extends Component {
             availableProjects,
         };
 
-        this.submitTask = (e) => {
-            e.preventDefault();
-            const { updateTask, errorMessage, onSave } = this.props;
-            const task = this.getTask();
-            const boardId = this.state.board_id;
-            const due = this.refs.dueDateInput.value || null;
-
-            if (this.state.name === '') {
-                errorMessage('Name can\'t be empty');
-                return;
-            }
-
-            const updatedTaskData = {
-                id: task.id,
-                name: this.state.name,
-                description: this.state.description,
-                done: this.state.done,
-                sp: Number(this.state.sp) === Number(this.state.sp) ? Number(this.state.sp) : null,
-                board_id: boardId > 0 ? Number(boardId) : null,
-                projects: this.state.selectedProjects.map(project => project.id),
-                priority: this.state.priority,
-                due,
-            };
-            this.setState({
-                loadingData: true,
-            });
-            updateTask(Object.assign(task, updatedTaskData));
-            onSave();
-        };
-
-        this.deleteTask = () => {
-            const task = this.getTask();
-            const { deleteTask, onDelete } = this.props;
-            deleteTask(task.id);
-            onDelete();
-        };
-
-        this.toggleDone = (newDoneStatus) => {
-            this.setState({
-                done: newDoneStatus,
-            });
-        };
-
-        this.connectProject = (newProject) => {
-            this.setState({
-                selectedProjects: this.state.selectedProjects.concat([newProject]),
-                availableProjects: this.state.availableProjects.filter(project => project.id !== newProject.id),
-            });
-        };
-
-        this.disconnectProject = (newProject) => {
-            this.setState({
-                selectedProjects: this.state.selectedProjects.filter(project => project.id !== newProject.id),
-                availableProjects: this.state.availableProjects.concat([newProject]),
-            });
-        };
+        this.dueDateRef = this;
     }
 
     componentDidMount() {
-        this.dueInstance = new Flatpickr(this.refs.dueDateInput);
+        this.dueInstance = new Flatpickr(this.dueDateRef);
     }
 
     componentWillReceiveProps(nextProps) {
-        const task = this.getTask(nextProps);
+        const { task } = this.props;
         const { selectedProjects, availableProjects } = filterProjects(task, nextProps.projects);
         this.setState({
             name: task.name || '',
@@ -115,8 +61,59 @@ class SingleTask extends Component {
         this.dueInstance.setDate(task.due);
     }
 
-    getTask(props = this.props) {
-        return props.task || {};
+    connectProject(newProject) {
+        this.setState({
+            selectedProjects: this.state.selectedProjects.concat([newProject]),
+            availableProjects: this.state.availableProjects.filter(project => project.id !== newProject.id),
+        });
+    }
+
+    disconnectProject(newProject) {
+        this.setState({
+            selectedProjects: this.state.selectedProjects.filter(project => project.id !== newProject.id),
+            availableProjects: this.state.availableProjects.concat([newProject]),
+        });
+    }
+
+    deleteTask() {
+        const { task, deleteTask, onDelete } = this.props;
+        deleteTask(task.id);
+        onDelete();
+    }
+
+    submitTask(e) {
+        e.preventDefault();
+        const { task, updateTask, errorMessage, onSave } = this.props;
+        const boardId = this.state.board_id;
+        const due = this.dueDateRef.value || null;
+
+        if (this.state.name === '') {
+            errorMessage('Name can\'t be empty');
+            return;
+        }
+
+        const updatedTaskData = {
+            id: task.id,
+            name: this.state.name,
+            description: this.state.description,
+            done: this.state.done,
+            sp: _isNumber(this.state.sp) ? Number(this.state.sp) : null,
+            board_id: boardId > 0 ? Number(boardId) : null,
+            projects: this.state.selectedProjects.map(project => project.id),
+            priority: this.state.priority,
+            due,
+        };
+        this.setState({
+            loadingData: true,
+        });
+        updateTask(Object.assign(task, updatedTaskData));
+        onSave();
+    }
+
+    toggleDone(newDoneStatus) {
+        this.setState({
+            done: newDoneStatus,
+        });
     }
 
     render() {
@@ -135,10 +132,9 @@ class SingleTask extends Component {
             }
             return null;
         };
-        const { boards, settings, onCancel, className } = this.props;
-        const task = this.getTask();
+        const { task, boards, settings, onCancel, className } = this.props;
         return (
-            <form onSubmit={this.submitTask} className={className}>
+            <form onSubmit={this.submitTask.bind(this)} className={className}>
                 <div className='form-group'>
                     <InputMd
                         type='text'
@@ -171,7 +167,7 @@ class SingleTask extends Component {
                 <div className='form-group'>
                     <OkCircle
                         doneStatus={this.state.done}
-                        onChange={this.toggleDone}
+                        onChange={this.toggleDone.bind(this)}
                     >
                         Mark done
                     </OkCircle>
@@ -179,15 +175,15 @@ class SingleTask extends Component {
                 <div className='form-group'>
                     <LabelsList
                         list={this.state.selectedProjects}
+                        onDelete={this.disconnectProject.bind(this)}
                         delitable
-                        onDelete={this.disconnectProject}
                     />
                 </div>
                 <div className='form-group'>
                     <DropdownList
                         list={this.state.availableProjects}
                         placeholder='Connect to project'
-                        onSelect={this.connectProject}
+                        onSelect={this.connectProject.bind(this)}
                     />
                 </div>
                 <div className='form-group'>
@@ -205,7 +201,9 @@ class SingleTask extends Component {
                             >
                                 <option value='0'>No board selected</option>
                                 {boards.map(board => (
-                                    <option value={board.id} key={`board-${board.id}`}>{emoji(board.title)}</option>
+                                    <option value={board.id} key={`board-${board.id}`}>
+                                        {emoji(board.title)}
+                                    </option>
                                 ))}
                             </select>
                         </div>
@@ -235,7 +233,7 @@ class SingleTask extends Component {
                                     type='text'
                                     name='due'
                                     placeholder='Due date'
-                                    ref='dueDateInput'
+                                    ref={ref => this.dueDateRef = ref}
                                     className='form-control' />
                             </div>
                         </div>
@@ -282,7 +280,7 @@ class SingleTask extends Component {
                         {renderLoadingSpinner()}
                     </div>
                     <div className='pull-right'>
-                        <DeleteButton onDelete={this.deleteTask} />
+                        <DeleteButton onDelete={this.deleteTask.bind(this)} />
                     </div>
                 </div>
             </form>
@@ -298,14 +296,17 @@ SingleTask.propTypes = {
     onDelete: PropTypes.func.isRequired,
 };
 
+SingleTask.defaultProps = {
+    task: {},
+    className: '',
+};
+
 export default connect(
-    (state) => {
-        return {
-            boards: state.boards,
-            projects: state.projects,
-            settings: state.settings,
-        };
-    },
+    state => ({
+        boards: state.boards,
+        projects: state.projects,
+        settings: state.settings,
+    }),
     {
         deleteTask,
         updateTask,

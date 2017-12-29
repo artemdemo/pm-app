@@ -1,3 +1,5 @@
+// ToDo: Shound't all this be in ReSelect?
+
 /**
  * Return object that contain selected projects and available projects
  * (Task object has array of id's of selected projects)

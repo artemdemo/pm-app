@@ -10,15 +10,9 @@ class LoginView extends Component {
     constructor(props) {
         super(props);
 
-        this.submitLogin = (e) => {
-            e.preventDefault();
-            const { login } = this.props;
-            login({
-                email: this.refs.email.value,
-                password: this.refs.password.value,
-                remember: this.refs.remember.checked,
-            });
-        };
+        this.emailRef = null;
+        this.passwordRef = null;
+        this.rememberRef = null;
     }
 
     componentWillMount() {
@@ -33,10 +27,23 @@ class LoginView extends Component {
         }
     }
 
+    submitLogin(e) {
+        e.preventDefault();
+        const { login } = this.props;
+        login({
+            email: this.emailRef.value,
+            password: this.passwordRef.value,
+            remember: this.rememberRef.checked,
+        });
+    }
+
     render() {
         return (
             <div className='container'>
-                <form className='form-signin' onSubmit={this.submitLogin}>
+                <form
+                    className='form-signin'
+                    onSubmit={this.submitLogin.bind(this)}
+                >
                     <h2 className='form-signin-heading'>Please sign in</h2>
                     <label htmlFor='inputEmail' className='sr-only'>
                         Email address
@@ -44,11 +51,10 @@ class LoginView extends Component {
                     <input
                         type='email'
                         name='email'
-                        ref='email'
+                        ref={ref => this.emailRef = ref}
                         className='form-control form-signin__first-input'
                         placeholder='Email address'
                         required=''
-                        autoFocus=''
                         autoComplete='off'
                     />
                     <label htmlFor='inputPassword' className='sr-only'>
@@ -57,7 +63,7 @@ class LoginView extends Component {
                     <input
                         type='password'
                         name='password'
-                        ref='password'
+                        ref={ref => this.passwordRef = ref}
                         className='form-control form-signin__last-input'
                         placeholder='Password'
                         required=''
@@ -68,7 +74,7 @@ class LoginView extends Component {
                             <input
                                 type='checkbox'
                                 name='remember'
-                                ref='remember'
+                                ref={ref => this.rememberRef = ref}
                                 value='remember-me'
                             /> Remember me
                         </label>

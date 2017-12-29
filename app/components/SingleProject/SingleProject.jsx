@@ -19,9 +19,9 @@ class SingleProject extends Component {
     constructor(props) {
         super(props);
 
-        const project = this.getProject();
+        // ToDo: This code is working here? Assigning state in constructor??
+        const { project } = props;
         const { selectedTasks, availableTasks } = filterTasks(project, props.tasks);
-
         this.state = {
             name: '',
             description: '',
@@ -32,8 +32,7 @@ class SingleProject extends Component {
 
         this.submitProject = (e) => {
             e.preventDefault();
-            const { updateProject, addNewProject, errorMessage } = this.props;
-            const project = this.getProject();
+            const { project, updateProject, addNewProject, errorMessage } = this.props;
 
             if (this.state.name === '') {
                 errorMessage('Name can\'t be empty');
@@ -57,8 +56,7 @@ class SingleProject extends Component {
         };
 
         this.deleteProject = () => {
-            const project = this.getProject();
-            const { deleteProject } = this.props;
+            const { project, deleteProject } = this.props;
             deleteProject(project.id);
         };
 
@@ -89,7 +87,7 @@ class SingleProject extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const project = this.getProject(nextProps);
+        const { project } = nextProps;
         const { selectedTasks, availableTasks } = filterTasks(project, nextProps.tasks);
 
         this.setState({
@@ -101,13 +99,8 @@ class SingleProject extends Component {
         });
     }
 
-    getProject(props = this.props) {
-        return props.project || {};
-    }
-
     render() {
-        const { clearEntity } = this.props;
-        const project = this.getProject();
+        const { project, clearEntity } = this.props;
         const renderLoadingSpinner = () => {
             if (this.state.loadingData) {
                 return (
@@ -236,13 +229,15 @@ class SingleProject extends Component {
 
 SingleProject.propTypes = {
     project: PropTypes.shape({}),
-    selectedEntity: PropTypes.shape({}),
+};
+
+SingleProject.defaultProps = {
+    project: {},
 };
 
 export default connect(
     state => ({
         tasks: state.tasks,
-        selectedEntity: state.selectedEntity,
     }), {
         clearEntity,
         deleteProject,

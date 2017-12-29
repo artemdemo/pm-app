@@ -61,7 +61,7 @@ export class NarrowListItem extends Component {
 
 NarrowListItem.propTypes = {
     deletable: PropTypes.bool,
-    item: PropTypes.object,
+    item: PropTypes.shape({}),
     onDelete: PropTypes.func,
     onClick: PropTypes.func,
 };
