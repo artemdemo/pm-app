@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Flatpickr from 'flatpickr';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
-import { deleteTask, updateTask } from '../../actions/tasks';
+import { deleteTask, updateTask } from '../../model/actions/tasks';
 import { LabelsList } from '../LabelsList/LabelsList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { OkCircle } from '../OkCircle/OkCircle';
@@ -13,7 +13,7 @@ import { DropdownList } from '../DropdownList/DropdownList';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { InputMd } from '../InputMd/InputMd';
 import { TextareaMd } from '../TextareaMd/TextareaMd';
-import { errorMessage } from '../../actions/notification';
+import { errorMessage } from '../../model/actions/notification';
 
 import './SingleTask.less';
 

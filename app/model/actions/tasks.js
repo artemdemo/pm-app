@@ -2,9 +2,9 @@ import * as tasksConst from '../constants/tasks';
 import { loadProjects } from './projects';
 import { loadBoards } from './boards';
 import { errorMessage, successMessage } from './notification';
-import { getStoredToken } from '../utils/user';
-import fetch from '../utils/fetch';
-import checkResponseStatus from '../utils/checkResponseStatus';
+import { getStoredToken } from '../../utils/user';
+import fetch from '../../utils/fetch';
+import checkResponseStatus from '../../utils/checkResponseStatus';
 
 /**
  * Load tasks from the server

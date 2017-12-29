@@ -3,15 +3,15 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
 
-import tasks from './reducers/tasks';
-import boards from './reducers/boards';
-import projects from './reducers/projects';
-import settings from './reducers/settings';
-import user from './reducers/user';
-import popup from './reducers/popup';
-import modal from './reducers/modal';
-import notification from './reducers/notification';
-import selectedEntity from './reducers/selectedEntity';
+import tasks from './model/reducers/tasks';
+import boards from './model/reducers/boards';
+import projects from './model/reducers/projects';
+import settings from './model/reducers/settings';
+import user from './model/reducers/user';
+import popup from './model/reducers/popup';
+import modal from './model/reducers/modal';
+import notification from './model/reducers/notification';
+import selectedEntity from './model/reducers/selectedEntity';
 
 const pmApp = combineReducers({
     user,

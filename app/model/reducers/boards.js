@@ -1,5 +1,5 @@
 import * as boardsConst from '../constants/boards';
-import { sortByIdPosition } from '../utils/boards';
+import { sortByIdPosition } from '../../utils/boards';
 
 function sortBoardsByPosition(boardsList) {
     return boardsList.map((board, index) => Object.assign(board, {

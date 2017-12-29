@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
-import * as entityConst from '../../constants/selectedEntity';
-import { clearEntity } from '../../actions/selectedEntity';
-import { showModal, hideModal } from '../../actions/modal';
+import * as entityConst from '../../model/constants/selectedEntity';
+import { clearEntity } from '../../model/actions/selectedEntity';
+import { showModal, hideModal } from '../../model/actions/modal';
 import SingleBoard from '../SingleBoard/SingleBoard';
 
 import './BoardsList.less';

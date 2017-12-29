@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import * as entityConst from '../../constants/selectedEntity';
+import * as entityConst from '../../model/constants/selectedEntity';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
-import { addNewTask } from '../../actions/tasks';
+import { addNewTask } from '../../model/actions/tasks';
 import { OkCircle } from '../OkCircle/OkCircle';
 import { LabelsList } from '../LabelsList/LabelsList';
-import { selectTask, clearEntity } from '../../actions/selectedEntity';
-import { errorMessage } from '../../actions/notification';
+import { selectTask, clearEntity } from '../../model/actions/selectedEntity';
+import { errorMessage } from '../../model/actions/notification';
 
 import './TasksListItem.less';
 

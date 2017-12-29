@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as popupConst from '../../constants/popup';
+import * as popupConst from '../../model/constants/popup';
 
 import './Popup.less';
 

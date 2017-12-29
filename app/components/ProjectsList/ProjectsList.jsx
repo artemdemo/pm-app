@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as entityConst from '../../constants/selectedEntity';
+import * as entityConst from '../../model/constants/selectedEntity';
 import ProjectsListItem from './ProjectsListItem';
-import { clearEntity, selectProject } from '../../actions/selectedEntity';
+import { clearEntity, selectProject } from '../../model/actions/selectedEntity';
 
 import './ProjectsList.less';
 

@@ -2,9 +2,9 @@ import * as projectsConst from '../constants/projects';
 import * as entityConst from '../constants/selectedEntity';
 import { loadTasks } from './tasks';
 import { errorMessage, successMessage } from './notification';
-import { getStoredToken } from '../utils/user';
-import fetch from '../utils/fetch';
-import checkResponseStatus from '../utils/checkResponseStatus';
+import { getStoredToken } from '../../utils/user';
+import fetch from '../../utils/fetch';
+import checkResponseStatus from '../../utils/checkResponseStatus';
 import { clearEntity } from './selectedEntity';
 
 function projectsLoaded(projects) {

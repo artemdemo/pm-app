@@ -1,9 +1,9 @@
 import * as boardsConst from '../constants/boards';
 import { errorMessage, successMessage } from './notification';
-import { getStoredToken } from '../utils/user';
+import { getStoredToken } from '../../utils/user';
 import { loadTasks } from './tasks';
-import fetch from '../utils/fetch';
-import checkResponseStatus from '../utils/checkResponseStatus';
+import fetch from '../../utils/fetch';
+import checkResponseStatus from '../../utils/checkResponseStatus';
 
 function boardsLoaded(boards) {
     return {

@@ -1,14 +1,14 @@
 import * as userConst from '../constants/user';
 import { errorMessage, successMessage } from './notification';
-import { history } from '../configs';
+import { history } from '../../configs';
 import { loadTasks } from './tasks';
 import { loadBoards } from './boards';
 import { loadProjects } from './projects';
 import { loadSettings } from './settings';
-import { storeToken, getStoredToken, removeStoredToken } from '../utils/user';
-import fetch from '../utils/fetch';
-import checkResponseStatus from '../utils/checkResponseStatus';
-import urlParser from '../utils/urlParser';
+import { storeToken, getStoredToken, removeStoredToken } from '../../utils/user';
+import fetch from '../../utils/fetch';
+import checkResponseStatus from '../../utils/checkResponseStatus';
+import urlParser from '../../utils/urlParser';
 
 /**
  * User authenticated

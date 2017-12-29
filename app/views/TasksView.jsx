@@ -1,11 +1,11 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import * as entityConst from '../constants/selectedEntity';
+import * as entityConst from '../model/constants/selectedEntity';
 import MainMenu from '../components/MainMenu/MainMenu';
 import TasksList from '../components/TasksList/TasksList';
 import SingleTask from '../components/SingleTask/SingleTask';
-import { clearEntity } from '../actions/selectedEntity';
+import { clearEntity } from '../model/actions/selectedEntity';
 
 import './list-container.less';
 

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import emoji from '../../utils/emoji/emoji';
-import * as entityConst from '../../constants/selectedEntity';
+import * as entityConst from '../../model/constants/selectedEntity';
 import { RadioMenu } from '../RadioMenu/RadioMenu';
 import TasksListItem from './TasksListItem';
-import { clearEntity } from '../../actions/selectedEntity';
+import { clearEntity } from '../../model/actions/selectedEntity';
 
 import './TasksList.less';
 

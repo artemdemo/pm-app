@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import emoji from '../../utils/emoji/emoji';
-import { selectProject } from '../../actions/selectedEntity';
+import { selectProject } from '../../model/actions/selectedEntity';
 
 import './ProjectsListItem.less';
 

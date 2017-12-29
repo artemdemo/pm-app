@@ -1,8 +1,8 @@
 import * as settingsConst from '../constants/settings';
-import { getStoredToken } from '../utils/user';
+import { getStoredToken } from '../../utils/user';
 import { errorMessage, successMessage } from './notification';
-import fetch from '../utils/fetch';
-import checkResponseStatus from '../utils/checkResponseStatus';
+import fetch from '../../utils/fetch';
+import checkResponseStatus from '../../utils/checkResponseStatus';
 
 function settingsLoaded(settings) {
     return {

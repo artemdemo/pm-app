@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as entityConst from '../../constants/selectedEntity';
+import * as entityConst from '../../model/constants/selectedEntity';
 import { filterTasks } from '../../utils/tasks';
-import { deleteProject, updateProject, addNewProject } from '../../actions/projects';
+import { deleteProject, updateProject, addNewProject } from '../../model/actions/projects';
 import { DropdownList } from '../DropdownList/DropdownList';
 import { NarrowList } from '../NarrowList/NarrowList';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
 import { DeleteButton } from '../DeleteButton/DeleteButton';
 import { InputMd } from '../InputMd/InputMd';
 import { TextareaMd } from '../TextareaMd/TextareaMd';
-import { clearEntity } from '../../actions/selectedEntity';
-import { errorMessage } from '../../actions/notification';
-import { showModal, hideModal } from '../../actions/modal';
+import { clearEntity } from '../../model/actions/selectedEntity';
+import { errorMessage } from '../../model/actions/notification';
+import { showModal, hideModal } from '../../model/actions/modal';
 import SingleTask from '../SingleTask/SingleTask';
 
 class SingleProject extends Component {
