@@ -139,7 +139,6 @@ class SingleTask extends React.PureComponent {
                     <InputMd
                         type='text'
                         name='name'
-                        editMode={!task.id}
                         value={this.state.name}
                         onChange={e => this.setState({
                             name: e.target.value,
@@ -147,6 +146,7 @@ class SingleTask extends React.PureComponent {
                         className='flat-input'
                         placeholder='Task name'
                         autoComplete='off'
+                        key={`input-md-${task.id}`}
                         data-qa='task-name'
                     />
                 </div>
@@ -155,12 +155,12 @@ class SingleTask extends React.PureComponent {
                         className='flat-input'
                         name='description'
                         rows='5'
-                        editMode={!task.id || this.state.description === ''}
                         value={this.state.description}
                         onChange={e => this.setState({
                             description: e.target.value,
                         })}
                         placeholder='No description'
+                        key={`textarea-md-${task.id}`}
                         data-qa='task-description'
                     />
                 </div>

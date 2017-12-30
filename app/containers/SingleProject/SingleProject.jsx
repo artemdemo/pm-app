@@ -164,7 +164,6 @@ class SingleProject extends React.PureComponent {
                     <InputMd
                         type='text'
                         name='name'
-                        editMode={!project.id}
                         value={this.state.name}
                         onChange={e => this.setState({
                             name: e.target.value,
@@ -172,6 +171,7 @@ class SingleProject extends React.PureComponent {
                         className='flat-input'
                         placeholder='Project name'
                         autoComplete='off'
+                        key={`input-md-${project.id}`}
                         data-qa='project-name'
                     />
                 </div>
@@ -180,12 +180,12 @@ class SingleProject extends React.PureComponent {
                         className='flat-input'
                         name='description'
                         rows='5'
-                        editMode={!project.id || this.state.description === ''}
                         value={this.state.description}
                         onChange={e => this.setState({
                             description: e.target.value,
                         })}
                         placeholder='Project description'
+                        key={`textarea-md-${project.id}`}
                         data-qa='project-description'
                     />
                 </div>

@@ -9,23 +9,25 @@ class InputMd extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const { editMode } = props;
-
         this.state = {
             value: props.value,
-            editMode,
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        const { value = '', editMode } = nextProps;
+        const { value = '' } = nextProps;
         const newState = {
             value,
         };
-        if (editMode !== undefined) {
-            newState.editMode = editMode;
-        }
         this.setState(newState);
+    }
+
+    changeValue(e) {
+        const { onChange } = this.props;
+        this.setState({
+            value: e.target.value,
+        });
+        onChange && onChange(e);
     }
 
     togglePreview() {
@@ -35,7 +37,7 @@ class InputMd extends React.PureComponent {
     }
 
     render() {
-        const { className, name = '', autoComplete = 'off', type = 'text', placeholder } = this.props;
+        const { className, name, autoComplete, type, placeholder } = this.props;
         const dataQa = this.props['data-qa'] ? this.props['data-qa'] : '';
         const editorClass = classnames({
             'input-md-editor': true,
@@ -62,14 +64,7 @@ class InputMd extends React.PureComponent {
                         type={type}
                         name={name}
                         value={this.state.value}
-                        onChange={(e) => {
-                            this.setState({
-                                value: e.target.value,
-                            });
-                            if (this.props.onChange) {
-                                this.props.onChange(e);
-                            }
-                        }}
+                        onChange={this.changeValue.bind(this)}
                         className={className}
                         placeholder={placeholder}
                         autoComplete={autoComplete}
@@ -79,7 +74,7 @@ class InputMd extends React.PureComponent {
                 <div className={contentClass}>
                     <div
                         className='input-md-content__edit'
-                        onClick={this.togglePreview}
+                        onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__edit-content`}
                     >
                         <span className='glyphicon glyphicon-pencil' />
@@ -103,7 +98,6 @@ InputMd.propTypes = {
     autoComplete: PropTypes.string,
     'data-qa': PropTypes.string,
     onChange: PropTypes.func,
-    editMode: PropTypes.bool,
 };
 
 InputMd.defaultProps = {
@@ -113,7 +107,6 @@ InputMd.defaultProps = {
     autoComplete: 'off',
     placeholder: '',
     type: 'text',
-    editMode: false,
     onChange: null,
     'data-qa': undefined,
 };

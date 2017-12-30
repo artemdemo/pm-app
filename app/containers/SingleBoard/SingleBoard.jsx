@@ -105,7 +105,6 @@ class SingleBoard extends React.PureComponent {
                     <InputMd
                         type='text'
                         name='name'
-                        editMode={!board.id}
                         value={this.state.title}
                         onChange={e => this.setState({
                             title: e.target.value,
@@ -113,6 +112,7 @@ class SingleBoard extends React.PureComponent {
                         className='flat-input'
                         placeholder='Board name'
                         autoComplete='off'
+                        key={`input-md-${board.id}`}
                         data-qa='board-name'
                     />
                 </div>
@@ -121,12 +121,12 @@ class SingleBoard extends React.PureComponent {
                         className='flat-input'
                         name='description'
                         rows='3'
-                        editMode={!board.id || this.state.description === ''}
                         value={this.state.description}
                         onChange={e => this.setState({
                             description: e.target.value,
                         })}
                         placeholder='Board description'
+                        key={`textarea-md-${board.id}`}
                         data-qa='board-description'
                     />
                 </div>
@@ -192,11 +192,9 @@ SingleBoard.defaultProps = {
 };
 
 export default connect(
-    (state) => {
-        return {
-            boards: state.boards,
-        };
-    }, {
+    state => ({
+        boards: state.boards,
+    }), {
         addNewBoard,
         updateBoard,
         deleteBoard,
