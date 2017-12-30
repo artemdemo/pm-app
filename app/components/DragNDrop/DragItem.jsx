@@ -73,7 +73,7 @@ export class DragItem extends React.PureComponent {
             setNewPosition(position);
         };
 
-        this.dragEnd = (e) => {
+        this.dragEnd = () => {
             this.setState({
                 isDragged: false,
             });
@@ -81,7 +81,7 @@ export class DragItem extends React.PureComponent {
             const { dragStopped } = this.props;
 
             if (dragStopped) {
-                dragStopped(e, {
+                dragStopped({
                     item: getDraggedItem(),
                     container: getLandingContainer(),
                     nearItem: getNearItem(),

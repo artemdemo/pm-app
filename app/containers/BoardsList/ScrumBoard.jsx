@@ -31,8 +31,11 @@ class ScrumBoard extends React.PureComponent {
         this.filterSelectedTasks(tasks, board);
     }
 
-    dragStopped(task, itemData) {
-        const { updateDraggedTaskPosition } = this.props;
+    dragStopped(itemData) {
+        const { tasks, updateDraggedTaskPosition } = this.props;
+
+        // ToDo: `itemData.item` should be `itemData.itemId` or something like that
+        const task = tasks.find(_ => _.id === itemData.item);
         updateDraggedTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 

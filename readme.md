@@ -61,6 +61,14 @@ $ npm test
 
 More [about e2e tests](docs/e2e.md)
 
+## Debugging server
+
+Run server with debug enabled:
+
+```
+$ DEBUG=pm:* npm start
+```
+
 ## Main technologies
 
 * ReactJS - https://facebook.github.io/react/
