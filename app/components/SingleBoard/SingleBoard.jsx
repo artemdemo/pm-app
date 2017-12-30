@@ -25,39 +25,39 @@ class SingleBoard extends Component {
             id_position: selectedBoardId > boardsList.length ? '' : selectedBoardId,
             loadingData: false,
         };
+    }
 
-        this.submitBoard = (e) => {
-            e.preventDefault();
-            const { board, addNewBoard, updateBoard, errorMessage, onSave } = this.props;
-            const idPosition = this.state.id_position;
+    submitBoard(e) {
+        e.preventDefault();
+        const { board, addNewBoard, updateBoard, errorMessage, onSave } = this.props;
+        const idPosition = this.state.id_position;
 
-            if (this.state.title === '') {
-                errorMessage('Title can\'t be empty');
-                return;
-            }
+        if (this.state.title === '') {
+            errorMessage('Title can\'t be empty');
+            return;
+        }
 
-            const updatedBoardData = {
-                title: this.state.title,
-                description: this.state.description,
-                id_position: idPosition ? Number(idPosition) : idPosition,
-            };
-            this.setState({
-                loadingData: true,
-            });
-            if (board.id) {
-                updatedBoardData.id = board.id;
-                updateBoard(Object.assign(board, updatedBoardData));
-            } else {
-                addNewBoard(updatedBoardData);
-            }
-            onSave();
+        const updatedBoardData = {
+            title: this.state.title,
+            description: this.state.description,
+            id_position: idPosition ? Number(idPosition) : idPosition,
         };
+        this.setState({
+            loadingData: true,
+        });
+        if (board.id) {
+            updatedBoardData.id = board.id;
+            updateBoard(Object.assign(board, updatedBoardData));
+        } else {
+            addNewBoard(updatedBoardData);
+        }
+        onSave();
+    }
 
-        this.deleteBoard = () => {
-            const { board, deleteBoard, onDelete } = this.props;
-            deleteBoard(board.id);
-            onDelete();
-        };
+    deleteBoard() {
+        const { board, deleteBoard, onDelete } = this.props;
+        deleteBoard(board.id);
+        onDelete();
     }
 
     render() {
@@ -90,15 +90,17 @@ class SingleBoard extends Component {
         const renderDeleteButton = () => {
             if (board && board.id) {
                 return (
-                    <DeleteButton onDelete={this.deleteBoard} />
+                    <DeleteButton onDelete={this.deleteBoard.bind(this)} />
                 );
             }
             return null;
         };
 
         return (
-            <form onSubmit={this.submitBoard}
-                className={className}>
+            <form
+                onSubmit={this.submitBoard.bind(this)}
+                className={className}
+            >
                 <div className='form-group'>
                     <InputMd
                         type='text'
@@ -141,7 +143,12 @@ class SingleBoard extends Component {
                         <option>Place after all</option>
                         <option disabled>&nbsp;&nbsp;Place before:</option>
                         {boardsList.map(board => (
-                            <option value={board.id_position} key={`board-${board.id}`}>{emoji(board.title)}</option>
+                            <option
+                                value={board.id_position}
+                                key={`board-${board.id}`}
+                            >
+                                {emoji(board.title)}
+                            </option>
                         ))}
                     </select>
                 </div>
@@ -150,14 +157,15 @@ class SingleBoard extends Component {
                     <div className='pull-left'>
                         <span className='buttons-group'>
                             {renderSaveButton()}
-                            <span
+                            <button
                                 className='btn btn-default'
                                 disabled={this.state.loadingData}
                                 onClick={() => onCancel()}
+                                type='button'
                                 data-qa='board-cancel'
                             >
                                 Cancel
-                            </span>
+                            </button>
                         </span>
                         {renderLoadingSpinner()}
                     </div>

@@ -9,15 +9,11 @@ import './Modal.less';
 const MODAL_BG_CLASS = 'pm-modal-bg';
 
 class Modal extends Component {
-    constructor(props) {
-        super(props);
-
-        this.bgClick = (e) => {
-            const { hideModal } = this.props;
-            if (e.target.className.indexOf(MODAL_BG_CLASS) > -1) {
-                hideModal();
-            }
-        };
+    bgClick(e) {
+        const { hideModal } = this.props;
+        if (e.target.className.indexOf(MODAL_BG_CLASS) > -1) {
+            hideModal();
+        }
     }
 
     render() {
@@ -34,7 +30,10 @@ class Modal extends Component {
 
         if (modal.type === modalConst.SHOW_MODAL) {
             return (
-                <div className={bgClass} onClick={this.bgClick}>
+                <div
+                    className={bgClass}
+                    onClick={this.bgClick.bind(this)}
+                >
                     <div className={modalClass}>
                         {modal.content}
                     </div>

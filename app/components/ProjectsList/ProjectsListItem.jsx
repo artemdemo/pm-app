@@ -13,22 +13,6 @@ class ProjectsListItem extends Component {
             tasks: props.tasks,
             project: props.project,
         };
-
-        this.renderTasks = () => {
-            if (this.state.project.tasks.length > 0) {
-                return (
-                    <div>
-                        <div className='text-muted'>
-                            Total: {this.filterTasks('all').length}
-                        </div>
-                        <div className='text-muted'>
-                            Done: {this.filterTasks('done').length}
-                        </div>
-                    </div>
-                );
-            }
-            return null;
-        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,6 +37,22 @@ class ProjectsListItem extends Component {
                     return this.state.project.tasks.indexOf(task.id) !== -1;
                 });
         }
+    }
+
+    renderTasks() {
+        if (this.state.project.tasks.length > 0) {
+            return (
+                <div>
+                    <div className='text-muted'>
+                        Total: {this.filterTasks('all').length}
+                    </div>
+                    <div className='text-muted'>
+                        Done: {this.filterTasks('done').length}
+                    </div>
+                </div>
+            );
+        }
+        return null;
     }
 
     render() {

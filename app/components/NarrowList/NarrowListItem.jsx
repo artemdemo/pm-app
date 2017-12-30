@@ -6,16 +6,12 @@ import emoji from '../../utils/emoji/emoji';
 import './NarrowListItem.less';
 
 export class NarrowListItem extends Component {
-    constructor(props) {
-        super(props);
+    itemClicked(e) {
+        const { onClick, item } = this.props;
 
-        this.itemClicked = (e) => {
-            const { onClick, item } = this.props;
-
-            if (onClick) {
-                onClick(item, e);
-            }
-        };
+        if (onClick) {
+            onClick(item, e);
+        }
     }
 
     render() {
@@ -30,8 +26,10 @@ export class NarrowListItem extends Component {
         const renderDeleteButton = (item) => {
             if (deletable) {
                 return (
-                    <span className='narrow-list-item__close'
-                        onClick={() => onDelete(item)}>
+                    <span
+                        className='narrow-list-item__close'
+                        onClick={() => onDelete(item)}
+                    >
                         <span className='glyphicon
                                          glyphicon-remove' />
                     </span>
@@ -43,9 +41,11 @@ export class NarrowListItem extends Component {
 
         return (
             <li className={classItem}>
-                <div className='narrow-list-item__cell
-                                narrow-list-item__cell_name'
-                    onClick={this.itemClicked}>
+                <div
+                    className='narrow-list-item__cell
+                               narrow-list-item__cell_name'
+                    onClick={this.itemClicked.bind(this)}
+                >
                     <span className='narrow-list-item__name'>
                         {emoji(item.name)}
                     </span>

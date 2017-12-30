@@ -16,23 +16,23 @@ class MainMenu extends Component {
             menuOpen: false,
             profileDropdownOpen: false,
         };
+    }
 
-        this.logout = () => {
-            const { logout } = this.props;
-            logout();
-        };
+    logout() {
+        const { logout } = this.props;
+        logout();
+    }
 
-        this.toggleMenu = () => {
-            this.setState({
-                menuOpen: !this.state.menuOpen,
-            });
-        };
+    toggleMenu() {
+        this.setState({
+            menuOpen: !this.state.menuOpen,
+        });
+    }
 
-        this.toggleProfileDropdown = () => {
-            this.setState({
-                profileDropdownOpen: !this.state.profileDropdownOpen,
-            });
-        };
+    toggleProfileDropdown() {
+        this.setState({
+            profileDropdownOpen: !this.state.profileDropdownOpen,
+        });
     }
 
     render() {
@@ -51,9 +51,11 @@ class MainMenu extends Component {
             <nav className='navbar navbar-default navbar-fixed-top'>
                 <div className='container'>
                     <div className='navbar-header'>
-                        <button type='button'
+                        <button
+                            type='button'
                             className='navbar-toggle collapsed'
-                            onClick={this.toggleMenu}>
+                            onClick={this.toggleMenu.bind(this)}
+                        >
                             <span className='sr-only'>Toggle navigation</span>
                             <span className='icon-bar' />
                             <span className='icon-bar' />
@@ -95,7 +97,7 @@ class MainMenu extends Component {
                             <li className={profileClass}>
                                 <span
                                     className='navbar-link'
-                                    onClick={this.toggleProfileDropdown}
+                                    onClick={this.toggleProfileDropdown.bind(this)}
                                     data-qa='profile-menu-toggle'
                                 >
                                     {user.username} <span className='caret' />
@@ -111,7 +113,7 @@ class MainMenu extends Component {
                                     <li>
                                         <span
                                             className='dropdown-menu-link'
-                                            onClick={this.logout}
+                                            onClick={this.logout.bind(this)}
                                             data-qa='logout-main-menu-button'
                                         >
                                             Logout

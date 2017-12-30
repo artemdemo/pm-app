@@ -11,42 +11,6 @@ export class OkCircle extends Component {
         this.state = {
             doneStatus: props.doneStatus,
         };
-
-        this.renderOkCircle = (loading) => {
-            const classOkCircle = classNames({
-                'ok-circle': true,
-                'ok-circle_with-text': !!this.props.children,
-                'ok-circle_done': this.state.doneStatus,
-            });
-            if (!loading) {
-                return (
-                    <span className={classOkCircle}>
-                        <span
-                            className='glyphicon glyphicon-ok-circle'
-                            aria-hidden='true'
-                        />
-                    </span>
-                );
-            }
-            return null;
-        };
-
-        this.renderLoadingSpinner = (loading) => {
-            if (loading) {
-                return (
-                    <loading-spinner color='green' />
-                );
-            }
-            return null;
-        };
-
-        this.changeDoneStatus = () => {
-            const { onChange } = this.props;
-            const newDoneStatus = !this.state.doneStatus;
-            if (onChange) {
-                onChange(newDoneStatus);
-            }
-        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -54,6 +18,42 @@ export class OkCircle extends Component {
         this.setState({
             doneStatus,
         });
+    }
+
+    changeDoneStatus() {
+        const { onChange } = this.props;
+        const newDoneStatus = !this.state.doneStatus;
+        if (onChange) {
+            onChange(newDoneStatus);
+        }
+    }
+
+    renderLoadingSpinner(loading) {
+        if (loading) {
+            return (
+                <loading-spinner color='green' />
+            );
+        }
+        return null;
+    }
+
+    renderOkCircle(loading) {
+        const classOkCircle = classNames({
+            'ok-circle': true,
+            'ok-circle_with-text': !!this.props.children,
+            'ok-circle_done': this.state.doneStatus,
+        });
+        if (!loading) {
+            return (
+                <span className={classOkCircle}>
+                    <span
+                        className='glyphicon glyphicon-ok-circle'
+                        aria-hidden='true'
+                    />
+                </span>
+            );
+        }
+        return null;
     }
 
     render() {
@@ -66,7 +66,7 @@ export class OkCircle extends Component {
         return (
             <span
                 className='ok-circle-container'
-                onClick={this.changeDoneStatus}
+                onClick={this.changeDoneStatus.bind(this)}
             >
                 {this.renderOkCircle(loading)}
                 {this.renderLoadingSpinner(loading)}
