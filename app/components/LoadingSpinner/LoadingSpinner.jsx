@@ -6,7 +6,7 @@ import './LoadingSpinner.less';
 
 // Colors: black white blue green red
 
-export const LoadingSpinner = (props) => {
+const LoadingSpinner = (props) => {
     const { color } = props;
     const spinnerClass = classnames({
         'loading-spinner': true,
@@ -24,3 +24,5 @@ LoadingSpinner.propTypes = {
 LoadingSpinner.defaultProps = {
     color: 'black',
 };
+
+export default LoadingSpinner;

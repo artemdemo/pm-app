@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import './DeleteButton.less';
 
-export class DeleteButton extends React.PureComponent {
+class DeleteButton extends React.PureComponent {
     constructor(props) {
         super(props);
         this.loadingData = false;
@@ -12,17 +12,22 @@ export class DeleteButton extends React.PureComponent {
         this.state = {
             showDelete: false,
         };
-
-        this.showDeleteButtons = () => this.setState({ showDelete: true });
-        this.hideDeleteButtons = () => this.setState({ showDelete: false });
-
-        this.delete = () => {
-            const { onDelete } = this.props;
-            onDelete();
-        };
     }
 
     componentWillReceiveProps() {
+        this.hideDeleteButtons();
+    }
+
+    delete() {
+        const { onDelete } = this.props;
+        onDelete();
+    }
+
+    showDeleteButtons() {
+        this.setState({ showDelete: true });
+    }
+
+    hideDeleteButtons() {
         this.setState({ showDelete: false });
     }
 
@@ -36,9 +41,12 @@ export class DeleteButton extends React.PureComponent {
         const renderDeleteButtons = () => {
             if (!this.state.showDelete) {
                 return (
-                    <span className={deleteTitleClass}
-                        onClick={this.showDeleteButtons}
-                        data-qa='delete-button'>Delete
+                    <span
+                        className={deleteTitleClass}
+                        onClick={this.showDeleteButtons.bind(this)}
+                        data-qa='delete-button'
+                    >
+                        Delete
                     </span>
                 );
             }
@@ -51,14 +59,14 @@ export class DeleteButton extends React.PureComponent {
                                        glyphicon-ok-sign
                                        delete-button-buttons__ok'
                             aria-hidden='true'
-                            onClick={this.delete}
+                            onClick={this.delete.bind(this)}
                         />
                         <span
                             className='glyphicon
                                        glyphicon-remove-sign
                                        delete-button-buttons__cancel'
                             aria-hidden='true'
-                            onClick={this.hideDeleteButtons}
+                            onClick={this.hideDeleteButtons.bind(this)}
                         />
                     </div>
                 </div>
@@ -75,3 +83,5 @@ export class DeleteButton extends React.PureComponent {
 DeleteButton.propTypes = {
     onDelete: PropTypes.func.isRequired,
 };
+
+export default DeleteButton;

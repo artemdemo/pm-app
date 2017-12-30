@@ -5,30 +5,24 @@ import emoji from '../../utils/emoji/emoji';
 
 import './LabelsListItem.less';
 
-export class LabelsListItem extends React.PureComponent {
-    constructor(props) {
-        super(props);
+class LabelsListItem extends React.PureComponent {
+    deleteItem() {
+        const { item, onDelete } = this.props;
+        onDelete && onDelete(item);
+    }
 
-        this.deleteItem = (item) => {
-            const { onDelete } = this.props;
-            if (onDelete) {
-                onDelete(item);
-            }
-        };
-
-        this.renderCloseButton = (item, delitable) => {
-            if (delitable) {
-                return (
-                    <span
-                        className='labels-list-item__close'
-                        onClick={() => this.deleteItem(item)}
-                    >
-                        <span className='glyphicon glyphicon-remove' />
-                    </span>
-                );
-            }
-            return null;
-        };
+    renderCloseButton(item, delitable) {
+        if (delitable) {
+            return (
+                <span
+                    className='labels-list-item__close'
+                    onClick={this.deleteItem}
+                >
+                    <span className='glyphicon glyphicon-remove' />
+                </span>
+            );
+        }
+        return null;
     }
 
     render() {
@@ -42,7 +36,7 @@ export class LabelsListItem extends React.PureComponent {
         return (
             <li className={itemClass}>
                 {emoji(item.name)}
-                {this.renderCloseButton(item, delitable)}
+                {this.renderCloseButton(delitable)}
             </li>
         );
     }
@@ -53,3 +47,5 @@ LabelsListItem.propTypes = {
     delitable: PropTypes.bool,
     onDelete: PropTypes.func,
 };
+
+export default LabelsListItem;

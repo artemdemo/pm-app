@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import _isNumber from 'lodash/isNumber';
 import emoji from '../../utils/emoji/emoji';
 import * as entityConst from '../../model/constants/selectedEntity';
-import { RadioMenu } from '../RadioMenu/RadioMenu';
+import RadioMenu from '../RadioMenu/RadioMenu';
 import TasksListItem from './TasksListItem';
 import { clearEntity } from '../../model/actions/selectedEntity';
 
 import './TasksList.less';
 
+// ToDo: ReSelect?
 const tasksFilterService = (function() {
     const filterFunctions = {};
     const filterData = {};

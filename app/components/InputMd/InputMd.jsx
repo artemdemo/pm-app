@@ -5,21 +5,15 @@ import emoji from '../../utils/emoji/emoji';
 
 import './InputMd.less';
 
-export class InputMd extends React.PureComponent {
+class InputMd extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const { editMode = false } = props;
+        const { editMode } = props;
 
         this.state = {
-            value: props.value || '',
+            value: props.value,
             editMode,
-        };
-
-        this.togglePreview = () => {
-            this.setState({
-                editMode: !this.state.editMode,
-            });
         };
     }
 
@@ -34,8 +28,14 @@ export class InputMd extends React.PureComponent {
         this.setState(newState);
     }
 
+    togglePreview() {
+        this.setState({
+            editMode: !this.state.editMode,
+        });
+    }
+
     render() {
-        const { className = '', name = '', autoComplete = 'off', type = 'text', placeholder } = this.props;
+        const { className, name = '', autoComplete = 'off', type = 'text', placeholder } = this.props;
         const dataQa = this.props['data-qa'] ? this.props['data-qa'] : '';
         const editorClass = classnames({
             'input-md-editor': true,
@@ -53,7 +53,7 @@ export class InputMd extends React.PureComponent {
                 <div className={editorClass}>
                     <div
                         className='input-md-content__preview'
-                        onClick={this.togglePreview}
+                        onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__preview`}
                     >
                         <span className='glyphicon glyphicon-eye-open' />
@@ -105,3 +105,17 @@ InputMd.propTypes = {
     onChange: PropTypes.func,
     editMode: PropTypes.bool,
 };
+
+InputMd.defaultProps = {
+    className: '',
+    name: '',
+    value: '',
+    autoComplete: 'off',
+    placeholder: '',
+    type: 'text',
+    editMode: false,
+    onChange: null,
+    'data-qa': undefined,
+};
+
+export default InputMd;

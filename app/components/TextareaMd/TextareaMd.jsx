@@ -6,7 +6,7 @@ import markdownItEmoji from 'markdown-it-emoji';
 
 import './TextareaMd.less';
 
-export class TextareaMd extends React.PureComponent {
+class TextareaMd extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -132,3 +132,5 @@ TextareaMd.propTypes = {
     onChange: PropTypes.func,
     editMode: PropTypes.bool,
 };
+
+export default TextareaMd;

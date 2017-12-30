@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NarrowListItem } from './NarrowListItem';
+import NarrowListItem from './NarrowListItem';
 
 import './NarrowList.less';
 
-export const NarrowList = (props) => {
+const NarrowList = (props) => {
     const { list, deletable, onDelete, onClick } = props;
     return (
         <ul className='narrow-list'>
@@ -27,3 +27,5 @@ NarrowList.propTypes = {
     onDelete: PropTypes.func,
     onClick: PropTypes.func,
 };
+
+export default NarrowList;

@@ -71,6 +71,8 @@ class ProjectsListItem extends React.PureComponent {
     }
 }
 
+
+// ToDo: Why ProjectsListItem is connected??
 export default connect(
     state => ({
         tasks: state.tasks,

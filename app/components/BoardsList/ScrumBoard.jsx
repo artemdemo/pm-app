@@ -16,35 +16,35 @@ class ScrumBoard extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.editBoard = () => {
-            const { showModal, board, hideModal } = this.props;
-            showModal(<SingleBoard
-                board={board}
-                className='single-board'
-                onSave={() => hideModal()}
-                onDelete={() => hideModal()}
-                onCancel={() => hideModal()}
-            />);
-        };
-
+        // ToDo: Will this really work in constructor?
         const { tasks, board } = this.props;
-
         this.filterSelectedTasks = (tasks, board) => {
             this.selectedTasks = tasks
                 .filter(task => task.board_id === board.id)
                 .sort(sortByIdPositionScrum);
         };
         this.filterSelectedTasks(tasks, board);
-
-        this.dragStopped = (task, itemData) => {
-            const { updateDraggedTaskPosition } = this.props;
-            updateDraggedTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
-        };
     }
 
     componentWillReceiveProps(newProps) {
         const { tasks, board } = newProps;
         this.filterSelectedTasks(tasks, board);
+    }
+
+    dragStopped(task, itemData) {
+        const { updateDraggedTaskPosition } = this.props;
+        updateDraggedTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
+    }
+
+    editBoard() {
+        const { showModal, board, hideModal } = this.props;
+        showModal(<SingleBoard
+            board={board}
+            className='single-board'
+            onSave={() => hideModal()}
+            onDelete={() => hideModal()}
+            onCancel={() => hideModal()}
+        />);
     }
 
     render() {
@@ -56,7 +56,7 @@ class ScrumBoard extends React.PureComponent {
                     <div className='board__name'>{emoji(board.title)}</div>
                     <div
                         className='board__edit-board'
-                        onClick={this.editBoard}
+                        onClick={this.editBoard.bind(this)}
                     >
                         <span className='glyphicon glyphicon-pencil' />
                     </div>
@@ -70,7 +70,7 @@ class ScrumBoard extends React.PureComponent {
                             className='board-task'
                             key={`task-${task.id}`}
                             item={task.id}
-                            dragStopped={(event, itemData) => this.dragStopped(task, itemData)}
+                            dragStopped={this.dragStopped.bind(this)}
                         >
                             <BoardTask task={task} />
                         </DragItem>

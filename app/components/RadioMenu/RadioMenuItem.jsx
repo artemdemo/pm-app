@@ -4,7 +4,7 @@ import classnames from 'classnames';
 
 import './RadioMenuItem.less';
 
-export const RadioMenuItem = (props) => {
+const RadioMenuItem = (props) => {
     const { item, selected, onClick } = props;
     const itemClass = classnames({
         'radio-menu-item': true,
@@ -24,3 +24,5 @@ RadioMenuItem.propTypes = {
     selected: PropTypes.bool,
     onClick: PropTypes.func,
 };
+
+export default RadioMenuItem;

@@ -5,7 +5,7 @@ import emoji from '../../utils/emoji/emoji';
 
 import './NarrowListItem.less';
 
-export class NarrowListItem extends React.PureComponent {
+class NarrowListItem extends React.PureComponent {
     itemClicked(e) {
         const { onClick, item } = this.props;
 
@@ -65,3 +65,5 @@ NarrowListItem.propTypes = {
     onDelete: PropTypes.func,
     onClick: PropTypes.func,
 };
+
+export default NarrowListItem;

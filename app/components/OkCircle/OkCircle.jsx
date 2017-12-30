@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import './OkCircle.less';
 
-export class OkCircle extends React.PureComponent {
+class OkCircle extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -88,3 +88,5 @@ OkCircle.defaultProps = {
     doneStatus: false,
     loading: false,
 };
+
+export default OkCircle;

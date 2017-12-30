@@ -4,20 +4,16 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
-import { LabelsList } from '../LabelsList/LabelsList';
+import LabelsList from '../LabelsList/LabelsList';
 import * as taskConst from '../../model/constants/tasks';
 import { selectTask } from '../../model/actions/selectedEntity';
 
 import './BoardTask.less';
 
 class BoardTask extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.openTask = () => {
-            const { task, selectTask } = this.props;
-            selectTask(task);
-        };
+    openTask() {
+        const { task, selectTask } = this.props;
+        selectTask(task);
     }
 
     render() {
@@ -70,7 +66,7 @@ class BoardTask extends React.PureComponent {
         };
 
         return (
-            <div onClick={this.openTask}>
+            <div onClick={this.openTask.bind(this)}>
                 <div className='board-task__menu-icon'>
                     <span
                         className='glyphicon glyphicon-option-vertical'

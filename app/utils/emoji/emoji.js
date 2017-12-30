@@ -1,3 +1,5 @@
+// ToDo: There is no need in emoji service - user just can use build in emojis in his mac
+
 import {emojisDictionary} from './emojisDictionary';
 
 function isEmoji(token) {

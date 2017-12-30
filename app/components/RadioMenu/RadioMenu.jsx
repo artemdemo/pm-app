@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RadioMenuItem } from './RadioMenuItem';
+import RadioMenuItem from './RadioMenuItem';
 
 import './RadioMenu.less';
 
-export class RadioMenu extends React.PureComponent {
+class RadioMenu extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -30,6 +30,7 @@ export class RadioMenu extends React.PureComponent {
     }
 
     render() {
+        // ToDo: onClick from <RadioMenuItem> should return "item"
         return (
             <div className='radio-menu'>
                 {this.state.selectedList.map(item => (
@@ -49,3 +50,5 @@ RadioMenu.propTypes = {
     list: PropTypes.arrayOf(PropTypes.object),
     onSelect: PropTypes.func,
 };
+
+export default RadioMenu;

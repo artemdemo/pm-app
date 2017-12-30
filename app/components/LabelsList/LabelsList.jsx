@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { LabelsListItem } from './LabelsListItem';
+import LabelsListItem from './LabelsListItem';
 
 import './LabelsList.less';
 
-export class LabelsList extends React.PureComponent {
+class LabelsList extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        // ToDo: ReSelect
         this.filterList = (list, limit) => {
             if (!limit) {
                 return list;
@@ -23,13 +24,13 @@ export class LabelsList extends React.PureComponent {
             }
             return newList;
         };
+    }
 
-        this.onDelete = (item) => {
-            const { onDelete } = this.props;
-            if (onDelete) {
-                onDelete(item);
-            }
-        };
+    onDelete(item) {
+        const { onDelete } = this.props;
+        if (onDelete) {
+            onDelete(item);
+        }
     }
 
     render() {
@@ -46,7 +47,7 @@ export class LabelsList extends React.PureComponent {
                     <LabelsListItem
                         item={label}
                         delitable={delitable}
-                        onDelete={this.onDelete}
+                        onDelete={this.onDelete.bind(this)}
                         key={`label-${label.id}`}
                     />
                 ))}
@@ -64,3 +65,5 @@ LabelsList.propTypes = {
     delitable: PropTypes.bool,
     onDelete: PropTypes.func,
 };
+
+export default LabelsList;

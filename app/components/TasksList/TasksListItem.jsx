@@ -7,8 +7,8 @@ import * as entityConst from '../../model/constants/selectedEntity';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
 import { addNewTask } from '../../model/actions/tasks';
-import { OkCircle } from '../OkCircle/OkCircle';
-import { LabelsList } from '../LabelsList/LabelsList';
+import OkCircle from '../OkCircle/OkCircle';
+import LabelsList from '../LabelsList/LabelsList';
 import { selectTask, clearEntity } from '../../model/actions/selectedEntity';
 import { errorMessage } from '../../model/actions/notification';
 

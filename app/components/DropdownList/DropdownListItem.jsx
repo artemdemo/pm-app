@@ -5,7 +5,7 @@ import emoji from '../../utils/emoji/emoji';
 
 import './DropdownListItem.less';
 
-export const DropdownListItem = (props) => {
+const DropdownListItem = (props) => {
     const { item, onClick } = props;
     const itemClass = classnames({
         'dropdown-list-item': true,
@@ -27,3 +27,5 @@ DropdownListItem.propTypes = {
     item: PropTypes.shape({}).isRequired,
     onClick: PropTypes.func.isRequired,
 };
+
+export default DropdownListItem;
