@@ -11,6 +11,7 @@ const tableName = 'projects_tasks_relations';
  * @param taskId {Number || Array}
  */
 exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
+
     if (Array.isArray(projectId) && Array.isArray(taskId)) {
         const err = 'projectId and taskId can\'t be both an Array';
         debug(new Error(err));
@@ -61,7 +62,11 @@ exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
     }
 
     DB.run(query)
-        .then(() => addRelations())
+        .then(addRelations)
+        .then(() => {
+            debug(`Added relation between project id ${projectId} and task id ${taskId}`);
+            resolve();
+        })
         .catch((err) => {
             debug(new Error(err));
             reject(err);
@@ -100,6 +105,7 @@ exports.deleteRelation = (projectId, taskId) => new Promise((resolve, reject) =>
             value: projectId,
         },
     ]).then(() => {
+        debug(`Relation deleted between project id ${projectId} and task id ${taskId}`);
         resolve();
     }).catch((err) => {
         debug(new Error(err));

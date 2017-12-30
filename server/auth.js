@@ -1,6 +1,3 @@
-/* eslint-disable strict*/
-'use strict';
-
 const atob = require('atob');
 const moment = require('moment');
 const sessions = require('./models/sessions');

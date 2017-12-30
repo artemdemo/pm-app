@@ -165,7 +165,7 @@ const deleteSession = sessionId => new Promise((resolve, reject) => {
     }
 });
 
-exports = {
+module.exports = {
     addSession,
     getSession,
     updateSession,
