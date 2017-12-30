@@ -1,6 +1,3 @@
-/* eslint-disable no-console, strict*/
-'use strict';
-
 module.exports = [
     {
         method: 'GET',

@@ -1,3 +1,4 @@
+const debug = require('debug')('pm:controllers:task');
 const boom = require('boom');
 const tasks = require('../models/tasks');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
@@ -19,16 +20,19 @@ exports.all = (request, replay) => {
     const tasksData = {
         tokenId: tokenData.id,
     };
-    tasks.getAll(tasksData).then((tasks) => {
-        replay(tasks);
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    tasks.getAll(tasksData)
+        .then((tasks) => {
+            replay(tasks);
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.add = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
-    const projects = request.payload.projects;
+    const { projects } = request.payload;
     if (!tokenData) {
         replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
@@ -37,25 +41,27 @@ exports.add = (request, replay) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    tasks.addNew(tasksData).then((result) => {
-        if (Array.isArray(projects) && projects.length > 0) {
-            projectsTasksRelations.addRelation(projects, result.id)
-                .then(() => {
-                    replay(result);
-                }, () => {
-                    replay(boom.badRequest(errConstants.DB_ERROR));
-                });
-        } else {
-            replay(result);
-        }
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    tasks.addNew(tasksData)
+        .then((result) => {
+            debug(`New task id ${result.id} added`);
+            if (Array.isArray(projects) && projects.length > 0) {
+                projectsTasksRelations.addRelation(projects, result.id)
+                    .then(() => {
+                        replay(result);
+                    });
+            } else {
+                replay(result);
+            }
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.update = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
-    const projects = request.payload.projects;
+    const { projects } = request.payload;
     const taskId = request.payload.id;
     if (!tokenData) {
         replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
@@ -65,20 +71,24 @@ exports.update = (request, replay) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    tasks.updateTask(tasksData).then((updatedData) => {
-        if (taskId && projects) {
-            projectsTasksRelations.addRelation(projects, taskId)
-                .then(() => {
-                    replay(updatedData);
-                }, () => {
-                    replay(boom.badRequest(errConstants.DB_ERROR));
-                });
-        } else {
-            replay(updatedData);
-        }
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    tasks.updateTask(tasksData)
+        .then((updatedData) => {
+            debug(`Task id ${request.payload.id} updated`);
+            if (taskId && projects) {
+                projectsTasksRelations.addRelation(projects, taskId)
+                    .then(() => {
+                        replay(updatedData);
+                    }, () => {
+                        replay(boom.badRequest(errConstants.DB_ERROR));
+                    });
+            } else {
+                replay(updatedData);
+            }
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.delete = (request, replay) => {
@@ -91,18 +101,25 @@ exports.delete = (request, replay) => {
         payload: request.params.taskId,
         tokenId: tokenData.id,
     };
-    tasks.deleteTask(tasksData).then(() => {
-        replay({});
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    tasks.deleteTask(tasksData)
+        .then(() => {
+            debug(`Task id ${request.params.taskId} deleted`);
+            replay({});
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.connectProject = (request, replay) => {
     projectsTasksRelations.addRelation(request.params.projectId, request.params.taskId)
         .then(() => {
+            debug(`Project id ${request.params.projectId} connected to task id ${request.params.taskId}`);
             replay({});
-        }, () => {
+        })
+        .catch((err) => {
+            debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));
         });
 };
@@ -110,8 +127,11 @@ exports.connectProject = (request, replay) => {
 exports.disconnectProject = (request, replay) => {
     projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
         .then(() => {
+            debug(`Project id ${request.params.projectId} disconnected from task id ${request.params.taskId}`);
             replay({});
-        }, () => {
+        })
+        .catch((err) => {
+            debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));
         });
 };
@@ -126,6 +146,12 @@ exports.updatePositions = (request, replay) => {
     // ToDo: This is different from other requests
     // `payload` and `tokenId` are properties in `tasksData` object
     tasks.updateTaskPosition(Object.assign(request.payload, {tokenId: tokenData.id}))
-        .then();
-    replay({});
+        .then(() => {
+            debug(`Task id ${request.payload.taskId} position updated`);
+            replay({});
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
