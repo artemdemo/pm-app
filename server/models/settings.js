@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 
+// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
+
 const DB = require('sqlite-crud');
 const serializer = require('../utils/serializer');
 

@@ -1,3 +1,5 @@
+// ToDo: Refactor error handling and debug errors (see controllers/tasks.js)
+
 const JWT = require('jsonwebtoken');
 const boom = require('boom');
 const sessions = require('../models/sessions');

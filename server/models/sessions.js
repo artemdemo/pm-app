@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 
+// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
+
 const chalk = require('chalk');
 const moment = require('moment');
 const aguid = require('aguid');  // https://github.com/ideaq/aguid

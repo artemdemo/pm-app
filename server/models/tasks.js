@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
-
-const chalk = require('chalk');
+const debug = require('debug')('pm:models:tasks');
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
+const errConstants = require('../constants/error');
 
 const tableName = 'tasks';
 
@@ -33,30 +32,34 @@ exports.getAll = tasksData => new Promise((resolve, reject) => {
                                        WHERE tasks.id = ?;`;
                 promisesList.push(DB.queryRows(projectsQuery, [task.id]));
             });
-            Promise.all(promisesList)
+            return Promise.all(promisesList)
                 .then((resultsList) => {
                     resultsList.forEach((data, index) => {
                         tasks[index].projects = data.map(item => item.project_id);
                     });
                     resolve(tasks);
-                }).catch(() => reject());
-        }).catch(() => reject());
+                });
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 exports.addNew = newTaskData => new Promise((resolve, reject) => {
     const now = moment(new Date());
 
     if (!newTaskData.payload.name) {
-        reject();
-        console.log(chalk.red.bold('[addNew task error]'), 'No newTaskData.payload.name in given task');
-        return;
+        const err = 'No newTaskData.payload.name in given task';
+        debug(new Error(err));
+        return reject(err);
     }
 
     sessions.getSession({
         id: newTaskData.tokenId,
     }).then((session) => {
         try {
-            DB.insertRow(tableName, {
+            return DB.insertRow(tableName, {
                 name: newTaskData.payload.name,
                 description: newTaskData.payload.description || '',
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -71,15 +74,14 @@ exports.addNew = newTaskData => new Promise((resolve, reject) => {
                     added: now.format('YYYY-MM-DD HH:mm:ss'),
                     updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 });
-            }).catch((error) => {
-                console.log(chalk.red.bold('[addNew Task error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[addNew Task error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
-    }).catch(() => reject());
+    }).catch((err) => {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
+    });
 });
 
 exports.updateTask = taskData => new Promise((resolve, reject) => {
@@ -88,8 +90,9 @@ exports.updateTask = taskData => new Promise((resolve, reject) => {
     const updateAllowed = true;
 
     if (!taskData.payload.id) {
-        reject();
-        console.log(chalk.red.bold('[updateTask error]'), 'No taskData.payload.id in given task');
+        const err = 'No taskData.payload.id in given task';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -120,8 +123,10 @@ exports.updateTask = taskData => new Promise((resolve, reject) => {
     });
 
     if (!updateAllowed) {
-        reject();
-        console.log(chalk.red.bold('[updateTask error]'), 'No fields to update:', taskData.payload);
+        const err = 'No fields to update';
+        debug(new Error(err));
+        debug(taskData.payload);
+        reject(err);
         return;
     }
 
@@ -136,7 +141,7 @@ exports.updateTask = taskData => new Promise((resolve, reject) => {
         id: taskData.tokenId,
     }).then((session) => {
         try {
-            DB.updateRow(tableName, updateData, [{
+            return DB.updateRow(tableName, updateData, [{
                 column: 'id',
                 comparator: '=',
                 value: taskData.payload.id,
@@ -148,28 +153,27 @@ exports.updateTask = taskData => new Promise((resolve, reject) => {
                 resolve({
                     updated: updateData.updated,
                 });
-            }, (error) => {
-                console.log(chalk.red.bold('[updateTask error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[updateTask error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
-    }).catch(() => reject());
+    }).catch((err) => {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
+    });
 });
 
 exports.deleteTask = taskData => new Promise((resolve, reject) => {
     if (!taskData.payload) {
-        reject();
-        console.log(chalk.red.bold('[deleteTask error]'), 'No "id" in given task');
-        return;
+        const err = 'No "id" in given task';
+        debug(new Error(err));
+        return reject(err);
     }
     sessions.getSession({
         id: taskData.tokenId,
     }).then((session) => {
         try {
-            DB.deleteRows(tableName, [{
+            return DB.deleteRows(tableName, [{
                 column: 'id',
                 comparator: '=',
                 value: taskData.payload,
@@ -179,15 +183,14 @@ exports.deleteTask = taskData => new Promise((resolve, reject) => {
                 value: session.user_id,
             }]).then(() => {
                 resolve();
-            }, (error) => {
-                console.log(chalk.red.bold('[deleteTask error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[deleteTask error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
-    }).catch(() => reject());
+    }).catch((err) => {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
+    });
 });
 
 
@@ -207,6 +210,14 @@ exports.updateTaskPosition = taskData => new Promise((resolve, reject) => {
                                 ON sessions.user_id = tasks.user_id
                         WHERE sessions.id = ? AND tasks.board_id = ?
                         ORDER BY tasks.id_position_scrum ASC;`;
+
+    if (!taskData.taskId) {
+        const err = 'No "taskId" in given taskData';
+        debug(new Error(err));
+        return reject(err);
+    }
+
+    let query;
 
     DB.queryRows(tasksQuery, [taskData.tokenId, taskData.boardId])
         .then((tasks) => {
@@ -239,8 +250,9 @@ exports.updateTaskPosition = taskData => new Promise((resolve, reject) => {
             taskList = taskList.map((task, index) => Object.assign(task, {
                 id_position_scrum: index,
             }));
-            let query = 'UPDATE tasks SET id_position_scrum = CASE id';
+            query = 'UPDATE tasks SET id_position_scrum = CASE id';
             const ids = [];
+
             taskList.forEach((task, index) => {
                 ids.push(task.id);
                 query += ` WHEN ${task.id} THEN ${index}`;
@@ -249,8 +261,13 @@ exports.updateTaskPosition = taskData => new Promise((resolve, reject) => {
             query += ` board_id = ${taskData.boardId}`;
             query += ` WHERE id IN (${ids.join(', ')});`;
 
-            DB.run(query)
-                .then(() => resolve(taskList))
-                .catch(() => reject());
-        }).catch(() => reject());
+            return DB.run(query)
+                .then(() => resolve(taskList));
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            debug('Query was:');
+            debug(query);
+            reject(errConstants.DB_ERROR);
+        });
 });

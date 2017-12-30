@@ -1,3 +1,5 @@
+// ToDo: Refactor error handling and debug errors (see controllers/tasks.js)
+
 const boom = require('boom');
 const settings = require('../models/settings');
 const auth = require('../auth');

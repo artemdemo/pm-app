@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 
+// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
+
 const chalk = require('chalk');
 const DB = require('sqlite-crud');
 const _isNumber = require('lodash/isNumber');
