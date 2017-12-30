@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
-import promises from 'es6-promise';
 
 import './styles/general.less';
 
@@ -17,8 +16,6 @@ import ProjectsView from './views/ProjectsView';
 import ProfileView from './views/ProfileView';
 import SettingsView from './views/SettingsView';
 import MainView from './views/MainView';
-
-promises.polyfill();
 
 render(
     <Provider store={store}>
