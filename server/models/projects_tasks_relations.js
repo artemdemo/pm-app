@@ -1,10 +1,9 @@
-/* eslint-disable no-console, strict*/
-'use strict';
+/* eslint-disable no-console */
 
 const chalk = require('chalk');
-const Q = require('q');
-
 const DB = require('sqlite-crud');
+const _isNumber = require('lodash/isNumber');
+
 const tableName = 'projects_tasks_relations';
 
 /**
@@ -13,21 +12,19 @@ const tableName = 'projects_tasks_relations';
  * @param projectId {Number || Array}
  * @param taskId {Number || Array}
  */
-exports.addRelation = (projectId, taskId) => {
-    const deferred = Q.defer();
-
+exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
     if (Array.isArray(projectId) && Array.isArray(taskId)) {
         console.log(chalk.red.bold('[addRelations error]'), 'projectId and taskId can\'t be both an Array');
-        deferred.reject();
-        return deferred.promise;
-    } else if (!Array.isArray(taskId) && Number(taskId) !== Number(taskId)) {
+        reject();
+        return;
+    } else if (!Array.isArray(taskId) && _isNumber(taskId)) {
         console.log(chalk.red.bold('[addRelations error]'), 'taskId should be a number or Array');
-        deferred.reject();
-        return deferred.promise;
-    } else if (!Array.isArray(projectId) && Number(projectId) !== Number(projectId)) {
+        reject();
+        return;
+    } else if (!Array.isArray(projectId) && _isNumber(projectId)) {
         console.log(chalk.red.bold('[addRelations error]'), 'projectId should be a number or Array');
-        deferred.reject();
-        return deferred.promise;
+        reject();
+        return;
     }
 
     const addRelations = () => {
@@ -37,34 +34,34 @@ exports.addRelation = (projectId, taskId) => {
                 task_id: taskId,
             };
             DB.insertRow(tableName, data).then(() => {
-                deferred.resolve();
-            }, (error) => {
+                resolve();
+            }).catch((error) => {
                 console.log(chalk.red.bold('[addRelation error]'), error);
-                deferred.reject();
+                reject();
             });
         } else if (!Array.isArray(projectId) && Array.isArray(taskId) && taskId.length > 0) {
             const values = '(' + taskId.join(`, ${projectId}),(`) + `, ${projectId})`;
             DB.run(`INSERT INTO ${tableName} (task_id, project_id) VALUES ${values};`).then(() => {
-                deferred.resolve();
-            }, (error) => {
+                resolve();
+            }).catch((error) => {
                 console.log(chalk.red.bold('[addRelations error]'), error);
-                deferred.reject();
+                reject();
             });
         } else if (!Array.isArray(taskId) && Array.isArray(projectId) && projectId.length > 0) {
             const values = '(' + projectId.join(`, ${taskId}),(`) + `, ${taskId})`;
             DB.run(`INSERT INTO ${tableName} (project_id, task_id) VALUES ${values};`).then(() => {
-                deferred.resolve();
-            }, (error) => {
+                resolve();
+            }).catch((error) => {
                 console.log(chalk.red.bold('[addRelations error]'), error);
-                deferred.reject();
+                reject();
             });
         } else if (!Array.isArray(projectId) && Array.isArray(taskId) && taskId.length === 0) {
-            deferred.resolve();
+            resolve();
         } else if (!Array.isArray(taskId) && Array.isArray(projectId) && projectId.length === 0) {
-            deferred.resolve();
+            resolve();
         } else {
             console.log(chalk.red.bold('[addRelations error]'), 'Error while adding relations');
-            deferred.reject();
+            reject();
         }
     };
 
@@ -78,13 +75,12 @@ exports.addRelation = (projectId, taskId) => {
 
     DB.run(query).then(() => {
         addRelations();
-    }, (error) => {
+    }).catch((error) => {
         console.log(chalk.red.bold('[addRelations error]'), error);
-        deferred.reject();
+        reject();
     });
+});
 
-    return deferred.promise;
-};
 
 /**
  * Delete relation
@@ -92,17 +88,15 @@ exports.addRelation = (projectId, taskId) => {
  * @param projectId {Number}
  * @param taskId {Number}
  */
-exports.deleteRelation = (projectId, taskId) => {
-    const deferred = Q.defer();
-
-    if (Number(projectId) !== Number(projectId) || Number(projectId) < 1) {
-        deferred.reject();
+exports.deleteRelation = (projectId, taskId) => new Promise((resolve, reject) => {
+    if (_isNumber(projectId) || Number(projectId) < 1) {
+        reject();
         console.log(chalk.red.bold('[deleteRelation error]'), 'projectId should be a number, greater than 1');
-        return deferred.promise;
-    } else if (Number(taskId) !== Number(taskId) || Number(taskId) < 1) {
-        deferred.reject();
+        return;
+    } else if (_isNumber(taskId) || Number(taskId) < 1) {
+        reject();
         console.log(chalk.red.bold('[deleteRelation error]'), 'taskId should be a number, greater than 1');
-        return deferred.promise;
+        return;
     }
 
     DB.deleteRows(tableName, [
@@ -117,14 +111,12 @@ exports.deleteRelation = (projectId, taskId) => {
             value: projectId,
         },
     ]).then(() => {
-        deferred.resolve();
-    }, (error) => {
+        resolve();
+    }).catch((error) => {
         console.log(chalk.red.bold('[deleteRelation error]'), error);
-        deferred.reject();
+        reject();
     });
-
-    return deferred.promise;
-};
+});
 
 /**
  * Get all relations by project id or task id
@@ -132,23 +124,22 @@ exports.deleteRelation = (projectId, taskId) => {
  * @param type {String} - 'project' or 'task'
  * @param typeId {Number} - id of project or task
  */
-exports.getRelations = (type, typeId) => {
-    const deferred = Q.defer();
+exports.getRelations = (type, typeId) => new Promise((resolve, reject) => {
     const allowedTypes = ['project', 'task'];
     let query;
 
     if (!type) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[getRelations error]'), 'No type given');
-        return deferred.promise;
+        return;
     } else if (allowedTypes.indexOf(type) === -1) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[getRelations error]'), 'Given type is not allowed:', type);
-        return deferred.promise;
+        return;
     } else if (!typeId) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[getRelations error]'), 'No typeId given');
-        return deferred.promise;
+        return;
     }
 
     query = `SELECT * FROM ${tableName} `;
@@ -164,10 +155,6 @@ exports.getRelations = (type, typeId) => {
 
     DB.getAll(query)
         .then((rows) => {
-            deferred.resolve(rows);
-        }, () => {
-            deferred.reject();
-        });
-
-    return deferred.promise;
-};
+            resolve(rows);
+        }).catch(() => reject());
+});

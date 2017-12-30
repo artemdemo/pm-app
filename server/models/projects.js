@@ -1,26 +1,24 @@
-/* eslint-disable no-console, strict*/
-'use strict';
+/* eslint-disable no-console */
 
 const chalk = require('chalk');
 const moment = require('moment');
-const Q = require('q');
-const sessions = require('./sessions');
 const DB = require('sqlite-crud');
+const sessions = require('./sessions');
+
 const tableName = 'projects';
 
-exports.getAll = (projectsData) => {
-    const deferred = Q.defer();
+exports.getAll = projectsData => new Promise((resolve, reject) => {
     const projectsQuery = `SELECT projects.id, projects.name, projects.description,
                                   projects.added, projects.updated
-                        FROM projects
-                        INNER JOIN sessions 
-                                ON sessions.user_id = projects.user_id
-                        WHERE sessions.id = ?;`;
+                           FROM projects
+                           INNER JOIN sessions 
+                                   ON sessions.user_id = projects.user_id
+                           WHERE sessions.id = ?;`;
 
     DB.queryRows(projectsQuery, [projectsData.tokenId])
         .then((projects) => {
             const promisesList = [];
-            projects.forEach(project => {
+            projects.forEach((project) => {
                 const tasksQuery = `SELECT projects_tasks_relations.task_id,
                                            projects_tasks_relations.project_id
                                     FROM projects
@@ -29,30 +27,24 @@ exports.getAll = (projectsData) => {
                                     WHERE projects.id = ?;`;
                 promisesList.push(DB.queryRows(tasksQuery, [project.id]));
             });
-            Q.all(promisesList)
+            Promise.all(promisesList)
                 .then((resultsList) => {
                     resultsList.forEach((data, index) => {
                         projects[index].tasks = data.map(item => item.task_id);
                     });
-                    deferred.resolve(projects);
-                }, () => {
-                    deferred.reject();
-                });
-        }, () => {
-            deferred.reject();
-        });
+                    resolve(projects);
+                }).catch(() => reject());
+        }).catch(() => reject());
+});
 
-    return deferred.promise;
-};
 
-exports.addNew = (newProjectData) => {
-    const deferred = Q.defer();
+exports.addNew = newProjectData => new Promise((resolve, reject) => {
     const now = moment(new Date());
 
     if (!newProjectData.payload.name) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[addNew project error]'), 'No newProjectData.payload.name in given project');
-        return deferred.promise;
+        return;
     }
 
     sessions.getSession({
@@ -66,34 +58,31 @@ exports.addNew = (newProjectData) => {
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 user_id: session.user_id,
             }).then((result) => {
-                deferred.resolve({
+                resolve({
                     id: result.id,
                     added: now.format('YYYY-MM-DD HH:mm:ss'),
                     updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 });
-            }, (error) => {
+            }).catch((error) => {
                 console.log(chalk.red.bold('[addNew projects error]'), error);
-                deferred.reject();
+                reject();
             });
         } catch (error) {
             console.log(chalk.red.bold('[addNew projects error]'), error);
-            deferred.reject();
+            reject();
         }
-    }, () => deferred.reject());
+    }).catch(() => reject());
+});
 
-    return deferred.promise;
-};
-
-exports.updateProject = (projectData) => {
-    const deferred = Q.defer();
+exports.updateProject = projectData => new Promise((resolve, reject) => {
     const now = moment(new Date());
     const updateData = {};
     const updateAllowed = true;
 
     if (!projectData.payload.id) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[updateProject error]'), 'No projectData.payload.id in given project');
-        return deferred.promise;
+        return;
     }
 
     const allowedFields = ['name', 'description'];
@@ -104,9 +93,9 @@ exports.updateProject = (projectData) => {
     });
 
     if (!updateAllowed) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[updateProject error]'), 'No fields to update:', projectData.payload);
-        return deferred.promise;
+        return;
     }
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
@@ -124,29 +113,25 @@ exports.updateProject = (projectData) => {
                 comparator: '=',
                 value: session.user_id,
             }]).then(() => {
-                deferred.resolve({
+                resolve({
                     updated: updateData.updated,
                 });
-            }, (error) => {
+            }).catch((error) => {
                 console.log(chalk.red.bold('[updateProject error]'), error);
-                deferred.reject();
+                reject();
             });
         } catch (error) {
             console.log(chalk.red.bold('[updateProject error]'), error);
-            deferred.reject();
+            reject();
         }
-    }, () => deferred.reject());
+    }).catch(() => reject());
+});
 
-    return deferred.promise;
-};
-
-exports.deleteProject = (projectData) => {
-    const deferred = Q.defer();
-
+exports.deleteProject = projectData => new Promise((resolve, reject) => {
     if (!projectData.payload) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[deleteProject error]'), 'No projectId in given project');
-        return deferred.promise;
+        return;
     }
 
     sessions.getSession({
@@ -162,16 +147,14 @@ exports.deleteProject = (projectData) => {
                 comparator: '=',
                 value: session.user_id,
             }]).then(() => {
-                deferred.resolve();
-            }, (error) => {
+                resolve();
+            }).catch((error) => {
                 console.log(chalk.red.bold('[deleteProject error]'), error);
-                deferred.reject();
+                reject();
             });
         } catch (error) {
             console.log(chalk.red.bold('[deleteProject error]'), error);
-            deferred.reject();
+            reject();
         }
-    }, () => deferred.reject());
-
-    return deferred.promise;
-};
+    }).catch(() => reject());
+});

@@ -1,5 +1,4 @@
-/* eslint-disable no-console, strict*/
-'use strict';
+/* eslint-disable no-console */
 
 module.exports = [
     {

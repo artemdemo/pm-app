@@ -1,12 +1,10 @@
-/* eslint-disable no-console, strict*/
-'use strict';
+/* eslint-disable no-console */
 
 const chalk = require('chalk');
 const moment = require('moment');
-const Q = require('q');
 const crypto = require('crypto');
-
 const DB = require('sqlite-crud');
+
 const tableName = 'users';
 
 /**
@@ -25,8 +23,7 @@ const getUserFields = (rawUser) => {
 };
 
 
-exports.addNew = (newUser) => {
-    const deferred = Q.defer();
+exports.addNew = newUser => new Promise((resolve, reject) => {
     const now = moment(new Date());
 
     try {
@@ -37,27 +34,23 @@ exports.addNew = (newUser) => {
             added: now.format('YYYY-MM-DD HH:mm:ss'),
             updated: now.format('YYYY-MM-DD HH:mm:ss'),
         }).then((result) => {
-            deferred.resolve({
+            resolve({
                 id: result.id,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
             });
-        }, (error) => {
+        }).catch((error) => {
             console.log(chalk.red.bold('[addNew User error]'), error);
-            deferred.reject();
+            reject();
         });
     } catch (error) {
         console.log(chalk.red.bold('[addNew User error]'), error);
-        deferred.reject();
+        reject();
     }
-
-    return deferred.promise;
-};
+});
 
 
-exports.getUser = (user) => {
-    const deferred = Q.defer();
-
+exports.getUser = user => new Promise((resolve, reject) => {
     try {
         DB.getRows(tableName, [{
             column: 'email',
@@ -69,26 +62,22 @@ exports.getUser = (user) => {
             value: crypto.createHash('sha256').update(user.password).digest('base64'),
         }]).then((result) => {
             if (result.length === 1) {
-                deferred.resolve(getUserFields(result[0]));
+                resolve(getUserFields(result[0]));
             } else {
-                deferred.reject();
+                reject();
             }
-        }, (error) => {
+        }).catch((error) => {
             console.log(chalk.red.bold('[getUser User error]'), error);
-            deferred.reject();
+            reject();
         });
     } catch (error) {
         console.log(chalk.red.bold('[getUser User error]'), error);
-        deferred.reject();
+        reject();
     }
-
-    return deferred.promise;
-};
+});
 
 
-exports.getUserById = (userId) => {
-    const deferred = Q.defer();
-
+exports.getUserById = userId => new Promise((resolve, reject) => {
     try {
         DB.getRows(tableName, [{
             column: 'id',
@@ -96,18 +85,16 @@ exports.getUserById = (userId) => {
             value: userId,
         }]).then((result) => {
             if (result.length === 1) {
-                deferred.resolve(getUserFields(result[0]));
+                resolve(getUserFields(result[0]));
             } else {
-                deferred.reject();
+                reject();
             }
-        }, (error) => {
+        }).catch((error) => {
             console.log(chalk.red.bold('[getUserById User error]'), error);
-            deferred.reject();
+            reject();
         });
     } catch (error) {
         console.log(chalk.red.bold('[getUserById User error]'), error);
-        deferred.reject();
+        reject();
     }
-
-    return deferred.promise;
-};
+});

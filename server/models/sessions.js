@@ -1,11 +1,10 @@
-'use strict';
+/* eslint-disable no-console */
 
 const chalk = require('chalk');
 const moment = require('moment');
-const Q = require('q');
 const aguid = require('aguid');  // https://github.com/ideaq/aguid
-
 const DB = require('sqlite-crud');
+
 const tableName = 'sessions';
 
 /**
@@ -13,12 +12,11 @@ const tableName = 'sessions';
  * @param queryObject
  * @returns {*|promise}
  */
-const getSession = (queryObject) => {
-    const deferred = Q.defer();
+const getSession = queryObject => new Promise((resolve, reject) => {
     let column;
     let value;
 
-    switch(true) {
+    switch (true) {
         case queryObject.hasOwnProperty('id'):
             column = 'id';
             value = queryObject.id;
@@ -31,86 +29,79 @@ const getSession = (queryObject) => {
 
     if (!column) {
         console.log(chalk.red.bold('[getSession error]'), 'There is no column data');
-        deferred.reject();
-        return deferred.promise;
+        reject();
+        return;
     }
 
     if (!value) {
         console.log(chalk.red.bold('[getSession error]'), 'There is no value data');
-        deferred.reject();
-        return deferred.promise;
+        reject();
+        return;
     }
 
     try {
         DB.getRows(tableName, [{
-            column: column,
+            column,
             comparator: '=',
-            value: value
+            value,
         }])
             .then((result) => {
-                if (result.length == 0) {
-                    deferred.resolve(null);
+                if (result.length === 0) {
+                    resolve(null);
                 } else {
-                    deferred.resolve(result[0]);
+                    resolve(result[0]);
                 }
-            }, () => {
-                console.log(chalk.red.bold('[getSession error]'), error);
-                deferred.reject();
+            }).catch((err) => {
+                console.log(chalk.red.bold('[getSession error]'), err);
+                reject();
             });
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[getSession error]'), error);
-        deferred.reject();
+        reject();
     }
+});
 
-    return deferred.promise;
-};
-
-const updateSession = (session) => {
-    const deferred = Q.defer();
+const updateSession = session => new Promise((resolve, reject) => {
     const expiration = moment(new Date()).add(7, 'days');
-    let updateData = {};
+    const updateData = {};
 
     if (!session.id) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[updateSession error]'), 'No session.id in given session');
-        return deferred.promise;
+        return;
     }
 
-    updateData['expiration'] = expiration.format('YYYY-MM-DD HH:mm:ss');
+    updateData.expiration = expiration.format('YYYY-MM-DD HH:mm:ss');
 
     try {
         DB.updateRow(tableName, updateData, [{
             column: 'id',
             comparator: '=',
-            value: session.id
+            value: session.id,
         }]).then(() => {
-            deferred.resolve({
-                expiration: expiration.format('YYYY-MM-DD HH:mm:ss')
+            resolve({
+                expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
             });
-        }, (error) => {
+        }).catch((error) => {
             console.log(chalk.red.bold('[updateSession error]'), error);
-            deferred.reject();
+            reject();
         });
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[updateSession error]'), error);
-        deferred.reject();
+        reject();
     }
+});
 
-    return deferred.promise;
-};
-
-const addSession = (newSession) => {
-    const deferred = Q.defer();
-
+const addSession = newSession => new Promise((resolve, reject) => {
     if (!newSession.user_id) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[addSession error]'), 'No user_id in given object');
-        return deferred.promise;
+        return;
     }
 
     try {
         getSession({
-            user_id: newSession.user_id
+            user_id: newSession.user_id,
         }).then((session) => {
             if (!session) {
                 const sessionId = aguid(); // a random session id
@@ -118,69 +109,63 @@ const addSession = (newSession) => {
                 DB.insertRow(tableName, {
                     id: sessionId,
                     user_id: newSession.user_id,
-                    expiration: expiration.format('YYYY-MM-DD HH:mm:ss')
-                }).then((result) => {
-                    deferred.resolve({
+                    expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
+                }).then(() => {
+                    resolve({
                         id: sessionId,
-                        expiration: expiration.format('YYYY-MM-DD HH:mm:ss')
+                        expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
                     });
-                }, (error) => {
+                }).catch((error) => {
                     console.log(chalk.red.bold('[addSession error]'), error);
-                    deferred.reject();
+                    reject();
                 });
             } else {
                 updateSession({
-                    id: session.id
+                    id: session.id,
                 }).then((result) => {
-                    deferred.resolve({
+                    resolve({
                         id: session.id,
-                        expiration: result.expiration
+                        expiration: result.expiration,
                     });
-                }, (error) => {
+                }).catch((error) => {
                     console.log(chalk.red.bold('[addSession error]'), error);
-                    deferred.reject();
+                    reject();
                 });
             }
-        }, (error) => {
+        }).catch((error) => {
             console.log(chalk.red.bold('[addSession error]'), error);
-            deferred.reject();
+            reject();
         });
 
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[addSession error]'), error);
-        deferred.reject();
+        reject();
     }
+});
 
-    return deferred.promise;
-};
-
-const deleteSession = (sessionId) => {
-    const deferred = Q.defer();
-
+const deleteSession = sessionId => new Promise((resolve, reject) => {
     if (!sessionId) {
-        deferred.reject();
+        reject();
         console.log(chalk.red.bold('[deleteSession error]'), 'No sessionId in given task');
-        return deferred.promise;
+        return;
     }
 
     try {
         DB.deleteRows(tableName, [{
             column: 'id',
             comparator: '=',
-            value: sessionId
+            value: sessionId,
         }]).then(() => {
-            deferred.resolve();
-        }, (error) => {
+            resolve();
+        }).catch((error) => {
             console.log(chalk.red.bold('[deleteSession error]'), error);
-            deferred.reject();
+            reject();
         });
-    } catch(error) {
+    } catch (error) {
         console.log(chalk.red.bold('[deleteSession error]'), error);
-        deferred.reject();
+        reject();
     }
-
-    return deferred.promise;
-};
+});
 
 exports.addSession = addSession;
 exports.getSession = getSession;
