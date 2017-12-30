@@ -29,61 +29,6 @@ class SingleProject extends React.PureComponent {
             selectedTasks,
             availableTasks,
         };
-
-        this.submitProject = (e) => {
-            e.preventDefault();
-            const { project, updateProject, addNewProject, errorMessage } = this.props;
-
-            if (this.state.name === '') {
-                errorMessage('Name can\'t be empty');
-                return;
-            }
-
-            const updatedProjectData = {
-                name: this.state.name,
-                description: this.state.description,
-                tasks: this.state.selectedTasks.map(project => project.id),
-            };
-            this.setState({
-                loadingData: true,
-            });
-            if (project.id) {
-                updatedProjectData.id = project.id;
-                updateProject(Object.assign(project, updatedProjectData));
-            } else {
-                addNewProject(updatedProjectData);
-            }
-        };
-
-        this.deleteProject = () => {
-            const { project, deleteProject } = this.props;
-            deleteProject(project.id);
-        };
-
-        this.connectTask = (newTask) => {
-            this.setState({
-                selectedTasks: this.state.selectedTasks.concat([newTask]),
-                availableTasks: this.state.availableTasks.filter(task => task.id !== newTask.id),
-            });
-        };
-
-        this.disconnectTask = (newTask) => {
-            this.setState({
-                selectedTasks: this.state.selectedTasks.filter(task => task.id !== newTask.id),
-                availableTasks: this.state.availableTasks.concat([newTask]),
-            });
-        };
-
-        this.openTask = (task) => {
-            const { showModal, hideModal } = this.props;
-            showModal(<SingleTask
-                task={task}
-                className='single-task-modal'
-                onSave={() => hideModal()}
-                onDelete={() => hideModal()}
-                onCancel={() => hideModal()}
-            />);
-        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -97,6 +42,60 @@ class SingleProject extends React.PureComponent {
             selectedTasks,
             availableTasks,
         });
+    }
+
+    connectTask(newTask) {
+        this.setState({
+            selectedTasks: this.state.selectedTasks.concat([newTask]),
+            availableTasks: this.state.availableTasks.filter(task => task.id !== newTask.id),
+        });
+    }
+
+    deleteProject() {
+        const { project, deleteProject } = this.props;
+        deleteProject(project.id);
+    }
+
+    disconnectTask(newTask) {
+        this.setState({
+            selectedTasks: this.state.selectedTasks.filter(task => task.id !== newTask.id),
+            availableTasks: this.state.availableTasks.concat([newTask]),
+        });
+    }
+
+    submitProject() {
+        const { project, updateProject, addNewProject, errorMessage } = this.props;
+
+        if (this.state.name === '') {
+            errorMessage('Name can\'t be empty');
+            return;
+        }
+
+        const updatedProjectData = {
+            name: this.state.name,
+            description: this.state.description,
+            tasks: this.state.selectedTasks.map(project => project.id),
+        };
+        this.setState({
+            loadingData: true,
+        });
+        if (project.id) {
+            updatedProjectData.id = project.id;
+            updateProject(Object.assign(project, updatedProjectData));
+        } else {
+            addNewProject(updatedProjectData);
+        }
+    }
+
+    openTask(task) {
+        const { showModal, hideModal } = this.props;
+        showModal(<SingleTask
+            task={task}
+            className='single-task-modal'
+            onSave={() => hideModal()}
+            onDelete={() => hideModal()}
+            onCancel={() => hideModal()}
+        />);
     }
 
     render() {
@@ -115,7 +114,7 @@ class SingleProject extends React.PureComponent {
             const text = project.id ? 'Save' : 'Add new';
             return (
                 <button
-                    type='submit'
+                    onClick={this.submitProject.bind(this)}
                     className='btn btn-primary'
                     disabled={this.state.loadingData}
                     data-qa='project-save'
@@ -130,8 +129,8 @@ class SingleProject extends React.PureComponent {
                     <NarrowList
                         list={this.state.selectedTasks}
                         deletable
-                        onClick={task => this.openTask(task)}
-                        onDelete={this.disconnectTask}
+                        onClick={this.openTask.bind(this)}
+                        onDelete={this.disconnectTask.bind(this)}
                     />
                 );
             }
@@ -153,13 +152,13 @@ class SingleProject extends React.PureComponent {
         const renderDeleteButton = () => {
             if (project && project.id) {
                 return (
-                    <DeleteButton onDelete={this.deleteProject} />
+                    <DeleteButton onDelete={this.deleteProject.bind(this)} />
                 );
             }
             return null;
         };
         return (
-            <form onSubmit={this.submitProject} className='single-panel'>
+            <div className='single-panel'>
                 <div className='form-group'>
                     <InputMd
                         type='text'
@@ -199,7 +198,7 @@ class SingleProject extends React.PureComponent {
                     <DropdownList
                         list={this.state.availableTasks}
                         placeholder='Connect tasks to project'
-                        onSelect={this.connectTask}
+                        onSelect={this.connectTask.bind(this)}
                     />
                 </div>
                 {renderTime()}
@@ -207,14 +206,14 @@ class SingleProject extends React.PureComponent {
                     <div className='pull-left'>
                         <span className='buttons-group'>
                             {renderSaveButton()}
-                            <span
+                            <button
                                 className='btn btn-default'
                                 disabled={this.state.loadingData}
                                 onClick={() => clearEntity(entityConst.ENTITY_PROJECT)}
                                 data-qa='project-cancel'
                             >
                                 Cancel
-                            </span>
+                            </button>
                         </span>
                         {renderLoadingSpinner()}
                     </div>
@@ -222,7 +221,7 @@ class SingleProject extends React.PureComponent {
                         {renderDeleteButton()}
                     </div>
                 </div>
-            </form>
+            </div>
         );
     }
 }

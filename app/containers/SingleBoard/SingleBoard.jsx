@@ -27,8 +27,7 @@ class SingleBoard extends React.PureComponent {
         };
     }
 
-    submitBoard(e) {
-        e.preventDefault();
+    submitBoard() {
         const { board, addNewBoard, updateBoard, errorMessage, onSave } = this.props;
         const idPosition = this.state.id_position;
 
@@ -68,7 +67,7 @@ class SingleBoard extends React.PureComponent {
             const text = board && board.id ? 'Save' : 'Add new';
             return (
                 <button
-                    type='submit'
+                    onClick={this.submitBoard.bind(this)}
                     className='btn btn-primary'
                     disabled={this.state.loadingData}
                     data-qa='board-save'
@@ -97,10 +96,7 @@ class SingleBoard extends React.PureComponent {
         };
 
         return (
-            <form
-                onSubmit={this.submitBoard.bind(this)}
-                className={className}
-            >
+            <div className={className}>
                 <div className='form-group'>
                     <InputMd
                         type='text'
@@ -173,7 +169,7 @@ class SingleBoard extends React.PureComponent {
                         {renderDeleteButton()}
                     </div>
                 </div>
-            </form>
+            </div>
         );
     }
 }

@@ -81,8 +81,7 @@ class SingleTask extends React.PureComponent {
         onDelete();
     }
 
-    submitTask(e) {
-        e.preventDefault();
+    submitTask() {
         const { task, updateTask, errorMessage, onSave } = this.props;
         const boardId = this.state.board_id;
         const due = this.dueDateRef.value || null;
@@ -134,7 +133,7 @@ class SingleTask extends React.PureComponent {
         };
         const { task, boards, settings, onCancel, className } = this.props;
         return (
-            <form onSubmit={this.submitTask.bind(this)} className={className}>
+            <div className={className}>
                 <div className='form-group'>
                     <InputMd
                         type='text'
@@ -263,8 +262,8 @@ class SingleTask extends React.PureComponent {
                     <div className='pull-left'>
                         <span className='buttons-group'>
                             <button
-                                type='submit'
                                 className='btn btn-primary'
+                                onClick={this.submitTask.bind(this)}
                                 data-qa='task-save'
                             >
                                 <span>Save</span>
@@ -283,7 +282,7 @@ class SingleTask extends React.PureComponent {
                         <DeleteButton onDelete={this.deleteTask.bind(this)} />
                     </div>
                 </div>
-            </form>
+            </div>
         );
     }
 }
