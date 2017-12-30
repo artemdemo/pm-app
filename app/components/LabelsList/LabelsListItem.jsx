@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import emoji from '../../utils/emoji/emoji';
 
 import './LabelsListItem.less';
 
-export class LabelsListItem extends Component {
+export class LabelsListItem extends React.PureComponent {
     constructor(props) {
         super(props);
 

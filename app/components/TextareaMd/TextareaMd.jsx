@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MarkdownIt from 'markdown-it';
@@ -6,7 +6,7 @@ import markdownItEmoji from 'markdown-it-emoji';
 
 import './TextareaMd.less';
 
-export class TextareaMd extends Component {
+export class TextareaMd extends React.PureComponent {
     constructor(props) {
         super(props);
 

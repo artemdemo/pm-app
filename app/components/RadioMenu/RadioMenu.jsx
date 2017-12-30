@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { RadioMenuItem } from './RadioMenuItem';
 
 import './RadioMenu.less';
 
-export class RadioMenu extends Component {
+export class RadioMenu extends React.PureComponent {
     constructor(props) {
         super(props);
 

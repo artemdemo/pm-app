@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BoardTask from './BoardTask';
@@ -12,7 +12,7 @@ import emoji from '../../utils/emoji/emoji';
 
 import './ScrumBoard.less';
 
-class ScrumBoard extends Component {
+class ScrumBoard extends React.PureComponent {
     constructor(props) {
         super(props);
 

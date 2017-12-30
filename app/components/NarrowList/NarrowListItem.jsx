@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import emoji from '../../utils/emoji/emoji';
 
 import './NarrowListItem.less';
 
-export class NarrowListItem extends Component {
+export class NarrowListItem extends React.PureComponent {
     itemClicked(e) {
         const { onClick, item } = this.props;
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import _isNumber from 'lodash/isNumber';
 import emoji from '../../utils/emoji/emoji';
@@ -76,7 +76,7 @@ tasksFilterService.addFilter(FILTER_BY_PROJECTS, (tasks, data) => {
     }
 });
 
-class TasksList extends Component {
+class TasksList extends React.PureComponent {
     constructor(props) {
         super(props);
 

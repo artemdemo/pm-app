@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import * as modalConst from '../../model/constants/modal';
@@ -8,7 +8,7 @@ import './Modal.less';
 
 const MODAL_BG_CLASS = 'pm-modal-bg';
 
-class Modal extends Component {
+class Modal extends React.PureComponent {
     bgClick(e) {
         const { hideModal } = this.props;
         if (e.target.className.indexOf(MODAL_BG_CLASS) > -1) {

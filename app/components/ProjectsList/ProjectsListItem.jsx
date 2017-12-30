@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import emoji from '../../utils/emoji/emoji';
 import { selectProject } from '../../model/actions/selectedEntity';
 
 import './ProjectsListItem.less';
 
-class ProjectsListItem extends Component {
+class ProjectsListItem extends React.PureComponent {
     constructor(props) {
         super(props);
 

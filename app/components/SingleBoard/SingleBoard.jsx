@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner';
@@ -11,7 +11,7 @@ import emoji from '../../utils/emoji/emoji';
 
 import './SingleBoard.less';
 
-class SingleBoard extends Component {
+class SingleBoard extends React.PureComponent {
     constructor(props) {
         super(props);
 

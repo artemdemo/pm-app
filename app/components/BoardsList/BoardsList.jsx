@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
 import * as entityConst from '../../model/constants/selectedEntity';
@@ -8,7 +8,7 @@ import SingleBoard from '../SingleBoard/SingleBoard';
 
 import './BoardsList.less';
 
-class BoardsList extends Component {
+class BoardsList extends React.PureComponent {
     constructor(props) {
         super(props);
 

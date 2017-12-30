@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as entityConst from '../../model/constants/selectedEntity';
@@ -7,7 +7,7 @@ import { clearEntity, selectProject } from '../../model/actions/selectedEntity';
 
 import './ProjectsList.less';
 
-class ProjectsList extends Component {
+class ProjectsList extends React.PureComponent {
     constructor(props) {
         super(props);
 

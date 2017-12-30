@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import './OkCircle.less';
 
-export class OkCircle extends Component {
+export class OkCircle extends React.PureComponent {
     constructor(props) {
         super(props);
 

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import './DeleteButton.less';
 
-export class DeleteButton extends Component {
+export class DeleteButton extends React.PureComponent {
     constructor(props) {
         super(props);
         this.loadingData = false;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { login, checkAuthentication } from '../model/actions/user';
@@ -6,7 +6,7 @@ import { history } from '../configs';
 
 import './form-signin.less';
 
-class LoginView extends Component {
+class LoginView extends React.PureComponent {
     constructor(props) {
         super(props);
 

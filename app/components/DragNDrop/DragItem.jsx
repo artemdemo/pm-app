@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { throttleLead } from './utils/throttle';
@@ -12,7 +12,7 @@ import {
 
 import './DragItem.less';
 
-export class DragItem extends Component {
+export class DragItem extends React.PureComponent {
     constructor(props) {
         super(props);
 

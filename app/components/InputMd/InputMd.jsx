@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import emoji from '../../utils/emoji/emoji';
 
 import './InputMd.less';
 
-export class InputMd extends Component {
+export class InputMd extends React.PureComponent {
     constructor(props) {
         super(props);
 

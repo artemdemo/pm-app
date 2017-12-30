@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { throttleLead } from './utils/throttle';
 import { nerve } from './utils/nerve';
 import { setLandingContainer, setNearItem, setPosition, getDraggedItemKey } from './services/dragService';
 
-export class DragItemsContainer extends Component {
+export class DragItemsContainer extends React.PureComponent {
     constructor(props) {
         super(props);
 

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { LabelsListItem } from './LabelsListItem';
 
 import './LabelsList.less';
 
-export class LabelsList extends Component {
+export class LabelsList extends React.PureComponent {
     constructor(props) {
         super(props);
 

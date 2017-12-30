@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import { selectTask } from '../../model/actions/selectedEntity';
 
 import './BoardTask.less';
 
-class BoardTask extends Component {
+class BoardTask extends React.PureComponent {
     constructor(props) {
         super(props);
 

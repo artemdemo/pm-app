@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as entityConst from '../../model/constants/selectedEntity';
@@ -15,7 +15,7 @@ import { errorMessage } from '../../model/actions/notification';
 import { showModal, hideModal } from '../../model/actions/modal';
 import SingleTask from '../SingleTask/SingleTask';
 
-class SingleProject extends Component {
+class SingleProject extends React.PureComponent {
     constructor(props) {
         super(props);
 

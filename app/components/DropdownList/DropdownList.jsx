@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DropdownListItem } from './DropdownListItem';
 
 import './DropdownList.less';
 
-export class DropdownList extends Component {
+export class DropdownList extends React.PureComponent {
     constructor(props) {
         super(props);
 

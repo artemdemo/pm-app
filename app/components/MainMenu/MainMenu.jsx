@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -8,7 +8,7 @@ import './MainMenu.less';
 
 const ACTIVE_ITEM = 'navbar-link_active';
 
-class MainMenu extends Component {
+class MainMenu extends React.PureComponent {
     constructor(props) {
         super(props);
 

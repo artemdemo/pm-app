@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
@@ -18,7 +18,7 @@ import { errorMessage } from '../../model/actions/notification';
 
 import './SingleTask.less';
 
-class SingleTask extends Component {
+class SingleTask extends React.PureComponent {
     constructor(props) {
         super(props);
 
