@@ -75,15 +75,10 @@ exports.update = (request, replay) => {
         .then((updatedData) => {
             debug(`Task id ${request.payload.id} updated`);
             if (taskId && projects) {
-                projectsTasksRelations.addRelation(projects, taskId)
-                    .then(() => {
-                        replay(updatedData);
-                    }, () => {
-                        replay(boom.badRequest(errConstants.DB_ERROR));
-                    });
-            } else {
-                replay(updatedData);
+                return projectsTasksRelations.addRelation(projects, taskId)
+                    .then(() => replay(updatedData));
             }
+            replay(updatedData);
         })
         .catch((err) => {
             debug(err);

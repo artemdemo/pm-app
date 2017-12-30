@@ -20,12 +20,12 @@ exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
         debug(new Error(err));
         reject(err);
         return;
-    } else if (!Array.isArray(taskId) && _isNumber(taskId)) {
+    } else if (!Array.isArray(taskId) && !_isNumber(taskId)) {
         const err = 'taskId should be a number or Array';
         debug(new Error(err));
         reject(err);
         return;
-    } else if (!Array.isArray(projectId) && _isNumber(projectId)) {
+    } else if (!Array.isArray(projectId) && !_isNumber(projectId)) {
         const err = 'projectId should be a number or Array';
         debug(new Error(err));
         reject(err);
