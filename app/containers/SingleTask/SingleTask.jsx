@@ -45,7 +45,7 @@ class SingleTask extends React.PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        const { task } = this.props;
+        const { task } = nextProps;
         const { selectedProjects, availableProjects } = filterProjects(task, nextProps.projects);
         this.setState({
             name: task.name || '',
