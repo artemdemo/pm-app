@@ -1,5 +1,4 @@
-/* eslint-disable no-console, strict*/
-'use strict';
+/* eslint-disable no-console, strict */
 
 const fs = require('fs');
 const path = require('path');
@@ -8,6 +7,7 @@ const inert = require('inert');
 const chalk = require('chalk');
 const hapiAuthJwt = require('hapi-auth-jwt2');
 const DB = require('sqlite-crud');
+
 let pathToTheDB;
 let cliDBPath = '';
 let migrateDB = false;
@@ -25,7 +25,7 @@ if (appSettings.db) {
 
 // node ./server/index --db=e2e-test.db --migrate
 process.argv.forEach((value) => {
-    if (~value.indexOf('--db')) {
+    if (value.indexOf('--db') > -1) {
         const match = /--db=(\S+.db)$/.exec(value);
         if (match) {
             cliDBPath = match[1];
@@ -89,31 +89,6 @@ server.connection({
     port: normalizePort(process.env.PORT || 3000),
 });
 
-// inert provides new handler methods for serving static files and directories,
-// as well as decorating the reply interface with a file method for serving file based resources.
-server.register(inert, () => {});
-
-/**
- * Authentication
- */
-server.register(hapiAuthJwt, () => {});
-
-// Generating secure key (base64, 256 random bytes)
-// https://tonicdev.com/artemdemo/5736ead43ed13c11004bb76b
-server.auth.strategy('jwt', 'jwt', {
-    key: require('./secret').key,
-    validateFunc: require('./auth').validate,
-    verifyOptions: {
-        ignoreExpiration: true,
-        algorithms: ['HS256'],
-    },
-});
-
-server.auth.default('jwt');
-
-/**
- * Routing
- */
 // Dynamically include routes
 // Function will recursively enter all directories and include all '*.js' files
 const routerDirWalker = (dirPath) => {
@@ -129,11 +104,41 @@ const routerDirWalker = (dirPath) => {
         }
     });
 };
-routerDirWalker('./server/routes');
 
-server.start((err) => {
-    if (err) {
-        throw err;
-    }
-    console.log(chalk.yellow.bold('Server is running at: ') + chalk.cyan(server.info.uri));
+// inert provides new handler methods for serving static files and directories,
+// as well as decorating the reply interface with a file method for serving file based resources.
+server.register(inert, () => {
+
+    server.register(hapiAuthJwt, () => {
+        // Generating secure key (base64, 256 random bytes)
+        // https://tonicdev.com/artemdemo/5736ead43ed13c11004bb76b
+        server.auth.strategy('jwt', 'jwt', {
+            key: require('./secret').key,
+            validateFunc: require('./auth').validate,
+            verifyOptions: {
+                ignoreExpiration: true,
+                algorithms: ['HS256'],
+            },
+        });
+
+        server.auth.default('jwt');
+
+        start();
+    });
 });
+
+// Start the server
+async function start() {
+
+    routerDirWalker('./server/routes');
+
+    try {
+        await server.start();
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+
+    console.log(chalk.yellow.bold('Server is running at: ') + chalk.cyan(server.info.uri));
+}
+
