@@ -1,5 +1,4 @@
-// ToDo: Refactor error handling and debug errors (see controllers/tasks.js)
-
+const debug = require('debug')('pm:controllers:boards');
 const boom = require('boom');
 const boards = require('../models/boards');
 const auth = require('../auth');
@@ -20,11 +19,14 @@ exports.all = (request, replay) => {
     const boardsData = {
         tokenId: tokenData.id,
     };
-    boards.getAll(boardsData).then((tasks) => {
-        replay(tasks);
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    boards.getAll(boardsData)
+        .then((tasks) => {
+            replay(tasks);
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.add = (request, replay) => {
@@ -37,11 +39,14 @@ exports.add = (request, replay) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    boards.addNew(boardsData).then((result) => {
-        replay(result);
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    boards.addNew(boardsData)
+        .then((result) => {
+            replay(result);
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.update = (request, replay) => {
@@ -54,11 +59,14 @@ exports.update = (request, replay) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    boards.updateBoard(boardsData).then(() => {
-        replay({});
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    boards.updateBoard(boardsData)
+        .then(() => {
+            replay({});
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.delete = (request, replay) => {
@@ -71,9 +79,12 @@ exports.delete = (request, replay) => {
         payload: request.params.boardId,
         tokenId: tokenData.id,
     };
-    boards.deleteBoard(boardsData).then(() => {
-        replay({});
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    boards.deleteBoard(boardsData)
+        .then(() => {
+            replay({});
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };

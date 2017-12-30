@@ -1,6 +1,6 @@
-// ToDo: Refactor error handling and debug errors (see controllers/tasks.js)
-
+const debug = require('debug')('pm:controllers:projects');
 const boom = require('boom');
+const _isNumber = require('lodash/isNumber');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
 const auth = require('../auth');
@@ -21,11 +21,14 @@ exports.all = (request, replay) => {
     const projectsData = {
         tokenId: tokenData.id,
     };
-    projects.getAll(projectsData).then((projects) => {
-        replay(projects);
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    projects.getAll(projectsData)
+        .then((projects) => {
+            replay(projects);
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.add = (request, replay) => {
@@ -38,17 +41,17 @@ exports.add = (request, replay) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    projects.addNew(projectsData).then((result) => {
-        replay(result);
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    projects.addNew(projectsData)
+        .then(result => replay(result))
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.update = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
-    const tasks = request.payload.tasks;
-    const projectId = request.payload.id;
+    const { id, tasks } = request.payload;
     if (!tokenData) {
         replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
@@ -57,20 +60,20 @@ exports.update = (request, replay) => {
         payload: request.payload,
         tokenId: tokenData.id,
     };
-    projects.updateProject(projectsData).then((updatedData) => {
-        if (tasks && projectId) {
-            projectsTasksRelations.addRelation(projectId, tasks)
-                .then(() => {
-                    replay(updatedData);
-                }, () => {
-                    replay(boom.badRequest(errConstants.DB_ERROR));
-                });
-        } else {
+    projects.updateProject(projectsData)
+        .then((updatedData) => {
+            if (tasks && _isNumber(id)) {
+                return projectsTasksRelations.addRelation(id, tasks)
+                    .then(() => {
+                        replay(updatedData);
+                    });
+            }
             replay(updatedData);
-        }
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.delete = (request, replay) => {
@@ -79,27 +82,27 @@ exports.delete = (request, replay) => {
         payload: request.params.projectId,
         tokenId: tokenData.id,
     };
-    projects.deleteProject(projectsData).then(() => {
-        replay({});
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    projects.deleteProject(projectsData)
+        .then(() => replay({}))
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.connectTask = (request, replay) => {
     projectsTasksRelations.addRelation(request.params.projectId, request.params.taskId)
-        .then(() => {
-            replay({});
-        }, () => {
+        .then(() => replay({}))
+        .catch(() => {
             replay(boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
 exports.disconnectTask = (request, replay) => {
     projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
-        .then(() => {
-            replay({});
-        }, () => {
+        .then(() => replay({}))
+        .catch((err) => {
+            debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));
         });
 };

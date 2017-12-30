@@ -1,11 +1,8 @@
-/* eslint-disable no-console */
-
-// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
-
-const chalk = require('chalk');
+const debug = require('debug')('pm:models:sessions');
 const moment = require('moment');
 const aguid = require('aguid');  // https://github.com/ideaq/aguid
 const DB = require('sqlite-crud');
+const errConstants = require('../constants/error');
 
 const tableName = 'sessions';
 
@@ -30,14 +27,16 @@ const getSession = queryObject => new Promise((resolve, reject) => {
     }
 
     if (!column) {
-        console.log(chalk.red.bold('[getSession error]'), 'There is no column data');
-        reject();
+        const err = 'There is no column data';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
     if (!value) {
-        console.log(chalk.red.bold('[getSession error]'), 'There is no value data');
-        reject();
+        const err = 'There is no value data';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -53,13 +52,14 @@ const getSession = queryObject => new Promise((resolve, reject) => {
                 } else {
                     resolve(result[0]);
                 }
-            }).catch((err) => {
-                console.log(chalk.red.bold('[getSession error]'), err);
-                reject();
+            })
+            .catch((err) => {
+                debug(new Error(err));
+                reject(errConstants.DB_ERROR);
             });
-    } catch (error) {
-        console.log(chalk.red.bold('[getSession error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });
 
@@ -68,8 +68,9 @@ const updateSession = session => new Promise((resolve, reject) => {
     const updateData = {};
 
     if (!session.id) {
-        reject();
-        console.log(chalk.red.bold('[updateSession error]'), 'No session.id in given session');
+        const err = 'No session.id in given session';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -84,20 +85,21 @@ const updateSession = session => new Promise((resolve, reject) => {
             resolve({
                 expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
             });
-        }).catch((error) => {
-            console.log(chalk.red.bold('[updateSession error]'), error);
-            reject();
+        }).catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
-    } catch (error) {
-        console.log(chalk.red.bold('[updateSession error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });
 
 const addSession = newSession => new Promise((resolve, reject) => {
     if (!newSession.user_id) {
-        reject();
-        console.log(chalk.red.bold('[addSession error]'), 'No user_id in given object');
+        const err = 'No user_id in given object';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -108,7 +110,7 @@ const addSession = newSession => new Promise((resolve, reject) => {
             if (!session) {
                 const sessionId = aguid(); // a random session id
                 const expiration = moment(new Date()).add(30, 'm');
-                DB.insertRow(tableName, {
+                return DB.insertRow(tableName, {
                     id: sessionId,
                     user_id: newSession.user_id,
                     expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
@@ -117,38 +119,32 @@ const addSession = newSession => new Promise((resolve, reject) => {
                         id: sessionId,
                         expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
                     });
-                }).catch((error) => {
-                    console.log(chalk.red.bold('[addSession error]'), error);
-                    reject();
-                });
-            } else {
-                updateSession({
-                    id: session.id,
-                }).then((result) => {
-                    resolve({
-                        id: session.id,
-                        expiration: result.expiration,
-                    });
-                }).catch((error) => {
-                    console.log(chalk.red.bold('[addSession error]'), error);
-                    reject();
                 });
             }
-        }).catch((error) => {
-            console.log(chalk.red.bold('[addSession error]'), error);
-            reject();
+            return updateSession({
+                id: session.id,
+            }).then((result) => {
+                resolve({
+                    id: session.id,
+                    expiration: result.expiration,
+                });
+            });
+        }).catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
 
-    } catch (error) {
-        console.log(chalk.red.bold('[addSession error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });
 
 const deleteSession = sessionId => new Promise((resolve, reject) => {
     if (!sessionId) {
-        reject();
-        console.log(chalk.red.bold('[deleteSession error]'), 'No sessionId in given task');
+        const err = 'No sessionId in given task';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -159,17 +155,19 @@ const deleteSession = sessionId => new Promise((resolve, reject) => {
             value: sessionId,
         }]).then(() => {
             resolve();
-        }).catch((error) => {
-            console.log(chalk.red.bold('[deleteSession error]'), error);
-            reject();
+        }).catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
-    } catch (error) {
-        console.log(chalk.red.bold('[deleteSession error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });
 
-exports.addSession = addSession;
-exports.getSession = getSession;
-exports.updateSession = updateSession;
-exports.deleteSession = deleteSession;
+exports = {
+    addSession,
+    getSession,
+    updateSession,
+    deleteSession,
+};

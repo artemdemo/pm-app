@@ -1,11 +1,8 @@
-/* eslint-disable no-console */
-
-// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
-
-const chalk = require('chalk');
+const debug = require('debug')('pm:models:users');
 const moment = require('moment');
 const crypto = require('crypto');
 const DB = require('sqlite-crud');
+const errConstants = require('../constants/error');
 
 const tableName = 'users';
 
@@ -41,13 +38,13 @@ exports.addNew = newUser => new Promise((resolve, reject) => {
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
             });
-        }).catch((error) => {
-            console.log(chalk.red.bold('[addNew User error]'), error);
-            reject();
+        }).catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
-    } catch (error) {
-        console.log(chalk.red.bold('[addNew User error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });
 
@@ -68,13 +65,13 @@ exports.getUser = user => new Promise((resolve, reject) => {
             } else {
                 reject();
             }
-        }).catch((error) => {
-            console.log(chalk.red.bold('[getUser User error]'), error);
-            reject();
+        }).catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
-    } catch (error) {
-        console.log(chalk.red.bold('[getUser User error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });
 
@@ -91,12 +88,12 @@ exports.getUserById = userId => new Promise((resolve, reject) => {
             } else {
                 reject();
             }
-        }).catch((error) => {
-            console.log(chalk.red.bold('[getUserById User error]'), error);
-            reject();
+        }).catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
-    } catch (error) {
-        console.log(chalk.red.bold('[getUserById User error]'), error);
-        reject();
+    } catch (err) {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
     }
 });

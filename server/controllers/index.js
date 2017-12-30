@@ -1,5 +1,4 @@
-// ToDo: Refactor error handling and debug errors (see controllers/tasks.js)
-
+const debug = require('debug')('pm:controllers:index');
 const JWT = require('jsonwebtoken');
 const boom = require('boom');
 const sessions = require('../models/sessions');
@@ -28,14 +27,13 @@ exports.user = (request, reply) => {
     sessions.getSession({
         id: tokenData.id,
     }).then((session) => {
-        users.getUserById(session.user_id)
+        return users.getUserById(session.user_id)
             .then((result) => {
                 reply(result);
-            }, () => {
-                reply(boom.unauthorized('No such user for given session'));
             });
-    }, () => {
-        reply(boom.unauthorized('Session error'));
+    }).catch((err) => {
+        debug(err);
+        reply(boom.unauthorized('Wrong user data'));
     });
 };
 
@@ -43,7 +41,7 @@ exports.user = (request, reply) => {
 exports.login = (request, reply) => {
     users.getUser(request.payload)
         .then((user) => {
-            sessions.addSession({
+            return sessions.addSession({
                 user_id: user.id,
             }).then((result) => {
                 const token = JWT.sign({
@@ -52,10 +50,10 @@ exports.login = (request, reply) => {
                 }, secret.key, tokenOptions);
 
                 reply(user).header('Authorization', token);
-            }, () => {
-                reply(boom.unauthorized('Session error'));
             });
-        }, () => {
+        })
+        .catch((err) => {
+            debug(err);
             reply(boom.unauthorized('Wrong user data'));
         });
 };
@@ -64,7 +62,7 @@ exports.login = (request, reply) => {
 exports.signup = (request, reply) => {
     users.addNew(request.payload)
         .then((result) => {
-            sessions.addSession({
+            return sessions.addSession({
                 user_id: result.id,
             }).then((result) => {
                 const token = JWT.sign({
@@ -73,10 +71,10 @@ exports.signup = (request, reply) => {
                 }, secret.key, tokenOptions);
 
                 reply({login: true}).header('Authorization', token);
-            }, () => {
-                reply(boom.unauthorized('Session error'));
             });
-        }, () => {
-            reply(boom.unauthorized('Adding new user error'));
+        })
+        .catch((err) => {
+            debug(err);
+            reply(boom.unauthorized('Wrong user data'));
         });
 };

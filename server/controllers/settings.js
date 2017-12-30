@@ -1,5 +1,4 @@
-// ToDo: Refactor error handling and debug errors (see controllers/tasks.js)
-
+const debug = require('debug')('pm:controllers:settings');
 const boom = require('boom');
 const settings = require('../models/settings');
 const auth = require('../auth');
@@ -16,18 +15,20 @@ exports.all = (request, replay) => {
     const settingsData = {
         tokenId: tokenData.id,
     };
-    settings.getAll(settingsData).then((settings) => {
-        replay(settings);
-    }, () => {
-        replay(boom.badRequest(errConstants.DB_ERROR));
-    });
+    settings.getAll(settingsData)
+        .then((settings) => {
+            replay(settings);
+        })
+        .catch((err) => {
+            debug(err);
+            replay(boom.badRequest(errConstants.DB_ERROR));
+        });
 };
 
 exports.update = (request, replay) => {
     const tokenData = auth.parseTokenData(request.headers.authorization);
     if (!tokenData) {
         replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
     }
 };
 

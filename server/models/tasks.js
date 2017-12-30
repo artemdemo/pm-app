@@ -52,7 +52,8 @@ exports.addNew = newTaskData => new Promise((resolve, reject) => {
     if (!newTaskData.payload.name) {
         const err = 'No newTaskData.payload.name in given task';
         debug(new Error(err));
-        return reject(err);
+        reject(err);
+        return;
     }
 
     sessions.getSession({

@@ -1,11 +1,8 @@
-/* eslint-disable no-console */
-
-// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
-
-const chalk = require('chalk');
+const debug = require('debug')('pm:models:models');
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
+const errConstants = require('../constants/error');
 
 const tableName = 'boards';
 
@@ -42,8 +39,10 @@ const getAllBoards = tokenId => new Promise((resolve, reject) => {
     DB.queryRows(boardsQuery, [tokenId])
         .then((boards) => {
             resolve(boards);
-        }).catch(() => {
-            reject();
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
 });
 
@@ -66,8 +65,10 @@ exports.getAll = boardsData => new Promise((resolve, reject) => {
                 };
             });
             resolve(boardsList);
-        }).catch(() => {
-            reject();
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
 });
 
@@ -106,7 +107,7 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
                 user_id: userId,
             };
 
-            DB.insertRow(tableName, newBoard)
+            return DB.insertRow(tableName, newBoard)
                 .then((result) => {
                     const resultData = {
                         id: result.id,
@@ -134,13 +135,11 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
 
                     const query = cratePositionsQuery(boardsList);
                     DB.run(query);
-                }).catch((error) => {
-                    console.log(chalk.red.bold('[addNew Board error]'), error);
-                    reject();
                 });
-        }).catch((error) => {
-            console.log(chalk.red.bold('[addNew Board error]'), error);
-            reject();
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
         });
 });
 
@@ -160,8 +159,9 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
     const updateAllowed = true;
 
     if (!boardData.payload.id) {
-        reject();
-        console.log(chalk.red.bold('[updateBoard error]'), 'No boardData.payload.id in given task');
+        const err = 'No boardData.payload.id in given task';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -173,8 +173,10 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
     });
 
     if (!updateAllowed) {
-        reject();
-        console.log(chalk.red.bold('[updateBoard error]'), 'No fields to update:', boardData.payload);
+        const err = 'No fields to update';
+        debug(new Error(err));
+        debug(boardData.payload);
+        reject(err);
         return;
     }
 
@@ -188,7 +190,7 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
                 id_position: boardData.payload.id_position,
             });
 
-            DB.updateRow(tableName, updateData, [{
+            return DB.updateRow(tableName, updateData, [{
                 column: 'id',
                 comparator: '=',
                 value: boardData.payload.id,
@@ -218,13 +220,12 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
 
                 const query = cratePositionsQuery(boardsList);
                 DB.run(query);
-
-                resolve();
-            }).catch((error) => {
-                console.log(chalk.red.bold('[updateBoard error]'), error);
-                reject();
             });
-        }).catch(() => reject());
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 /**
@@ -236,15 +237,16 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
  */
 exports.deleteBoard = boardData => new Promise((resolve, reject) => {
     if (!boardData.payload) {
-        reject();
-        console.log(chalk.red.bold('[deleteBoard error]'), 'No "id" in given board');
+        const err = 'No "id" in given board';
+        debug(new Error(err));
+        reject(err);
         return;
     }
     sessions.getSession({
         id: boardData.tokenId,
     }).then((session) => {
         try {
-            DB.deleteRows(tableName, [{
+            return DB.deleteRows(tableName, [{
                 column: 'id',
                 comparator: '=',
                 value: boardData.payload,
@@ -253,19 +255,17 @@ exports.deleteBoard = boardData => new Promise((resolve, reject) => {
                 comparator: '=',
                 value: session.user_id,
             }]).then(() => {
-                getAllBoards(boardData.tokenId)
+                return getAllBoards(boardData.tokenId)
                     .then((boards) => {
                         const query = cratePositionsQuery(boards);
                         DB.run(query);
                     });
-                resolve();
-            }).catch((error) => {
-                console.log(chalk.red.bold('[deleteBoard error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[deleteBoard error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
-    }).catch(() => reject());
+    }).catch((err) => {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
+    });
 });

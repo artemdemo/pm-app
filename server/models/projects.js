@@ -1,11 +1,8 @@
-/* eslint-disable no-console */
-
-// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
-
-const chalk = require('chalk');
+const debug = require('debug')('pm:models:projects');
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
+const errConstants = require('../constants/error');
 
 const tableName = 'projects';
 
@@ -29,14 +26,18 @@ exports.getAll = projectsData => new Promise((resolve, reject) => {
                                     WHERE projects.id = ?;`;
                 promisesList.push(DB.queryRows(tasksQuery, [project.id]));
             });
-            Promise.all(promisesList)
+            return Promise.all(promisesList)
                 .then((resultsList) => {
                     resultsList.forEach((data, index) => {
                         projects[index].tasks = data.map(item => item.task_id);
                     });
                     resolve(projects);
-                }).catch(() => reject());
-        }).catch(() => reject());
+                });
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 
@@ -44,8 +45,9 @@ exports.addNew = newProjectData => new Promise((resolve, reject) => {
     const now = moment(new Date());
 
     if (!newProjectData.payload.name) {
-        reject();
-        console.log(chalk.red.bold('[addNew project error]'), 'No newProjectData.payload.name in given project');
+        const err = 'No newProjectData.payload.name in given project';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -53,7 +55,7 @@ exports.addNew = newProjectData => new Promise((resolve, reject) => {
         id: newProjectData.tokenId,
     }).then((session) => {
         try {
-            DB.insertRow(tableName, {
+            return DB.insertRow(tableName, {
                 name: newProjectData.payload.name,
                 description: newProjectData.payload.description,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -65,15 +67,14 @@ exports.addNew = newProjectData => new Promise((resolve, reject) => {
                     added: now.format('YYYY-MM-DD HH:mm:ss'),
                     updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 });
-            }).catch((error) => {
-                console.log(chalk.red.bold('[addNew projects error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[addNew projects error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
-    }).catch(() => reject());
+    }).catch((err) => {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
+    });
 });
 
 exports.updateProject = projectData => new Promise((resolve, reject) => {
@@ -82,8 +83,9 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
     const updateAllowed = true;
 
     if (!projectData.payload.id) {
-        reject();
-        console.log(chalk.red.bold('[updateProject error]'), 'No projectData.payload.id in given project');
+        const err = 'No projectData.payload.id in given project';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -95,8 +97,10 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
     });
 
     if (!updateAllowed) {
-        reject();
-        console.log(chalk.red.bold('[updateProject error]'), 'No fields to update:', projectData.payload);
+        const err = 'No fields to update';
+        debug(new Error(err));
+        debug(projectData.payload);
+        reject(err);
         return;
     }
 
@@ -106,7 +110,7 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
         id: projectData.tokenId,
     }).then((session) => {
         try {
-            DB.updateRow(tableName, updateData, [{
+            return DB.updateRow(tableName, updateData, [{
                 column: 'id',
                 comparator: '=',
                 value: projectData.payload.id,
@@ -118,21 +122,18 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
                 resolve({
                     updated: updateData.updated,
                 });
-            }).catch((error) => {
-                console.log(chalk.red.bold('[updateProject error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[updateProject error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
     }).catch(() => reject());
 });
 
 exports.deleteProject = projectData => new Promise((resolve, reject) => {
     if (!projectData.payload) {
-        reject();
-        console.log(chalk.red.bold('[deleteProject error]'), 'No projectId in given project');
+        const err = 'No projectId in given project';
+        debug(new Error(err));
+        reject(err);
         return;
     }
 
@@ -140,7 +141,7 @@ exports.deleteProject = projectData => new Promise((resolve, reject) => {
         id: projectData.tokenId,
     }).then((session) => {
         try {
-            DB.deleteRows(tableName, [{
+            return DB.deleteRows(tableName, [{
                 column: 'id',
                 comparator: '=',
                 value: projectData.payload,
@@ -150,13 +151,12 @@ exports.deleteProject = projectData => new Promise((resolve, reject) => {
                 value: session.user_id,
             }]).then(() => {
                 resolve();
-            }).catch((error) => {
-                console.log(chalk.red.bold('[deleteProject error]'), error);
-                reject();
             });
-        } catch (error) {
-            console.log(chalk.red.bold('[deleteProject error]'), error);
-            reject();
+        } catch (err) {
+            return Promise.reject(err);
         }
-    }).catch(() => reject());
+    }).catch((err) => {
+        debug(new Error(err));
+        reject(errConstants.DB_ERROR);
+    });
 });

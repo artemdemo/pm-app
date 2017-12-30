@@ -1,7 +1,3 @@
-/* eslint-disable no-console */
-
-// ToDo: Refactor error handling and debug errors (see modes/tasks.js)
-
 const debug = require('debug')('pm:models:relations');
 const DB = require('sqlite-crud');
 const _isNumber = require('lodash/isNumber');
