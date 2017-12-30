@@ -1,4 +1,2 @@
-js/
-css/
-fonts/
-*.html
+*
+!.gitignore
