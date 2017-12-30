@@ -2,9 +2,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import * as entityConst from '../model/constants/selectedEntity';
-import MainMenu from '../components/MainMenu/MainMenu';
-import BoardsList from '../components/BoardsList/BoardsList';
-import SingleTask from '../components/SingleTask/SingleTask';
+import MainMenu from '../containers/MainMenu/MainMenu';
+import BoardsList from '../containers/BoardsList/BoardsList';
+import SingleTask from '../containers/SingleTask/SingleTask';
 import { clearEntity } from '../model/actions/selectedEntity';
 
 const ScrumView = (props) => {

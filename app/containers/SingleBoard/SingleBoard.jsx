@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import DeleteButton from '../DeleteButton/DeleteButton';
-import InputMd from '../InputMd/InputMd';
-import TextareaMd from '../TextareaMd/TextareaMd';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import DeleteButton from '../../components/DeleteButton/DeleteButton';
+import InputMd from '../../components/InputMd/InputMd';
+import TextareaMd from '../../components/TextareaMd/TextareaMd';
 import { addNewBoard, updateBoard, deleteBoard } from '../../model/actions/boards';
 import { errorMessage } from '../../model/actions/notification';
 import emoji from '../../utils/emoji/emoji';

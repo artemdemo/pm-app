@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { checkAuthentication } from '../model/actions/user';
-import UserNotificator from '../components/UserNotificator/UserNotificator';
-import Popup from '../components/Popup/Popup';
-import Modal from '../components/Modal/Modal';
+import UserNotificator from '../containers/UserNotificator/UserNotificator';
+import Popup from '../containers/Popup/Popup';
+import Modal from '../containers/Modal/Modal';
 
 class AppView extends React.PureComponent {
     componentWillMount() {

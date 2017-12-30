@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
-import LabelsList from '../LabelsList/LabelsList';
+import LabelsList from '../../components/LabelsList/LabelsList';
 import * as taskConst from '../../model/constants/tasks';
 import { selectTask } from '../../model/actions/selectedEntity';
 

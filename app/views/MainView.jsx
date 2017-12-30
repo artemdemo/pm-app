@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MainMenu from '../components/MainMenu/MainMenu';
+import MainMenu from '../containers/MainMenu/MainMenu';
 
 const MainView = (props) => {
     const { tasks, projects } = props;
