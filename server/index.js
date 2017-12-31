@@ -52,7 +52,6 @@ if (cliDBPath) {
 }
 
 DB.connectToDB(pathToTheDB);
-DB.setVerbose(false);
 if (migrateDB) {
     const migrationPath = 'server/models/migrations';
     console.log(chalk.yellow('[Migrating DB] ') + migrationPath);

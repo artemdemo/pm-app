@@ -7,7 +7,7 @@
     "build": "webpack --progress --colors",
     "watch": "webpack --progress --colors --watch",
     "eslint": "./node_modules/eslint/bin/eslint.js ./app/**/*.js ./app/**/**/*.js ./app/**/*.jsx ./app/**/**/*.jsx",
-    "start": "node ./server/index",
+    "start": "DEBUG=* node ./server/index",
     "postinstall": "./postinstall.sh",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
     "test": "./e2e-test.sh",
@@ -34,7 +34,7 @@
     "inert": "^4.2.1",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.12.0",
-    "sqlite-crud": "git+https://github.com/artemdemo/sqlite-crud.git#2.0.1",
+    "sqlite-crud": "git+https://github.com/artemdemo/sqlite-crud.git#2.1.0",
     "sqlite3": "^3.1.13"
   },
   "devDependencies": {
