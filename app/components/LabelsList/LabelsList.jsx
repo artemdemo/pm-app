@@ -28,9 +28,7 @@ class LabelsList extends React.PureComponent {
 
     onDelete(item) {
         const { onDelete } = this.props;
-        if (onDelete) {
-            onDelete(item);
-        }
+        onDelete && onDelete(item);
     }
 
     render() {
@@ -60,10 +58,17 @@ class LabelsList extends React.PureComponent {
 }
 
 LabelsList.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object),
+    list: PropTypes.arrayOf(PropTypes.shape({})),
     limit: PropTypes.number,
     delitable: PropTypes.bool,
     onDelete: PropTypes.func,
+};
+
+LabelsList.defaultProps = {
+    list: [],
+    limit: null,
+    delitable: false,
+    onDelete: null,
 };
 
 export default LabelsList;

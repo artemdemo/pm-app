@@ -11,7 +11,7 @@ class LabelsListItem extends React.PureComponent {
         onDelete && onDelete(item);
     }
 
-    renderCloseButton(item, delitable) {
+    renderCloseButton(delitable) {
         if (delitable) {
             return (
                 <span
@@ -46,6 +46,12 @@ LabelsListItem.propTypes = {
     item: PropTypes.shape({}),
     delitable: PropTypes.bool,
     onDelete: PropTypes.func,
+};
+
+LabelsListItem.defaultProps = {
+    item: {},
+    delitable: false,
+    onDelete: null,
 };
 
 export default LabelsListItem;

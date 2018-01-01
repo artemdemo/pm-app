@@ -12,12 +12,6 @@ Compile client app
 $ npm run build
 ```
 
-You can build uglified version of the code:
-
-```
-$ npm run pack
-```
-
 Start server
 
 ```
