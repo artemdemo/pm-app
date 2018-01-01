@@ -16,7 +16,7 @@ class LabelsListItem extends React.PureComponent {
             return (
                 <span
                     className='labels-list-item__close'
-                    onClick={this.deleteItem}
+                    onClick={this.deleteItem.bind(this)}
                 >
                     <span className='glyphicon glyphicon-remove' />
                 </span>
