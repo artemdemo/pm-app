@@ -1,6 +1,6 @@
 import * as userConst from './userConst';
 import { errorMessage, successMessage } from '../notification/notificationActions';
-import { history } from '../../configs';
+import { history } from '../../store';
 import { loadTasks } from '../tasks/tasksActions';
 import { loadBoards } from '../boards/boardsActions';
 import { loadProjects } from '../projects/projectsActions';

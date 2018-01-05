@@ -1,6 +1,4 @@
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
 
 import tasks from './model/tasks/tasksReducer';
@@ -23,9 +21,8 @@ const pmApp = combineReducers({
     settings,
     notification,
     selectedEntity,
-    routing: routerReducer,
 });
 
-export const store = createStore(pmApp, applyMiddleware(thunk));
+const store = createStore(pmApp, applyMiddleware(thunk));
 
-export const history = syncHistoryWithStore(browserHistory, store);
+export default store;

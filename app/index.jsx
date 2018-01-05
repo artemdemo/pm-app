@@ -1,11 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import store from './store';
 
 import './styles/general.less';
-
-import { store, history } from './configs';
 
 import AppView from './views/AppView';
 import LoginView from './views/LoginView';
@@ -19,7 +18,7 @@ import MainView from './views/MainView';
 
 render(
     <Provider store={store}>
-        <Router history={history}>
+        <Router history={browserHistory}>
             <Route path='/' component={AppView}>
                 <IndexRoute component={MainView} />
                 <Route path='login' component={LoginView} />
