@@ -14,12 +14,18 @@ class DropdownList extends React.PureComponent {
             dropdownIsVisible: false,
             list: props.list,
         };
+
+        this.blurTimeout = null;
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             list: nextProps.list,
         });
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.blurTimeout);
     }
 
     handleInputChange(e) {
@@ -47,7 +53,7 @@ class DropdownList extends React.PureComponent {
     inputBlur() {
         // 'blur' is firing faster then 'click' event
         // therefore I need a timeout to make it work
-        setTimeout(() => {
+        this.blurTimeout = setTimeout(() => {
             this.setState({
                 dropdownIsVisible: false,
             });
@@ -60,14 +66,18 @@ class DropdownList extends React.PureComponent {
         });
     }
 
+    selectHandler(item) {
+        const { onSelect } = this.props;
+        onSelect && onSelect(item);
+    }
+
     render() {
-        const { placeholder, onSelect } = this.props;
+        const { placeholder } = this.props;
         const itemsClass = classnames({
             'dropdown-list-items': true,
             'dropdown-list-items_show': this.state.dropdownIsVisible,
         });
 
-        // ToDo: <DropdownListItem> onClick should return `item`
         return (
             <div className='dropdown-list'>
                 <input
@@ -82,7 +92,7 @@ class DropdownList extends React.PureComponent {
                         <DropdownListItem
                             item={item}
                             key={`dropdown-item-${item.id}`}
-                            onClick={() => onSelect(item)}
+                            onClick={this.selectHandler.bind(this)}
                         />
                     ))}
                 </div>
@@ -94,6 +104,10 @@ class DropdownList extends React.PureComponent {
 DropdownList.propTypes = {
     list: PropTypes.arrayOf(PropTypes.object).isRequired,
     onSelect: PropTypes.func,
+};
+
+DropdownList.defaultProps = {
+    onSelect: null,
 };
 
 export default DropdownList;
