@@ -7,7 +7,6 @@ import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
 import { addNewBoard, updateBoard, deleteBoard } from '../../model/actions/boards';
 import { errorMessage } from '../../model/actions/notification';
-import emoji from '../../utils/emoji/emoji';
 
 import './SingleBoard.less';
 
@@ -15,16 +14,32 @@ class SingleBoard extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        // ToDo: This code is working here? Assigning state in constructor??
+        this.state = {
+            title: '',
+            description: '',
+            id_position: '',
+            loadingData: false,
+        };
+    }
+
+    componentDidMount() {
+        this.setupData();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setupData(nextProps);
+    }
+
+    setupData(props = this.props) {
         const { board, boards } = props;
         const boardsList = boards.filter(item => item.id !== board.id);
         const selectedBoardId = board.id_position ? board.id_position + 1 : '';
-        this.state = {
+        this.setState({
             title: board.title || '',
             description: board.description || '',
             id_position: selectedBoardId > boardsList.length ? '' : selectedBoardId,
             loadingData: false,
-        };
+        });
     }
 
     submitBoard() {
@@ -143,7 +158,7 @@ class SingleBoard extends React.PureComponent {
                                 value={board.id_position}
                                 key={`board-${board.id}`}
                             >
-                                {emoji(board.title)}
+                                {board.title}
                             </option>
                         ))}
                     </select>
