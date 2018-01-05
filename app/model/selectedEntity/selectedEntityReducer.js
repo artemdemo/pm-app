@@ -1,4 +1,4 @@
-import * as selectedEntityConst from '../constants/selectedEntity';
+import * as selectedEntityConst from './selectedEntityConst';
 
 export default function(state = {}, action) {
     switch (action.type) {

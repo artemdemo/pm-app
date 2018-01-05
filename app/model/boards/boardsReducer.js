@@ -1,4 +1,4 @@
-import * as boardsConst from '../constants/boards';
+import * as boardsConst from './boardsConst';
 import { sortByIdPosition } from '../../utils/boards';
 
 function sortBoardsByPosition(boardsList) {

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { signup, checkAuthentication } from '../model/actions/user';
-import { errorMessage } from '../model/actions/notification';
+import { signup, checkAuthentication } from '../model/user/userActions';
+import { errorMessage } from '../model/notification/notificationActions';
 
 import './form-signin.less';
 

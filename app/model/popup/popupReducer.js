@@ -1,4 +1,4 @@
-import * as popupConst from '../constants/popup';
+import * as popupConst from './popupConst';
 
 export default function popup(state = {}, action) {
     switch (action.type) {

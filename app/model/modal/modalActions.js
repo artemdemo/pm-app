@@ -1,4 +1,4 @@
-import * as modalConst from '../constants/modal';
+import * as modalConst from './modalConst';
 
 export function showModal(content) {
     return {

@@ -1,7 +1,7 @@
-import * as boardsConst from '../constants/boards';
-import { errorMessage, successMessage } from './notification';
+import * as boardsConst from './boardsConst';
+import { errorMessage, successMessage } from '../notification/notificationActions';
 import { getStoredToken } from '../../utils/user';
-import { loadTasks } from './tasks';
+import { loadTasks } from '../tasks/tasksActions';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
 

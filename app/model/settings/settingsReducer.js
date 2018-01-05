@@ -1,4 +1,4 @@
-import * as settingsConst from '../constants/settings';
+import * as settingsConst from './settingsConst';
 
 export default function settings(state = {}, action) {
     switch (action.type) {

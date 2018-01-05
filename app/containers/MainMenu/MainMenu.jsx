@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { logout } from '../../model/actions/user';
+import { logout } from '../../model/user/userActions';
 
 import './MainMenu.less';
 

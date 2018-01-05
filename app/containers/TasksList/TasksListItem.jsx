@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import _isNumber from 'lodash/isNumber';
-import * as entityConst from '../../model/constants/selectedEntity';
+import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
-import { addNewTask } from '../../model/actions/tasks';
+import { addNewTask } from '../../model/tasks/tasksActions';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import LabelsList from '../../components/LabelsList/LabelsList';
-import { selectTask, clearEntity } from '../../model/actions/selectedEntity';
-import { errorMessage } from '../../model/actions/notification';
+import { selectTask, clearEntity } from '../../model/selectedEntity/selectedEntityActions';
+import { errorMessage } from '../../model/notification/notificationActions';
 
 import './TasksListItem.less';
 

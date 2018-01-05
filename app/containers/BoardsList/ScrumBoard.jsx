@@ -5,9 +5,9 @@ import BoardTask from './BoardTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
 import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContainer';
 import { DragItem } from '../../components/DragNDrop/DragItem';
-import { showModal, hideModal } from '../../model/actions/modal';
+import { showModal, hideModal } from '../../model/modal/modalActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
-import { updateDraggedTaskPosition } from '../../model/actions/tasks';
+import { updateDraggedTaskPosition } from '../../model/tasks/tasksActions';
 import emoji from '../../utils/emoji/emoji';
 
 import './ScrumBoard.less';

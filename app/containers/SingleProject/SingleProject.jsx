@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as entityConst from '../../model/constants/selectedEntity';
+import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { filterTasks } from '../../utils/tasks';
-import { deleteProject, updateProject, addNewProject } from '../../model/actions/projects';
+import { deleteProject, updateProject, addNewProject } from '../../model/projects/projectsActions';
 import DropdownList from '../../components/DropdownList/DropdownList';
 import NarrowList from '../../components/NarrowList/NarrowList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
-import { clearEntity } from '../../model/actions/selectedEntity';
-import { errorMessage } from '../../model/actions/notification';
-import { showModal, hideModal } from '../../model/actions/modal';
+import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
+import { errorMessage } from '../../model/notification/notificationActions';
+import { showModal, hideModal } from '../../model/modal/modalActions';
 import SingleTask from '../SingleTask/SingleTask';
 
 class SingleProject extends React.PureComponent {

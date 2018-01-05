@@ -1,4 +1,4 @@
-import * as notificationConst from '../constants/notification';
+import * as notificationConst from './notificationConst';
 
 export default function notification(state = {}, action) {
     switch (action.type) {

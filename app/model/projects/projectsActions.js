@@ -1,11 +1,11 @@
-import * as projectsConst from '../constants/projects';
-import * as entityConst from '../constants/selectedEntity';
-import { loadTasks } from './tasks';
-import { errorMessage, successMessage } from './notification';
+import * as projectsConst from './projectsConst';
+import * as entityConst from '../selectedEntity/selectedEntityConst';
+import { loadTasks } from '../tasks/tasksActions';
+import { errorMessage, successMessage } from '../notification/notificationActions';
 import { getStoredToken } from '../../utils/user';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
-import { clearEntity } from './selectedEntity';
+import { clearEntity } from '../selectedEntity/selectedEntityActions';
 
 function projectsLoaded(projects) {
     return {

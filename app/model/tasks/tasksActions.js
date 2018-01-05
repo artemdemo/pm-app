@@ -1,7 +1,7 @@
-import * as tasksConst from '../constants/tasks';
-import { loadProjects } from './projects';
-import { loadBoards } from './boards';
-import { errorMessage, successMessage } from './notification';
+import * as tasksConst from './tasksConst';
+import { loadProjects } from '../projects/projectsActions';
+import { loadBoards } from '../boards/boardsActions';
+import { errorMessage, successMessage } from '../notification/notificationActions';
 import { getStoredToken } from '../../utils/user';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';

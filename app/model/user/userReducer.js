@@ -1,4 +1,4 @@
-import * as userConst from '../constants/user';
+import * as userConst from './userConst';
 
 const defaultState = (() => {
     const token = window.localStorage.getItem(userConst.LS_ITEM_NAME);

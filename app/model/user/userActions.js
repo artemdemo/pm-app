@@ -1,10 +1,10 @@
-import * as userConst from '../constants/user';
-import { errorMessage, successMessage } from './notification';
+import * as userConst from './userConst';
+import { errorMessage, successMessage } from '../notification/notificationActions';
 import { history } from '../../configs';
-import { loadTasks } from './tasks';
-import { loadBoards } from './boards';
-import { loadProjects } from './projects';
-import { loadSettings } from './settings';
+import { loadTasks } from '../tasks/tasksActions';
+import { loadBoards } from '../boards/boardsActions';
+import { loadProjects } from '../projects/projectsActions';
+import { loadSettings } from '../settings/settingsActions';
 import { storeToken, getStoredToken, removeStoredToken } from '../../utils/user';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { login, checkAuthentication } from '../model/actions/user';
+import { login, checkAuthentication } from '../model/user/userActions';
 import { history } from '../configs';
 
 import './form-signin.less';

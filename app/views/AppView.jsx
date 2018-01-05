@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { checkAuthentication } from '../model/actions/user';
+import { checkAuthentication } from '../model/user/userActions';
 import UserNotificator from '../containers/UserNotificator/UserNotificator';
 import Popup from '../containers/Popup/Popup';
 import Modal from '../containers/Modal/Modal';

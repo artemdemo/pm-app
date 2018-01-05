@@ -1,4 +1,4 @@
-import * as tasksConst from '../constants/tasks';
+import * as tasksConst from './tasksConst';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 
 function sortTasksByUpdate(inTasks = []) {

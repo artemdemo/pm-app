@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import _isNumber from 'lodash/isNumber';
 import emoji from '../../utils/emoji/emoji';
-import * as entityConst from '../../model/constants/selectedEntity';
+import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import RadioMenu from '../../components/RadioMenu/RadioMenu';
 import TasksListItem from './TasksListItem';
-import { clearEntity } from '../../model/actions/selectedEntity';
+import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 
 import './TasksList.less';
 

@@ -1,4 +1,4 @@
-import * as notificationConst from '../constants/notification';
+import * as notificationConst from './notificationConst';
 
 export function hideNotification() {
     return {

@@ -5,8 +5,8 @@ import moment from 'moment';
 import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
 import LabelsList from '../../components/LabelsList/LabelsList';
-import * as taskConst from '../../model/constants/tasks';
-import { selectTask } from '../../model/actions/selectedEntity';
+import * as taskConst from '../../model/tasks/tasksConst';
+import { selectTask } from '../../model/selectedEntity/selectedEntityActions';
 
 import './BoardTask.less';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import { hideNotification } from '../../model/actions/notification';
-import * as notificationConst from '../../model/constants/notification';
+import { hideNotification } from '../../model/notification/notificationActions';
+import * as notificationConst from '../../model/notification/notificationConst';
 
 import './UserNotificator.less';
 

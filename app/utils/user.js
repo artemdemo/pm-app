@@ -1,4 +1,4 @@
-import * as userConst from '../model/constants/user';
+import * as userConst from '../model/user/userConst';
 
 let storedToken = null;
 

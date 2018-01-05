@@ -1,4 +1,4 @@
-import * as entityConst from '../constants/selectedEntity';
+import * as entityConst from './selectedEntityConst';
 
 export function clearEntity(entityType) {
     return {

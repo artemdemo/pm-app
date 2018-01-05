@@ -1,6 +1,6 @@
-import * as settingsConst from '../constants/settings';
+import * as settingsConst from './settingsConst';
 import { getStoredToken } from '../../utils/user';
-import { errorMessage, successMessage } from './notification';
+import { errorMessage, successMessage } from '../notification/notificationActions';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
 

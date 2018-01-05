@@ -1,4 +1,4 @@
-import * as projectsConst from '../constants/projects';
+import * as projectsConst from './projectsConst';
 
 function sortProjectsByUpdate(inProjects = []) {
     return inProjects.sort((projectA, projectB) => {

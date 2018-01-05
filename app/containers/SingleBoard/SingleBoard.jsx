@@ -5,8 +5,8 @@ import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
-import { addNewBoard, updateBoard, deleteBoard } from '../../model/actions/boards';
-import { errorMessage } from '../../model/actions/notification';
+import { addNewBoard, updateBoard, deleteBoard } from '../../model/boards/boardsActions';
+import { errorMessage } from '../../model/notification/notificationActions';
 
 import './SingleBoard.less';
 

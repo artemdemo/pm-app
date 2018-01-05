@@ -6,7 +6,7 @@ import Flatpickr from 'flatpickr';
 import _isNumber from 'lodash/isNumber';
 import _isString from 'lodash/isString';
 import { filterProjects } from '../../utils/tasks';
-import { deleteTask, updateTask } from '../../model/actions/tasks';
+import { deleteTask, updateTask } from '../../model/tasks/tasksActions';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import OkCircle from '../../components/OkCircle/OkCircle';
@@ -14,7 +14,7 @@ import DropdownList from '../../components/DropdownList/DropdownList';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
-import { errorMessage } from '../../model/actions/notification';
+import { errorMessage } from '../../model/notification/notificationActions';
 
 import './SingleTask.less';
 
