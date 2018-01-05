@@ -13,7 +13,13 @@ import Icon from '../../components/Icon/Icon';
 import './ScrumBoard.less';
 
 class ScrumBoard extends React.PureComponent {
-    componentDidMount() {
+    constructor(props) {
+        super(props);
+
+        this.selectedTasks = [];
+    }
+
+    componentWillMount() {
         const { tasks, board } = this.props;
         this.filterSelectedTasks(tasks, board);
     }

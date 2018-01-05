@@ -10,16 +10,27 @@ class InputMd extends React.PureComponent {
         super(props);
 
         this.state = {
-            value: props.value,
+            value: '',
+            editMode: false,
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { value = '' } = nextProps;
+    componentWillMount() {
+        const { value } = this.props;
         const newState = {
             value,
         };
+        if (value.length === 0) {
+            newState.editMode = true;
+        }
         this.setState(newState);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { value } = nextProps;
+        this.setState({
+            value,
+        });
     }
 
     changeValue(e) {
