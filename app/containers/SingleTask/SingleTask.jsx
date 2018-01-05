@@ -4,8 +4,8 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import Flatpickr from 'flatpickr';
 import _isNumber from 'lodash/isNumber';
+import _isString from 'lodash/isString';
 import { filterProjects } from '../../utils/tasks';
-import emoji from '../../utils/emoji/emoji';
 import { deleteTask, updateTask } from '../../model/actions/tasks';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
@@ -22,31 +22,32 @@ class SingleTask extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        // ToDo: This code is working here? Assigning state in constructor??
-        const { task } = props;
-        const { selectedProjects, availableProjects } = filterProjects(task, props.projects);
         this.state = {
-            name: task.name || '',
-            description: task.description || '',
-            board_id: task.board_id > 0 ? task.board_id : 0,
-            done: task.done || false,
-            sp: task.sp || 0,
-            priority: task.priority || 0,
+            name: '',
+            description: '',
+            board_id: 0,
+            done: false,
+            sp: 0,
+            priority: 0,
             loadingData: false,
-            selectedProjects,
-            availableProjects,
+            selectedProjects: [],
+            availableProjects: [],
         };
-
         this.dueDateRef = this;
     }
 
     componentDidMount() {
         this.dueInstance = new Flatpickr(this.dueDateRef);
+        this.setupData();
     }
 
     componentWillReceiveProps(nextProps) {
-        const { task } = nextProps;
-        const { selectedProjects, availableProjects } = filterProjects(task, nextProps.projects);
+        this.setupData(nextProps);
+    }
+
+    setupData(props = this.props) {
+        const { task, projects } = props;
+        const { selectedProjects, availableProjects } = filterProjects(task, projects);
         this.setState({
             name: task.name || '',
             description: task.description || '',
@@ -58,7 +59,9 @@ class SingleTask extends React.PureComponent {
             selectedProjects,
             availableProjects,
         });
-        this.dueInstance.setDate(task.due);
+        if (_isString(task.due)) {
+            this.dueInstance.setDate(task.due);
+        }
     }
 
     connectProject(newProject) {
@@ -201,7 +204,7 @@ class SingleTask extends React.PureComponent {
                                 <option value='0'>No board selected</option>
                                 {boards.map(board => (
                                     <option value={board.id} key={`board-${board.id}`}>
-                                        {emoji(board.title)}
+                                        {board.title}
                                     </option>
                                 ))}
                             </select>
