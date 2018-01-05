@@ -19,21 +19,26 @@ class SingleProject extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        // ToDo: This code is working here? Assigning state in constructor??
-        const { project } = props;
-        const { selectedTasks, availableTasks } = filterTasks(project, props.tasks);
         this.state = {
             name: '',
             description: '',
             loadingData: false,
-            selectedTasks,
-            availableTasks,
+            selectedTasks: [],
+            availableTasks: [],
         };
     }
 
+    componentDidMount() {
+        this.setupData();
+    }
+
     componentWillReceiveProps(nextProps) {
-        const { project } = nextProps;
-        const { selectedTasks, availableTasks } = filterTasks(project, nextProps.tasks);
+        this.setupData(nextProps);
+    }
+
+    setupData(props = this.props) {
+        const { project, tasks } = props;
+        const { selectedTasks, availableTasks } = filterTasks(project, tasks);
 
         this.setState({
             name: project.name || '',
