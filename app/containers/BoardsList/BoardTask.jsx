@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import emoji from '../../utils/emoji/emoji';
 import { filterProjects } from '../../utils/tasks';
+import Icon from '../../components/Icon/Icon';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import * as taskConst from '../../model/tasks/tasksConst';
 import { selectTask } from '../../model/selectedEntity/selectedEntityActions';
@@ -35,7 +35,7 @@ class BoardTask extends React.PureComponent {
             if (task.due && task.due !== '') {
                 return (
                     <div className='board-task-description__item'>
-                        <span className='glyphicon glyphicon-calendar' />
+                        <Icon name='calendar' />
                         {moment(task.due, taskConst.DUE_BASE_TIME_FORMAT).format('MMM, D')}
                     </div>
                 );
@@ -57,7 +57,7 @@ class BoardTask extends React.PureComponent {
                 }
                 return (
                     <div className='board-task-description__item'>
-                        <span className='glyphicon glyphicon-exclamation-sign' />
+                        <Icon name='exclamation-sign' />
                         {selectedPriority && selectedPriority.value}
                     </div>
                 );
@@ -68,12 +68,9 @@ class BoardTask extends React.PureComponent {
         return (
             <div onClick={this.openTask.bind(this)}>
                 <div className='board-task__menu-icon'>
-                    <span
-                        className='glyphicon glyphicon-option-vertical'
-                        aria-hidden='true'
-                    />
+                    <Icon name='option-vertical' />
                 </div>
-                {emoji(task.name)}
+                {task.name}
                 <div className='board-task-description
                                 text-muted'>
                     {renderSP()}
@@ -93,6 +90,10 @@ class BoardTask extends React.PureComponent {
 
 BoardTask.propTypes = {
     task: PropTypes.shape({}),
+};
+
+BoardTask.defaultProps = {
+    task: {},
 };
 
 export default connect(

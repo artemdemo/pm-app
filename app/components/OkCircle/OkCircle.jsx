@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Icon from '../../components/Icon/Icon';
 
 import './OkCircle.less';
 
@@ -23,9 +24,7 @@ class OkCircle extends React.PureComponent {
     changeDoneStatus() {
         const { onChange } = this.props;
         const newDoneStatus = !this.state.doneStatus;
-        if (onChange) {
-            onChange(newDoneStatus);
-        }
+        onChange && onChange(newDoneStatus);
     }
 
     renderLoadingSpinner(loading) {
@@ -46,10 +45,7 @@ class OkCircle extends React.PureComponent {
         if (!loading) {
             return (
                 <span className={classOkCircle}>
-                    <span
-                        className='glyphicon glyphicon-ok-circle'
-                        aria-hidden='true'
-                    />
+                    <Icon name='ok-circle' />
                 </span>
             );
         }
@@ -87,6 +83,7 @@ OkCircle.propTypes = {
 OkCircle.defaultProps = {
     doneStatus: false,
     loading: false,
+    onChange: null,
 };
 
 export default OkCircle;

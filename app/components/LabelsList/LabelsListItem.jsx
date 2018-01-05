@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import emoji from '../../utils/emoji/emoji';
+import Icon from '../../components/Icon/Icon';
 
 import './LabelsListItem.less';
 
@@ -18,7 +18,7 @@ class LabelsListItem extends React.PureComponent {
                     className='labels-list-item__close'
                     onClick={this.deleteItem.bind(this)}
                 >
-                    <span className='glyphicon glyphicon-remove' />
+                    <Icon name='remove' />
                 </span>
             );
         }
@@ -35,7 +35,7 @@ class LabelsListItem extends React.PureComponent {
         });
         return (
             <li className={itemClass}>
-                {emoji(item.name)}
+                {item.name}
                 {this.renderCloseButton(delitable)}
             </li>
         );

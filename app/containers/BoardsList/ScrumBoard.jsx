@@ -8,27 +8,25 @@ import { DragItem } from '../../components/DragNDrop/DragItem';
 import { showModal, hideModal } from '../../model/modal/modalActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import { updateDraggedTaskPosition } from '../../model/tasks/tasksActions';
-import emoji from '../../utils/emoji/emoji';
+import Icon from '../../components/Icon/Icon';
 
 import './ScrumBoard.less';
 
 class ScrumBoard extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        // ToDo: Will this really work in constructor?
+    componentDidMount() {
         const { tasks, board } = this.props;
-        this.filterSelectedTasks = (tasks, board) => {
-            this.selectedTasks = tasks
-                .filter(task => task.board_id === board.id)
-                .sort(sortByIdPositionScrum);
-        };
         this.filterSelectedTasks(tasks, board);
     }
 
     componentWillReceiveProps(newProps) {
         const { tasks, board } = newProps;
         this.filterSelectedTasks(tasks, board);
+    }
+
+    filterSelectedTasks(tasks, board) {
+        this.selectedTasks = tasks
+            .filter(task => task.board_id === board.id)
+            .sort(sortByIdPositionScrum);
     }
 
     dragStopped(itemData) {
@@ -56,12 +54,12 @@ class ScrumBoard extends React.PureComponent {
         return (
             <div className='scrum-board'>
                 <div className='board__title'>
-                    <div className='board__name'>{emoji(board.title)}</div>
+                    <div className='board__name'>{board.title}</div>
                     <div
                         className='board__edit-board'
                         onClick={this.editBoard.bind(this)}
                     >
-                        <span className='glyphicon glyphicon-pencil' />
+                        <Icon name='pencil' />
                     </div>
                 </div>
                 <DragItemsContainer
@@ -86,6 +84,10 @@ class ScrumBoard extends React.PureComponent {
 
 ScrumBoard.propTypes = {
     board: PropTypes.shape({}),
+};
+
+ScrumBoard.defaultProps = {
+    board: {},
 };
 
 export default connect(

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import MarkdownIt from 'markdown-it';
 import markdownItEmoji from 'markdown-it-emoji';
+import Icon from '../../components/Icon/Icon';
 
 import './TextareaMd.less';
 
@@ -19,12 +20,6 @@ class TextareaMd extends React.PureComponent {
 
         this.md = new MarkdownIt();
         this.md.use(markdownItEmoji);
-
-        this.togglePreview = () => {
-            this.setState({
-                editMode: !this.state.editMode,
-            });
-        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -36,6 +31,12 @@ class TextareaMd extends React.PureComponent {
             newState.editMode = editMode;
         }
         this.setState(newState);
+    }
+
+    togglePreview() {
+        this.setState({
+            editMode: !this.state.editMode,
+        });
     }
 
     render() {
@@ -73,10 +74,10 @@ class TextareaMd extends React.PureComponent {
                 <div className={editorClass}>
                     <div
                         className='textarea-md-content__preview'
-                        onClick={this.togglePreview}
+                        onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__preview`}
                     >
-                        <span className='glyphicon glyphicon-eye-open' />
+                        <Icon name='eye-open' />
                     </div>
                     <textarea
                         className={className}
@@ -105,10 +106,12 @@ class TextareaMd extends React.PureComponent {
                     </div>
                 </div>
                 <div className={contentClass}>
-                    <div className='textarea-md-content__edit'
+                    <div
+                        className='textarea-md-content__edit'
                         onClick={this.togglePreview}
-                        data-qa={`${dataQa}__edit-content`}>
-                        <span className='glyphicon glyphicon-pencil' />
+                        data-qa={`${dataQa}__edit-content`}
+                    >
+                        <Icon name='pencil' />
                     </div>
                     {renderPlaceholder()}
                     <div
@@ -121,6 +124,8 @@ class TextareaMd extends React.PureComponent {
         );
     }
 }
+
+// ToDo: Add defaultProps
 
 TextareaMd.propTypes = {
     className: PropTypes.string,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import emoji from '../../utils/emoji/emoji';
+import Icon from '../../components/Icon/Icon';
 
 import './InputMd.less';
 
@@ -58,7 +58,7 @@ class InputMd extends React.PureComponent {
                         onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__preview`}
                     >
-                        <span className='glyphicon glyphicon-eye-open' />
+                        <Icon name='eye-open' />
                     </div>
                     <input
                         type={type}
@@ -77,11 +77,13 @@ class InputMd extends React.PureComponent {
                         onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__edit-content`}
                     >
-                        <span className='glyphicon glyphicon-pencil' />
+                        <Icon name='pencil' />
                     </div>
-                    <div className='input-md-content__rendered'
-                        data-qa={`${dataQa}__rendered`}>
-                        {emoji(this.state.value)}
+                    <div
+                        className='input-md-content__rendered'
+                        data-qa={`${dataQa}__rendered`}
+                    >
+                        {this.state.value}
                     </div>
                 </div>
             </div>

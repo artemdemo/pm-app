@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import Icon from '../../components/Icon/Icon';
 
 import './DeleteButton.less';
 
@@ -54,18 +55,14 @@ class DeleteButton extends React.PureComponent {
                 <div className='delete-button'>
                     <div className='delete-button__title'>Delete?</div>
                     <div className='delete-button-buttons'>
-                        <span
-                            className='glyphicon
-                                       glyphicon-ok-sign
-                                       delete-button-buttons__ok'
-                            aria-hidden='true'
+                        <Icon
+                            name='ok-sign'
+                            className='delete-button-buttons__ok'
                             onClick={this.delete.bind(this)}
                         />
-                        <span
-                            className='glyphicon
-                                       glyphicon-remove-sign
-                                       delete-button-buttons__cancel'
-                            aria-hidden='true'
+                        <Icon
+                            name='remove-sign'
+                            className='delete-button-buttons__cancel'
                             onClick={this.hideDeleteButtons.bind(this)}
                         />
                     </div>

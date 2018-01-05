@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import emoji from '../../utils/emoji/emoji';
+import Icon from '../../components/Icon/Icon';
 
 import './NarrowListItem.less';
 
@@ -30,8 +30,7 @@ class NarrowListItem extends React.PureComponent {
                         className='narrow-list-item__close'
                         onClick={() => onDelete(item)}
                     >
-                        <span className='glyphicon
-                                         glyphicon-remove' />
+                        <Icon name='remove' />
                     </span>
                 );
             }
@@ -47,7 +46,7 @@ class NarrowListItem extends React.PureComponent {
                     onClick={this.itemClicked.bind(this)}
                 >
                     <span className='narrow-list-item__name'>
-                        {emoji(item.name)}
+                        {item.name}
                     </span>
                 </div>
                 <div className='narrow-list-item__cell
@@ -58,6 +57,8 @@ class NarrowListItem extends React.PureComponent {
         );
     }
 }
+
+// ToDo: Add defaultProps
 
 NarrowListItem.propTypes = {
     deletable: PropTypes.bool,
