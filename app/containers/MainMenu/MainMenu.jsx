@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import { logout } from '../../model/user/userActions';
 
 import './MainMenu.less';
@@ -61,36 +61,36 @@ class MainMenu extends React.PureComponent {
                             <span className='icon-bar' />
                             <span className='icon-bar' />
                         </button>
-                        <Link className='navbar-brand' to='/'>&lt;PM&gt;</Link>
+                        <NavLink className='navbar-brand' to='/'>&lt;PM&gt;</NavLink>
                     </div>
                     <div className={menuClass}>
                         <ul className='nav navbar-nav'>
                             <li>
-                                <Link
+                                <NavLink
                                     to='/tasks'
                                     activeClassName={ACTIVE_ITEM}
                                     className='navbar-link'
                                 >
                                     Tasks
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link
+                                <NavLink
                                     to='/scrum'
                                     activeClassName={ACTIVE_ITEM}
                                     className='navbar-link'
                                 >
                                     Scrum
-                                </Link>
+                                </NavLink>
                             </li>
                             <li>
-                                <Link
+                                <NavLink
                                     to='/projects'
                                     activeClassName={ACTIVE_ITEM}
                                     className='navbar-link'
                                 >
                                     Projects
-                                </Link>
+                                </NavLink>
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
@@ -104,10 +104,10 @@ class MainMenu extends React.PureComponent {
                                 </span>
                                 <ul className='dropdown-menu'>
                                     <li>
-                                        <Link to='/profile'>Profile</Link>
+                                        <NavLink to='/profile'>Profile</NavLink>
                                     </li>
                                     <li>
-                                        <Link to='/settings'>Settings</Link>
+                                        <NavLink to='/settings'>Settings</NavLink>
                                     </li>
                                     <li role='separator' className='divider' />
                                     <li>
