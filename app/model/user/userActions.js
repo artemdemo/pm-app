@@ -1,11 +1,11 @@
 import * as userConst from './userConst';
 import { errorMessage, successMessage } from '../notification/notificationActions';
-import { history } from '../../store';
 import { loadTasks } from '../tasks/tasksActions';
 import { loadBoards } from '../boards/boardsActions';
 import { loadProjects } from '../projects/projectsActions';
 import { loadSettings } from '../settings/settingsActions';
 import { storeToken, getStoredToken, removeStoredToken } from '../../utils/user';
+import history from '../../history';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
 import urlParser from '../../utils/urlParser';

@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { logout } from '../../model/user/userActions';
+import ProfileMenu from './ProfileMenu';
 
 import './MainMenu.less';
 
@@ -14,7 +15,6 @@ class MainMenu extends React.PureComponent {
 
         this.state = {
             menuOpen: false,
-            profileDropdownOpen: false,
         };
     }
 
@@ -29,22 +29,12 @@ class MainMenu extends React.PureComponent {
         });
     }
 
-    toggleProfileDropdown() {
-        this.setState({
-            profileDropdownOpen: !this.state.profileDropdownOpen,
-        });
-    }
-
     render() {
         const { user } = this.props;
         const menuClass = classnames({
             collapse: true,
             'navbar-collapse': true,
             'in': this.state.menuOpen,
-        });
-        const profileClass = classnames({
-            dropdown: true,
-            open: this.state.profileDropdownOpen,
         });
 
         return (
@@ -94,33 +84,10 @@ class MainMenu extends React.PureComponent {
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
-                            <li className={profileClass}>
-                                <span
-                                    className='navbar-link'
-                                    onClick={this.toggleProfileDropdown.bind(this)}
-                                    data-qa='profile-menu-toggle'
-                                >
-                                    {user.username} <span className='caret' />
-                                </span>
-                                <ul className='dropdown-menu'>
-                                    <li>
-                                        <NavLink to='/profile'>Profile</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to='/settings'>Settings</NavLink>
-                                    </li>
-                                    <li role='separator' className='divider' />
-                                    <li>
-                                        <span
-                                            className='dropdown-menu-link'
-                                            onClick={this.logout.bind(this)}
-                                            data-qa='logout-main-menu-button'
-                                        >
-                                            Logout
-                                        </span>
-                                    </li>
-                                </ul>
-                            </li>
+                            <ProfileMenu
+                                username={user.username}
+                                onLogout={this.logout.bind(this)}
+                            />
                         </ul>
                     </div>
                 </div>
