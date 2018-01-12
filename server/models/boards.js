@@ -1,4 +1,4 @@
-const debug = require('debug')('pm:models:models');
+const debug = require('debug')('pm:models:boards');
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
@@ -219,9 +219,13 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
                 }));
 
                 const query = cratePositionsQuery(boardsList);
-                DB.run(query);
+                return DB.run(query)
+                    .then(() => {
+                        debug(`Moved board # ${boardData.payload.id}`);
+                    });
             });
         })
+        .then(() => resolve())
         .catch((err) => {
             debug(new Error(err));
             reject(errConstants.DB_ERROR);
