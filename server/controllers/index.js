@@ -26,15 +26,17 @@ exports.user = (request, reply) => {
     }
     sessions.getSession({
         id: tokenData.id,
-    }).then((session) => {
-        return users.getUserById(session.user_id)
-            .then((result) => {
-                reply(result);
-            });
-    }).catch((err) => {
-        debug(err);
-        reply(boom.unauthorized('Wrong user data'));
-    });
+    })
+        .then((session) => {
+            return users.getUserById(session.user_id);
+        })
+        .then((result) => {
+            reply(result);
+        })
+        .catch((err) => {
+            debug(err);
+            reply(boom.unauthorized(errConstants.USER_ERROR));
+        });
 };
 
 
@@ -49,12 +51,13 @@ exports.login = (request, reply) => {
                     expiration: result.expiration,
                 }, secret.key, tokenOptions);
 
+                debug(`User session id ${result.id} logged in`);
                 reply(user).header('Authorization', token);
             });
         })
         .catch((err) => {
             debug(err);
-            reply(boom.unauthorized('Wrong user data'));
+            reply(boom.unauthorized(errConstants.USER_ERROR));
         });
 };
 
@@ -64,17 +67,20 @@ exports.signup = (request, reply) => {
         .then((result) => {
             return sessions.addSession({
                 user_id: result.id,
-            }).then((result) => {
-                const token = JWT.sign({
-                    id: result.id,
-                    expiration: result.expiration,
-                }, secret.key, tokenOptions);
-
-                reply({login: true}).header('Authorization', token);
             });
+        })
+        .then((result) => {
+            const token = JWT.sign({
+                id: result.id,
+                expiration: result.expiration,
+            }, secret.key, tokenOptions);
+
+            debug(`User session id ${result.id} signed up`);
+
+            reply({login: true}).header('Authorization', token);
         })
         .catch((err) => {
             debug(err);
-            reply(boom.unauthorized('Wrong user data'));
+            reply(boom.unauthorized(errConstants.USER_ERROR));
         });
 };

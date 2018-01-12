@@ -63,7 +63,7 @@ exports.getUser = user => new Promise((resolve, reject) => {
             if (result.length === 1) {
                 resolve(getUserFields(result[0]));
             } else {
-                reject();
+                reject(errConstants.USER_ERROR);
             }
         }).catch((err) => {
             debug(new Error(err));
