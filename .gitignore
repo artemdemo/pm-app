@@ -4,7 +4,7 @@ node_modules
 e2e-test-*.pid
 e2e-test.db
 pm-database
-pm.db
+server/pm.db
 selenium-*
 reports
 app-settings.json

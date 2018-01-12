@@ -1,4 +1,4 @@
-/* eslint-disable no-console, strict */
+/* eslint-disable no-console */
 
 const fs = require('fs');
 const path = require('path');
@@ -6,6 +6,7 @@ const Hapi = require('hapi');
 const inert = require('inert');
 const chalk = require('chalk');
 const hapiAuthJwt = require('hapi-auth-jwt2');
+const debug = require('debug')('pm:index');
 const DB = require('sqlite-crud');
 
 let pathToTheDB;
@@ -16,7 +17,8 @@ let appSettings = {};
 try {
     appSettings = require('../app-settings.json');
 } catch (e) {
-    console.log(`${chalk.yellow('[Info]')} app-settings.json - not found`);
+    debug('app-settings.json - not found');
+    debug('Using default settings instead');
 }
 
 if (appSettings.db) {
@@ -45,6 +47,7 @@ if (cliDBPath) {
         pathToTheDB = './pm.db';
         try {
             fs.lstatSync(pathToTheDB);
+            debug(`DB file found in path "${pathToTheDB}"`);
         } catch (e) {
             migrateDB = true;
         }
@@ -53,9 +56,13 @@ if (cliDBPath) {
 
 DB.connectToDB(pathToTheDB);
 if (migrateDB) {
-    const migrationPath = 'server/models/migrations';
-    console.log(chalk.yellow('[Migrating DB] ') + migrationPath);
-    DB.migrate(migrationPath);
+    const migrationPath = './models/migrations';
+    debug(`Migrating DB, path to files with migrations is "${migrationPath}"`);
+    DB.migrate(migrationPath)
+        .catch((err) => {
+            debug('Migration failed');
+            debug(err);
+        });
 }
 
 // Normalize a port into a number, string, or false.
@@ -128,13 +135,11 @@ server.register(inert, () => {
 
 // Start the server
 async function start() {
-
-    routerDirWalker('./server/routes');
-
     try {
+        routerDirWalker('./routes');
         await server.start();
     } catch (err) {
-        console.log(err);
+        debug(err);
         process.exit(1);
     }
 

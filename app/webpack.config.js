@@ -1,8 +1,8 @@
-const packageFile = require('./package.json');
+const packageFile = require('../server/package.json');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const configOptions = {
-    buildFolder: './public',
+    buildFolder: '../public',
     appVersion: packageFile.version,
     extractCssFile: true,
     isProduction,

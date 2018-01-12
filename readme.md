@@ -17,23 +17,16 @@ Work in progress. There is still much to be done.
 I assume that you have at least `node v4.x.x` and `npm 3.x.x`.
 (Everything tested in following environment: `node v6.3.1` and `npm 3.10.3`)
 
-First of all you need to run following command:
-(it will install all dependencies and copy all needed files after that)
+*Start server*
 
 ```
-$ npm i && npm run build
+$ cd server/ && npm start 
 ```
 
-Then run the server:
+*Start watch for the app*
 
 ```
-$ npm start
-```
-
-And start watching files:
-
-```
-$ npm run watch
+$ cd app/ && npm start 
 ```
 
 This is it, you are ready to go - open [http://localhost:3000/login](http://localhost:3000/login) and login with test user:
@@ -60,14 +53,6 @@ $ npm test
 ```
 
 More [about e2e tests](docs/e2e.md)
-
-## Debugging server
-
-Run server with debug enabled:
-
-```
-$ DEBUG=pm:* npm start
-```
 
 ## Main technologies
 
