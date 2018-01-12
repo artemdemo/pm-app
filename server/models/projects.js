@@ -41,43 +41,35 @@ exports.getAll = projectsData => new Promise((resolve, reject) => {
 });
 
 
-exports.addNew = newProjectData => new Promise((resolve, reject) => {
+exports.addNew = (newProjectData) => {
     const now = moment(new Date());
 
     if (!newProjectData.payload.name) {
         const err = 'No newProjectData.payload.name in given project';
         debug(new Error(err));
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
 
-    sessions.getSession({
-        id: newProjectData.tokenId,
-    }).then((session) => {
-        try {
+    const id = newProjectData.tokenId;
+
+    return sessions.getSession({ id })
+        .then((session) => {
             return DB.insertRow(tableName, {
                 name: newProjectData.payload.name,
                 description: newProjectData.payload.description,
                 added: now.format('YYYY-MM-DD HH:mm:ss'),
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 user_id: session.user_id,
-            }).then((result) => {
-                resolve({
-                    id: result.id,
-                    added: now.format('YYYY-MM-DD HH:mm:ss'),
-                    updated: now.format('YYYY-MM-DD HH:mm:ss'),
-                });
             });
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    });
-});
+        })
+        .then(result => ({
+            id: result.id,
+            added: now.format('YYYY-MM-DD HH:mm:ss'),
+            updated: now.format('YYYY-MM-DD HH:mm:ss'),
+        }));
+};
 
-exports.updateProject = projectData => new Promise((resolve, reject) => {
+exports.updateProject = (projectData) => {
     const now = moment(new Date());
     const updateData = {};
     const updateAllowed = true;
@@ -85,8 +77,7 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
     if (!projectData.payload.id) {
         const err = 'No projectData.payload.id in given project';
         debug(new Error(err));
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
 
     const allowedFields = ['name', 'description'];
@@ -100,16 +91,15 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
         const err = 'No fields to update';
         debug(new Error(err));
         debug(projectData.payload);
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    sessions.getSession({
-        id: projectData.tokenId,
-    }).then((session) => {
-        try {
+    const id = projectData.tokenId;
+
+    return sessions.getSession({ id })
+        .then((session) => {
             return DB.updateRow(tableName, updateData, [{
                 column: 'id',
                 comparator: '=',
@@ -119,33 +109,23 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
                 comparator: '=',
                 value: session.user_id,
             }]);
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    })
-        .then(() => {
-            resolve({
-                updated: updateData.updated,
-            });
         })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-});
+        .then(() => ({
+            updated: updateData.updated,
+        }));
+};
 
-exports.deleteProject = projectData => new Promise((resolve, reject) => {
+exports.deleteProject = (projectData) => {
     if (!projectData.payload) {
         const err = 'No projectId in given project';
         debug(new Error(err));
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
 
-    sessions.getSession({
-        id: projectData.tokenId,
-    }).then((session) => {
-        try {
+    const id = projectData.tokenId;
+
+    return sessions.getSession({ id })
+        .then((session) => {
             return DB.deleteRows(tableName, [{
                 column: 'id',
                 comparator: '=',
@@ -155,15 +135,5 @@ exports.deleteProject = projectData => new Promise((resolve, reject) => {
                 comparator: '=',
                 value: session.user_id,
             }]);
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    })
-        .then(() => {
-            resolve();
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
         });
-});
+};

@@ -14,8 +14,8 @@ Work in progress. There is still much to be done.
 
 ## Getting started
 
-I assume that you have at least `node v4.x.x` and `npm 3.x.x`.
-(Everything tested in following environment: `node v6.3.1` and `npm 3.10.3`)
+I assume that you have at least `node v9.x.x` and `npm 5.x.x`.
+(Everything tested in following environment: `node v9.3.0` and `npm 5.6.0`)
 
 *Start server*
 

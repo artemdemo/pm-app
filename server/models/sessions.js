@@ -1,17 +1,10 @@
-const debug = require('debug')('pm:models:sessions');
 const moment = require('moment');
 const aguid = require('aguid');  // https://github.com/ideaq/aguid
 const DB = require('sqlite-crud');
-const errConstants = require('../constants/error');
 
 const tableName = 'sessions';
 
-/**
- * Get session data from DB
- * @param queryObject
- * @returns {*|promise}
- */
-const getSession = queryObject => new Promise((resolve, reject) => {
+const getSession = async function(queryObject) {
     let column;
     let value;
 
@@ -27,143 +20,89 @@ const getSession = queryObject => new Promise((resolve, reject) => {
     }
 
     if (!column) {
-        const err = 'There is no column data';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('There is no column data');
     }
 
     if (!value) {
-        const err = 'There is no value data';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('There is no value data');
     }
 
-    try {
-        DB.getRows(tableName, [{
-            column,
-            comparator: '=',
-            value,
-        }])
-            .then((result) => {
-                if (result.length === 0) {
-                    resolve(null);
-                } else {
-                    resolve(result[0]);
-                }
-            })
-            .catch((err) => {
-                debug(new Error(err));
-                reject(errConstants.DB_ERROR);
-            });
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    }
-});
+    const result = await DB.getRows(tableName, [{
+        column,
+        comparator: '=',
+        value,
+    }]);
 
-const updateSession = session => new Promise((resolve, reject) => {
+    return result.length === 0 ? null : result[0];
+};
+
+
+const updateSession = async function(session) {
     const expiration = moment(new Date()).add(7, 'days');
-    const updateData = {};
+    const updateData = {
+        expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
+    };
 
     if (!session.id) {
-        const err = 'No session.id in given session';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('No session.id in given session');
     }
 
-    updateData.expiration = expiration.format('YYYY-MM-DD HH:mm:ss');
+    await DB.updateRow(tableName, updateData, [{
+        column: 'id',
+        comparator: '=',
+        value: session.id,
+    }]);
 
-    try {
-        DB.updateRow(tableName, updateData, [{
-            column: 'id',
-            comparator: '=',
-            value: session.id,
-        }]).then(() => {
-            resolve({
-                expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
-            });
-        }).catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    }
-});
+    return updateData;
+};
 
-const addSession = newSession => new Promise((resolve, reject) => {
+
+const addSession = async function(newSession) {
     if (!newSession.user_id) {
-        const err = 'No user_id in given object';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('No user_id in given object');
     }
 
-    try {
-        getSession({
+    // eslint-disable-next-line
+    const { user_id } = newSession;
+    const session = await getSession({ user_id });
+
+    if (!session) {
+        const sessionId = aguid(); // a random session id
+        const expiration = moment(new Date()).add(30, 'm');
+        await DB.insertRow(tableName, {
+            id: sessionId,
             user_id: newSession.user_id,
-        }).then((session) => {
-            if (!session) {
-                const sessionId = aguid(); // a random session id
-                const expiration = moment(new Date()).add(30, 'm');
-                return DB.insertRow(tableName, {
-                    id: sessionId,
-                    user_id: newSession.user_id,
-                    expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
-                }).then(() => {
-                    resolve({
-                        id: sessionId,
-                        expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
-                    });
-                });
-            }
-            return updateSession({
-                id: session.id,
-            }).then((result) => {
-                resolve({
-                    id: session.id,
-                    expiration: result.expiration,
-                });
-            });
-        }).catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
+            expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
         });
 
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
+        return {
+            id: sessionId,
+            expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
+        };
     }
-});
 
-const deleteSession = sessionId => new Promise((resolve, reject) => {
+    const result = await updateSession({
+        id: session.id,
+    });
+
+    return {
+        id: session.id,
+        expiration: result.expiration,
+    };
+};
+
+
+const deleteSession = async function(sessionId) {
     if (!sessionId) {
-        const err = 'No sessionId in given task';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('No sessionId in given task');
     }
 
-    try {
-        DB.deleteRows(tableName, [{
-            column: 'id',
-            comparator: '=',
-            value: sessionId,
-        }]).then(() => {
-            resolve();
-        }).catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    }
-});
+    return DB.deleteRows(tableName, [{
+        column: 'id',
+        comparator: '=',
+        value: sessionId,
+    }]);
+};
 
 module.exports = {
     addSession,

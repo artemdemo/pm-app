@@ -129,12 +129,14 @@ server.register(inert, () => {
 
         server.auth.default('jwt');
 
-        start();
+        startServer().then(() => {
+            console.log(chalk.yellow.bold('Server is running at: ') + chalk.cyan(server.info.uri));
+        });
     });
 });
 
 // Start the server
-async function start() {
+async function startServer() {
     try {
         routerDirWalker('./routes');
         await server.start();
@@ -142,7 +144,5 @@ async function start() {
         debug(err);
         process.exit(1);
     }
-
-    console.log(chalk.yellow.bold('Server is running at: ') + chalk.cyan(server.info.uri));
 }
 

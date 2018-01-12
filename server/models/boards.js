@@ -2,7 +2,6 @@ const debug = require('debug')('pm:models:boards');
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
-const errConstants = require('../constants/error');
 
 const tableName = 'boards';
 
@@ -27,50 +26,33 @@ const cratePositionsQuery = (boards) => {
 /**
  * Return all boards (without tasks), that related to given session id
  * @param tokenId {String} - for example: bbad4972-43d3-43fa-bb7f-35fb1ae64333
- * @returns {Array|promise}
  */
-const getAllBoards = tokenId => new Promise((resolve, reject) => {
+const getAllBoards = (tokenId) => {
     const boardsQuery = `SELECT boards.id, boards.title, boards.description, boards.id_position, sessions.user_id
                          FROM boards
                          INNER JOIN sessions ON sessions.user_id = boards.user_id
                          WHERE sessions.id = ?
                          ORDER BY id_position ASC;`;
 
-    DB.queryRows(boardsQuery, [tokenId])
-        .then((boards) => {
-            resolve(boards);
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-});
+    return DB.queryRows(boardsQuery, [tokenId]);
+};
 
 /**
  * Fetch all boards with tasks
  * @param boardsData {Object}
  * @param boardsData.tokenId {String}
  * @param boardsData.id {String}
- * @returns {Array|promise}
+ * @returns {Promise}
  */
-exports.getAll = boardsData => new Promise((resolve, reject) => {
-    getAllBoards(boardsData.tokenId)
-        .then((boards) => {
-            const boardsList = boards.map((board) => {
-                return {
-                    id: board.id,
-                    title: board.title,
-                    description: board.description,
-                    id_position: board.id_position,
-                };
-            });
-            resolve(boardsList);
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-});
+exports.getAll = boardsData => getAllBoards(boardsData.tokenId)
+    .then((boards) => {
+        return boards.map(board => ({
+            id: board.id,
+            title: board.title,
+            description: board.description,
+            id_position: board.id_position,
+        }));
+    });
 
 /**
  * Add new board
@@ -80,9 +62,9 @@ exports.getAll = boardsData => new Promise((resolve, reject) => {
  * @param newBoardData.payload.title {String}
  * @param newBoardData.payload.description {String}
  * @param newBoardData.payload.id_position {Number}
- * @returns {Object|promise}
+ * @returns {Promise}
  */
-exports.addNew = newBoardData => new Promise((resolve, reject) => {
+exports.addNew = (newBoardData) => {
     const now = moment(new Date());
     const promisesList = [];
 
@@ -93,7 +75,7 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
         id: newBoardData.tokenId,
     }));
 
-    Promise.all(promisesList)
+    return Promise.all(promisesList)
         .then((results) => {
             const boards = results[0];
             const session = results[1];
@@ -136,15 +118,8 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
                     return DB.run(query)
                         .then(() => resultData);
                 });
-        })
-        .then((resultData) => {
-            resolve(resultData);
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
         });
-});
+};
 
 /**
  * Update board
@@ -154,9 +129,9 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
  * @param boardData.payload.title {String}
  * @param boardData.payload.description {String} - (optional)
  * @param boardData.payload.id_position {Number} - (optional)
- * @returns {Object|promise}
+ * @returns {Promise}
  */
-exports.updateBoard = boardData => new Promise((resolve, reject) => {
+exports.updateBoard = (boardData) => {
     const now = moment(new Date());
     const updateData = {};
     const updateAllowed = true;
@@ -164,8 +139,7 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
     if (!boardData.payload.id) {
         const err = 'No boardData.payload.id in given task';
         debug(new Error(err));
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
 
     const allowedFields = ['title', 'description'];
@@ -179,13 +153,12 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
         const err = 'No fields to update';
         debug(new Error(err));
         debug(boardData.payload);
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    getAllBoards(boardData.tokenId)
+    return getAllBoards(boardData.tokenId)
         .then((boards) => {
             const userId = boards[0].user_id;
             const updatedBoard = Object.assign(updateData, {
@@ -202,7 +175,7 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
                 comparator: '=',
                 value: userId,
             }]).then(() => {
-                let boardsList = [];
+                const boardsList = [];
                 let newBoardAdded = false;
 
                 boards.forEach((board, i) => {
@@ -217,69 +190,50 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
                 if (!newBoardAdded) {
                     boardsList.push(updatedBoard);
                 }
-                boardsList = boardsList.map((board, index) => Object.assign(board, {
+
+                const boardsListWithIdPosition = boardsList.map((board, index) => Object.assign(board, {
                     id_position: index,
                 }));
 
-                const query = cratePositionsQuery(boardsList);
+                const query = cratePositionsQuery(boardsListWithIdPosition);
                 return DB.run(query)
                     .then(() => {
                         debug(`Board id ${boardData.payload.id} moved`);
                     });
             });
-        })
-        .then(() => {
-            resolve();
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
         });
-});
+};
 
 /**
  * Delete board
  * @param boardData {Object}
  * @param boardData.tokenId {String}
  * @param boardData.payload {String} - id of the board that should be deleted
- * @returns {Object|promise}
  */
-exports.deleteBoard = boardData => new Promise((resolve, reject) => {
+exports.deleteBoard = (boardData) => {
     if (!boardData.payload) {
         const err = 'No "id" in given board';
         debug(new Error(err));
-        reject(err);
-        return;
+        return Promise.reject(err);
     }
-    sessions.getSession({
-        id: boardData.tokenId,
-    })
+
+    const id = boardData.tokenId;
+
+    return sessions.getSession({ id })
         .then((session) => {
-            try {
-                return DB.deleteRows(tableName, [{
-                    column: 'id',
-                    comparator: '=',
-                    value: boardData.payload,
-                }, {
-                    column: 'user_id',
-                    comparator: '=',
-                    value: session.user_id,
-                }]).then(() => {
-                    return getAllBoards(boardData.tokenId)
-                        .then((boards) => {
-                            const query = cratePositionsQuery(boards);
-                            return DB.run(query);
-                        });
-                });
-            } catch (err) {
-                return Promise.reject(err);
-            }
+            return DB.deleteRows(tableName, [{
+                column: 'id',
+                comparator: '=',
+                value: boardData.payload,
+            }, {
+                column: 'user_id',
+                comparator: '=',
+                value: session.user_id,
+            }]);
         })
-        .then(() => {
-            resolve();
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
+        .then(() => getAllBoards(boardData.tokenId))
+        .then((boards) => {
+            const query = cratePositionsQuery(boards);
+            return DB.run(query);
         });
-});
+};
