@@ -45,6 +45,10 @@ class SingleTask extends React.PureComponent {
         this.setupData(nextProps);
     }
 
+    componentWillUnmount() {
+        this.dueInstance.destroy();
+    }
+
     setupData(props = this.props) {
         const { task, projects } = props;
         const { selectedProjects, availableProjects } = filterProjects(task, projects);
