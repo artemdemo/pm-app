@@ -114,7 +114,6 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
                         added: now.format('YYYY-MM-DD HH:mm:ss'),
                         updated: now.format('YYYY-MM-DD HH:mm:ss'),
                     };
-                    resolve(resultData);
 
                     let boardsList = [];
                     let newBoardAdded = false;
@@ -134,8 +133,13 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
                     }));
 
                     const query = cratePositionsQuery(boardsList);
-                    DB.run(query);
+                    return DB.run(query)
+                        .then(() => resultData);
                 });
+        })
+        .then((resultData) => {
+            debug(`Board id ${resultData.id} created`);
+            resolve(resultData);
         })
         .catch((err) => {
             debug(new Error(err));
@@ -221,11 +225,14 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
                 const query = cratePositionsQuery(boardsList);
                 return DB.run(query)
                     .then(() => {
-                        debug(`Moved board # ${boardData.payload.id}`);
+                        debug(`Board id ${boardData.payload.id} moved`);
                     });
             });
         })
-        .then(() => resolve())
+        .then(() => {
+            resolve();
+            debug(`Board id ${boardData.payload.id} updated`);
+        })
         .catch((err) => {
             debug(new Error(err));
             reject(errConstants.DB_ERROR);
@@ -248,28 +255,34 @@ exports.deleteBoard = boardData => new Promise((resolve, reject) => {
     }
     sessions.getSession({
         id: boardData.tokenId,
-    }).then((session) => {
-        try {
-            return DB.deleteRows(tableName, [{
-                column: 'id',
-                comparator: '=',
-                value: boardData.payload,
-            }, {
-                column: 'user_id',
-                comparator: '=',
-                value: session.user_id,
-            }]).then(() => {
-                return getAllBoards(boardData.tokenId)
-                    .then((boards) => {
-                        const query = cratePositionsQuery(boards);
-                        DB.run(query);
-                    });
-            });
-        } catch (err) {
-            return Promise.reject(err);
-        }
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    });
+    })
+        .then((session) => {
+            try {
+                return DB.deleteRows(tableName, [{
+                    column: 'id',
+                    comparator: '=',
+                    value: boardData.payload,
+                }, {
+                    column: 'user_id',
+                    comparator: '=',
+                    value: session.user_id,
+                }]).then(() => {
+                    return getAllBoards(boardData.tokenId)
+                        .then((boards) => {
+                            const query = cratePositionsQuery(boards);
+                            return DB.run(query);
+                        });
+                });
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        })
+        .then(() => {
+            debug(`Board id ${boardData.payload} deleted`);
+            resolve();
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
