@@ -138,7 +138,6 @@ exports.addNew = newBoardData => new Promise((resolve, reject) => {
                 });
         })
         .then((resultData) => {
-            debug(`Board id ${resultData.id} created`);
             resolve(resultData);
         })
         .catch((err) => {
@@ -231,7 +230,6 @@ exports.updateBoard = boardData => new Promise((resolve, reject) => {
         })
         .then(() => {
             resolve();
-            debug(`Board id ${boardData.payload.id} updated`);
         })
         .catch((err) => {
             debug(new Error(err));
@@ -278,7 +276,6 @@ exports.deleteBoard = boardData => new Promise((resolve, reject) => {
             }
         })
         .then(() => {
-            debug(`Board id ${boardData.payload} deleted`);
             resolve();
         })
         .catch((err) => {

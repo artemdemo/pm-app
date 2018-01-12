@@ -64,7 +64,6 @@ exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
     DB.run(query)
         .then(addRelations)
         .then(() => {
-            debug(`Added relation between project id ${projectId} and task id ${taskId}`);
             resolve();
         })
         .catch((err) => {

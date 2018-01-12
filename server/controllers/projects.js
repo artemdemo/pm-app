@@ -6,10 +6,6 @@ const projectsTasksRelations = require('../models/projects_tasks_relations');
 const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-// exports.index = (request, replay) => {
-//     replay.redirect('/');
-// };
-
 exports.index = (request, replay) => replay.file('index.html');
 
 exports.all = (request, replay) => {
@@ -42,7 +38,10 @@ exports.add = (request, replay) => {
         tokenId: tokenData.id,
     };
     projects.addNew(projectsData)
-        .then(result => replay(result))
+        .then((result) => {
+            debug(`Project id ${result.id} created`);
+            replay(result);
+        })
         .catch((err) => {
             debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));
@@ -62,9 +61,11 @@ exports.update = (request, replay) => {
     };
     projects.updateProject(projectsData)
         .then((updatedData) => {
+            debug(`Project id ${request.payload.id} updated`);
             if (tasks && _isNumber(id)) {
                 return projectsTasksRelations.addRelation(id, tasks)
                     .then(() => {
+                        debug(`Added relations to project id ${request.payload.id} and tasks ${tasks}`);
                         replay(updatedData);
                     });
             }
@@ -83,7 +84,10 @@ exports.delete = (request, replay) => {
         tokenId: tokenData.id,
     };
     projects.deleteProject(projectsData)
-        .then(() => replay({}))
+        .then(() => {
+            debug(`Project id ${request.params.projectId} deleted`);
+            replay({});
+        })
         .catch((err) => {
             debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));

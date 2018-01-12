@@ -43,7 +43,7 @@ exports.add = (request, replay) => {
     };
     tasks.addNew(tasksData)
         .then((result) => {
-            debug(`New task id ${result.id} added`);
+            debug(`Task id ${result.id} created`);
             if (Array.isArray(projects) && projects.length > 0) {
                 projectsTasksRelations.addRelation(projects, result.id)
                     .then(() => {

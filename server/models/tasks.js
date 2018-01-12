@@ -69,20 +69,22 @@ exports.addNew = newTaskData => new Promise((resolve, reject) => {
                 due: newTaskData.due || null,
                 board_id: newTaskData.board_id || null,
                 user_id: session.user_id,
-            }).then((result) => {
-                resolve({
-                    id: result.id,
-                    added: now.format('YYYY-MM-DD HH:mm:ss'),
-                    updated: now.format('YYYY-MM-DD HH:mm:ss'),
-                });
             });
         } catch (err) {
             return Promise.reject(err);
         }
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    });
+    })
+        .then((result) => {
+            resolve({
+                id: result.id,
+                added: now.format('YYYY-MM-DD HH:mm:ss'),
+                updated: now.format('YYYY-MM-DD HH:mm:ss'),
+            });
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 exports.updateTask = taskData => new Promise((resolve, reject) => {
@@ -150,18 +152,20 @@ exports.updateTask = taskData => new Promise((resolve, reject) => {
                 column: 'user_id',
                 comparator: '=',
                 value: session.user_id,
-            }]).then(() => {
-                resolve({
-                    updated: updateData.updated,
-                });
-            });
+            }]);
         } catch (err) {
             return Promise.reject(err);
         }
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    });
+    })
+        .then(() => {
+            resolve({
+                updated: updateData.updated,
+            });
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 exports.deleteTask = taskData => new Promise((resolve, reject) => {
@@ -182,16 +186,18 @@ exports.deleteTask = taskData => new Promise((resolve, reject) => {
                 column: 'user_id',
                 comparator: '=',
                 value: session.user_id,
-            }]).then(() => {
-                resolve();
-            });
+            }]);
         } catch (err) {
             return Promise.reject(err);
         }
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    });
+    })
+        .then(() => {
+            resolve();
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 
@@ -219,10 +225,10 @@ exports.updateTaskPosition = taskData => new Promise((resolve, reject) => {
     }
 
     let query;
+    let taskList = [];
 
     DB.queryRows(tasksQuery, [taskData.tokenId, taskData.boardId])
         .then((tasks) => {
-            let taskList = [];
             const newTask = {
                 id: taskData.taskId,
                 id_position_scrum: 888, // this number doesn't matter for now, it will be corrected later
@@ -262,9 +268,9 @@ exports.updateTaskPosition = taskData => new Promise((resolve, reject) => {
             query += ` board_id = ${taskData.boardId}`;
             query += ` WHERE id IN (${ids.join(', ')});`;
 
-            return DB.run(query)
-                .then(() => resolve(taskList));
+            return DB.run(query);
         })
+        .then(() => resolve(taskList))
         .catch((err) => {
             debug(new Error(err));
             debug('Query was:');

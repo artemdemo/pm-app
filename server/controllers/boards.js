@@ -41,6 +41,7 @@ exports.add = (request, replay) => {
     };
     boards.addNew(boardsData)
         .then((result) => {
+            debug(`Board id ${result.id} created`);
             replay(result);
         })
         .catch((err) => {
@@ -61,6 +62,7 @@ exports.update = (request, replay) => {
     };
     boards.updateBoard(boardsData)
         .then(() => {
+            debug(`Board id ${request.payload.id} updated`);
             replay({});
         })
         .catch((err) => {
@@ -81,6 +83,7 @@ exports.delete = (request, replay) => {
     };
     boards.deleteBoard(boardsData)
         .then(() => {
+            debug(`Board id ${request.params.boardId} deleted`);
             replay({});
         })
         .catch((err) => {

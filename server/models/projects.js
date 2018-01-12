@@ -62,7 +62,6 @@ exports.addNew = newProjectData => new Promise((resolve, reject) => {
                 updated: now.format('YYYY-MM-DD HH:mm:ss'),
                 user_id: session.user_id,
             }).then((result) => {
-                debug(`Project id ${result.id} created`);
                 resolve({
                     id: result.id,
                     added: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -119,19 +118,20 @@ exports.updateProject = projectData => new Promise((resolve, reject) => {
                 column: 'user_id',
                 comparator: '=',
                 value: session.user_id,
-            }]).then(() => {
-                debug(`Project id ${projectData.payload.id} updated`);
-                resolve({
-                    updated: updateData.updated,
-                });
-            });
+            }]);
         } catch (err) {
             return Promise.reject(err);
         }
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    });
+    })
+        .then(() => {
+            resolve({
+                updated: updateData.updated,
+            });
+        })
+        .catch((err) => {
+            debug(new Error(err));
+            reject(errConstants.DB_ERROR);
+        });
 });
 
 exports.deleteProject = projectData => new Promise((resolve, reject) => {
@@ -160,7 +160,6 @@ exports.deleteProject = projectData => new Promise((resolve, reject) => {
         }
     })
         .then(() => {
-            debug(`Project id ${projectData.payload} deleted`);
             resolve();
         })
         .catch((err) => {
