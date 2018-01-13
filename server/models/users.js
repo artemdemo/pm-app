@@ -1,4 +1,3 @@
-const debug = require('debug')('pm:models:users');
 const moment = require('moment');
 const crypto = require('crypto');
 const DB = require('sqlite-crud');
@@ -22,78 +21,54 @@ const getUserFields = (rawUser) => {
 };
 
 
-exports.addNew = newUser => new Promise((resolve, reject) => {
+exports.addNew = async function(newUser) {
     const now = moment(new Date());
 
-    try {
-        DB.insertRow(tableName, {
-            username: newUser.username,
-            email: newUser.email,
-            password: crypto.createHash('sha256').update(newUser.password).digest('base64'),
-            added: now.format('YYYY-MM-DD HH:mm:ss'),
-            updated: now.format('YYYY-MM-DD HH:mm:ss'),
-        }).then((result) => {
-            resolve({
-                id: result.id,
-                added: now.format('YYYY-MM-DD HH:mm:ss'),
-                updated: now.format('YYYY-MM-DD HH:mm:ss'),
-            });
-        }).catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
+    const result = await DB.insertRow(tableName, {
+        username: newUser.username,
+        email: newUser.email,
+        password: crypto.createHash('sha256').update(newUser.password).digest('base64'),
+        added: now.format('YYYY-MM-DD HH:mm:ss'),
+        updated: now.format('YYYY-MM-DD HH:mm:ss'),
+    });
+
+    return {
+        id: result.id,
+        added: now.format('YYYY-MM-DD HH:mm:ss'),
+        updated: now.format('YYYY-MM-DD HH:mm:ss'),
+    };
+};
+
+
+exports.getUser = async function(user) {
+    const result = await DB.getRows(tableName, [{
+        column: 'email',
+        comparator: '=',
+        value: user.email,
+    }, {
+        column: 'password',
+        comparator: '=',
+        value: crypto.createHash('sha256').update(user.password).digest('base64'),
+    }]);
+
+    if (result.length === 0) {
+        throw new Error(errConstants.USER_ERROR);
     }
-});
+
+    return getUserFields(result[0]);
+};
 
 
-exports.getUser = user => new Promise((resolve, reject) => {
-    try {
-        DB.getRows(tableName, [{
-            column: 'email',
-            comparator: '=',
-            value: user.email,
-        }, {
-            column: 'password',
-            comparator: '=',
-            value: crypto.createHash('sha256').update(user.password).digest('base64'),
-        }]).then((result) => {
-            if (result.length === 1) {
-                resolve(getUserFields(result[0]));
-            } else {
-                reject(errConstants.USER_ERROR);
-            }
-        }).catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
+exports.getUserById = async function(userId) {
+    const result = await DB.getRows(tableName, [{
+        column: 'id',
+        comparator: '=',
+        value: userId,
+    }]);
+
+    if (result.length === 0) {
+        throw new Error(errConstants.USER_ERROR);
     }
-});
 
-
-exports.getUserById = userId => new Promise((resolve, reject) => {
-    try {
-        DB.getRows(tableName, [{
-            column: 'id',
-            comparator: '=',
-            value: userId,
-        }]).then((result) => {
-            if (result.length === 1) {
-                resolve(getUserFields(result[0]));
-            } else {
-                reject();
-            }
-        }).catch((err) => {
-            debug(new Error(err));
-            reject(errConstants.DB_ERROR);
-        });
-    } catch (err) {
-        debug(new Error(err));
-        reject(errConstants.DB_ERROR);
-    }
-});
+    return getUserFields(result[0]);
+};
