@@ -82,7 +82,7 @@ export function deleteBoard(boardId) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch(`/boards/${boardId}`, token, {method: 'DELETE'})
+        fetch(`/api/boards/${boardId}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then(() => {

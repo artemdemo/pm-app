@@ -87,7 +87,7 @@ export function deleteProject(id) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch(`/projects/${id}`, token, {method: 'DELETE'})
+        fetch(`/api/projects/${id}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then(() => {

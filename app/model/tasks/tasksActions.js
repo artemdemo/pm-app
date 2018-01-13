@@ -80,7 +80,7 @@ export function deleteTask(taskId) {
     }
 
     return (dispatch) => {
-        fetch(`/tasks/${taskId}`, token, {method: 'DELETE'})
+        fetch(`/api/tasks/${taskId}`, token, {method: 'DELETE'})
             .then(checkResponseStatus)
             .then((response) => {
                 return response.json();

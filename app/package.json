@@ -4,7 +4,7 @@
   "description": "Project Management app",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --progress --colors --watch",
+    "start": "webpack-dev-server",
     "build": "webpack --progress --colors",
     "eslint": "eslint ./app/**/*.js ./app/**/**/*.js ./app/**/*.jsx ./app/**/**/*.jsx",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
@@ -58,14 +58,15 @@
     "css-loader": "^0.28.7",
     "eslint-config-artem-react": "git+https://github.com/artemdemo/eslint-config-artem-react.git#3.1.0",
     "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
     "jasmine-node": "^1.14.5",
     "json-loader": "^0.5.4",
     "less-loader": "^4.0.5",
     "postcss-loader": "^2.0.9",
     "style-loader": "^0.19.1",
     "svg-loader": "0.0.2",
-    "file-loader": "^1.1.6",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.10.1"
   }
 }
