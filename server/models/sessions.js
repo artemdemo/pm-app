@@ -92,21 +92,7 @@ const addSession = async function(newSession) {
 };
 
 
-const deleteSession = async function(sessionId) {
-    if (!sessionId) {
-        throw new Error('No sessionId in given task');
-    }
-
-    return DB.deleteRows(tableName, [{
-        column: 'id',
-        comparator: '=',
-        value: sessionId,
-    }]);
-};
-
 module.exports = {
     addSession,
     getSession,
-    updateSession,
-    deleteSession,
 };

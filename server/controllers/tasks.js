@@ -5,10 +5,6 @@ const projectsTasksRelations = require('../models/projects_tasks_relations');
 const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-// exports.index = (request, replay) => {
-//     replay.redirect('/');
-// };
-
 exports.index = (request, replay) => replay.file('index.html');
 
 exports.all = (request, replay) => {
