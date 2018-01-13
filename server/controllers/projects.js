@@ -104,7 +104,10 @@ exports.connectTask = (request, replay) => {
 
 exports.disconnectTask = (request, replay) => {
     projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
-        .then(() => replay({}))
+        .then(() => {
+            debug(`Task id ${request.params.taskId} disconnected from project id ${request.params.projectId}`);
+            replay({});
+        })
         .catch((err) => {
             debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));

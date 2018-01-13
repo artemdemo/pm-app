@@ -1,4 +1,3 @@
-const debug = require('debug')('pm:models:relations');
 const DB = require('sqlite-crud');
 const _isNumber = require('lodash/isNumber');
 
@@ -10,23 +9,14 @@ const tableName = 'projects_tasks_relations';
  * @param projectId {Number || Array}
  * @param taskId {Number || Array}
  */
-exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
+const addRelation = async function(projectId, taskId) {
 
     if (Array.isArray(projectId) && Array.isArray(taskId)) {
-        const err = 'projectId and taskId can\'t be both an Array';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('projectId and taskId can\'t be both an Array');
     } else if (!Array.isArray(taskId) && !_isNumber(taskId)) {
-        const err = 'taskId should be a number or Array';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('taskId should be a number or Array');
     } else if (!Array.isArray(projectId) && !_isNumber(projectId)) {
-        const err = 'projectId should be a number or Array';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('projectId should be a number or Array');
     }
 
     const addRelations = () => {
@@ -61,16 +51,8 @@ exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
         query = `DELETE FROM ${tableName} WHERE project_id=${projectId};`;
     }
 
-    DB.run(query)
-        .then(addRelations)
-        .then(() => {
-            resolve();
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(err);
-        });
-});
+    return DB.run(query).then(addRelations);
+};
 
 
 /**
@@ -79,20 +61,14 @@ exports.addRelation = (projectId, taskId) => new Promise((resolve, reject) => {
  * @param projectId {Number}
  * @param taskId {Number}
  */
-exports.deleteRelation = (projectId, taskId) => new Promise((resolve, reject) => {
+const deleteRelation = async function(projectId, taskId) {
     if (_isNumber(projectId) || Number(projectId) < 1) {
-        const err = 'projectId should be a number, greater than 1';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('projectId should be a number, greater than 1');
     } else if (_isNumber(taskId) || Number(taskId) < 1) {
-        const err = 'taskId should be a number, greater than 1';
-        debug(new Error(err));
-        reject(err);
-        return;
+        throw new Error('taskId should be a number, greater than 1');
     }
 
-    DB.deleteRows(tableName, [
+    return DB.deleteRows(tableName, [
         {
             column: 'task_id',
             comparator: '=',
@@ -103,59 +79,10 @@ exports.deleteRelation = (projectId, taskId) => new Promise((resolve, reject) =>
             comparator: '=',
             value: projectId,
         },
-    ]).then(() => {
-        debug(`Relation deleted between project id ${projectId} and task id ${taskId}`);
-        resolve();
-    }).catch((err) => {
-        debug(new Error(err));
-        reject(err);
-    });
-});
+    ]);
+};
 
-/**
- * Get all relations by project id or task id
- *
- * @param type {String} - 'project' or 'task'
- * @param typeId {Number} - id of project or task
- */
-exports.getRelations = (type, typeId) => new Promise((resolve, reject) => {
-    const allowedTypes = ['project', 'task'];
-    let query;
-
-    if (!type) {
-        const err = 'No type given';
-        debug(new Error(err));
-        reject(err);
-        return;
-    } else if (allowedTypes.indexOf(type) === -1) {
-        const err = `Given type is not allowed: ${type}`;
-        debug(new Error(err));
-        reject(err);
-        return;
-    } else if (!typeId) {
-        const err = 'No typeId given';
-        debug(new Error(err));
-        reject(err);
-        return;
-    }
-
-    query = `SELECT * FROM ${tableName} `;
-
-    switch (true) {
-        case type === 'project':
-            query += `WHERE project_id=${typeId};`;
-            break;
-        default:
-            query += `WHERE task_id=${typeId};`;
-            break;
-    }
-
-    DB.getAll(query)
-        .then((rows) => {
-            resolve(rows);
-        })
-        .catch((err) => {
-            debug(new Error(err));
-            reject(err);
-        });
-});
+module.exports = {
+    addRelation,
+    deleteRelation,
+};
