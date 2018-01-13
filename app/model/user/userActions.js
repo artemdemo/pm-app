@@ -65,7 +65,7 @@ export function checkAuthentication(location) {
     }
 
     return (dispatch) => {
-        fetch('/user', token)
+        fetch('/api/user', token)
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((userData) => {
@@ -95,7 +95,7 @@ export function checkAuthentication(location) {
 export function login(user) {
     return (dispatch) => {
         let token;
-        fetch('/login', null, {method: 'PUT', body: user})
+        fetch('/api/login', null, {method: 'PUT', body: user})
             .then(checkResponseStatus)
             .then((response) => {
                 token = response.headers.get('authorization');
@@ -130,7 +130,7 @@ export function login(user) {
 export function signup(user) {
     return (dispatch) => {
         let token;
-        fetch('/signup', null, {method: 'POST', body: user})
+        fetch('/api/signup', null, {method: 'POST', body: user})
             .then(checkResponseStatus)
             .then((response) => {
                 token = response.headers.get('authorization');

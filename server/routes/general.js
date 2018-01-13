@@ -6,24 +6,6 @@ module.exports = [
         handler: require('../controllers/index').index,
     },
     {
-        method: 'PUT',
-        path: '/login',
-        config: { auth: false },
-        handler: require('../controllers/index').login,
-    },
-    {
-        method: 'POST',
-        path: '/signup',
-        config: { auth: false },
-        handler: require('../controllers/index').signup,
-    },
-    {
-        method: 'GET',
-        path: '/user',
-        config: { auth: 'jwt' },
-        handler: require('../controllers/index').user,
-    },
-    {
         method: 'GET',
         path: '/js/{param*}',
         config: { auth: false },

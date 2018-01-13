@@ -22,7 +22,7 @@ export function loadSettings() {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/settings/all', token)
+        fetch('/api/settings', token)
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((settings) => {
@@ -44,7 +44,7 @@ export function updateSettings(settingsUpdate) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/settings', token, {method: 'PUT', body: settingsUpdate})
+        fetch('/api/settings', token, {method: 'PUT', body: settingsUpdate})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((setting) => {

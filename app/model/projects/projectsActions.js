@@ -39,7 +39,7 @@ export function loadProjects() {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/projects/all', token)
+        fetch('/api/projects', token)
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((projects) => {
@@ -63,7 +63,7 @@ export function addNewProject(newProject) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/projects', token, {method: 'POST', body: newProject})
+        fetch('/api/projects', token, {method: 'POST', body: newProject})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((project) => {
@@ -115,7 +115,7 @@ export function updateProject(projectUpdate) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/projects', token, {method: 'PUT', body: projectUpdate})
+        fetch('/api/projects', token, {method: 'PUT', body: projectUpdate})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((project) => {

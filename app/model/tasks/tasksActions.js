@@ -20,7 +20,7 @@ export function loadTasks() {
     }
 
     return (dispatch) => {
-        fetch('/tasks/all', token)
+        fetch('/api/tasks', token)
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((tasks) => {
@@ -51,7 +51,7 @@ export function addNewTask(newTask) {
     }
 
     return (dispatch) => {
-        fetch('/tasks', token, {method: 'POST', body: newTask})
+        fetch('/api/tasks', token, {method: 'POST', body: newTask})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((task) => {
@@ -119,7 +119,7 @@ export function updateTask(taskUpdate) {
     }
 
     return (dispatch) => {
-        fetch('/tasks', token, {method: 'PUT', body: taskUpdate})
+        fetch('/api/tasks', token, {method: 'PUT', body: taskUpdate})
             .then(checkResponseStatus)
             .then((response) => {
                 return response.json();
@@ -160,7 +160,7 @@ export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, posi
     return (dispatch) => {
         dispatch(updateTaskPosition(draggedTask));
 
-        fetch('/tasks/position', token, {method: 'PUT',
+        fetch('/api/tasks/position', token, {method: 'PUT',
             body: {
                 taskId: draggedTask.id,
                 nearTaskId,

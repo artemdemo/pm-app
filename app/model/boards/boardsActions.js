@@ -37,7 +37,7 @@ export function loadBoards() {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/boards/all', token)
+        fetch('/api/boards', token)
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((boards) => {
@@ -60,7 +60,7 @@ export function addNewBoard(newBoard) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/boards', token, {method: 'POST', body: newBoard})
+        fetch('/api/boards', token, {method: 'POST', body: newBoard})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((board) => {
@@ -108,7 +108,7 @@ export function updateBoard(boardUpdate) {
     const token = getStoredToken();
 
     return (dispatch) => {
-        fetch('/boards', token, {method: 'PUT', body: boardUpdate})
+        fetch('/api/boards', token, {method: 'PUT', body: boardUpdate})
             .then(checkResponseStatus)
             .then(response => response.json())
             .then((board) => {
