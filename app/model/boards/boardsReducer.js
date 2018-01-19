@@ -1,12 +1,6 @@
 import * as boardsConst from './boardsConst';
 import { sortByIdPosition } from '../../utils/boards';
 
-function sortBoardsByPosition(boardsList) {
-    return boardsList.map((board, index) => Object.assign(board, {
-        id_position: index,
-    }));
-}
-
 const initialState = {
     data: [],
     loading: false,
@@ -42,7 +36,7 @@ export default function boards(state = initialState, action) {
          */
         case boardsConst.ADD_BOARD:
             return Object.assign({}, state, {adding: true});
-        case boardsConst.BOARDS_ADDED:
+        case boardsConst.BOARD_ADDED:
             return Object.assign({}, state, {
                 data: [
                     ...state.data,
@@ -62,18 +56,13 @@ export default function boards(state = initialState, action) {
         case boardsConst.UPDATE_BOARD:
             return Object.assign({}, state, {updating: true});
         case boardsConst.BOARD_UPDATED:
-            let updatedBoardId;
-            for (let i = 0, len = state.data.length; i < len; i++) {
-                if (state.data[i].id !== action.board.id) {
-                    updatedBoardId = i;
-                }
-            }
             return Object.assign({}, state, {
-                data: [
-                    ...state.data.slice(0, updatedBoardId),
-                    action.board,
-                    ...state.data.slice(updatedBoardId + 1),
-                ],
+                data: state.data.map((item) => {
+                    if (item.id === action.board.id) {
+                        return action.board;
+                    }
+                    return item;
+                }),
                 updating: false,
                 updatingError: null,
             });
@@ -88,17 +77,8 @@ export default function boards(state = initialState, action) {
         case boardsConst.DELETE_BOARD:
             return Object.assign({}, state, {deleting: true});
         case boardsConst.BOARD_DELETED:
-            let deletedBoardId;
-            for (let i = 0, len = state.data.length; i < len; i++) {
-                if (state.data[i].id === action.id) {
-                    deletedBoardId = i;
-                }
-            }
             return Object.assign({}, state, {
-                data: [
-                    ...state.data.slice(0, deletedBoardId),
-                    ...state.data.slice(deletedBoardId + 1),
-                ],
+                data: state.data.filter(item => item.id !== action.id),
                 deleting: true,
                 deletingError: null,
             });

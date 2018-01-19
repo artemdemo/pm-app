@@ -37,7 +37,7 @@ function* addBoardSaga() {
                 .set('authorization', getStoredToken())
                 .send(board)
                 .promise();
-            yield put(boardAdded(result.body));
+            yield put(boardAdded(Object.assign(board, {id: result.body.id})));
         } catch (err) {
             yield put(boardAddingError(err));
         }
@@ -64,11 +64,11 @@ function* deleteBoardSaga() {
     while (true) {
         try {
             const { id } = yield take(boardsConst.DELETE_BOARD);
-            const result = yield request
+            yield request
                 .delete(`/api/boards/${id}`)
                 .set('authorization', getStoredToken())
                 .promise();
-            yield put(boardDeleted(result.body));
+            yield put(boardDeleted(id));
         } catch (err) {
             yield put(boardDeletingError(err));
         }

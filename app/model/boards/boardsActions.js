@@ -43,7 +43,7 @@ export function addBoard(board) {
 
 export function boardAdded(board) {
     return {
-        type: boardsConst.BOARDS_ADDED,
+        type: boardsConst.BOARD_ADDED,
         board,
     };
 }
