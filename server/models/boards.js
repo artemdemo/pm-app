@@ -5,6 +5,8 @@ const sessions = require('./sessions');
 
 const tableName = 'boards';
 
+const BOARD_FIELDS = 'boards.id, boards.title, boards.description, boards.id_position';
+
 /**
  * Create SQL query to set position_id by order of given array
  * @param boards {Array}
@@ -27,7 +29,7 @@ const cratePositionsQuery = (boards) => {
  * @param tokenId {String} - for example: bbad4972-43d3-43fa-bb7f-35fb1ae64333
  */
 const getAllBoards = async function(tokenId) {
-    const boardsQuery = `SELECT boards.id, boards.title, boards.description, boards.id_position, sessions.user_id
+    const boardsQuery = `SELECT ${BOARD_FIELDS}, sessions.user_id
                          FROM boards
                          INNER JOIN sessions ON sessions.user_id = boards.user_id
                          WHERE sessions.id = ?
@@ -52,6 +54,21 @@ const getAll = boardsData => getAllBoards(boardsData.tokenId)
             id_position: board.id_position,
         }));
     });
+
+/**
+ * Fetch single board
+ * @param boardId
+ * @param tokenId
+ * @return {Promise<Object|null>}
+ */
+const getBoard = async function(boardId, tokenId) {
+    const boardQuery = `SELECT ${BOARD_FIELDS}, sessions.user_id
+                         FROM boards
+                         INNER JOIN sessions ON sessions.user_id = boards.user_id
+                         WHERE boards.id = ? AND sessions.id = ?
+                         ORDER BY id_position ASC;`;
+    return DB.queryRows(boardQuery, [boardId, tokenId]);
+};
 
 /**
  * Add new board
@@ -187,10 +204,12 @@ const updateBoard = async function(boardData) {
     }));
 
     const query = cratePositionsQuery(boardsListWithIdPosition);
-    return DB.run(query)
+    await DB.run(query)
         .then(() => {
             debug(`Board id ${boardData.payload.id} moved`);
         });
+    const results = await getBoard(boardData.payload.id, boardData.tokenId);
+    return results.length > 0 ? results[0] : null;
 };
 
 /**
