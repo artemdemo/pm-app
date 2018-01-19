@@ -45,11 +45,13 @@ function* updateBoardSaga() {
     while (true) {
         try {
             const { board } = yield take(boardsConst.UPDATE_BOARD);
-            const result = yield request
+            yield request
                 .put('/api/boards')
                 .send(board)
                 .promise();
-            yield put(boardUpdated(result.body));
+            // After updating single board I'll request all list, since they whole order could change
+            // Therefore there is no additional data here
+            yield put(boardUpdated());
         } catch (err) {
             yield put(boardUpdatingError(err));
         }

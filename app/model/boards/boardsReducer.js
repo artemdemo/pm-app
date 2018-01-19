@@ -56,13 +56,8 @@ export default function boards(state = initialState, action) {
         case boardsConst.UPDATE_BOARD:
             return Object.assign({}, state, {updating: true});
         case boardsConst.BOARD_UPDATED:
+            // After updating single board I'll request all list, since they whole order could change
             return Object.assign({}, state, {
-                data: state.data.map((item) => {
-                    if (item.id === action.board.id) {
-                        return action.board;
-                    }
-                    return item;
-                }),
                 updating: false,
                 updatingError: null,
             });

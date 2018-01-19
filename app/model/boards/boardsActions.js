@@ -73,10 +73,11 @@ export function updateBoard(board) {
     };
 }
 
-export function boardUpdated(board) {
+export function boardUpdated() {
+    // After updating single board I'll request all list, since they whole order could change
+    // Therefore there is no additional data here
     return {
         type: boardsConst.BOARD_UPDATED,
-        board,
     };
 }
 
