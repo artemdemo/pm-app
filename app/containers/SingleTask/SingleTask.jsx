@@ -206,7 +206,7 @@ class SingleTask extends React.PureComponent {
                                 data-qa='select-board'
                             >
                                 <option value='0'>No board selected</option>
-                                {boards.map(board => (
+                                {boards.data.map(board => (
                                     <option value={board.id} key={`board-${board.id}`}>
                                         {board.title}
                                     </option>

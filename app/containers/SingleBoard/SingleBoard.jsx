@@ -5,7 +5,7 @@ import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
-import { addNewBoard, updateBoard, deleteBoard } from '../../model/boards/boardsActions';
+import { addBoard, updateBoard, deleteBoard } from '../../model/boards/boardsActions';
 import { errorMessage } from '../../model/notification/notificationActions';
 
 import './SingleBoard.less';
@@ -32,7 +32,7 @@ class SingleBoard extends React.PureComponent {
 
     setupData(props = this.props) {
         const { board, boards } = props;
-        const boardsList = boards.filter(item => item.id !== board.id);
+        const boardsList = boards.data.filter(item => item.id !== board.id);
         const selectedBoardId = board.id_position ? board.id_position + 1 : '';
         this.setState({
             title: board.title || '',
@@ -43,7 +43,7 @@ class SingleBoard extends React.PureComponent {
     }
 
     submitBoard() {
-        const { board, addNewBoard, updateBoard, errorMessage, onSave } = this.props;
+        const { board, addBoard, updateBoard, errorMessage, onSave } = this.props;
         const idPosition = this.state.id_position;
 
         if (this.state.title === '') {
@@ -63,7 +63,7 @@ class SingleBoard extends React.PureComponent {
             updatedBoardData.id = board.id;
             updateBoard(Object.assign(board, updatedBoardData));
         } else {
-            addNewBoard(updatedBoardData);
+            addBoard(updatedBoardData);
         }
         onSave();
     }
@@ -76,7 +76,7 @@ class SingleBoard extends React.PureComponent {
 
     render() {
         const { board, boards, onCancel, className } = this.props;
-        const boardsList = boards.filter(item => item.id !== board.id);
+        const boardsList = boards.data.filter(item => item.id !== board.id);
 
         const renderSaveButton = () => {
             const text = board && board.id ? 'Save' : 'Add new';
@@ -206,7 +206,7 @@ export default connect(
     state => ({
         boards: state.boards,
     }), {
-        addNewBoard,
+        addBoard,
         updateBoard,
         deleteBoard,
         errorMessage,

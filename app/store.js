@@ -1,28 +1,12 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 
-import tasks from './model/tasks/tasksReducer';
-import boards from './model/boards/boardsReducer';
-import projects from './model/projects/projectsReducer';
-import settings from './model/settings/settingsReducer';
-import user from './model/user/userReducer';
-import popup from './model/popup/popupReducer';
-import modal from './model/modal/modalReducer';
-import notification from './model/notification/notificationReducer';
-import selectedEntity from './model/selectedEntity/selectedEntityReducer';
+import combineReducers from './reducers';
+import sagas from './sagas';
 
-const pmApp = combineReducers({
-    user,
-    tasks,
-    popup,
-    modal,
-    boards,
-    projects,
-    settings,
-    notification,
-    selectedEntity,
-});
-
-const store = createStore(pmApp, applyMiddleware(thunk));
+const sagaMiddleware = createSagaMiddleware();
+const store = createStore(combineReducers, applyMiddleware(sagaMiddleware, thunk));
+sagaMiddleware.run(sagas);
 
 export default store;

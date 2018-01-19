@@ -1,123 +1,117 @@
 import * as boardsConst from './boardsConst';
-import { errorMessage, successMessage } from '../notification/notificationActions';
-import { getStoredToken } from '../../utils/user';
-import { loadTasks } from '../tasks/tasksActions';
-import fetch from '../../utils/fetch';
-import checkResponseStatus from '../../utils/checkResponseStatus';
 
-function boardsLoaded(boards) {
+/*
+ * Loading
+ */
+
+export function loadBoards() {
+    return {
+        type: boardsConst.LOAD_BOARDS,
+    };
+}
+
+export function boardsLoaded(boards) {
     return {
         type: boardsConst.BOARDS_LOADED,
         boards,
     };
 }
 
-function boardAdded(board) {
+export function boardsLoadingError(err = true) {
+    return {
+        type: boardsConst.BOARDS_LOADING_ERROR,
+        err,
+    };
+}
+
+/*
+ * Adding
+ */
+
+/**
+ * Add new board
+ * @param board {Object}
+ * @param board.title {String}
+ * @param board.description {String}
+ */
+export function addBoard(board) {
+    return {
+        type: boardsConst.ADD_BOARD,
+        board,
+    };
+}
+
+export function boardAdded(board) {
     return {
         type: boardsConst.BOARDS_ADDED,
         board,
     };
 }
 
-function boardDeleted(id) {
+export function boardAddingError(err) {
     return {
-        type: boardsConst.BOARD_DELETED,
-        id,
+        type: boardsConst.BOARD_ADDING_ERROR,
+        err,
     };
 }
 
-function boardUpdated(board) {
+/*
+ * Updating
+ */
+
+/**
+ * Update board
+ * @param board {Object}
+ * @param board.id {String}
+ * @param board.title {String}
+ * @param board.description {String}
+ */
+export function updateBoard(board) {
+    return {
+        type: boardsConst.UPDATE_BOARD,
+        board,
+    };
+}
+
+export function boardUpdated(board) {
     return {
         type: boardsConst.BOARD_UPDATED,
         board,
     };
 }
 
-export function loadBoards() {
-    const token = getStoredToken();
-
-    return (dispatch) => {
-        fetch('/api/boards', token)
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then((boards) => {
-                dispatch(boardsLoaded(boards));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while boards loading'));
-            });
+export function boardUpdatingError(err) {
+    return {
+        type: boardsConst.BOARD_UPDATING_ERROR,
+        err,
     };
 }
 
-/**
- * Add new board
- * @param newBoard {Object}
- * @param newBoard.title {String}
- * @param newBoard.description {String}
+/*
+ * Deleting
  */
-export function addNewBoard(newBoard) {
-    const token = getStoredToken();
-
-    return (dispatch) => {
-        fetch('/api/boards', token, {method: 'POST', body: newBoard})
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then((board) => {
-                dispatch(boardAdded(Object.assign({}, newBoard, board)));
-                dispatch(successMessage('Board added'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while adding board'));
-            });
-    };
-}
 
 /**
  * Delete board
- * @param boardId {Number}
+ * @param id {Number}
  */
-export function deleteBoard(boardId) {
-    const token = getStoredToken();
-
-    return (dispatch) => {
-        fetch(`/api/boards/${boardId}`, token, {method: 'DELETE'})
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then(() => {
-                dispatch(boardDeleted(boardId));
-                dispatch(loadTasks());
-                dispatch(successMessage('Board deleted'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while deleting board'));
-            });
+export function deleteBoard(id) {
+    return {
+        type: boardsConst.DELETE_BOARD,
+        id,
     };
 }
 
-/**
- * Update board
- * @param boardUpdate {Object}
- * @param boardUpdate.id {String}
- * @param boardUpdate.title {String}
- * @param boardUpdate.description {String}
- */
-export function updateBoard(boardUpdate) {
-    const token = getStoredToken();
+export function boardDeleted(id) {
+    return {
+        type: boardsConst.BOARD_DELETED,
+        id,
+    };
+}
 
-    return (dispatch) => {
-        fetch('/api/boards', token, {method: 'PUT', body: boardUpdate})
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then((board) => {
-                dispatch(boardUpdated(Object.assign({}, boardUpdate, board)));
-                dispatch(successMessage('Board updated'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while updating board'));
-            });
+export function boardDeletingError(err) {
+    return {
+        type: boardsConst.BOARD_DELETING_ERROR,
+        err,
     };
 }

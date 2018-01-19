@@ -7,50 +7,106 @@ function sortBoardsByPosition(boardsList) {
     }));
 }
 
-export default function boards(state = [], action) {
-    const boardsList = [];
-    let newBoardAdded = false;
+const initialState = {
+    data: [],
+    loading: false,
+    loadingError: null,
+    updating: false,
+    updatingError: null,
+    adding: false,
+    addingError: null,
+    deleting: false,
+    deletingError: null,
+};
 
+export default function boards(state = initialState, action) {
     switch (action.type) {
+        /*
+         * Loading
+         */
+        case boardsConst.LOAD_BOARDS:
+            return Object.assign({}, state, {loading: true});
         case boardsConst.BOARDS_LOADED:
-            return action.boards.sort(sortByIdPosition);
-        case boardsConst.BOARDS_ADDED:
-            state.forEach((board, i) => {
-                if (action.board.id_position === i) {
-                    newBoardAdded = true;
-                    boardsList.push(action.board);
-                }
-                boardsList.push(board);
+            return Object.assign({}, state, {
+                data: action.boards.sort(sortByIdPosition),
+                loading: false,
+                loadingError: null,
             });
-            if (!newBoardAdded) {
-                boardsList.push(action.board);
-            }
-            return sortBoardsByPosition(boardsList);
-        case boardsConst.BOARD_DELETED:
-            for (let i = 0, len = state.length; i < len; i++) {
-                if (state[i].id === action.id) {
-                    const boardsList = [
-                        ...state.slice(0, i),
-                        ...state.slice(i + 1),
-                    ];
-                    return sortBoardsByPosition(boardsList);
-                }
-            }
-            return state;
+        case boardsConst.BOARDS_LOADING_ERROR:
+            return Object.assign({}, state, {
+                loading: false,
+                loadingError: action.err,
+            });
+        /*
+         * Adding
+         */
+        case boardsConst.ADD_BOARD:
+            return Object.assign({}, state, {adding: true});
+        case boardsConst.BOARDS_ADDED:
+            return Object.assign({}, state, {
+                data: [
+                    ...state.data,
+                    action.board,
+                ],
+                adding: false,
+                addingError: null,
+            });
+        case boardsConst.BOARD_ADDING_ERROR:
+            return Object.assign({}, state, {
+                adding: false,
+                addingError: action.err,
+            });
+        /*
+         * Updating
+         */
+        case boardsConst.UPDATE_BOARD:
+            return Object.assign({}, state, {updating: true});
         case boardsConst.BOARD_UPDATED:
-            for (let i = 0, len = state.length; i < len; i++) {
-                if (action.board.id_position === i) {
-                    newBoardAdded = true;
-                    boardsList.push(action.board);
-                }
-                if (state[i].id !== action.board.id) {
-                    boardsList.push(state[i]);
+            let updatedBoardId;
+            for (let i = 0, len = state.data.length; i < len; i++) {
+                if (state.data[i].id !== action.board.id) {
+                    updatedBoardId = i;
                 }
             }
-            if (!newBoardAdded) {
-                boardsList.push(action.board);
+            return Object.assign({}, state, {
+                data: [
+                    ...state.data.slice(0, updatedBoardId),
+                    action.board,
+                    ...state.data.slice(updatedBoardId + 1),
+                ],
+                updating: false,
+                updatingError: null,
+            });
+        case boardsConst.BOARD_UPDATING_ERROR:
+            return Object.assign({}, state, {
+                updating: false,
+                updatingError: action.err,
+            });
+        /*
+         * Deleting
+         */
+        case boardsConst.DELETE_BOARD:
+            return Object.assign({}, state, {deleting: true});
+        case boardsConst.BOARD_DELETED:
+            let deletedBoardId;
+            for (let i = 0, len = state.data.length; i < len; i++) {
+                if (state.data[i].id === action.id) {
+                    deletedBoardId = i;
+                }
             }
-            return sortBoardsByPosition(boardsList);
+            return Object.assign({}, state, {
+                data: [
+                    ...state.data.slice(0, deletedBoardId),
+                    ...state.data.slice(deletedBoardId + 1),
+                ],
+                deleting: true,
+                deletingError: null,
+            });
+        case boardsConst.BOARD_DELETING_ERROR:
+            return Object.assign({}, state, {
+                deleting: false,
+                deletingError: action.err,
+            });
         default:
             return state;
     }

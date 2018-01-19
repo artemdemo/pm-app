@@ -13,7 +13,7 @@ function settingsLoaded(settings) {
 
 function settingsUpdated(settings) {
     return {
-        type: settingsConst.SETTING_UPDATED,
+        type: settingsConst.SETTINGS_UPDATED,
         settings,
     };
 }

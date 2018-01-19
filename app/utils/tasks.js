@@ -1,4 +1,4 @@
-// ToDo: Shound't all this be in ReSelect?
+// ToDo: Shouldn't all this be in ReSelect?
 
 /**
  * Return object that contain selected projects and available projects

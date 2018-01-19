@@ -33,7 +33,7 @@ class BoardsList extends React.PureComponent {
         return (
             <div>
                 <div className='boards-list'>
-                    {boards.map(board => (
+                    {boards.data.map(board => (
                         <ScrumBoard board={board} key={`board-${board.id}`} />
                     ))}
                 </div>

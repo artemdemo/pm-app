@@ -5,12 +5,18 @@ import {
     Router,
     Route,
 } from 'react-router-dom';
+import PromiseBluebird from 'bluebird';
 import history from './history';
 import store from './store';
 
 import './styles/general.less';
 
 import AppView from './views/AppView';
+
+PromiseBluebird.config({
+    warnings: false,
+    cancellation: true,
+});
 
 render(
     <Provider store={store}>

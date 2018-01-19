@@ -1,4 +1,19 @@
 {
-  "presets": ["es2015"],
-  "plugins": ["transform-react-jsx", "transform-object-assign"]
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions"]
+      }
+    }],
+    "react"
+  ],
+  "plugins": [
+    "transform-react-jsx",
+    "transform-object-assign",
+    "syntax-dynamic-import",
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }]
+  ]
 }
