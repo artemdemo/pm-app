@@ -1,5 +1,5 @@
 import { take, put } from 'redux-saga/effects';
-import request from 'superagent-bluebird-promise';
+import request from '../../services/request';
 import * as boardsConst from './boardsConst';
 import {
     boardsLoaded,
@@ -11,7 +11,6 @@ import {
     boardDeleted,
     boardDeletingError,
 } from './boardsActions';
-import { getStoredToken } from '../../utils/user';
 
 function* loadBoardsSaga() {
     while (true) {
@@ -19,7 +18,6 @@ function* loadBoardsSaga() {
             yield take(boardsConst.LOAD_BOARDS);
             const result = yield request
                 .get('/api/boards')
-                .set('authorization', getStoredToken())
                 .promise();
             yield put(boardsLoaded(result.body));
         } catch (err) {
@@ -34,7 +32,6 @@ function* addBoardSaga() {
             const { board } = yield take(boardsConst.ADD_BOARD);
             const result = yield request
                 .post('/api/boards')
-                .set('authorization', getStoredToken())
                 .send(board)
                 .promise();
             yield put(boardAdded(Object.assign(board, {id: result.body.id})));
@@ -50,7 +47,6 @@ function* updateBoardSaga() {
             const { board } = yield take(boardsConst.UPDATE_BOARD);
             const result = yield request
                 .put('/api/boards')
-                .set('authorization', getStoredToken())
                 .send(board)
                 .promise();
             yield put(boardUpdated(result.body));
@@ -66,7 +62,6 @@ function* deleteBoardSaga() {
             const { id } = yield take(boardsConst.DELETE_BOARD);
             yield request
                 .delete(`/api/boards/${id}`)
-                .set('authorization', getStoredToken())
                 .promise();
             yield put(boardDeleted(id));
         } catch (err) {
