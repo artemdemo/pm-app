@@ -65,9 +65,9 @@ exports.update = (request, replay) => {
     debug(request.payload);
 
     boards.updateBoard(boardsData)
-        .then((board) => {
+        .then(() => {
             debug(`Board id ${request.payload.id} updated`);
-            replay(board);
+            replay({});
         })
         .catch((err) => {
             debug(err);

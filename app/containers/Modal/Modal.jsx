@@ -28,7 +28,7 @@ class Modal extends React.PureComponent {
             'pm-modal_fadeIn': true,
         });
 
-        if (modal.type === modalConst.SHOW_MODAL) {
+        if (modal.content) {
             return (
                 <div
                     className={bgClass}

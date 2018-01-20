@@ -204,12 +204,10 @@ const updateBoard = async function(boardData) {
     }));
 
     const query = cratePositionsQuery(boardsListWithIdPosition);
-    await DB.run(query)
+    return DB.run(query)
         .then(() => {
             debug(`Board id ${boardData.payload.id} moved`);
         });
-    const results = await getBoard(boardData.payload.id, boardData.tokenId);
-    return results.length > 0 ? results[0] : null;
 };
 
 /**
