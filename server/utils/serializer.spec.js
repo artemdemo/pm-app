@@ -1,6 +1,3 @@
-/* eslint-disable strict*/
-'use strict';
-
 const serializer = require('./serializer');
 
 describe('Serialize strings to object', () => {

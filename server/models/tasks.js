@@ -23,11 +23,11 @@ exports.getAll = async function(tasksData) {
     const tasks = parseTasks(rows);
     tasks.forEach((task) => {
         const projectsQuery = `SELECT projects_tasks_relations.task_id,
-                                              projects_tasks_relations.project_id
-                                       FROM tasks
-                                       INNER JOIN projects_tasks_relations
-                                               ON tasks.id = projects_tasks_relations.task_id
-                                       WHERE tasks.id = ?;`;
+                                      projects_tasks_relations.project_id
+                               FROM tasks
+                               INNER JOIN projects_tasks_relations
+                                       ON tasks.id = projects_tasks_relations.task_id
+                               WHERE tasks.id = ?;`;
         promisesList.push(DB.queryRows(projectsQuery, [task.id]));
     });
 

@@ -1,6 +1,3 @@
-/* eslint-disable no-console, strict*/
-'use strict';
-
 /**
  * Convert array of strings to json object
  *
@@ -9,8 +6,8 @@
  */
 const strArrToObj = (dataArr) => {
     const result = {};
-    dataArr.forEach(item => {
-        const nameRegexp = /([^\[\]{}]+)(?:(\[[\d]*])|({\}))?/g;
+    dataArr.forEach((item) => {
+        const nameRegexp = /([^[\]{}]+)(?:(\[[\d]*])|({\}))?/g;
         const nameParts = [];
         let match = nameRegexp.exec(item.name);
 
@@ -26,7 +23,7 @@ const strArrToObj = (dataArr) => {
             match = nameRegexp.exec(item.name);
         }
 
-        const getGroupingObj = (grouping) => grouping === '{}' ? {} : [];
+        const getGroupingObj = grouping => grouping === '{}' ? {} : [];
 
         if (nameParts.length > 0) {
             let prevPart = null;
@@ -102,14 +99,12 @@ const objToStrArr = (dataObj) => {
 
             if (Array.isArray(obj)) {
                 path += `[${prop}]`;
+            } else if (path[path.length - 1] === ']') {
+                path += `${prop}`;
+            } else if (path === '') {
+                path += prop;
             } else {
-                if (path[path.length - 1] === ']') {
-                    path += `${prop}`;
-                } else if (path === '') {
-                    path += prop;
-                } else {
-                    path += `{}${prop}`;
-                }
+                path += `{}${prop}`;
             }
 
             if (typeof propValue === 'object') {

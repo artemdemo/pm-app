@@ -63,10 +63,10 @@ const getAll = boardsData => getAllBoards(boardsData.tokenId)
  */
 const getBoard = async function(boardId, tokenId) {
     const boardQuery = `SELECT ${BOARD_FIELDS}, sessions.user_id
-                         FROM boards
-                         INNER JOIN sessions ON sessions.user_id = boards.user_id
-                         WHERE boards.id = ? AND sessions.id = ?
-                         ORDER BY id_position ASC;`;
+                        FROM boards
+                        INNER JOIN sessions ON sessions.user_id = boards.user_id
+                        WHERE boards.id = ? AND sessions.id = ?
+                        ORDER BY id_position ASC;`;
     return DB.queryRows(boardQuery, [boardId, tokenId]);
 };
 
