@@ -2,6 +2,7 @@ import { take, put } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as boardsConst from './boardsConst';
 import {
+    loadBoards,
     boardsLoaded,
     boardsLoadingError,
     boardAdded,
@@ -52,6 +53,7 @@ function* updateBoardSaga() {
             // After updating single board I'll request all list, since they whole order could change
             // Therefore there is no additional data here from the request
             yield put(boardUpdated());
+            yield put(loadBoards());
         } catch (err) {
             yield put(boardUpdatingError(err));
         }

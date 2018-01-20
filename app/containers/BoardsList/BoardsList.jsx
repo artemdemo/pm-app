@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
-import { loadBoards } from '../../model/boards/boardsActions';
 import { showModal, hideModal } from '../../model/modal/modalActions';
 import SingleBoard from '../SingleBoard/SingleBoard';
 
@@ -22,17 +21,6 @@ class BoardsList extends React.PureComponent {
                 onCancel={() => hideModal()}
             />);
         };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { loadBoards } = this.props;
-
-        // After updating single board I request all list, since they whole order could change
-        if (this.props.boards.updating === true &&
-            nextProps.boards.updating === false &&
-            !nextProps.boards.updatingError) {
-            loadBoards();
-        }
     }
 
     componentWillUnmount() {
@@ -68,6 +56,5 @@ export default connect(
         clearEntity,
         showModal,
         hideModal,
-        loadBoards,
     }
 )(BoardsList);
