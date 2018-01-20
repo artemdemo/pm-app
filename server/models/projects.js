@@ -1,26 +1,24 @@
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
+const { queryRowsWithSession } = require('../utils/db');
 
 const tableName = 'projects';
 
 const getAll = async function(projectsData) {
-    const projectsQuery = `SELECT projects.id, projects.name, projects.description,
-                                  projects.added, projects.updated
-                           FROM projects
-                           INNER JOIN sessions 
-                                   ON sessions.user_id = projects.user_id
-                           WHERE sessions.id = ?;`;
-
-    const projects = await DB.queryRows(projectsQuery, [projectsData.tokenId]);
+    const projects = await queryRowsWithSession(
+        tableName,
+        ['id', 'name', 'description', 'added', 'updated'],
+        projectsData.tokenId,
+    );
     const promisesList = [];
     projects.forEach((project) => {
         const tasksQuery = `SELECT projects_tasks_relations.task_id,
-                                           projects_tasks_relations.project_id
-                                    FROM projects
-                                    INNER JOIN projects_tasks_relations
-                                            ON projects.id = projects_tasks_relations.project_id
-                                    WHERE projects.id = ?;`;
+                                   projects_tasks_relations.project_id
+                            FROM projects
+                            INNER JOIN projects_tasks_relations
+                                    ON projects.id = projects_tasks_relations.project_id
+                            WHERE projects.id = ?;`;
         promisesList.push(DB.queryRows(tasksQuery, [project.id]));
     });
 

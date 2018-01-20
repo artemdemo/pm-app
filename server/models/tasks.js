@@ -2,6 +2,7 @@ const debug = require('debug')('pm:models:tasks');
 const moment = require('moment');
 const DB = require('sqlite-crud');
 const sessions = require('./sessions');
+const { queryRowsWithSession } = require('../utils/db');
 
 const tableName = 'tasks';
 
@@ -11,14 +12,11 @@ const parseTasks = tasks => tasks.map((task) => {
 });
 
 exports.getAll = async function(tasksData) {
-    const tasksQuery = `SELECT tasks.id, tasks.name, tasks.description, tasks.done, tasks.sp, tasks.priority, tasks.due,
-                               tasks.added, tasks.updated, tasks.board_id, tasks.id_position_scrum
-                        FROM tasks
-                        INNER JOIN sessions 
-                                ON sessions.user_id = tasks.user_id
-                        WHERE sessions.id = ?;`;
-
-    const rows = await DB.queryRows(tasksQuery, [tasksData.tokenId]);
+    const rows = await queryRowsWithSession(
+        tableName,
+        ['id', 'name', 'description', 'done', 'priority', 'due', 'added', 'updated', 'board_id', 'id_position_scrum'],
+        tasksData.tokenId,
+    );
     const promisesList = [];
     const tasks = parseTasks(rows);
     tasks.forEach((task) => {
