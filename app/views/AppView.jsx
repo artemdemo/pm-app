@@ -5,7 +5,6 @@ import {
 } from 'react-router-dom';
 import { checkAuthentication } from '../model/user/userActions';
 import UserNotificator from '../containers/UserNotificator/UserNotificator';
-import Popup from '../containers/Popup/Popup';
 import Modal from '../containers/Modal/Modal';
 import ProjectsView from './ProjectsView';
 import TasksView from './TasksView';
@@ -26,7 +25,6 @@ class AppView extends React.PureComponent {
         return (
             <div className='app'>
                 <UserNotificator />
-                <Popup />
                 <Modal />
 
                 <Route exact path='/' component={MainView} />
