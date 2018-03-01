@@ -70,10 +70,13 @@ ProjectsList.propTypes = {
     projects: PropTypes.arrayOf(PropTypes.object),
 };
 
+ProjectsList.defaultProps = {
+    projects: [],
+};
+
 export default connect(
-    state => ({
-        projects: state.projects,
-    }), {
+    () => ({}),
+    {
         clearEntity,
         selectProject,
     }

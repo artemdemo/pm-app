@@ -70,7 +70,7 @@ class TasksListItem extends React.PureComponent {
             'tasks-list-item__text_done': task.done,
         });
 
-        const { selectedProjects } = filterProjects(task, projects);
+        const { selectedProjects } = filterProjects(task, projects.data);
 
         const renderTaskName = () => {
             if (task.id) {
@@ -123,7 +123,6 @@ class TasksListItem extends React.PureComponent {
 
 TasksListItem.propTypes = {
     task: PropTypes.shape({}),
-    projects: PropTypes.arrayOf(PropTypes.shape({})),
     projectId: PropTypes.string,
 };
 

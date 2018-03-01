@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { filterTasks } from '../../utils/tasks';
-import { deleteProject, updateProject, addNewProject } from '../../model/projects/projectsActions';
+import { deleteProject, updateProject, addProject } from '../../model/projects/projectsActions';
 import DropdownList from '../../components/DropdownList/DropdownList';
 import NarrowList from '../../components/NarrowList/NarrowList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
@@ -69,7 +69,7 @@ class SingleProject extends React.PureComponent {
     }
 
     submitProject() {
-        const { project, updateProject, addNewProject, errorMessage } = this.props;
+        const { project, updateProject, addProject, errorMessage } = this.props;
 
         if (this.state.name === '') {
             errorMessage('Name can\'t be empty');
@@ -88,7 +88,7 @@ class SingleProject extends React.PureComponent {
             updatedProjectData.id = project.id;
             updateProject(Object.assign(project, updatedProjectData));
         } else {
-            addNewProject(updatedProjectData);
+            addProject(updatedProjectData);
         }
     }
 
@@ -103,65 +103,73 @@ class SingleProject extends React.PureComponent {
         />);
     }
 
+    renderDeleteButton() {
+        const { project } = this.props;
+        if (project && project.id) {
+            return (
+                <DeleteButton onDelete={this.deleteProject.bind(this)} />
+            );
+        }
+        return null;
+    }
+
+    renderLoadingSpinner() {
+        if (this.state.loadingData) {
+            return (
+                <span className='btn btn-link'>
+                    <LoadingSpinner />
+                </span>
+            );
+        }
+        return null;
+    }
+
+    renderNarrowList() {
+        if (this.state.selectedTasks.length > 0) {
+            return (
+                <NarrowList
+                    list={this.state.selectedTasks}
+                    deletable
+                    onClick={this.openTask.bind(this)}
+                    onDelete={this.disconnectTask.bind(this)}
+                />
+            );
+        }
+        return (
+            <div className='text-muted' data-qa='no-tasks-label'>No tasks selected</div>
+        );
+    }
+
+    renderSaveButton() {
+        const { project } = this.props;
+        const text = project.id ? 'Save' : 'Add new';
+        return (
+            <button
+                onClick={this.submitProject.bind(this)}
+                className='btn btn-primary'
+                disabled={this.state.loadingData}
+                data-qa='project-save'
+            >
+                <span>{text}</span>
+            </button>
+        );
+    }
+
+    renderTime() {
+        const { project } = this.props;
+        if (project.id) {
+            return (
+                <div className='form-group text-muted'>
+                    <p>Project added: {project.added}</p>
+                    <p>Last updated: {project.updated}</p>
+                </div>
+            );
+        }
+        return null;
+    }
+
     render() {
         const { project, clearEntity } = this.props;
-        const renderLoadingSpinner = () => {
-            if (this.state.loadingData) {
-                return (
-                    <span className='btn btn-link'>
-                        <LoadingSpinner />
-                    </span>
-                );
-            }
-            return null;
-        };
-        const renderSaveButton = () => {
-            const text = project.id ? 'Save' : 'Add new';
-            return (
-                <button
-                    onClick={this.submitProject.bind(this)}
-                    className='btn btn-primary'
-                    disabled={this.state.loadingData}
-                    data-qa='project-save'
-                >
-                    <span>{text}</span>
-                </button>
-            );
-        };
-        const renderNarrowList = () => {
-            if (this.state.selectedTasks.length > 0) {
-                return (
-                    <NarrowList
-                        list={this.state.selectedTasks}
-                        deletable
-                        onClick={this.openTask.bind(this)}
-                        onDelete={this.disconnectTask.bind(this)}
-                    />
-                );
-            }
-            return (
-                <div className='text-muted' data-qa='no-tasks-label'>No tasks selected</div>
-            );
-        };
-        const renderTime = () => {
-            if (project.id) {
-                return (
-                    <div className='form-group text-muted'>
-                        <p>Project added: {project.added}</p>
-                        <p>Last updated: {project.updated}</p>
-                    </div>
-                );
-            }
-            return null;
-        };
-        const renderDeleteButton = () => {
-            if (project && project.id) {
-                return (
-                    <DeleteButton onDelete={this.deleteProject.bind(this)} />
-                );
-            }
-            return null;
-        };
         return (
             <div className='single-panel'>
                 <div className='form-group'>
@@ -197,7 +205,7 @@ class SingleProject extends React.PureComponent {
                     <div className='single-panel__subtitle'>
                         Tasks
                     </div>
-                    {renderNarrowList()}
+                    {this.renderNarrowList()}
                 </div>
                 <div className='form-group'>
                     <DropdownList
@@ -206,11 +214,11 @@ class SingleProject extends React.PureComponent {
                         onSelect={this.connectTask.bind(this)}
                     />
                 </div>
-                {renderTime()}
+                {this.renderTime()}
                 <div className='clearfix'>
                     <div className='pull-left'>
                         <span className='buttons-group'>
-                            {renderSaveButton()}
+                            {this.renderSaveButton()}
                             <button
                                 className='btn btn-default'
                                 disabled={this.state.loadingData}
@@ -220,10 +228,10 @@ class SingleProject extends React.PureComponent {
                                 Cancel
                             </button>
                         </span>
-                        {renderLoadingSpinner()}
+                        {this.renderLoadingSpinner()}
                     </div>
                     <div className='pull-right'>
-                        {renderDeleteButton()}
+                        {this.renderDeleteButton()}
                     </div>
                 </div>
             </div>
@@ -246,7 +254,7 @@ export default connect(
         clearEntity,
         deleteProject,
         updateProject,
-        addNewProject,
+        addProject,
         errorMessage,
         showModal,
         hideModal,

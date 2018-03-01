@@ -85,7 +85,7 @@ class TasksList extends React.PureComponent {
 
         this.state = {
             tasks: tasksFilterService.runAllFilters(this.allTasks),
-            projects: this.filterProjects(props.projects || []),
+            projects: this.filterProjects(props.projects),
             filteredByProjectId: null,
         };
 
@@ -121,7 +121,7 @@ class TasksList extends React.PureComponent {
     }
 
     filterProjects(projects) {
-        return projects.filter(project => project.tasks.length > 0);
+        return projects.data.filter(project => project.tasks.length > 0);
     }
 
     render() {
@@ -150,8 +150,10 @@ class TasksList extends React.PureComponent {
                             <option value='free'>Tasks without project</option>
                             <option disabled>—</option>
                             {this.state.projects.map(project => (
-                                <option value={project.id}
-                                    key={`project-filter-${project.id}`}>
+                                <option
+                                    value={project.id}
+                                    key={`project-filter-${project.id}`}
+                                >
                                     {emoji(project.name)}
                                 </option>
                             ))}
@@ -159,9 +161,11 @@ class TasksList extends React.PureComponent {
                     </div>
                 </div>
                 <div className='tasks-list'>
-                    <TasksListItem task={newTask}
+                    <TasksListItem
+                        task={newTask}
                         projectId={this.state.filteredByProjectId}
-                        key='task-0' />
+                        key='task-0'
+                    />
                     {this.state.tasks.map(task => (
                         <TasksListItem task={task} key={`task-${task.id}`} />
                     ))}

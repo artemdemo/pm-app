@@ -9,7 +9,7 @@ import SingleProject from '../containers/SingleProject/SingleProject';
 import './list-container.less';
 
 const ProjectsView = (props) => {
-    const { selectedEntity } = props;
+    const { selectedEntity, projects } = props;
     const selectedProject = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_PROJECT ?
         selectedEntity.entity :
         undefined;
@@ -23,7 +23,7 @@ const ProjectsView = (props) => {
 
             <div className={classView}>
                 <div className='list-container__list'>
-                    <ProjectsList />
+                    <ProjectsList projects={projects.data} />
                 </div>
                 <div className='list-container__panel'>
                     <SingleProject project={selectedProject} />
@@ -36,5 +36,6 @@ const ProjectsView = (props) => {
 export default connect(
     state => ({
         selectedEntity: state.selectedEntity,
+        projects: state.projects,
     })
 )(ProjectsView);
