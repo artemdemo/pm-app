@@ -81,28 +81,16 @@ class TasksList extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = {
-            tasks: [],
-            projects: [],
-            filteredByProjectId: null,
-        };
-
-        this.listMenu = [
+        this.statusMenu = [
             { id: 'all', name: 'All' },
             { id: 'active', name: 'Active' },
             { id: 'completed', name: 'Completed' },
         ];
 
-        // eslint-disable-next-line prefer-destructuring
-        this.sortingMenuItem = this.listMenu[0];
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { tasks, projects } = nextProps;
-        this.setState({
-            tasks: tasksFilterService.runAllFilters(tasks.data),
-            projects: this.filterProjects(projects.data),
-        });
+        this.state = {
+            filteredByProjectId: null,
+            filteredByStatusId: this.statusMenu[0].id,
+        };
     }
 
     componentWillUnmount() {
@@ -111,11 +99,9 @@ class TasksList extends React.PureComponent {
     }
 
     selectRadioItem(item) {
-        const { tasks } = this.props;
-        this.sortingMenuItem = item;
-        tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, this.sortingMenuItem.id);
+        tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, item.id);
         this.setState({
-            tasks: tasksFilterService.runAllFilters(tasks.data),
+            filteredByStatusId: item.id,
         });
     }
 
@@ -124,6 +110,9 @@ class TasksList extends React.PureComponent {
     }
 
     render() {
+        const { tasks, projects } = this.props;
+        const tasksList = tasksFilterService.runAllFilters(tasks.data);
+        const projectsList = this.filterProjects(projects.data);
         const newTask = {
             name: '',
             description: '',
@@ -133,7 +122,7 @@ class TasksList extends React.PureComponent {
                 <div className='fluid-oneline-grid'>
                     <div className='fluid-oneline-grid__cell'>
                         <RadioMenu
-                            list={this.listMenu}
+                            list={this.statusMenu}
                             onSelect={this.selectRadioItem.bind(this)}
                         />
                     </div>
@@ -144,14 +133,13 @@ class TasksList extends React.PureComponent {
                                 const projectId = e.target.value;
                                 tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
                                 this.setState({
-                                    tasks: tasksFilterService.runAllFilters(this.allTasks),
                                     filteredByProjectId: projectId,
                                 });
                             }}>
                             <option value='all'>All projects</option>
                             <option value='free'>Tasks without project</option>
                             <option disabled>—</option>
-                            {this.state.projects.map(project => (
+                            {projectsList.map(project => (
                                 <option
                                     value={project.id}
                                     key={`project-filter-${project.id}`}
@@ -168,7 +156,7 @@ class TasksList extends React.PureComponent {
                         projectId={this.state.filteredByProjectId}
                         key='task-0'
                     />
-                    {this.state.tasks.map(task => (
+                    {tasksList.map(task => (
                         <TasksListItem
                             task={task}
                             key={`task-${task.id}`}
