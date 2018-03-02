@@ -6,64 +6,98 @@ import { getStoredToken } from '../../utils/user';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
 
-/**
- * Load tasks from the server
+/*
+ * Loading
  */
+
 export function loadTasks() {
-    const token = getStoredToken();
-
-    function tasksLoaded(tasks) {
-        return {
-            type: tasksConst.TASKS_LOADED,
-            tasks,
-        };
-    }
-
-    return (dispatch) => {
-        fetch('/api/tasks', token)
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then((tasks) => {
-                dispatch(tasksLoaded(tasks));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while tasks loading'));
-            });
+    return {
+        type: tasksConst.LOAD_TASKS,
     };
 }
 
-/**
+export function tasksLoaded(tasks) {
+    return {
+        type: tasksConst.TASKS_LOADED,
+        tasks,
+    };
+}
+
+export function tasksLoadingError(err) {
+    return {
+        type: tasksConst.TASKS_LOADING_ERROR,
+        err,
+    };
+}
+
+/*
+ * Adding
+ */
+
+export function addTask(task) {
+    return {
+        type: tasksConst.ADD_TASK,
+        task,
+    };
+}
+
+export function taskAdded() {
+    return {
+        type: tasksConst.TASK_ADDED,
+    };
+}
+
+export function taskAddingError(err) {
+    return {
+        type: tasksConst.TASK_ADDING_ERROR,
+        err,
+    };
+}
+
+/*
+ * Updating
+ */
+/*
+ * Deleting
+ */
+/*
+ * Loading
+ */
+/*
+ * Updating position
+ */
+
+/*
  * Add new task
  * @param newTask {Object}
  * @param newTask.name {String} - task name (required)
  * @param newTask.description {String}
  * @param newTask.board_id {Number}
  */
-export function addNewTask(newTask) {
-    const token = getStoredToken();
-
-    function taskAdded(task) {
-        return {
-            type: tasksConst.TASKS_ADDED,
-            task,
-        };
-    }
-
-    return (dispatch) => {
-        fetch('/api/tasks', token, {method: 'POST', body: newTask})
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then((task) => {
-                dispatch(taskAdded(Object.assign({}, newTask, task)));
-                dispatch(successMessage('Task added'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while adding task'));
-            });
-    };
-}
+// export function addNewTask(newTask) {
+//     const token = getStoredToken();
+//
+//     function taskAdded(task) {
+//         return {
+//             type: tasksConst.TASKS_ADDED,
+//             task,
+//         };
+//     }
+//
+//     return (dispatch) => {
+//         fetch('/api/tasks', token, {method: 'POST', body: newTask})
+//             .then(checkResponseStatus)
+//             .then(response => response.json())
+//             .then((task) => {
+//                 dispatch(taskAdded(Object.assign({}, newTask, task)));
+//                 dispatch(successMessage('Task added'));
+//             })
+//             .catch((e) => {
+//                 console.error(e);
+//                 dispatch(errorMessage('Error, while adding task'));
+//             });
+//     };
+// }
 
 /**
  * Delete task
@@ -149,7 +183,7 @@ export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, posi
 
     function updateTaskPosition(draggedTask) {
         return {
-            type: tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING,
+            type: tasksConst.UPDATE_TASK_POSITION,
             draggedTask,
             boardId,
             nearTaskId,

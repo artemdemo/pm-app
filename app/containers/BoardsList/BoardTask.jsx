@@ -18,7 +18,7 @@ class BoardTask extends React.PureComponent {
 
     render() {
         const { task, projects, settings } = this.props;
-        const { selectedProjects } = filterProjects(task, projects);
+        const { selectedProjects } = filterProjects(task, projects.data);
 
         const renderSP = () => {
             if (task.sp > 0) {

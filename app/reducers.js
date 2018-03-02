@@ -5,7 +5,6 @@ import boards from './model/boards/boardsReducer';
 import projects from './model/projects/projectsReducer';
 import settings from './model/settings/settingsReducer';
 import user from './model/user/userReducer';
-import popup from './model/popup/popupReducer';
 import modal from './model/modal/modalReducer';
 import notification from './model/notification/notificationReducer';
 import selectedEntity from './model/selectedEntity/selectedEntityReducer';
@@ -13,7 +12,6 @@ import selectedEntity from './model/selectedEntity/selectedEntityReducer';
 const reducers = combineReducers({
     user,
     tasks,
-    popup,
     modal,
     boards,
     projects,

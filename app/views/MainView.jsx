@@ -4,7 +4,7 @@ import MainMenu from '../containers/MainMenu/MainMenu';
 
 const MainView = (props) => {
     const { tasks, projects } = props;
-    const doneTasks = tasks.filter(task => task.done).length;
+    const doneTasks = tasks.data.filter(task => task.done).length;
 
     return (
         <div>
@@ -14,14 +14,14 @@ const MainView = (props) => {
                 <div className='list-container__list'>
                     <h4>Tasks</h4>
                     <p>
-                        Total: {tasks.length}<br />
-                        In process: {tasks.length - doneTasks}<br />
+                        Total: {tasks.data.length}<br />
+                        In process: {tasks.data.length - doneTasks}<br />
                         Done: {doneTasks}<br />
                     </p>
 
                     <h4>Projects</h4>
                     <p>
-                        Total: {projects.length}<br />
+                        Total: {projects.data.length}<br />
                     </p>
                 </div>
             </div>

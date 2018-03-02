@@ -1,6 +1,20 @@
 import * as tasksConst from './tasksConst';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 
+const initState = {
+    data: [],
+    loading: false,
+    loadingError: null,
+    updating: false,
+    updatingError: null,
+    adding: false,
+    addingError: null,
+    deleting: false,
+    deletingError: null,
+    updatingPosition: false,
+    updatingPositionError: null,
+};
+
 function sortTasksByUpdate(inTasks = []) {
     const sortedByUpdate = inTasks.sort((taskA, taskB) => {
         if (taskA.updated > taskB.updated) {
@@ -20,13 +34,62 @@ function sortTasksByUpdate(inTasks = []) {
             undoneTasks.push(task);
         }
     });
-    return undoneTasks.concat(doneTasks);
+    return [
+        ...undoneTasks,
+        ...doneTasks,
+    ];
 }
 
-export default function tasks(state = [], action) {
+export default function tasksReducer(state = initState, action) {
     switch (action.type) {
+        /*
+         * Loading
+         */
+        case tasksConst.LOAD_TASKS:
+            return Object.assign({}, state, {loading: true});
         case tasksConst.TASKS_LOADED:
-            return sortTasksByUpdate(action.tasks);
+            return Object.assign({}, state, {
+                // ToDo: Why need to sort here? Can't it came sorted from the server?
+                data: sortTasksByUpdate(action.tasks),
+                loading: false,
+                loadingError: null,
+            });
+        case tasksConst.TASKS_LOADING_ERROR:
+            return Object.assign({}, state, {
+                loading: false,
+                loadingError: action.err,
+            });
+        /*
+         * Adding
+         */
+        case tasksConst.ADD_TASK:
+            return Object.assign({}, state, {adding: true});
+        case tasksConst.TASK_ADDED:
+            return Object.assign({}, state, {
+                data: [
+                    ...state.data,
+                    action.task,
+                ],
+                adding: false,
+                addingError: null,
+            });
+        case tasksConst.TASK_ADDING_ERROR:
+            return Object.assign({}, state, {
+                adding: false,
+                addingError: action.err,
+            });
+        /*
+         * Updating
+         */
+        /*
+         * Deleting
+         */
+        /*
+         * Loading
+         */
+        /*
+         * Updating position
+         */
         case tasksConst.TASKS_ADDED:
             return [action.task].concat(state);
         case tasksConst.TASK_DELETED:
