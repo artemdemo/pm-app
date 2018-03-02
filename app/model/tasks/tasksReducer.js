@@ -67,8 +67,8 @@ export default function tasksReducer(state = initState, action) {
         case tasksConst.TASK_ADDED:
             return Object.assign({}, state, {
                 data: [
-                    ...state.data,
                     action.task,
+                    ...state.data,
                 ],
                 adding: false,
                 addingError: null,

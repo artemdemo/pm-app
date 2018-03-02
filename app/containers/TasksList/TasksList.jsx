@@ -83,6 +83,7 @@ class TasksList extends React.PureComponent {
         const { tasks, projects } = this.props;
         const tasksList = this.filterTasks(tasks.data);
         const projectsList = this.filterProjects(projects.data);
+        console.log(tasksList);
         const newTask = {
             name: '',
             description: '',

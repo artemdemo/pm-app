@@ -6,7 +6,7 @@ import _isNumber from 'lodash/isNumber';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
-import { addNewTask } from '../../model/tasks/tasksActions';
+import { addTask } from '../../model/tasks/tasksActions';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import { selectTask, clearEntity } from '../../model/selectedEntity/selectedEntityActions';
@@ -41,7 +41,7 @@ class TasksListItem extends React.PureComponent {
     }
 
     createNewTask(e) {
-        const { addNewTask, errorMessage, projectId } = this.props;
+        const { addTask, errorMessage, projectId } = this.props;
         const newTaskName = this.state.name;
         e.preventDefault();
 
@@ -52,7 +52,7 @@ class TasksListItem extends React.PureComponent {
 
         const projects = _isNumber(projectId) ? [Number(projectId)] : [];
 
-        addNewTask({
+        addTask({
             name: newTaskName,
             done: false,
             projects,
@@ -126,6 +126,11 @@ TasksListItem.propTypes = {
     projectId: PropTypes.string,
 };
 
+TasksListItem.defaultProps = {
+    task: {},
+    projectId: null,
+};
+
 export default connect(
     state => ({
         projects: state.projects,
@@ -133,7 +138,7 @@ export default connect(
     {
         selectTask,
         clearEntity,
-        addNewTask,
+        addTask,
         errorMessage,
     }
 )(TasksListItem);
