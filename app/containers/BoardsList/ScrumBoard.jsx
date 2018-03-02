@@ -21,12 +21,12 @@ class ScrumBoard extends React.PureComponent {
 
     componentWillMount() {
         const { tasks, board } = this.props;
-        this.filterSelectedTasks(tasks, board);
+        this.filterSelectedTasks(tasks.data, board);
     }
 
     componentWillReceiveProps(newProps) {
         const { tasks, board } = newProps;
-        this.filterSelectedTasks(tasks, board);
+        this.filterSelectedTasks(tasks.data, board);
     }
 
     filterSelectedTasks(tasks, board) {
@@ -39,7 +39,7 @@ class ScrumBoard extends React.PureComponent {
         const { tasks, updateDraggedTaskPosition } = this.props;
 
         // ToDo: `itemData.item` should be `itemData.itemId` or something like that
-        const task = tasks.find(_ => _.id === itemData.item);
+        const task = tasks.data.find(_ => _.id === itemData.item);
         updateDraggedTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 

@@ -1,46 +1,33 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import propTypes from 'prop-types';
 import emoji from '../../utils/emoji/emoji';
 import { selectProject } from '../../model/selectedEntity/selectedEntityActions';
 
 import './ProjectsListItem.less';
 
 class ProjectsListItem extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            tasks: props.tasks,
-            project: props.project,
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            tasks: nextProps.tasks,
-            project: nextProps.project,
-        });
-    }
-
     filterTasks(filter) {
-        if (this.state.project.tasks.length === 0) {
+        const { tasks, project } = this.props;
+        if (project.tasks.length === 0) {
             return [];
         }
         switch (filter) {
             case 'done':
-                return this.state.tasks.filter((task) => {
-                    return task.done === true && this.state.project.tasks.indexOf(task.id) !== -1;
+                return tasks.data.filter((task) => {
+                    return task.done === true && project.tasks.indexOf(task.id) !== -1;
                 });
             case 'all':
             default:
-                return this.state.tasks.filter((task) => {
-                    return this.state.project.tasks.indexOf(task.id) !== -1;
+                return tasks.data.filter((task) => {
+                    return project.tasks.indexOf(task.id) !== -1;
                 });
         }
     }
 
     renderTasks() {
-        if (this.state.project.tasks.length > 0) {
+        const { project } = this.props;
+        if (project.tasks.length > 0) {
             return (
                 <div>
                     <div className='text-muted'>
@@ -70,6 +57,14 @@ class ProjectsListItem extends React.PureComponent {
         );
     }
 }
+
+ProjectsListItem.propTypes = {
+    project: propTypes.shape({}),
+};
+
+ProjectsListItem.defaultProps = {
+    project: {},
+};
 
 
 // ToDo: Why ProjectsListItem is connected??
