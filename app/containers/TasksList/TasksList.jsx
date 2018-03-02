@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import _isNumber from 'lodash/isNumber';
+import _isNaN from 'lodash/isNaN';
 import emoji from '../../utils/emoji/emoji';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import RadioMenu from '../../components/RadioMenu/RadioMenu';
@@ -8,74 +9,6 @@ import TasksListItem from './TasksListItem';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 
 import './TasksList.less';
-
-// ToDo: ReSelect?
-const tasksFilterService = (function() {
-    const filterFunctions = {};
-    const filterData = {};
-
-    const addFilterData = (name, newFilterData = null) => {
-        filterData[name] = newFilterData;
-    };
-
-    const addFilter = (name, filterFunc = null, newFilterData = null) => {
-        filterFunctions[name] = filterFunc;
-        addFilterData(name, newFilterData);
-    };
-
-    const runFilter = (name, tasks) => {
-        if (filterFunctions[name]) {
-            return filterFunctions[name](tasks, filterData[name]);
-        }
-        return tasks;
-    };
-
-    const runAllFilters = (startTasks) => {
-        let tasks = startTasks;
-        for (const filter in filterFunctions) {
-            tasks = runFilter(filter, tasks);
-        }
-        return tasks;
-    };
-
-    return {
-        addFilter,
-        addFilterData,
-        runAllFilters,
-    };
-})();
-
-const FILTER_BY_DONE_STATUS = 'FILTER_BY_DONE_STATUS';
-const FILTER_BY_PROJECTS = 'FILTER_BY_PROJECTS';
-
-tasksFilterService.addFilter(FILTER_BY_DONE_STATUS, (tasks, data) => {
-    return tasks.filter((task) => {
-        switch (data) {
-            case 'active':
-                return task.done === false;
-            case 'completed':
-                return task.done === true;
-            default:
-                return true;
-        }
-    });
-});
-
-tasksFilterService.addFilter(FILTER_BY_PROJECTS, (tasks, data) => {
-    switch (true) {
-        case data === 'free':
-            return tasks.filter((task) => {
-                return task.projects.length === 0;
-            });
-        case _isNumber(data):
-            return tasks.filter((task) => {
-                return task.projects.indexOf(Number(data)) > -1;
-            });
-        case data === 'all':
-        default:
-            return tasks;
-    }
-});
 
 class TasksList extends React.PureComponent {
     constructor(props) {
@@ -88,7 +21,7 @@ class TasksList extends React.PureComponent {
         ];
 
         this.state = {
-            filteredByProjectId: null,
+            filteredByProjectId: 'all',
             filteredByStatusId: this.statusMenu[0].id,
         };
     }
@@ -99,7 +32,7 @@ class TasksList extends React.PureComponent {
     }
 
     selectRadioItem(item) {
-        tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, item.id);
+        // tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, item.id);
         this.setState({
             filteredByStatusId: item.id,
         });
@@ -109,9 +42,46 @@ class TasksList extends React.PureComponent {
         return projectsList.filter(project => project.tasks.length > 0);
     }
 
+    filterTasks(tasksList) {
+        const filteredByStatus = tasksList
+            .filter((task) => {
+                switch (this.state.filteredByStatusId) {
+                    case 'active':
+                        return task.done === false;
+                    case 'completed':
+                        return task.done === true;
+                    default:
+                        return true;
+                }
+            });
+        const resultList = (() => {
+            const projectId = (() => {
+                const projectIdNumber = parseInt(this.state.filteredByProjectId, 10);
+                if (_isNaN(projectIdNumber)) {
+                    return this.state.filteredByProjectId;
+                }
+                return projectIdNumber;
+            })();
+            switch (true) {
+                case projectId === 'free':
+                    return filteredByStatus.filter((task) => {
+                        return task.projects.length === 0;
+                    });
+                case _isNumber(projectId):
+                    return filteredByStatus.filter((task) => {
+                        return task.projects.indexOf(projectId) > -1;
+                    });
+                case projectId === 'all':
+                default:
+                    return filteredByStatus;
+            }
+        })();
+        return resultList;
+    }
+
     render() {
         const { tasks, projects } = this.props;
-        const tasksList = tasksFilterService.runAllFilters(tasks.data);
+        const tasksList = this.filterTasks(tasks.data);
         const projectsList = this.filterProjects(projects.data);
         const newTask = {
             name: '',
@@ -131,7 +101,6 @@ class TasksList extends React.PureComponent {
                             className='form-control input-sm'
                             onChange={(e) => {
                                 const projectId = e.target.value;
-                                tasksFilterService.addFilterData(FILTER_BY_PROJECTS, projectId);
                                 this.setState({
                                     filteredByProjectId: projectId,
                                 });
