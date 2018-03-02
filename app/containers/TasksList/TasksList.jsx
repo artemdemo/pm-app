@@ -81,11 +81,9 @@ class TasksList extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.allTasks = props.tasks || [];
-
         this.state = {
-            tasks: tasksFilterService.runAllFilters(this.allTasks),
-            projects: this.filterProjects(props.projects),
+            tasks: [],
+            projects: [],
             filteredByProjectId: null,
         };
 
@@ -97,21 +95,13 @@ class TasksList extends React.PureComponent {
 
         // eslint-disable-next-line prefer-destructuring
         this.sortingMenuItem = this.listMenu[0];
-
-        this.selectRadioItem = (item) => {
-            this.sortingMenuItem = item;
-            tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, this.sortingMenuItem.id);
-            this.setState({
-                tasks: tasksFilterService.runAllFilters(this.allTasks),
-            });
-        };
     }
 
     componentWillReceiveProps(nextProps) {
-        this.allTasks = nextProps.tasks;
+        const { tasks, projects } = nextProps;
         this.setState({
-            tasks: tasksFilterService.runAllFilters(this.allTasks),
-            projects: this.filterProjects(nextProps.projects),
+            tasks: tasksFilterService.runAllFilters(tasks.data),
+            projects: this.filterProjects(projects.data),
         });
     }
 
@@ -120,8 +110,17 @@ class TasksList extends React.PureComponent {
         clearEntity(entityConst.ENTITY_TASK);
     }
 
-    filterProjects(projects) {
-        return projects.data.filter(project => project.tasks.length > 0);
+    selectRadioItem(item) {
+        const { tasks } = this.props;
+        this.sortingMenuItem = item;
+        tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, this.sortingMenuItem.id);
+        this.setState({
+            tasks: tasksFilterService.runAllFilters(tasks.data),
+        });
+    }
+
+    filterProjects(projectsList) {
+        return projectsList.filter(project => project.tasks.length > 0);
     }
 
     render() {
@@ -133,7 +132,10 @@ class TasksList extends React.PureComponent {
             <div>
                 <div className='fluid-oneline-grid'>
                     <div className='fluid-oneline-grid__cell'>
-                        <RadioMenu list={this.listMenu} onSelect={this.selectRadioItem} />
+                        <RadioMenu
+                            list={this.listMenu}
+                            onSelect={this.selectRadioItem.bind(this)}
+                        />
                     </div>
                     <div className='fluid-oneline-grid__cell'>
                         <select
@@ -167,7 +169,10 @@ class TasksList extends React.PureComponent {
                         key='task-0'
                     />
                     {this.state.tasks.map(task => (
-                        <TasksListItem task={task} key={`task-${task.id}`} />
+                        <TasksListItem
+                            task={task}
+                            key={`task-${task.id}`}
+                        />
                     ))}
                 </div>
             </div>
