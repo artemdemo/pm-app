@@ -38,7 +38,7 @@ class SingleProject extends React.PureComponent {
 
     setupData(props = this.props) {
         const { project, tasks } = props;
-        const { selectedTasks, availableTasks } = filterTasks(project, tasks);
+        const { selectedTasks, availableTasks } = filterTasks(project, tasks.data);
 
         this.setState({
             name: project.name || '',

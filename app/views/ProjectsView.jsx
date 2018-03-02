@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import * as entityConst from '../model/selectedEntity/selectedEntityConst';
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
 import MainMenu from '../containers/MainMenu/MainMenu';
 import ProjectsList from '../containers/ProjectsList/ProjectsList';
 import SingleProject from '../containers/SingleProject/SingleProject';
@@ -23,10 +24,14 @@ const ProjectsView = (props) => {
 
             <div className={classView}>
                 <div className='list-container__list'>
-                    <ProjectsList projects={projects.data} />
+                    <ErrorBoundary componentName='ProjectsList'>
+                        <ProjectsList projects={projects.data} />
+                    </ErrorBoundary>
                 </div>
                 <div className='list-container__panel'>
-                    <SingleProject project={selectedProject} />
+                    <ErrorBoundary componentName='SingleProject'>
+                        <SingleProject project={selectedProject} />
+                    </ErrorBoundary>
                 </div>
             </div>
         </div>
