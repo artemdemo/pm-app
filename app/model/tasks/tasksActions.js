@@ -41,9 +41,10 @@ export function addTask(task) {
     };
 }
 
-export function taskAdded() {
+export function taskAdded(task) {
     return {
         type: tasksConst.TASK_ADDED,
+        task,
     };
 }
 

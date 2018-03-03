@@ -26,12 +26,11 @@ function* addTaskSaga() {
     while (true) {
         try {
             const { task } = yield take(tasksConst.ADD_TASK);
-            yield take(tasksConst.ADD_TASK);
             const result = yield request
                 .post('/api/tasks')
                 .send(task)
                 .promise();
-            yield put(taskAdded(result.body));
+            yield put(taskAdded(Object.assign({}, task, result.body)));
         } catch (err) {
             yield put(taskAddingError(err));
         }
