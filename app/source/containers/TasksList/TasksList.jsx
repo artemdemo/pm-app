@@ -32,7 +32,6 @@ class TasksList extends React.PureComponent {
     }
 
     selectRadioItem(item) {
-        // tasksFilterService.addFilterData(FILTER_BY_DONE_STATUS, item.id);
         this.setState({
             filteredByStatusId: item.id,
         });

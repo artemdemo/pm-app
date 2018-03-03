@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
-import * as modalConst from '../../model/modal/modalConst';
 import { hideModal } from '../../model/modal/modalActions';
 
 import './Modal.less';

@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Icon> should be rendered with "in text" class 1`] = `
+<span
+  className="glyphicon glyphicon-fire icon_in-text"
+  onClick={null}
+/>
+`;
+
+exports[`<Icon> should be rendered with className 1`] = `
+<span
+  className="some-class glyphicon glyphicon-fire"
+  onClick={null}
+/>
+`;
+
+exports[`<Icon> should be rendered with icon name 1`] = `
+<span
+  className="glyphicon glyphicon-fire"
+  onClick={null}
+/>
+`;
