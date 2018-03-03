@@ -30,7 +30,7 @@ function* addTaskSaga() {
                 .post('/api/tasks')
                 .send(task)
                 .promise();
-            yield put(taskAdded(Object.assign({}, task, result.body)));
+            yield put(taskAdded(result.body));
         } catch (err) {
             yield put(taskAddingError(err));
         }

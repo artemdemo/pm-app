@@ -68,38 +68,6 @@ export function taskAddingError(err) {
  * Updating position
  */
 
-/*
- * Add new task
- * @param newTask {Object}
- * @param newTask.name {String} - task name (required)
- * @param newTask.description {String}
- * @param newTask.board_id {Number}
- */
-// export function addNewTask(newTask) {
-//     const token = getStoredToken();
-//
-//     function taskAdded(task) {
-//         return {
-//             type: tasksConst.TASKS_ADDED,
-//             task,
-//         };
-//     }
-//
-//     return (dispatch) => {
-//         fetch('/api/tasks', token, {method: 'POST', body: newTask})
-//             .then(checkResponseStatus)
-//             .then(response => response.json())
-//             .then((task) => {
-//                 dispatch(taskAdded(Object.assign({}, newTask, task)));
-//                 dispatch(successMessage('Task added'));
-//             })
-//             .catch((e) => {
-//                 console.error(e);
-//                 dispatch(errorMessage('Error, while adding task'));
-//             });
-//     };
-// }
-
 /**
  * Delete task
  * @param taskId {Number}
