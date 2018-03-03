@@ -12,18 +12,6 @@ const initialState = {
     deletingError: null,
 };
 
-function sortProjectsByUpdate(inProjects = []) {
-    return inProjects.sort((projectA, projectB) => {
-        if (projectA.updated > projectB.updated) {
-            return -1;
-        }
-        if (projectA.updated < projectB.updated) {
-            return 1;
-        }
-        return 0;
-    });
-}
-
 export default function projects(state = initialState, action) {
     switch (action.type) {
         /*

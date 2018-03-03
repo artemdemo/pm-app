@@ -6,10 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack --progress --colors",
-    "eslint": "eslint ./app/**/*.js ./app/**/**/*.js ./app/**/*.jsx ./app/**/**/*.jsx",
+    "eslint": "eslint ./source/**/*.js ./source/**/**/*.js ./source/**/*.jsx ./source/**/**/*.jsx",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
-    "test": "./e2e-test.sh",
-    "test-server": "node node_modules/jasmine-node/bin/jasmine-node --color ./server"
+    "test": "./e2e-test.sh"
   },
   "repository": {
     "type": "git",
