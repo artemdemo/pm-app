@@ -40,15 +40,25 @@ exports.add = (request, replay) => {
     tasks.addNew(tasksData)
         .then((result) => {
             debug(`Task id ${result.id} created`);
-            if (Array.isArray(projects) && projects.length > 0) {
-                projectsTasksRelations.addRelation(projects, result.id)
-                    .then(() => {
-                        replay(result);
-                    });
-            } else {
-                replay(result);
-            }
+            return tasks.getById({
+                tokenId: tokenData.id,
+                taskId: result.id,
+            });
         })
+        .then((task) => {
+            if (!task) {
+                throw new Error('No task was found, probably given id is incorrect');
+            } else if (Array.isArray(projects) && projects.length > 0) {
+                return projectsTasksRelations
+                    .addRelation(projects, task.id)
+                    .then(() => {
+                        debug(`Projects relations with task id ${task.id} updated`);
+                        return task;
+                    });
+            }
+            return task;
+        })
+        .then(task => replay(task))
         .catch((err) => {
             debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));
@@ -68,14 +78,24 @@ exports.update = (request, replay) => {
         tokenId: tokenData.id,
     };
     tasks.updateTask(tasksData)
-        .then((updatedData) => {
+        .then(() => {
             debug(`Task id ${request.payload.id} updated`);
+            return tasks.getById({
+                tokenId: tokenData.id,
+                taskId: request.payload.id,
+            });
+        })
+        .then((task) => {
             if (taskId && projects) {
                 return projectsTasksRelations.addRelation(projects, taskId)
-                    .then(() => replay(updatedData));
+                    .then(() => {
+                        debug(`Projects relations with task id ${task.id} updated`);
+                        return task;
+                    });
             }
-            replay(updatedData);
+            return task;
         })
+        .then(task => replay(task))
         .catch((err) => {
             debug(err);
             replay(boom.badRequest(errConstants.DB_ERROR));

@@ -2,17 +2,24 @@ const DB = require('sqlite-crud');
 const _ = require('lodash');
 
 /**
- * Query rows with session
- * @param tableName {String}
- * @param fields {Array<String>}
- * @param tokenId {String}
+ * Query all rows where session fits given token
+ * @param args {Object}
+ * @param args.tableName {String}
+ * @param args.fields {Array<String>}
+ * @param args.tokenId {String}
+ * @param args.where {String}
  * @return {Promise<void>}
  */
-exports.queryRowsWithSession = async function(tableName, fields, tokenId) {
+exports.queryRowsWithSession = async function({tableName, fields, tokenId, where = null}) {
     let query = 'SELECT ';
+    let _where = 'sessions.id = ?';
 
     if (!_.isArray(fields) || fields.length === 0) {
         throw new Error('`fields` should be array');
+    }
+
+    if (_.isString(where)) {
+        _where += ` AND (${where})`;
     }
 
     fields.forEach((field, index) => {
@@ -23,6 +30,6 @@ exports.queryRowsWithSession = async function(tableName, fields, tokenId) {
     query += `FROM ${tableName}
               INNER JOIN sessions
                       ON sessions.user_id = ${tableName}.user_id
-              WHERE sessions.id = ?;`;
+              WHERE ${_where};`;
     return DB.queryRows(query, [tokenId]);
 };

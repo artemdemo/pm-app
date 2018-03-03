@@ -6,11 +6,11 @@ const { queryRowsWithSession } = require('../utils/db');
 const tableName = 'projects';
 
 const getAll = async function(projectsData) {
-    const projects = await queryRowsWithSession(
+    const projects = await queryRowsWithSession({
         tableName,
-        ['id', 'name', 'description', 'added', 'updated'],
-        projectsData.tokenId,
-    );
+        fields: ['id', 'name', 'description', 'added', 'updated'],
+        tokenId: projectsData.tokenId,
+    });
     const promisesList = [];
     projects.forEach((project) => {
         const tasksQuery = `SELECT projects_tasks_relations.task_id,

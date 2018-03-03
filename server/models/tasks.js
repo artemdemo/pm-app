@@ -11,12 +11,15 @@ const parseTasks = tasks => tasks.map((task) => {
     return task;
 });
 
+const TASK_FIELDS = ['id', 'name', 'description', 'done', 'priority',
+    'due', 'added', 'updated', 'board_id', 'id_position_scrum'];
+
 exports.getAll = async function(tasksData) {
-    const rows = await queryRowsWithSession(
+    const rows = await queryRowsWithSession({
         tableName,
-        ['id', 'name', 'description', 'done', 'priority', 'due', 'added', 'updated', 'board_id', 'id_position_scrum'],
-        tasksData.tokenId,
-    );
+        fields: TASK_FIELDS,
+        tokenId: tasksData.tokenId,
+    });
     const promisesList = [];
     const tasks = parseTasks(rows);
     tasks.forEach((task) => {
@@ -34,6 +37,26 @@ exports.getAll = async function(tasksData) {
         tasks[index].projects = data.map(item => item.project_id);
     });
     return tasks;
+};
+
+/**
+ * Get task by its id
+ * @param taskData {Object}
+ * @param taskData.tokenId {String}
+ * @param taskData.taskId {Number}
+ * @return {Promise<Object>}
+ */
+exports.getById = async function(taskData) {
+    const tasks = await queryRowsWithSession({
+        tableName,
+        fields: TASK_FIELDS,
+        tokenId: taskData.tokenId,
+        where: `tasks.id = ${taskData.taskId}`,
+    });
+    if (tasks.length === 0) {
+        return null;
+    }
+    return parseTasks(tasks)[0];
 };
 
 

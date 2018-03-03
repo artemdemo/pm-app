@@ -1,4 +1,4 @@
-const serializer = require('./serializer');
+const serializer = require('../serializer');
 
 describe('Serialize strings to object', () => {
     it('1 property - array of objects', () => {

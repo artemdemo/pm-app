@@ -27,11 +27,11 @@ const cratePositionsQuery = (boards) => {
  * Return all boards (without tasks), that related to given session id
  * @param tokenId {String} - for example: bbad4972-43d3-43fa-bb7f-35fb1ae64333
  */
-const getAllBoards = tokenId => queryRowsWithSession(
+const getAllBoards = tokenId => queryRowsWithSession({
     tableName,
-    ['id', 'title', 'description', 'id_position'],
-    tokenId
-);
+    fields: ['id', 'title', 'description', 'id_position'],
+    tokenId,
+});
 
 /**
  * Fetch all boards with tasks
