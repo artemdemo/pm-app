@@ -2,79 +2,45 @@ import { take, put } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as projectsConst from './settingsConst';
 import {
-    projectsLoaded,
-    projectsLoadingError,
-    projectAdded,
-    projectAddingError,
-    projectUpdated,
-    projectUpdatingError,
-    projectDeleted,
-    projectDeletingError,
-} from './projectsActions';
+    settingsLoaded,
+    settingsLoadingError,
+    settingsUpdated,
+    settingsUpdatingError,
+} from './settingsActions';
 
-function* loadProjectsSaga() {
+function* loadSettingsSaga() {
     while (true) {
         try {
-            yield take(projectsConst.LOAD_PROJECTS);
+            yield take(projectsConst.LOAD_SETTINGS);
             const result = yield request
-                .get('/api/projects')
+                .get('/api/settings')
                 .promise();
-            yield put(projectsLoaded(result.body));
+            yield put(settingsLoaded(result.body));
         } catch (err) {
-            yield put(projectsLoadingError(err));
+            yield put(settingsLoadingError(err));
         }
     }
 }
 
-function* addProjectSaga() {
+function* updateSettingsSaga() {
     while (true) {
         try {
-            const { project } = yield take(projectsConst.ADD_PROJECT);
+            const { settings } = yield take(projectsConst.UPDATE_SETTINGS);
             const result = yield request
-                .post('/api/projects')
-                .send(project)
+                .put('/api/settings')
+                .send(settings)
                 .promise();
-            yield put(projectAdded(Object.assign(project, {id: result.body.id})));
+            yield put(settingsUpdated(result.body));
         } catch (err) {
-            yield put(projectAddingError(err));
+            yield put(settingsUpdatingError(err));
         }
     }
 }
 
-function* updateProjectSaga() {
-    while (true) {
-        try {
-            const { project } = yield take(projectsConst.UPDATE_PROJECT);
-            yield request
-                .put('/api/projects')
-                .send(project)
-                .promise();
-            yield put(projectUpdated(project));
-        } catch (err) {
-            yield put(projectUpdatingError(err));
-        }
-    }
-}
 
-function* deleteProjectSaga() {
-    while (true) {
-        try {
-            const { id } = yield take(projectsConst.DELETE_PROJECT);
-            yield request
-                .delete(`/api/projects/${id}`)
-                .promise();
-            yield put(projectDeleted(id));
-        } catch (err) {
-            yield put(projectDeletingError(err));
-        }
-    }
-}
-
-export default function* projectsSagas() {
+export default function* settingsSagas() {
     yield [
-        loadProjectsSaga(),
-        addProjectSaga(),
-        updateProjectSaga(),
-        deleteProjectSaga(),
+        loadSettingsSaga(),
+        updateSettingsSaga(),
     ];
 }
