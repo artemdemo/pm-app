@@ -1,6 +1,8 @@
 import * as selectedEntityConst from './selectedEntityConst';
 
-export default function(state = {}, action) {
+const initState = {};
+
+export default function(state = initState, action) {
     switch (action.type) {
         case selectedEntityConst.SET_SELECTED_ENTITY:
             return {
