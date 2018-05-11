@@ -1,7 +1,7 @@
 import * as boardsConst from './boardsConst';
 import { sortByIdPosition } from '../../utils/boards';
 
-const initialState = {
+const initState = {
     data: [],
     loading: false,
     loadingError: null,
@@ -13,75 +13,95 @@ const initialState = {
     deletingError: null,
 };
 
-export default function boards(state = initialState, action) {
+export default function boards(state = initState, action) {
     switch (action.type) {
         /*
-         * Loading
+         * Load
          */
         case boardsConst.LOAD_BOARDS:
-            return Object.assign({}, state, {loading: true});
+            return {
+                ...state,
+                loading: true
+            };
         case boardsConst.BOARDS_LOADED:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 data: action.boards.sort(sortByIdPosition),
                 loading: false,
                 loadingError: null,
-            });
+            };
         case boardsConst.BOARDS_LOADING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 loading: false,
                 loadingError: action.err,
-            });
+            };
         /*
-         * Adding
+         * Add
          */
         case boardsConst.ADD_BOARD:
-            return Object.assign({}, state, {adding: true});
+            return {
+                ...state,
+                adding: true,
+            };
         case boardsConst.BOARD_ADDED:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 data: [
                     ...state.data,
                     action.board,
                 ],
                 adding: false,
                 addingError: null,
-            });
+            };
         case boardsConst.BOARD_ADDING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 adding: false,
                 addingError: action.err,
-            });
+            };
         /*
-         * Updating
+         * Update
          */
         case boardsConst.UPDATE_BOARD:
-            return Object.assign({}, state, {updating: true});
+            return {
+                ...state,
+                updating: true,
+            };
         case boardsConst.BOARD_UPDATED:
             // After updating single board I'll request all list, since they whole order could change
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 updating: false,
                 updatingError: null,
-            });
+            };
         case boardsConst.BOARD_UPDATING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 updating: false,
                 updatingError: action.err,
-            });
+            };
         /*
-         * Deleting
+         * Delete
          */
         case boardsConst.DELETE_BOARD:
-            return Object.assign({}, state, {deleting: true});
+            return {
+                ...state,
+                deleting: true,
+            };
         case boardsConst.BOARD_DELETED:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 data: state.data.filter(item => item.id !== action.id),
                 deleting: true,
                 deletingError: null,
-            });
+            };
         case boardsConst.BOARD_DELETING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 deleting: false,
                 deletingError: action.err,
-            });
+            };
         default:
             return state;
     }
