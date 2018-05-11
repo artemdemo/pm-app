@@ -1,6 +1,6 @@
 import * as userConst from './userConst';
 
-const defaultState = (() => {
+const initState = (() => {
     const token = window.localStorage.getItem(userConst.LS_ITEM_NAME);
     if (token) {
         return {
@@ -10,7 +10,7 @@ const defaultState = (() => {
     return {};
 })();
 
-export default function user(state = defaultState, action) {
+export default function user(state = initState, action) {
     switch (action.type) {
         case userConst.USER_AUTHENTICATED:
             return {
