@@ -17,7 +17,7 @@ export function projectsLoaded(projects) {
     };
 }
 
-export function projectsLoadingError(err) {
+export function projectsLoadingError(err = true) {
     return {
         type: projectsConst.PROJECTS_LOADING_ERROR,
         err,
@@ -42,7 +42,7 @@ export function projectAdded(project) {
     };
 }
 
-export function projectAddingError(err) {
+export function projectAddingError(err = true) {
     return {
         type: projectsConst.PROJECT_ADDING_ERROR,
         err,
@@ -67,7 +67,7 @@ export function projectUpdated(project) {
     };
 }
 
-export function projectUpdatingError(err) {
+export function projectUpdatingError(err = true) {
     return {
         type: projectsConst.PROJECT_UPDATING_ERROR,
         err,
@@ -92,7 +92,7 @@ export function projectDeleted(id) {
     };
 }
 
-export function projectDeletingError(err) {
+export function projectDeletingError(err = true) {
     return {
         type: projectsConst.PROJECT_DELETING_ERROR,
         err,

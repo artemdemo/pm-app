@@ -10,6 +10,8 @@
   "plugins": [
     "transform-react-jsx",
     "transform-object-assign",
+    "transform-class-properties",
+    "transform-object-rest-spread",
     "syntax-dynamic-import",
     ["transform-runtime", {
       "polyfill": false,

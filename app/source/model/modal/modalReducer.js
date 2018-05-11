@@ -1,19 +1,21 @@
 import * as modalConst from './modalConst';
 
-const initialState = {
+const initState = {
     content: null,
 };
 
-export default function modal(state = initialState, action) {
+export default function modal(state = initState, action) {
     switch (action.type) {
         case modalConst.HIDE_MODAL:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 content: null,
-            });
+            };
         case modalConst.SHOW_MODAL:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 content: action.content,
-            });
+            };
         default:
             return state;
     }

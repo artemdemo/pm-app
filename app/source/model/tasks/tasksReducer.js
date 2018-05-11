@@ -46,45 +46,59 @@ export default function tasksReducer(state = initState, action) {
          * Loading
          */
         case tasksConst.LOAD_TASKS:
-            return Object.assign({}, state, {loading: true});
+            return {
+                ...state,
+                loading: true,
+            };
         case tasksConst.TASKS_LOADED:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 // ToDo: Why need to sort here? Can't it came sorted from the server?
                 data: sortTasksByUpdate(action.tasks),
                 loading: false,
                 loadingError: null,
-            });
+            };
         case tasksConst.TASKS_LOADING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 loading: false,
                 loadingError: action.err,
-            });
+            };
         /*
          * Adding
          */
         case tasksConst.ADD_TASK:
-            return Object.assign({}, state, {adding: true});
+            return {
+                ...state,
+                adding: true,
+            };
         case tasksConst.TASK_ADDED:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 data: [
                     action.task,
                     ...state.data,
                 ],
                 adding: false,
                 addingError: null,
-            });
+            };
         case tasksConst.TASK_ADDING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 adding: false,
                 addingError: action.err,
-            });
+            };
         /*
          * Updating
          */
         case tasksConst.UPDATE_TASK:
-            return Object.assign({}, state, {updating: true});
+            return {
+                ...state,
+                updating: true,
+            };
         case tasksConst.TASK_UPDATED:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 data: sortTasksByUpdate(state.data.map((task) => {
                     if (task.id === action.task.id) {
                         return Object.assign(
@@ -98,12 +112,13 @@ export default function tasksReducer(state = initState, action) {
                 })),
                 updating: false,
                 updatingError: null,
-            });
+            };
         case tasksConst.TASK_UPDATING_ERROR:
-            return Object.assign({}, state, {
+            return {
+                ...state,
                 updating: false,
                 updatingError: action.err,
-            });
+            };
         /*
          * Deleting
          */
