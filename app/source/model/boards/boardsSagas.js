@@ -50,7 +50,7 @@ function* updateBoardSaga() {
                 .put('/api/boards')
                 .send(board)
                 .promise();
-            // After updating single board I'll request all list, since they whole order could change
+            // After updating single board I'll request all list, since their whole order could change
             // Therefore there is no additional data here from the request
             yield put(boardUpdated());
             yield put(loadBoards());
