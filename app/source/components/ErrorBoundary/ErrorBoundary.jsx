@@ -22,9 +22,9 @@ class ErrorBoundary extends React.Component {
         const { componentName } = this.props;
         const generalText = 'component failed, try to reload page.';
         if (componentName) {
-            return `<${componentName} /> ${generalText}`;
+            return `[!] <${componentName} /> ${generalText}`;
         }
-        return generalText;
+        return `[!] ${generalText}`;
     }
 
     render() {
