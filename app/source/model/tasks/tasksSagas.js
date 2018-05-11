@@ -6,6 +6,8 @@ import {
     tasksLoadingError,
     taskAdded,
     taskAddingError,
+    taskUpdated,
+    taskUpdatingError,
 } from './tasksActions';
 
 function* loadTasksSaga() {
@@ -30,9 +32,24 @@ function* addTaskSaga() {
                 .post('/api/tasks')
                 .send(task)
                 .promise();
-            yield put(taskAdded(Object.assign({}, task, result.body)));
+            yield put(taskAdded(result.body));
         } catch (err) {
             yield put(taskAddingError(err));
+        }
+    }
+}
+
+function* updateTaskSaga() {
+    while (true) {
+        try {
+            const { task } = yield take(tasksConst.UPDATE_TASK);
+            const result = yield request
+                .put('/api/tasks')
+                .send(task)
+                .promise();
+            yield put(taskUpdated(result.body));
+        } catch (err) {
+            yield put(taskUpdatingError(err));
         }
     }
 }
@@ -41,5 +58,6 @@ export default function* tasksSagas() {
     yield [
         loadTasksSaga(),
         addTaskSaga(),
+        updateTaskSaga(),
     ];
 }

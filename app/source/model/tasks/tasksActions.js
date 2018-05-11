@@ -58,6 +58,28 @@ export function taskAddingError(err) {
 /*
  * Updating
  */
+
+export function updateTask(task) {
+    return {
+        type: tasksConst.UPDATE_TASK,
+        task,
+    };
+}
+
+export function taskUpdated(task) {
+    return {
+        type: tasksConst.TASK_UPDATED,
+        task,
+    };
+}
+
+export function taskUpdatingError(err) {
+    return {
+        type: tasksConst.TASK_UPDATING_ERROR,
+        err,
+    };
+}
+
 /*
  * Deleting
  */
@@ -67,38 +89,6 @@ export function taskAddingError(err) {
 /*
  * Updating position
  */
-
-/*
- * Add new task
- * @param newTask {Object}
- * @param newTask.name {String} - task name (required)
- * @param newTask.description {String}
- * @param newTask.board_id {Number}
- */
-// export function addNewTask(newTask) {
-//     const token = getStoredToken();
-//
-//     function taskAdded(task) {
-//         return {
-//             type: tasksConst.TASKS_ADDED,
-//             task,
-//         };
-//     }
-//
-//     return (dispatch) => {
-//         fetch('/api/tasks', token, {method: 'POST', body: newTask})
-//             .then(checkResponseStatus)
-//             .then(response => response.json())
-//             .then((task) => {
-//                 dispatch(taskAdded(Object.assign({}, newTask, task)));
-//                 dispatch(successMessage('Task added'));
-//             })
-//             .catch((e) => {
-//                 console.error(e);
-//                 dispatch(errorMessage('Error, while adding task'));
-//             });
-//     };
-// }
 
 /**
  * Delete task
@@ -133,7 +123,7 @@ export function deleteTask(taskId) {
     };
 }
 
-/**
+/*
  * Update task
  * @param taskUpdate {Object}
  * @param taskUpdate.id {String}
@@ -143,34 +133,34 @@ export function deleteTask(taskId) {
  * @param taskUpdate.board_id {Number}
  * @param taskUpdate.projects {Array}
  */
-export function updateTask(taskUpdate) {
-    const token = getStoredToken();
-
-    function taskUpdated(task) {
-        return {
-            type: tasksConst.TASK_UPDATED,
-            task,
-        };
-    }
-
-    return (dispatch) => {
-        fetch('/api/tasks', token, {method: 'PUT', body: taskUpdate})
-            .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
-            .then((task) => {
-                dispatch(taskUpdated(Object.assign({}, taskUpdate, task)));
-                dispatch(loadProjects());
-                dispatch(loadBoards());
-                dispatch(successMessage('Task updated'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while updating task'));
-            });
-    };
-}
+// export function updateTask(taskUpdate) {
+//     const token = getStoredToken();
+//
+//     function taskUpdated(task) {
+//         return {
+//             type: tasksConst.TASK_UPDATED,
+//             task,
+//         };
+//     }
+//
+//     return (dispatch) => {
+//         fetch('/api/tasks', token, {method: 'PUT', body: taskUpdate})
+//             .then(checkResponseStatus)
+//             .then((response) => {
+//                 return response.json();
+//             })
+//             .then((task) => {
+//                 dispatch(taskUpdated(Object.assign({}, taskUpdate, task)));
+//                 dispatch(loadProjects());
+//                 dispatch(loadBoards());
+//                 dispatch(successMessage('Task updated'));
+//             })
+//             .catch((e) => {
+//                 console.error(e);
+//                 dispatch(errorMessage('Error, while updating task'));
+//             });
+//     };
+// }
 
 /**
  * After task has been dragged I need to update id of all tasks
