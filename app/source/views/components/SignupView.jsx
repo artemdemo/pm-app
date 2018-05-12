@@ -1,15 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { login, checkAuthentication } from '../model/user/userActions';
-import { history } from '../store';
+import { signup, checkAuthentication } from '../../model/user/userActions';
+import { errorMessage } from '../../model/notification/notificationActions';
 
-import './form-signin.less';
+import '../form-signin.less';
 
-class LoginView extends React.PureComponent {
+class SignupView extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        this.usernameRef = null;
         this.emailRef = null;
         this.passwordRef = null;
         this.rememberRef = null;
@@ -20,21 +21,25 @@ class LoginView extends React.PureComponent {
         checkAuthentication(location);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { user } = nextProps;
-        if (user.token) {
-            history.push('/tasks');
-        }
-    }
-
-    submitLogin(e) {
+    submitSignup(e) {
         e.preventDefault();
-        const { login } = this.props;
-        login({
-            email: this.emailRef.value,
-            password: this.passwordRef.value,
-            remember: this.rememberRef.checked,
-        });
+        const { signup, errorMessage } = this.props;
+        const username = this.usernameRef.value;
+        const email = this.emailRef.value;
+        const password = this.passwordRef.value;
+        const remember = this.rememberRef.checked;
+        if (username !== '' &&
+            email !== '' &&
+            password !== '') {
+            signup({
+                username,
+                email,
+                password,
+                remember,
+            });
+        } else {
+            errorMessage('Please fill all fields');
+        }
     }
 
     render() {
@@ -42,9 +47,21 @@ class LoginView extends React.PureComponent {
             <div className='container'>
                 <form
                     className='form-signin'
-                    onSubmit={this.submitLogin.bind(this)}
+                    onSubmit={this.submitSignup.bind(this)}
                 >
-                    <h2 className='form-signin-heading'>Please sign in</h2>
+                    <h2 className='form-signin-heading'>Sign up</h2>
+                    <label htmlFor='inputUsername' className='sr-only'>
+                        Username
+                    </label>
+                    <input
+                        type='text'
+                        name='username'
+                        ref={ref => this.usernameRef = ref}
+                        className='form-control form-signin__first-input'
+                        placeholder='Username'
+                        required=''
+                        autoComplete='off'
+                    />
                     <label htmlFor='inputEmail' className='sr-only'>
                         Email address
                     </label>
@@ -52,7 +69,7 @@ class LoginView extends React.PureComponent {
                         type='email'
                         name='email'
                         ref={ref => this.emailRef = ref}
-                        className='form-control form-signin__first-input'
+                        className='form-control form-signin__input'
                         placeholder='Email address'
                         required=''
                         autoComplete='off'
@@ -83,10 +100,14 @@ class LoginView extends React.PureComponent {
                         className='btn btn-lg btn-primary btn-block'
                         type='submit'
                     >
-                        Login
+                        Sign up
                     </button>
-                    <Link to='/signup' className='btn btn-link btn-block' data-qa='link-to-signup'>
-                        Create new account - sign up
+                    <Link
+                        to='/login'
+                        className='btn btn-link btn-block'
+                        data-qa='link-to-login'
+                    >
+                        I have an account - login
                     </Link>
                 </form>
             </div>
@@ -95,10 +116,9 @@ class LoginView extends React.PureComponent {
 }
 
 export default connect(
-    state => ({
-        user: state.user,
-    }), {
-        login,
+    () => ({}), {
+        signup,
         checkAuthentication,
+        errorMessage,
     }
-)(LoginView);
+)(SignupView);

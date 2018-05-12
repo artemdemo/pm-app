@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router';
 import { logout } from '../../model/user/userActions';
 import ProfileMenu from './ProfileMenu';
 
@@ -51,36 +51,36 @@ class MainMenu extends React.PureComponent {
                             <span className='icon-bar' />
                             <span className='icon-bar' />
                         </button>
-                        <NavLink className='navbar-brand' to='/'>&lt;PM&gt;</NavLink>
+                        <Link className='navbar-brand' to='/'>&lt;PM&gt;</Link>
                     </div>
                     <div className={menuClass}>
                         <ul className='nav navbar-nav'>
                             <li>
-                                <NavLink
+                                <Link
                                     to='/tasks'
                                     activeClassName={ACTIVE_ITEM}
                                     className='navbar-link'
                                 >
                                     Tasks
-                                </NavLink>
+                                </Link>
                             </li>
                             <li>
-                                <NavLink
+                                <Link
                                     to='/scrum'
                                     activeClassName={ACTIVE_ITEM}
                                     className='navbar-link'
                                 >
                                     Scrum
-                                </NavLink>
+                                </Link>
                             </li>
                             <li>
-                                <NavLink
+                                <Link
                                     to='/projects'
                                     activeClassName={ACTIVE_ITEM}
                                     className='navbar-link'
                                 >
                                     Projects
-                                </NavLink>
+                                </Link>
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>

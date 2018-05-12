@@ -1,16 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { signup, checkAuthentication } from '../model/user/userActions';
-import { errorMessage } from '../model/notification/notificationActions';
+import { login, checkAuthentication } from '../../model/user/userActions';
+import { history } from '../../store';
 
-import './form-signin.less';
+import '../form-signin.less';
 
-class SignupView extends React.PureComponent {
+class LoginView extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        this.usernameRef = null;
         this.emailRef = null;
         this.passwordRef = null;
         this.rememberRef = null;
@@ -21,25 +20,21 @@ class SignupView extends React.PureComponent {
         checkAuthentication(location);
     }
 
-    submitSignup(e) {
-        e.preventDefault();
-        const { signup, errorMessage } = this.props;
-        const username = this.usernameRef.value;
-        const email = this.emailRef.value;
-        const password = this.passwordRef.value;
-        const remember = this.rememberRef.checked;
-        if (username !== '' &&
-            email !== '' &&
-            password !== '') {
-            signup({
-                username,
-                email,
-                password,
-                remember,
-            });
-        } else {
-            errorMessage('Please fill all fields');
+    componentWillReceiveProps(nextProps) {
+        const { user } = nextProps;
+        if (user.token) {
+            history.push('/tasks');
         }
+    }
+
+    submitLogin(e) {
+        e.preventDefault();
+        const { login } = this.props;
+        login({
+            email: this.emailRef.value,
+            password: this.passwordRef.value,
+            remember: this.rememberRef.checked,
+        });
     }
 
     render() {
@@ -47,21 +42,9 @@ class SignupView extends React.PureComponent {
             <div className='container'>
                 <form
                     className='form-signin'
-                    onSubmit={this.submitSignup.bind(this)}
+                    onSubmit={this.submitLogin.bind(this)}
                 >
-                    <h2 className='form-signin-heading'>Sign up</h2>
-                    <label htmlFor='inputUsername' className='sr-only'>
-                        Username
-                    </label>
-                    <input
-                        type='text'
-                        name='username'
-                        ref={ref => this.usernameRef = ref}
-                        className='form-control form-signin__first-input'
-                        placeholder='Username'
-                        required=''
-                        autoComplete='off'
-                    />
+                    <h2 className='form-signin-heading'>Please sign in</h2>
                     <label htmlFor='inputEmail' className='sr-only'>
                         Email address
                     </label>
@@ -69,7 +52,7 @@ class SignupView extends React.PureComponent {
                         type='email'
                         name='email'
                         ref={ref => this.emailRef = ref}
-                        className='form-control form-signin__input'
+                        className='form-control form-signin__first-input'
                         placeholder='Email address'
                         required=''
                         autoComplete='off'
@@ -100,14 +83,10 @@ class SignupView extends React.PureComponent {
                         className='btn btn-lg btn-primary btn-block'
                         type='submit'
                     >
-                        Sign up
+                        Login
                     </button>
-                    <Link
-                        to='/login'
-                        className='btn btn-link btn-block'
-                        data-qa='link-to-login'
-                    >
-                        I have an account - login
+                    <Link to='/signup' className='btn btn-link btn-block' data-qa='link-to-signup'>
+                        Create new account - sign up
                     </Link>
                 </form>
             </div>
@@ -116,9 +95,10 @@ class SignupView extends React.PureComponent {
 }
 
 export default connect(
-    () => ({}), {
-        signup,
+    state => ({
+        user: state.user,
+    }), {
+        login,
         checkAuthentication,
-        errorMessage,
     }
-)(SignupView);
+)(LoginView);

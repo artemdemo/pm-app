@@ -1,14 +1,14 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import * as entityConst from '../model/selectedEntity/selectedEntityConst';
-import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
-import MainMenu from '../containers/MainMenu/MainMenu';
-import TasksList from '../containers/TasksList/TasksList';
-import SingleTask from '../containers/SingleTask/SingleTask';
-import { clearEntity } from '../model/selectedEntity/selectedEntityActions';
+import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import MainMenu from '../../containers/MainMenu/MainMenu';
+import TasksList from '../../containers/TasksList/TasksList';
+import SingleTask from '../../containers/SingleTask/SingleTask';
+import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 
-import './list-container.less';
+import '../list-container.less';
 
 const TasksView = (props) => {
     const { selectedEntity, clearEntity } = props;

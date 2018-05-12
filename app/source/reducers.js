@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { routerReducer } from 'react-router-redux';
 
 import tasks from './model/tasks/tasksReducer';
 import boards from './model/boards/boardsReducer';
@@ -18,6 +19,8 @@ const reducers = combineReducers({
     settings,
     notification,
     selectedEntity,
+
+    routing: routerReducer,
 });
 
 export default reducers;
