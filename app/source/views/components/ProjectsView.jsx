@@ -1,13 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import * as entityConst from '../model/selectedEntity/selectedEntityConst';
-import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary';
-import MainMenu from '../containers/MainMenu/MainMenu';
-import ProjectsList from '../containers/ProjectsList/ProjectsList';
-import SingleProject from '../containers/SingleProject/SingleProject';
+import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
+import MainMenu from '../../containers/MainMenu/MainMenu';
+import ProjectsList from '../../containers/ProjectsList/ProjectsList';
+import SingleProject from '../../containers/SingleProject/SingleProject';
 
-import './list-container.less';
+import '../list-container.less';
 
 const ProjectsView = (props) => {
     const { selectedEntity, projects } = props;

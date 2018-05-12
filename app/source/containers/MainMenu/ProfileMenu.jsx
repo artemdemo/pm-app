@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import onClickOutside from 'react-click-outside';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router';
 
 class ProfileMenu extends React.PureComponent {
     constructor() {
@@ -51,10 +51,10 @@ class ProfileMenu extends React.PureComponent {
                 </span>
                 <ul className='dropdown-menu'>
                     <li>
-                        <NavLink to='/profile'>Profile</NavLink>
+                        <Link to='/profile'>Profile</Link>
                     </li>
                     <li>
-                        <NavLink to='/settings'>Settings</NavLink>
+                        <Link to='/settings'>Settings</Link>
                     </li>
                     <li role='separator' className='divider' />
                     <li>

@@ -1,28 +1,34 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import {
-    Router,
-    Route,
-} from 'react-router-dom';
-import PromiseBluebird from 'bluebird';
+import Bluebird from 'bluebird';
+import RouteProvider from './routes/RouteProvider';
+import { requestRoutes } from './model/routes/routesSagas';
 import history from './history';
 import store from './store';
 
 import './styles/general.less';
 
-import AppView from './views/AppView';
-
-PromiseBluebird.config({
+Bluebird.config({
     warnings: false,
     cancellation: true,
 });
 
+const loadComponent = componentName => new Promise((resolve) => {
+    return import(
+        /* webpackChunkName: "view/[request]" */
+        `./views/components/${componentName}`
+    )
+        .then((response) => {
+            resolve(response.default);
+        });
+});
+
 render(
-    <Provider store={store}>
-        <Router history={history}>
-            <Route path='/' component={AppView} />
-        </Router>
-    </Provider>,
+    <RouteProvider
+        store={store}
+        history={history}
+        requestRoutes={requestRoutes}
+        loadComponent={loadComponent}
+    />,
     document.getElementById('pm-app')
 );
