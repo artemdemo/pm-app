@@ -8,6 +8,8 @@ import BoardsList from '../../containers/BoardsList/BoardsList';
 import SingleTask from '../../containers/SingleTask/SingleTask';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 
+import '../list-container.less';
+
 const ScrumView = (props) => {
     const { selectedEntity, clearEntity } = props;
     const selectedTask = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_TASK ?
