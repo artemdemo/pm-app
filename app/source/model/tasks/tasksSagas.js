@@ -8,6 +8,8 @@ import {
     taskAddingError,
     taskUpdated,
     taskUpdatingError,
+    taskDeleted,
+    taskDeletingError,
 } from './tasksActions';
 
 function* loadTasksSaga() {
@@ -54,10 +56,25 @@ function* updateTaskSaga() {
     }
 }
 
+function* deleteTaskSaga() {
+    while (true) {
+        try {
+            const { id } = yield take(tasksConst.DELETE_TASK);
+            yield request
+                .delete(`/api/tasks/${id}`)
+                .promise();
+            yield put(taskDeleted(id));
+        } catch (err) {
+            yield put(taskDeletingError(err));
+        }
+    }
+}
+
 export default function* tasksSagas() {
     yield [
         loadTasksSaga(),
         addTaskSaga(),
         updateTaskSaga(),
+        deleteTaskSaga(),
     ];
 }

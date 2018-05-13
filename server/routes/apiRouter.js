@@ -16,20 +16,21 @@ router.get('/projects', projectsController.all);
 router.post('/projects', projectsController.add);
 router.put('/projects', projectsController.update);
 router.delete('/projects', projectsController.delete);
-router.get('/projects/{taskId}/task/{projectId}', projectsController.connectTask);
-router.delete('/api/projects/{taskId}/task/{projectId}', projectsController.disconnectTask);
+router.get('/projects/:taskId/task/:projectId', projectsController.connectTask);
+router.delete('/api/projects/:taskId/task/:projectId', projectsController.disconnectTask);
 
 router.get('/tasks', tasksController.all);
 router.post('/tasks', tasksController.add);
 router.put('/tasks', tasksController.update);
-router.delete('/tasks/{taskId}', tasksController.delete);
-router.get('/tasks/{taskId}/project/{projectId}', tasksController.connectProject);
-router.delete('/tasks/{taskId}/project/{projectId}', tasksController.disconnectProject);
+router.delete('/tasks/:taskId', tasksController.delete);
+router.get('/tasks/:taskId/project/:projectId', tasksController.connectProject);
+router.delete('/tasks/:taskId/project/:projectId', tasksController.disconnectProject);
 router.put('/tasks/position', tasksController.updatePositions);
 
 router.get('/user', userController.user);
 router.post('/user', userController.signup);
-router.put('/user', userController.login);
+
+router.put('/login', userController.login);
 
 router.get('/settings', settingsController.all);
 router.put('/settings', settingsController.update);

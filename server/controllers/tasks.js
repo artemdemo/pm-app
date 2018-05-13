@@ -2,19 +2,13 @@ const debug = require('debug')('pm:controllers:task');
 const Boom = require('boom');
 const tasks = require('../models/tasks');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
 exports.all = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    const tasksData = {
-        tokenId: tokenData.id,
-    };
-    tasks.getAll(tasksData)
+    tasks
+        .getAll({
+            userId: req.authSession.userId,
+        })
         .then((tasks) => {
             res.json(tasks);
         })
@@ -25,21 +19,17 @@ exports.all = (req, res, next) => {
 };
 
 exports.add = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    const { projects } = req.payload;
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+    const { projects } = req.body;
     const tasksData = {
-        payload: req.payload,
-        tokenId: tokenData.id,
+        task: req.body,
+        userId: req.authSession.userId,
     };
+    debug(`Add task (user id ${tasksData.userId})`);
     tasks.addNew(tasksData)
         .then((result) => {
             debug(`Task id ${result.id} created`);
             return tasks.getById({
-                tokenId: tokenData.id,
+                userId: req.authSession.userId,
                 taskId: result.id,
             });
         })
@@ -64,23 +54,19 @@ exports.add = (req, res, next) => {
 };
 
 exports.update = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    const { projects } = req.payload;
-    const taskId = req.payload.id;
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+    const { projects } = req.body;
+    const taskId = req.body.id;
     const tasksData = {
-        payload: req.payload,
-        tokenId: tokenData.id,
+        task: req.body,
+        userId: req.authSession.userId,
     };
+    debug(`Update task with id: ${taskId} (user id ${tasksData.userId})`);
     tasks.updateTask(tasksData)
         .then(() => {
-            debug(`Task id ${req.payload.id} updated`);
+            debug(`Task id ${req.body.id} updated`);
             return tasks.getById({
-                tokenId: tokenData.id,
-                taskId: req.payload.id,
+                userId: req.authSession.userId,
+                taskId: req.body.id,
             });
         })
         .then((task) => {
@@ -101,15 +87,11 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
     const tasksData = {
-        payload: req.params.taskId,
-        tokenId: tokenData.id,
+        taskId: req.params.taskId,
+        userId: req.authSession.userId,
     };
+    debug(`Delete task with id: ${tasksData.taskId} (user id ${tasksData.userId})`);
     tasks.deleteTask(tasksData)
         .then(() => {
             debug(`Task id ${req.params.taskId} deleted`);
@@ -146,17 +128,12 @@ exports.disconnectProject = (req, res, next) => {
 };
 
 exports.updatePositions = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
 
     // ToDo: This is different from other reqs
     // `payload` and `tokenId` are properties in `tasksData` object
-    tasks.updateTaskPosition(Object.assign(req.payload, {tokenId: tokenData.id}))
+    tasks.updateTaskPosition(Object.assign(req.body, {userId: req.authSession.userId}))
         .then(() => {
-            debug(`Task id ${req.payload.taskId} position updated`);
+            debug(`Task id ${req.body.taskId} position updated`);
             res.json({});
         })
         .catch((err) => {

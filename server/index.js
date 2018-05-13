@@ -6,8 +6,15 @@ const express = require('express');
 const chalk = require('chalk');
 const debug = require('debug')('pm:index');
 const Boom = require('boom');
+const bodyParser = require('body-parser');
 const DB = require('sqlite-crud');
+
+const jwt = require('express-jwt');
+const sessions = require('./models/sessions');
+const secret = require('./secret');
+
 const apiRouter = require('./routes/apiRouter');
+
 
 let pathToTheDB;
 let cliDBPath = '';
@@ -69,18 +76,51 @@ if (migrateDB) {
 const app = express();
 const isDevelopment = app.get('env') === 'development';
 
+app.use(bodyParser.json());
+
+app.use(jwt({
+    secret: secret.key,
+    credentialsRequired: false,
+    requestProperty: 'auth',
+    getToken: (req) => {
+        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+            return req.headers.authorization.split(' ')[1];
+        } else if (req.query && req.query.token) {
+            return req.query.token;
+        }
+        return null;
+    },
+}));
+
+app.use((req, res, next) => {
+    if (req.auth) {
+        sessions.getSession({
+            id: req.auth.id,
+        }).then((session) => {
+            req.authSession = {
+                id: session.id,
+                userId: session.user_id,
+                expiration: session.expiration,
+            };
+            next();
+        });
+    } else {
+        next();
+    }
+});
+
 app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'private, max-age=31557600');
     next();
 });
 
 app.use('/', express.static(path.join(__dirname, '../public')));
-
 app.use('/api', apiRouter);
 
 app.use((err, req, res, next) => {
     const boomErr = (() => {
         if (!err.isBoom) {
+            // ToDo: I'm not sure that in current implementation (with express) it will work
             if (err.failedValidation) {
                 return Boom.boomify(err, { statusCode: 400 });
             }
@@ -90,73 +130,6 @@ app.use((err, req, res, next) => {
     })();
     res.status(boomErr.output.statusCode).send(boomErr.output.payload);
 });
-
-// Create a server with a host and port
-// const server = new Hapi.Server({
-//     connections: {
-//         routes: {
-//             files: {
-//                 relativeTo: path.join(__dirname, '../public'),
-//             },
-//         },
-//     },
-// });
-
-// server.connection({
-//     host: 'localhost',
-//     port: normalizePort(process.env.PORT || 3000),
-// });
-
-// Dynamically include routes
-// Function will recursively enter all directories and include all '*.js' files
-// const routerDirWalker = (dirPath) => {
-//     fs.readdirSync(dirPath).forEach((file) => {
-//         if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
-//             routerDirWalker(path.join(dirPath, file));
-//         } else {
-//             const pathToRoute = '.' + path.sep + path.join(dirPath, file.split('.').shift());
-//             const routes = require(pathToRoute.replace(/\\/g, '/').replace('/server', ''));
-//             for (const route in routes) {
-//                 server.route(routes[route]);
-//             }
-//         }
-//     });
-// };
-
-// inert provides new handler methods for serving static files and directories,
-// as well as decorating the reply interface with a file method for serving file based resources.
-// server.register(inert, () => {
-//
-//     server.register(hapiAuthJwt, () => {
-//         // Generating secure key (base64, 256 random bytes)
-//         // https://tonicdev.com/artemdemo/5736ead43ed13c11004bb76b
-//         server.auth.strategy('jwt', 'jwt', {
-//             key: require('./secret').key,
-//             validateFunc: require('./auth').validate,
-//             verifyOptions: {
-//                 ignoreExpiration: true,
-//                 algorithms: ['HS256'],
-//             },
-//         });
-//
-//         server.auth.default('jwt');
-//
-//         startServer().then(() => {
-//             console.log(chalk.yellow.bold('Server is running at: ') + chalk.cyan(server.info.uri));
-//         });
-//     });
-// });
-
-// Start the server
-// async function startServer() {
-//     try {
-//         routerDirWalker('./routes');
-//         await server.start();
-//     } catch (err) {
-//         debug(err);
-//         process.exit(1);
-//     }
-// }
 
 const port = (() => {
     if (!isDevelopment) {

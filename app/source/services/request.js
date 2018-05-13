@@ -5,21 +5,21 @@ export default {
     get: (url) => {
         return request
             .get(url)
-            .set('authorization', getStoredToken());
+            .set('authorization', `Bearer ${getStoredToken()}`);
     },
     post: (url) => {
         return request
             .post(url)
-            .set('authorization', getStoredToken());
+            .set('authorization', `Bearer ${getStoredToken()}`);
     },
     put: (url) => {
         return request
             .put(url)
-            .set('authorization', getStoredToken());
+            .set('authorization', `Bearer ${getStoredToken()}`);
     },
     'delete': (url) => {
         return request
             .delete(url)
-            .set('authorization', getStoredToken());
+            .set('authorization', `Bearer ${getStoredToken()}`);
     },
 };

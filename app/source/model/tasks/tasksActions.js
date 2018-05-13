@@ -83,84 +83,64 @@ export function taskUpdatingError(err) {
 /*
  * Deleting
  */
-/*
- * Loading
- */
-/*
- * Updating position
- */
+
+export function deleteTask(id) {
+    return {
+        type: tasksConst.DELETE_TASK,
+        id,
+    };
+}
+
+export function taskDeleted(id) {
+    return {
+        type: tasksConst.TASK_DELETED,
+        id,
+    };
+}
+
+export function taskDeletingError(err = true) {
+    return {
+        type: tasksConst.TASK_DELETING_ERROR,
+        err,
+    };
+}
 
 /**
  * Delete task
  * @param taskId {Number}
  */
-export function deleteTask(taskId) {
-    const token = getStoredToken();
-
-    function taskDeleted(id) {
-        return {
-            type: tasksConst.TASK_DELETED,
-            id,
-        };
-    }
-
-    return (dispatch) => {
-        fetch(`/api/tasks/${taskId}`, token, {method: 'DELETE'})
-            .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
-            .then(() => {
-                dispatch(taskDeleted(taskId));
-                dispatch(loadProjects());
-                dispatch(loadBoards());
-                dispatch(successMessage('Task deleted'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while deleting task'));
-            });
-    };
-}
-
-/*
- * Update task
- * @param taskUpdate {Object}
- * @param taskUpdate.id {String}
- * @param taskUpdate.name {String}
- * @param taskUpdate.description {String}
- * @param taskUpdate.done {Boolean}
- * @param taskUpdate.board_id {Number}
- * @param taskUpdate.projects {Array}
- */
-// export function updateTask(taskUpdate) {
+// export function deleteTask(taskId) {
 //     const token = getStoredToken();
 //
-//     function taskUpdated(task) {
+//     function taskDeleted(id) {
 //         return {
-//             type: tasksConst.TASK_UPDATED,
-//             task,
+//             type: tasksConst.TASK_DELETED,
+//             id,
 //         };
 //     }
 //
 //     return (dispatch) => {
-//         fetch('/api/tasks', token, {method: 'PUT', body: taskUpdate})
+//         fetch(`/api/tasks/${taskId}`, token, {method: 'DELETE'})
 //             .then(checkResponseStatus)
 //             .then((response) => {
 //                 return response.json();
 //             })
-//             .then((task) => {
-//                 dispatch(taskUpdated(Object.assign({}, taskUpdate, task)));
+//             .then(() => {
+//                 dispatch(taskDeleted(taskId));
 //                 dispatch(loadProjects());
 //                 dispatch(loadBoards());
-//                 dispatch(successMessage('Task updated'));
+//                 dispatch(successMessage('Task deleted'));
 //             })
 //             .catch((e) => {
 //                 console.error(e);
-//                 dispatch(errorMessage('Error, while updating task'));
+//                 dispatch(errorMessage('Error, while deleting task'));
 //             });
 //     };
 // }
+
+/*
+ * Updating position
+ */
 
 /**
  * After task has been dragged I need to update id of all tasks

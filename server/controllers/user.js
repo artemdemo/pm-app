@@ -9,8 +9,8 @@ const errConstants = require('../constants/error');
 
 const tokenOptions = {};
 
-exports.user = (reg, res, next) => {
-    const tokenData = auth.parseTokenData(reg.headers.authorization);
+exports.user = (req, res, next) => {
+    const tokenData = auth.parseTokenData(req.headers.authorization);
     if (!tokenData) {
         next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
         return;
@@ -31,8 +31,8 @@ exports.user = (reg, res, next) => {
 };
 
 
-exports.login = (reg, res, next) => {
-    users.getUser(reg.payload)
+exports.login = (req, res, next) => {
+    users.getUser(req.body)
         .then((user) => {
             return sessions.addSession({
                 user_id: user.id,
@@ -43,7 +43,7 @@ exports.login = (reg, res, next) => {
                 }, secret.key, tokenOptions);
 
                 debug(`User session id ${result.id} logged in`);
-                res.json(user).header('Authorization', token);
+                res.header('Authorization', token).json(user);
             });
         })
         .catch((err) => {
@@ -53,8 +53,8 @@ exports.login = (reg, res, next) => {
 };
 
 
-exports.signup = (reg, res, next) => {
-    users.addNew(reg.payload)
+exports.signup = (req, res, next) => {
+    users.addNew(req.body)
         .then((result) => {
             return sessions.addSession({
                 user_id: result.id,
