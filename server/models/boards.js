@@ -1,8 +1,7 @@
 const debug = require('debug')('pm:models:boards');
 const moment = require('moment');
 const DB = require('sqlite-crud');
-const sessions = require('./sessions');
-const { queryRowsWithSession } = require('../utils/db');
+const { queryRows } = require('../utils/db');
 
 const tableName = 'boards';
 
@@ -25,22 +24,22 @@ const createPositionsQuery = (boards) => {
 
 /**
  * Return all boards (without tasks), that related to given session id
- * @param tokenId {String} - for example: bbad4972-43d3-43fa-bb7f-35fb1ae64333
+ * @param userId {String}
  */
-const getAllBoards = tokenId => queryRowsWithSession({
+const getAllBoards = userId => queryRows({
     tableName,
     fields: ['id', 'title', 'description', 'id_position'],
-    tokenId,
+    userId,
 });
 
 /**
  * Fetch all boards with tasks
  * @param boardsData {Object}
- * @param boardsData.tokenId {String}
+ * @param boardsData.userId {String}
  * @param boardsData.id {String}
  * @returns {Promise}
  */
-const getAll = boardsData => getAllBoards(boardsData.tokenId)
+const getAll = boardsData => getAllBoards(boardsData.userId)
     .then((boards) => {
         return boards.map(board => ({
             id: board.id,
@@ -53,36 +52,27 @@ const getAll = boardsData => getAllBoards(boardsData.tokenId)
 /**
  * Add new board
  * @param newBoardData {Object}
- * @param newBoardData.tokenId {String}
- * @param newBoardData.payload {Object}
- * @param newBoardData.payload.title {String}
- * @param newBoardData.payload.description {String}
- * @param newBoardData.payload.id_position {Number}
+ * @param newBoardData.userId {String}
+ * @param newBoardData.board {Object}
+ * @param newBoardData.board.title {String}
+ * @param newBoardData.board.description {String}
+ * @param newBoardData.board.id_position {Number}
  * @returns {Promise}
  */
 const addNew = async function(newBoardData) {
     const now = moment(new Date());
-    const promisesList = [];
 
-    promisesList.push(getAllBoards(newBoardData.tokenId));
+    const boards = await getAllBoards(newBoardData.userId);
 
-    // In case there are no boards `getAllBoards` will return empty array
-    promisesList.push(sessions.getSession({
-        id: newBoardData.tokenId,
-    }));
-
-    const results = await Promise.all(promisesList);
-    const boards = results[0];
-    const session = results[1];
-
-    const userId = session.user_id;
     const newBoard = {
-        title: newBoardData.payload.title,
-        description: newBoardData.payload.description,
+        title: newBoardData.board.title,
+        description: newBoardData.board.description,
         added: now.format('YYYY-MM-DD HH:mm:ss'),
         updated: now.format('YYYY-MM-DD HH:mm:ss'),
-        user_id: userId,
+        user_id: newBoardData.userId,
     };
+
+    debug(newBoard);
 
     const result = await DB.insertRow(tableName, newBoard);
     const resultData = {
@@ -93,9 +83,9 @@ const addNew = async function(newBoardData) {
 
     let boardsList = [];
     let newBoardAdded = false;
-    newBoard.id_position = newBoardData.payload.id_position;
+    newBoard.id_position = newBoardData.board.id_position;
     boards.forEach((board, i) => {
-        if (newBoardData.payload.id_position === i) {
+        if (newBoardData.board.id_position === i) {
             newBoardAdded = true;
             boardsList.push(Object.assign(newBoard, resultData));
         }
@@ -116,12 +106,6 @@ const addNew = async function(newBoardData) {
 
 /**
  * Update board
- * @param boardData.tokenId {String}
- * @param boardData.payload {Object}
- * @param boardData.payload.id {String}
- * @param boardData.payload.title {String}
- * @param boardData.payload.description {String} - (optional)
- * @param boardData.payload.id_position {Number} - (optional)
  * @returns {Promise}
  */
 const updateBoard = async function(boardData) {
@@ -129,14 +113,14 @@ const updateBoard = async function(boardData) {
     const updateData = {};
     const updateAllowed = true;
 
-    if (!boardData.payload.id) {
-        throw new Error('No boardData.payload.id in given task');
+    if (!boardData.board.id) {
+        throw new Error('No boardData.board.id in given task');
     }
 
     const allowedFields = ['title', 'description'];
     allowedFields.forEach((field) => {
-        if (boardData.payload.hasOwnProperty(field)) {
-            updateData[field] = boardData.payload[field];
+        if (boardData.board.hasOwnProperty(field)) {
+            updateData[field] = boardData.board[field];
         }
     });
 
@@ -146,21 +130,22 @@ const updateBoard = async function(boardData) {
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    const boards = await getAllBoards(boardData.tokenId);
-    const userId = boards[0].user_id;
+    const boards = await getAllBoards(boardData.userId);
     const updatedBoard = Object.assign(updateData, {
-        id: boardData.payload.id,
-        id_position: boardData.payload.id_position,
+        id: boardData.board.id,
+        id_position: boardData.board.id_position,
     });
+
+    debug(updatedBoard);
 
     await DB.updateRow(tableName, updateData, [{
         column: 'id',
         comparator: '=',
-        value: boardData.payload.id,
+        value: boardData.board.id,
     }, {
         column: 'user_id',
         comparator: '=',
-        value: userId,
+        value: boardData.userId,
     }]);
 
     const boardsList = [];
@@ -186,35 +171,34 @@ const updateBoard = async function(boardData) {
     const query = createPositionsQuery(boardsListWithIdPosition);
     return DB.run(query)
         .then(() => {
-            debug(`Board id ${boardData.payload.id} moved`);
+            debug(`Board id ${boardData.board.id} moved`);
         });
 };
 
 /**
  * Delete board
  * @param boardData {Object}
- * @param boardData.tokenId {String}
- * @param boardData.payload {String} - id of the board that should be deleted
+ * @param boardData.userId {String}
+ * @param boardData.boardId {String}
  */
 const deleteBoard = async function(boardData) {
-    if (!boardData.payload) {
+    if (!boardData.boardId) {
         throw new Error('No "id" in given board');
     }
 
-    const id = boardData.tokenId;
+    debug(boardData);
 
-    const session = await sessions.getSession({ id });
     await DB.deleteRows(tableName, [{
         column: 'id',
         comparator: '=',
-        value: boardData.payload,
+        value: boardData.boardId,
     }, {
         column: 'user_id',
         comparator: '=',
-        value: session.user_id,
+        value: boardData.userId,
     }]);
 
-    const boards = await getAllBoards(boardData.tokenId);
+    const boards = await getAllBoards(boardData.userId);
     const query = createPositionsQuery(boards);
     return DB.run(query);
 };

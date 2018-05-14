@@ -1,19 +1,14 @@
 const debug = require('debug')('pm:controllers:boards');
 const Boom = require('boom');
 const boards = require('../models/boards');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
 exports.all = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    const boardsData = {
-        tokenId: tokenData.id,
-    };
-    boards.getAll(boardsData)
+    debug(`Get all boards (user id ${req.authSession.userId})`);
+    boards
+        .getAll({
+            userId: req.authSession.userId,
+        })
         .then((tasks) => {
             res.json(tasks);
         })
@@ -24,20 +19,14 @@ exports.all = (req, res, next) => {
 };
 
 exports.add = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
     const boardsData = {
-        payload: req.payload,
-        tokenId: tokenData.id,
+        board: req.body,
+        userId: req.authSession.userId,
     };
 
-    debug('Add board:');
-    debug(req.payload);
-
-    boards.addNew(boardsData)
+    debug(`Add board (user id ${boardsData.userId})`);
+    boards
+        .addNew(boardsData)
         .then((result) => {
             debug(`Board id ${result.id} created`);
             res.json(result);
@@ -49,22 +38,17 @@ exports.add = (req, res, next) => {
 };
 
 exports.update = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+    const { id } = req.body;
     const boardsData = {
-        payload: req.payload,
-        tokenId: tokenData.id,
+        board: req.body,
+        userId: req.authSession.userId,
     };
 
-    debug('Update board:');
-    debug(req.payload);
-
-    boards.updateBoard(boardsData)
+    debug(`Update board with id: ${id} (user id ${boardsData.userId})`);
+    boards
+        .updateBoard(boardsData)
         .then(() => {
-            debug(`Board id ${req.payload.id} updated`);
+            debug(`Board id ${id} updated`);
             res.json({});
         })
         .catch((err) => {
@@ -74,19 +58,14 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
     const boardsData = {
-        payload: req.params.boardId,
-        tokenId: tokenData.id,
+        boardId: req.params.boardId,
+        userId: req.authSession.userId,
     };
 
-    debug(`Delete board id ${req.params.boardId}`);
-
-    boards.deleteBoard(boardsData)
+    debug(`Delete board with id: ${boardsData.boardId} (user id ${boardsData.userId})`);
+    boards
+        .deleteBoard(boardsData)
         .then(() => {
             debug(`Board id ${req.params.boardId} deleted`);
             res.json({});

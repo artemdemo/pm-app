@@ -26,7 +26,6 @@ exports.add = (req, res, next) => {
         userId: req.authSession.userId,
     };
     debug(`Add project (user id ${projectsData.userId})`);
-    debug(req.body);
 
     projects
         .addNew(projectsData)
