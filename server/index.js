@@ -3,7 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const chalk = require('chalk');
 const debug = require('debug')('pm:index');
 const Boom = require('boom');
 const bodyParser = require('body-parser');
@@ -93,7 +92,6 @@ app.use(jwt({
 }));
 
 app.use((req, res, next) => {
-    // ToDo: at this point user could not be authorized and if it's not - we should somehow handle it
     if (req.auth) {
         sessions.getSession({
             id: req.auth.id,
@@ -106,7 +104,16 @@ app.use((req, res, next) => {
             next();
         });
     } else {
-        next();
+        const allowedUrls = [
+            /\/api\/login/,
+            /\/api\/signup/,
+        ];
+        const allowed = allowedUrls.some(urlRegex => urlRegex.test(req.url));
+        if (allowed) {
+            next();
+        } else {
+            next(Boom.unauthorized());
+        }
     }
 });
 
