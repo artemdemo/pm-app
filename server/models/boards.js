@@ -11,7 +11,7 @@ const tableName = 'boards';
  * @param boards {Array}
  * @returns {string}
  */
-const cratePositionsQuery = (boards) => {
+const createPositionsQuery = (boards) => {
     let query = 'UPDATE boards SET id_position = CASE id';
     const ids = [];
     boards.forEach((board, index) => {
@@ -108,7 +108,7 @@ const addNew = async function(newBoardData) {
         id_position: index,
     }));
 
-    const query = cratePositionsQuery(boardsList);
+    const query = createPositionsQuery(boardsList);
 
     await DB.run(query);
     return resultData;
@@ -183,7 +183,7 @@ const updateBoard = async function(boardData) {
         id_position: index,
     }));
 
-    const query = cratePositionsQuery(boardsListWithIdPosition);
+    const query = createPositionsQuery(boardsListWithIdPosition);
     return DB.run(query)
         .then(() => {
             debug(`Board id ${boardData.payload.id} moved`);
@@ -215,7 +215,7 @@ const deleteBoard = async function(boardData) {
     }]);
 
     const boards = await getAllBoards(boardData.tokenId);
-    const query = cratePositionsQuery(boards);
+    const query = createPositionsQuery(boards);
     return DB.run(query);
 };
 

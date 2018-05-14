@@ -10,12 +10,12 @@ const router = express.Router();
 router.get('/boards', boardsController.all);
 router.post('/boards', boardsController.add);
 router.put('/boards', boardsController.update);
-router.delete('/boards', boardsController.delete);
+router.delete('/boards/:boardId', boardsController.delete);
 
 router.get('/projects', projectsController.all);
 router.post('/projects', projectsController.add);
 router.put('/projects', projectsController.update);
-router.delete('/projects', projectsController.delete);
+router.delete('/projects/:projectId', projectsController.delete);
 router.get('/projects/:taskId/task/:projectId', projectsController.connectTask);
 router.delete('/api/projects/:taskId/task/:projectId', projectsController.disconnectTask);
 

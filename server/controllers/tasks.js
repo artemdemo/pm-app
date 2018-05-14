@@ -5,6 +5,7 @@ const projectsTasksRelations = require('../models/projects_tasks_relations');
 const errConstants = require('../constants/error');
 
 exports.all = (req, res, next) => {
+    debug(`Get all tasks (user id ${req.authSession.userId})`);
     tasks
         .getAll({
             userId: req.authSession.userId,
@@ -25,7 +26,10 @@ exports.add = (req, res, next) => {
         userId: req.authSession.userId,
     };
     debug(`Add task (user id ${tasksData.userId})`);
-    tasks.addNew(tasksData)
+    debug(req.body);
+
+    tasks
+        .addNew(tasksData)
         .then((result) => {
             debug(`Task id ${result.id} created`);
             return tasks.getById({
@@ -61,17 +65,20 @@ exports.update = (req, res, next) => {
         userId: req.authSession.userId,
     };
     debug(`Update task with id: ${taskId} (user id ${tasksData.userId})`);
-    tasks.updateTask(tasksData)
+    tasks
+        .updateTask(tasksData)
         .then(() => {
             debug(`Task id ${req.body.id} updated`);
-            return tasks.getById({
-                userId: req.authSession.userId,
-                taskId: req.body.id,
-            });
+            return tasks
+                .getById({
+                    userId: req.authSession.userId,
+                    taskId,
+                });
         })
         .then((task) => {
             if (taskId && projects) {
-                return projectsTasksRelations.addRelation(projects, taskId)
+                return projectsTasksRelations
+                    .addRelation(projects, taskId)
                     .then(() => {
                         debug(`Projects relations with task id ${task.id} updated`);
                         return task;
@@ -92,7 +99,8 @@ exports.delete = (req, res, next) => {
         userId: req.authSession.userId,
     };
     debug(`Delete task with id: ${tasksData.taskId} (user id ${tasksData.userId})`);
-    tasks.deleteTask(tasksData)
+    tasks
+        .deleteTask(tasksData)
         .then(() => {
             debug(`Task id ${req.params.taskId} deleted`);
             res.json({});
@@ -104,7 +112,8 @@ exports.delete = (req, res, next) => {
 };
 
 exports.connectProject = (req, res, next) => {
-    projectsTasksRelations.addRelation(req.params.projectId, req.params.taskId)
+    projectsTasksRelations
+        .addRelation(req.params.projectId, req.params.taskId)
         .then(() => {
             debug(`Project id ${req.params.projectId} connected to task id ${req.params.taskId}`);
             res.json({});
@@ -116,7 +125,8 @@ exports.connectProject = (req, res, next) => {
 };
 
 exports.disconnectProject = (req, res, next) => {
-    projectsTasksRelations.deleteRelation(req.params.projectId, req.params.taskId)
+    projectsTasksRelations
+        .deleteRelation(req.params.projectId, req.params.taskId)
         .then(() => {
             debug(`Project id ${req.params.projectId} disconnected from task id ${req.params.taskId}`);
             res.json({});
@@ -131,7 +141,8 @@ exports.updatePositions = (req, res, next) => {
 
     // ToDo: This is different from other reqs
     // `payload` and `tokenId` are properties in `tasksData` object
-    tasks.updateTaskPosition(Object.assign(req.body, {userId: req.authSession.userId}))
+    tasks
+        .updateTaskPosition(Object.assign(req.body, {userId: req.authSession.userId}))
         .then(() => {
             debug(`Task id ${req.body.taskId} position updated`);
             res.json({});

@@ -3,19 +3,14 @@ const Boom = require('boom');
 const _isNumber = require('lodash/isNumber');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
 exports.all = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    const projectsData = {
-        tokenId: tokenData.id,
-    };
-    projects.getAll(projectsData)
+    debug(`Get all projects (user id ${req.authSession.userId})`);
+    projects
+        .getAll({
+            userId: req.authSession.userId,
+        })
         .then((projects) => {
             res.json(projects);
         })
@@ -26,16 +21,15 @@ exports.all = (req, res, next) => {
 };
 
 exports.add = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
     const projectsData = {
-        payload: req.payload,
-        tokenId: tokenData.id,
+        project: req.body,
+        userId: req.authSession.userId,
     };
-    projects.addNew(projectsData)
+    debug(`Add project (user id ${projectsData.userId})`);
+    debug(req.body);
+
+    projects
+        .addNew(projectsData)
         .then((result) => {
             debug(`Project id ${result.id} created`);
             res.json(result);
@@ -47,23 +41,22 @@ exports.add = (req, res, next) => {
 };
 
 exports.update = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    const { id, tasks } = req.payload;
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+    const { id, tasks } = req.body;
+
     const projectsData = {
-        payload: req.payload,
-        tokenId: tokenData.id,
+        project: req.body,
+        userId: req.authSession.userId,
     };
-    projects.updateProject(projectsData)
+    debug(`Update project with id: ${id} (user id ${projectsData.userId})`);
+    projects
+        .updateProject(projectsData)
         .then((updatedData) => {
-            debug(`Project id ${req.payload.id} updated`);
+            debug(`Project id ${id} updated`);
             if (tasks && _isNumber(id)) {
-                return projectsTasksRelations.addRelation(id, tasks)
+                return projectsTasksRelations
+                    .addRelation(id, tasks)
                     .then(() => {
-                        debug(`Added relations to project id ${req.payload.id} and tasks ${tasks}`);
+                        debug(`Added relations to project id ${id} and tasks ${tasks}`);
                         res.json(updatedData);
                     });
             }
@@ -76,12 +69,13 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
     const projectsData = {
-        payload: req.params.projectId,
-        tokenId: tokenData.id,
+        projectId: req.params.projectId,
+        userId: req.authSession.userId,
     };
-    projects.deleteProject(projectsData)
+    debug(`Delete project with id: ${projectsData.projectId} (user id ${projectsData.userId})`);
+    projects
+        .deleteProject(projectsData)
         .then(() => {
             debug(`Project id ${req.params.projectId} deleted`);
             res.json({});
@@ -93,15 +87,20 @@ exports.delete = (req, res, next) => {
 };
 
 exports.connectTask = (req, res, next) => {
-    projectsTasksRelations.addRelation(req.params.projectId, req.params.taskId)
-        .then(() => res.json({}))
+    projectsTasksRelations
+        .addRelation(req.params.projectId, req.params.taskId)
+        .then(() => {
+            debug(`Task id ${req.params.taskId} connected to project id ${req.params.projectId}`);
+            res.json({});
+        })
         .catch(() => {
             next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
 exports.disconnectTask = (req, res, next) => {
-    projectsTasksRelations.deleteRelation(req.params.projectId, req.params.taskId)
+    projectsTasksRelations
+        .deleteRelation(req.params.projectId, req.params.taskId)
         .then(() => {
             debug(`Task id ${req.params.taskId} disconnected from project id ${req.params.projectId}`);
             res.json({});
