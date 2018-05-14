@@ -93,6 +93,7 @@ app.use(jwt({
 }));
 
 app.use((req, res, next) => {
+    // ToDo: at this point user could not be authorized and if it's not - we should somehow handle it
     if (req.auth) {
         sessions.getSession({
             id: req.auth.id,

@@ -4,34 +4,17 @@ const Boom = require('boom');
 const sessions = require('../models/sessions');
 const users = require('../models/users');
 const secret = require('../secret');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
 const tokenOptions = {};
 
 exports.user = (req, res, next) => {
-    const tokenData = auth.parseTokenData(req.headers.authorization);
-    if (!tokenData) {
-        next(Boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    sessions.getSession({
-        id: tokenData.id,
-    })
-        .then((session) => {
-            return users.getUserById(session.user_id);
-        })
-        .then((result) => {
-            res.json(result);
-        })
-        .catch((err) => {
-            debug(err);
-            next(Boom.unauthorized(errConstants.USER_ERROR));
-        });
+    debug(`Get user data (user id ${req.authSession.userId})`);
+    return users.getUserById(req.authSession.userId);
 };
 
-
 exports.login = (req, res, next) => {
+    debug('Login');
     users.getUser(req.body)
         .then((user) => {
             return sessions.addSession({
@@ -52,8 +35,8 @@ exports.login = (req, res, next) => {
         });
 };
 
-
 exports.signup = (req, res, next) => {
+    debug('Signup');
     users.addNew(req.body)
         .then((result) => {
             return sessions.addSession({
