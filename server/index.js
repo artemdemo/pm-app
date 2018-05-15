@@ -8,12 +8,8 @@ const Boom = require('boom');
 const bodyParser = require('body-parser');
 const DB = require('sqlite-crud');
 
-const jwt = require('express-jwt');
-const sessions = require('./models/sessions');
-const secret = require('./secret');
-
 const apiRouter = require('./routes/apiRouter');
-
+const { addAuth } = require('./middleware/auth');
 
 let pathToTheDB;
 let cliDBPath = '';
@@ -77,45 +73,7 @@ const isDevelopment = app.get('env') === 'development';
 
 app.use(bodyParser.json());
 
-app.use(jwt({
-    secret: secret.key,
-    credentialsRequired: false,
-    requestProperty: 'auth',
-    getToken: (req) => {
-        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-            return req.headers.authorization.split(' ')[1];
-        } else if (req.query && req.query.token) {
-            return req.query.token;
-        }
-        return null;
-    },
-}));
-
-app.use((req, res, next) => {
-    if (req.auth) {
-        sessions.getSession({
-            id: req.auth.id,
-        }).then((session) => {
-            req.authSession = {
-                id: session.id,
-                userId: session.user_id,
-                expiration: session.expiration,
-            };
-            next();
-        });
-    } else {
-        const allowedUrls = [
-            /\/api\/login/,
-            /\/api\/signup/,
-        ];
-        const allowed = allowedUrls.some(urlRegex => urlRegex.test(req.url));
-        if (allowed) {
-            next();
-        } else {
-            next(Boom.unauthorized());
-        }
-    }
-});
+addAuth(app);
 
 app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'private, max-age=31557600');

@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const authorization = (WrappedComponent) => {
-    class WithAuthorization extends Component {
+    class WithAuthorization extends React.Component {
         constructor(props) {
             super(props);
             this.state = {
