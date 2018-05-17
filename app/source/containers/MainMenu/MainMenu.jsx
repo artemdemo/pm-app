@@ -84,10 +84,7 @@ class MainMenu extends React.PureComponent {
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
-                            <ProfileMenu
-                                username={user.username}
-                                onLogout={this.logout.bind(this)}
-                            />
+                            
                         </ul>
                     </div>
                 </div>

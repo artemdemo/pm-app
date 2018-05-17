@@ -1,24 +1,24 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
-import tasks from './model/tasks/tasksReducer';
+import auth from './model/auth/authReducer';
 import boards from './model/boards/boardsReducer';
-import projects from './model/projects/projectsReducer';
-import settings from './model/settings/settingsReducer';
-import user from './model/user/userReducer';
 import modal from './model/modal/modalReducer';
 import notification from './model/notification/notificationReducer';
+import projects from './model/projects/projectsReducer';
 import selectedEntity from './model/selectedEntity/selectedEntityReducer';
+import settings from './model/settings/settingsReducer';
+import tasks from './model/tasks/tasksReducer';
 
 const reducers = combineReducers({
-    user,
-    tasks,
-    modal,
+    auth,
     boards,
-    projects,
-    settings,
+    modal,
     notification,
+    projects,
     selectedEntity,
+    settings,
+    tasks,
 
     routing: routerReducer,
 });

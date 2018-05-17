@@ -1,8 +1,5 @@
 import * as tasksConst from './tasksConst';
-import { loadProjects } from '../projects/projectsActions';
-import { loadBoards } from '../boards/boardsActions';
 import { errorMessage, successMessage } from '../notification/notificationActions';
-import { getStoredToken } from '../../utils/user';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
 
@@ -105,39 +102,6 @@ export function taskDeletingError(err = true) {
     };
 }
 
-/**
- * Delete task
- * @param taskId {Number}
- */
-// export function deleteTask(taskId) {
-//     const token = getStoredToken();
-//
-//     function taskDeleted(id) {
-//         return {
-//             type: tasksConst.TASK_DELETED,
-//             id,
-//         };
-//     }
-//
-//     return (dispatch) => {
-//         fetch(`/api/tasks/${taskId}`, token, {method: 'DELETE'})
-//             .then(checkResponseStatus)
-//             .then((response) => {
-//                 return response.json();
-//             })
-//             .then(() => {
-//                 dispatch(taskDeleted(taskId));
-//                 dispatch(loadProjects());
-//                 dispatch(loadBoards());
-//                 dispatch(successMessage('Task deleted'));
-//             })
-//             .catch((e) => {
-//                 console.error(e);
-//                 dispatch(errorMessage('Error, while deleting task'));
-//             });
-//     };
-// }
-
 /*
  * Updating position
  */
@@ -149,39 +113,39 @@ export function taskDeletingError(err = true) {
  * @param nearTaskId {Number|null} - in case there is no near task it will be `null`
  * @param position {String} - `before` or `after`
  */
-export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, position) {
-    const token = getStoredToken();
-
-    function updateTaskPosition(draggedTask) {
-        return {
-            type: tasksConst.UPDATE_TASK_POSITION,
-            draggedTask,
-            boardId,
-            nearTaskId,
-            position,
-        };
-    }
-
-    return (dispatch) => {
-        dispatch(updateTaskPosition(draggedTask));
-
-        fetch('/api/tasks/position', token, {method: 'PUT',
-            body: {
-                taskId: draggedTask.id,
-                nearTaskId,
-                position,
-                boardId,
-            }})
-            .then(checkResponseStatus)
-            .then((response) => {
-                return response.json();
-            })
-            .then(() => {
-                dispatch(successMessage('Task position updated'));
-            })
-            .catch((e) => {
-                console.error(e);
-                dispatch(errorMessage('Error, while updating task position'));
-            });
-    };
-}
+// export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, position) {
+//     const token = getStoredToken();
+//
+//     function updateTaskPosition(draggedTask) {
+//         return {
+//             type: tasksConst.UPDATE_TASK_POSITION,
+//             draggedTask,
+//             boardId,
+//             nearTaskId,
+//             position,
+//         };
+//     }
+//
+//     return (dispatch) => {
+//         dispatch(updateTaskPosition(draggedTask));
+//
+//         fetch('/api/tasks/position', token, {method: 'PUT',
+//             body: {
+//                 taskId: draggedTask.id,
+//                 nearTaskId,
+//                 position,
+//                 boardId,
+//             }})
+//             .then(checkResponseStatus)
+//             .then((response) => {
+//                 return response.json();
+//             })
+//             .then(() => {
+//                 dispatch(successMessage('Task position updated'));
+//             })
+//             .catch((e) => {
+//                 console.error(e);
+//                 dispatch(errorMessage('Error, while updating task position'));
+//             });
+//     };
+// }

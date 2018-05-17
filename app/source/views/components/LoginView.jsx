@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { login, checkAuthentication } from '../../model/user/userActions';
-import { history } from '../../store';
+import { login } from '../../model/auth/authAction';
+import LoginUser from '../../model/auth/LoginUser';
+import history from '../../history';
 
 import '../form-signin.less';
 
@@ -12,12 +13,6 @@ class LoginView extends React.PureComponent {
 
         this.emailRef = null;
         this.passwordRef = null;
-        this.rememberRef = null;
-    }
-
-    componentWillMount() {
-        const { checkAuthentication, location } = this.props;
-        checkAuthentication(location);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -30,11 +25,11 @@ class LoginView extends React.PureComponent {
     submitLogin(e) {
         e.preventDefault();
         const { login } = this.props;
-        login({
-            email: this.emailRef.value,
-            password: this.passwordRef.value,
-            remember: this.rememberRef.checked,
-        });
+        const loginUser = new LoginUser(
+            this.emailRef.value,
+            this.passwordRef.value,
+        );
+        login(loginUser);
     }
 
     render() {
@@ -69,16 +64,6 @@ class LoginView extends React.PureComponent {
                         required=''
                         autoComplete='off'
                     />
-                    <div className='checkbox'>
-                        <label>
-                            <input
-                                type='checkbox'
-                                name='remember'
-                                ref={ref => this.rememberRef = ref}
-                                value='remember-me'
-                            /> Remember me
-                        </label>
-                    </div>
                     <button
                         className='btn btn-lg btn-primary btn-block'
                         type='submit'
@@ -99,6 +84,5 @@ export default connect(
         user: state.user,
     }), {
         login,
-        checkAuthentication,
     }
 )(LoginView);
