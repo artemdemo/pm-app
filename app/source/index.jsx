@@ -5,6 +5,7 @@ import RouteProvider from './routes/RouteProvider';
 import { requestRoutes } from './model/routes/routesSagas';
 import history from './history';
 import store from './store';
+import authorization from './components/Authorization/authorization';
 
 import './styles/general.less';
 
@@ -29,6 +30,7 @@ render(
         history={history}
         requestRoutes={requestRoutes}
         loadComponent={loadComponent}
+        authorization={authorization}
     />,
     document.getElementById('pm-app')
 );

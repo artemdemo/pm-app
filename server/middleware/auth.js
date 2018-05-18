@@ -9,9 +9,11 @@ const jwtMiddleware = jwt({
     credentialsRequired: false,
     requestProperty: 'auth',
     getToken: (req) => {
-        const authParts = req.headers.authorization.split(' ');
-        if (req.headers.authorization && authParts[0] === 'Bearer') {
-            return authParts[1];
+        if (req.headers.authorization) {
+            const authParts = req.headers.authorization.split(' ');
+            if (authParts[0] === 'Bearer') {
+                return authParts[1];
+            }
         }
         debug(`There is no "Bearer" token in the header - ${req.url}`);
         return null;

@@ -86,9 +86,13 @@ app.use('/api', apiRouter);
 app.use((err, req, res, next) => {
     const boomErr = (() => {
         if (!err.isBoom) {
-            // ToDo: I'm not sure that in current implementation (with express) it will work
-            if (err.failedValidation) {
-                return Boom.boomify(err, { statusCode: 400 });
+            if (err.status === 401) {
+                debug(err.name, err.status);
+                debug(err.code, err.message);
+                return Boom.boomify(err, {
+                    statusCode: 401,
+                    message: `${err.code}`,
+                });
             }
             return Boom.boomify(err, { statusCode: 500 });
         }

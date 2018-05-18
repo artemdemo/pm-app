@@ -18,12 +18,9 @@ const authorization = (WrappedComponent) => {
             this.updateState(nextProps);
         }
 
-        updateState(props) {
-            const { user, location } = props;
-            const permission = checkUrlPermission(location.pathname, user.data.permissions.views, publicPath);
+        updateState() {
             this.setState({
-                allowed: permission,
-                isLoadingUserData: this.state.isLoadingUserData === true ? user.loading : false,
+                allowed: false,
             });
         }
 
