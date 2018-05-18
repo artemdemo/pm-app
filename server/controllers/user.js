@@ -5,12 +5,19 @@ const sessions = require('../models/sessions');
 const users = require('../models/users');
 const secret = require('../secret');
 const errConstants = require('../constants/error');
+const config = require('../config');
 
 const tokenOptions = {};
 
+// ToDo: This route is not longer needed
 exports.user = (req, res, next) => {
     debug(`Get user data (user id ${req.authSession.userId})`);
-    return users.getUserById(req.authSession.userId);
+    return users
+        .getUserById(req.authSession.userId)
+        .then(user => ({
+            email: user.email,
+            username: user.username,
+        }));
 };
 
 exports.login = (req, res, next) => {
@@ -22,11 +29,16 @@ exports.login = (req, res, next) => {
             }).then((result) => {
                 const token = JWT.sign({
                     id: result.id,
-                    expiration: result.expiration,
                 }, secret.key, tokenOptions);
 
                 debug(`User session id ${result.id} logged in`);
-                res.header('Authorization', token).json(user);
+                res
+                    .header('Authorization', token)
+                    .json({
+                        email: user.email,
+                        username: user.username,
+                        expiration: config.expPeriod,
+                    });
             });
         })
         .catch((err) => {
@@ -46,12 +58,17 @@ exports.signup = (req, res, next) => {
         .then((result) => {
             const token = JWT.sign({
                 id: result.id,
-                expiration: result.expiration,
             }, secret.key, tokenOptions);
 
             debug(`User session id ${result.id} signed up`);
 
-            res.json({login: true}).header('Authorization', token);
+            res
+                .header('Authorization', token)
+                .json({
+                    email: req.body.email,
+                    username: req.body.username,
+                    expiration: config.expPeriod,
+                });
         })
         .catch((err) => {
             debug(err);

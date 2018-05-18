@@ -1,29 +1,35 @@
 import request from 'superagent-bluebird-promise';
-import * as token from '../services/token';
+
+const defaultHeaders = {};
+
+export const setHeader = (name, value) => {
+    defaultHeaders[name] = value;
+};
+
+const applyHeaders = (request) => {
+    if (Object.keys(defaultHeaders).length > 0) {
+        for (const key in defaultHeaders) {
+            request.set(key, defaultHeaders[key]);
+        }
+    }
+    return request;
+};
 
 export default {
     get: (url) => {
-        const tokenInstance = token.get();
-        return request
-            .get(url)
-            .set('authorization', `Bearer ${tokenInstance.token}`);
+        const requestHandler = request.get(url);
+        return applyHeaders(requestHandler);
     },
     post: (url) => {
-        const tokenInstance = token.get();
-        return request
-            .post(url)
-            .set('authorization', `Bearer ${tokenInstance.token}`);
+        const requestHandler = request.post(url);
+        return applyHeaders(requestHandler);
     },
     put: (url) => {
-        const tokenInstance = token.get();
-        return request
-            .put(url)
-            .set('authorization', `Bearer ${tokenInstance.token}`);
+        const requestHandler = request.put(url);
+        return applyHeaders(requestHandler);
     },
     'delete': (url) => {
-        const tokenInstance = token.get();
-        return request
-            .delete(url)
-            .set('authorization', `Bearer ${tokenInstance.token}`);
+        const requestHandler = request.delete(url);
+        return applyHeaders(requestHandler);
     },
 };
