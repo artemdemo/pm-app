@@ -1,4 +1,4 @@
-const debug = require('debug')('pm:controllers:index');
+const debug = require('debug')('pm:controllers:user');
 const JWT = require('jsonwebtoken');
 const Boom = require('boom');
 const sessions = require('../models/sessions');
@@ -17,7 +17,14 @@ exports.user = (req, res, next) => {
         .then(user => ({
             email: user.email,
             username: user.username,
-        }));
+        }))
+        .then((userData) => {
+            res.json(userData)
+        })
+        .catch((err) => {
+            debug(err);
+            next(Boom.unauthorized(errConstants.USER_ERROR));
+        });
 };
 
 exports.login = (req, res, next) => {

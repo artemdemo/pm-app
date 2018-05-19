@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { login } from '../../model/auth/authAction';
+import { login } from '../../model/auth/authActions';
 import LoginUser from '../../model/auth/LoginUser';
 import auth from '../../services/auth';
 import * as location from '../../services/location';

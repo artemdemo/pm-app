@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { logout } from '../../model/user/userActions';
+import { logout } from '../../model/auth/authActions';
 import ProfileMenu from './ProfileMenu';
 
 import './MainMenu.less';
@@ -30,7 +30,7 @@ class MainMenu extends React.PureComponent {
     }
 
     render() {
-        const { user } = this.props;
+        const { auth } = this.props;
         const menuClass = classnames({
             collapse: true,
             'navbar-collapse': true,
@@ -84,7 +84,10 @@ class MainMenu extends React.PureComponent {
                             </li>
                         </ul>
                         <ul className='nav navbar-nav navbar-right'>
-                            
+                            <ProfileMenu
+                                username={auth.data.username}
+                                onLogout={this.logout.bind(this)}
+                            />
                         </ul>
                     </div>
                 </div>
@@ -95,7 +98,7 @@ class MainMenu extends React.PureComponent {
 
 export default connect(
     state => ({
-        user: state.user,
+        auth: state.auth,
     }), {
         logout,
     }

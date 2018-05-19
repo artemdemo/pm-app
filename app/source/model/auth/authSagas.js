@@ -4,16 +4,33 @@ import * as authConst from './authConst';
 import {
     loggedIn,
     loginError,
-} from './authAction';
+} from './authActions';
 import auth, { Token } from '../../services/auth';
 import * as location from '../../services/location';
+
+function* userSaga() {
+    while (true) {
+        try {
+            yield take(authConst.LOAD_USER);
+            const result = yield request
+                .get('/api/user')
+                .promise();
+            yield put(loggedIn({
+                email: result.body.email,
+                username: result.body.username,
+            }));
+        } catch (err) {
+            yield put(loginError(err));
+        }
+    }
+}
 
 function* loginSaga() {
     while (true) {
         try {
             const { loginUser } = yield take(authConst.LOGIN);
             const result = yield request
-                .put('/api/login')
+                .put('/api/user/login')
                 .send(loginUser)
                 .promise();
             const expires = (new Date()).getTime() + (result.body.expiration * 1000);
@@ -23,15 +40,28 @@ function* loginSaga() {
             );
             auth.saveToken(tokenInstance);
             location.replace('/');
-            yield put(loggedIn(result.body));
+            yield put(loggedIn({
+                email: result.body.email,
+                username: result.body.username,
+            }));
         } catch (err) {
             yield put(loginError(err));
         }
     }
 }
 
+function* logoutSaga() {
+    while (true) {
+        yield take(authConst.LOGOUT);
+        auth.removeToken();
+        location.replace('/login');
+    }
+}
+
 export default function* authSagas() {
     yield [
+        userSaga(),
         loginSaga(),
+        logoutSaga(),
     ];
 }

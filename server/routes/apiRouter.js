@@ -29,8 +29,7 @@ router.put('/tasks/position', tasksController.updatePositions);
 
 router.get('/user', userController.user);
 router.post('/user', userController.signup);
-
-router.put('/login', userController.login);
+router.put('/user/login', userController.login);
 
 router.get('/settings', settingsController.all);
 router.put('/settings', settingsController.update);
