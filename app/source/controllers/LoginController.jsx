@@ -19,7 +19,7 @@ class LoginController extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        const loggedIn = prevProps.login === true &&
+        const loggedIn = prevProps.auth.login === true &&
             this.props.auth.login === false &&
             this.props.auth.loginError === null;
 
