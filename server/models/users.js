@@ -1,3 +1,4 @@
+const debug = require('debug')('pm:models:users');
 const moment = require('moment');
 const crypto = require('crypto');
 const DB = require('sqlite-crud');
@@ -24,6 +25,8 @@ const getUserFields = (rawUser) => {
 exports.addNew = async function(newUser) {
     const now = moment(new Date());
 
+    debug(newUser);
+
     const result = await DB.insertRow(tableName, {
         username: newUser.username,
         email: newUser.email,
@@ -41,6 +44,8 @@ exports.addNew = async function(newUser) {
 
 
 exports.getUser = async function(user) {
+    debug(user);
+
     const result = await DB.getRows(tableName, [{
         column: 'email',
         comparator: '=',

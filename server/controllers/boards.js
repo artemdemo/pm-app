@@ -1,100 +1,77 @@
 const debug = require('debug')('pm:controllers:boards');
-const boom = require('boom');
+const Boom = require('boom');
 const boards = require('../models/boards');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-exports.index = (request, replay) => replay.file('index.html');
-
-exports.all = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    const boardsData = {
-        tokenId: tokenData.id,
-    };
-    boards.getAll(boardsData)
+exports.all = (req, res, next) => {
+    debug(`Get all boards (user id ${req.authSession.userId})`);
+    boards
+        .getAll({
+            userId: req.authSession.userId,
+        })
         .then((tasks) => {
-            replay(tasks);
+            res.json(tasks);
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.add = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.add = (req, res, next) => {
     const boardsData = {
-        payload: request.payload,
-        tokenId: tokenData.id,
+        board: req.body,
+        userId: req.authSession.userId,
     };
 
-    debug('Add board:');
-    debug(request.payload);
-
-    boards.addNew(boardsData)
+    debug(`Add board (user id ${boardsData.userId})`);
+    boards
+        .addNew(boardsData)
         .then((result) => {
             debug(`Board id ${result.id} created`);
-            replay(result);
+            res.json(result);
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.update = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.update = (req, res, next) => {
+    const { id } = req.body;
     const boardsData = {
-        payload: request.payload,
-        tokenId: tokenData.id,
+        board: req.body,
+        userId: req.authSession.userId,
     };
 
-    debug('Update board:');
-    debug(request.payload);
-
-    boards.updateBoard(boardsData)
+    debug(`Update board with id: ${id} (user id ${boardsData.userId})`);
+    boards
+        .updateBoard(boardsData)
         .then(() => {
-            debug(`Board id ${request.payload.id} updated`);
-            replay({});
+            debug(`Board id ${id} updated`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.delete = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.delete = (req, res, next) => {
     const boardsData = {
-        payload: request.params.boardId,
-        tokenId: tokenData.id,
+        boardId: req.params.boardId,
+        userId: req.authSession.userId,
     };
 
-    debug(`Delete board id ${request.params.boardId}`);
-
-    boards.deleteBoard(boardsData)
+    debug(`Delete board with id: ${boardsData.boardId} (user id ${boardsData.userId})`);
+    boards
+        .deleteBoard(boardsData)
         .then(() => {
-            debug(`Board id ${request.params.boardId} deleted`);
-            replay({});
+            debug(`Board id ${req.params.boardId} deleted`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };

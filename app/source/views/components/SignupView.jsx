@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { signup, checkAuthentication } from '../../model/user/userActions';
+import { signup } from '../../model/user/userActions';
 import { errorMessage } from '../../model/notification/notificationActions';
+import auth from '../../services/auth';
+import * as location from '../../services/location';
 
 import '../form-signin.less';
 
@@ -13,12 +15,12 @@ class SignupView extends React.PureComponent {
         this.usernameRef = null;
         this.emailRef = null;
         this.passwordRef = null;
-        this.rememberRef = null;
     }
 
-    componentWillMount() {
-        const { checkAuthentication, location } = this.props;
-        checkAuthentication(location);
+    componentDidMount() {
+        if (auth.isAuthorized()) {
+            location.replace('/')
+        }
     }
 
     submitSignup(e) {
@@ -27,7 +29,6 @@ class SignupView extends React.PureComponent {
         const username = this.usernameRef.value;
         const email = this.emailRef.value;
         const password = this.passwordRef.value;
-        const remember = this.rememberRef.checked;
         if (username !== '' &&
             email !== '' &&
             password !== '') {
@@ -35,7 +36,6 @@ class SignupView extends React.PureComponent {
                 username,
                 email,
                 password,
-                remember,
             });
         } else {
             errorMessage('Please fill all fields');
@@ -86,16 +86,6 @@ class SignupView extends React.PureComponent {
                         required=''
                         autoComplete='off'
                     />
-                    <div className='checkbox'>
-                        <label>
-                            <input
-                                type='checkbox'
-                                name='remember'
-                                ref={ref => this.rememberRef = ref}
-                                value='remember-me'
-                            /> Remember me
-                        </label>
-                    </div>
                     <button
                         className='btn btn-lg btn-primary btn-block'
                         type='submit'
@@ -118,7 +108,6 @@ class SignupView extends React.PureComponent {
 export default connect(
     () => ({}), {
         signup,
-        checkAuthentication,
         errorMessage,
     }
 )(SignupView);

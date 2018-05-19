@@ -1,47 +1,39 @@
 const debug = require('debug')('pm:controllers:task');
-const boom = require('boom');
+const Boom = require('boom');
 const tasks = require('../models/tasks');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-exports.index = (request, replay) => replay.file('index.html');
-
-exports.all = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    const tasksData = {
-        tokenId: tokenData.id,
-    };
-    tasks.getAll(tasksData)
+exports.all = (req, res, next) => {
+    debug(`Get all tasks (user id ${req.authSession.userId})`);
+    tasks
+        .getAll({
+            userId: req.authSession.userId,
+        })
         .then((tasks) => {
-            replay(tasks);
+            res.json(tasks);
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.add = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    const { projects } = request.payload;
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.add = (req, res, next) => {
+    const { projects } = req.body;
     const tasksData = {
-        payload: request.payload,
-        tokenId: tokenData.id,
+        task: req.body,
+        userId: req.authSession.userId,
     };
-    tasks.addNew(tasksData)
+    debug(`Add task (user id ${tasksData.userId})`);
+    debug(req.body);
+
+    tasks
+        .addNew(tasksData)
         .then((result) => {
             debug(`Task id ${result.id} created`);
             return tasks.getById({
-                tokenId: tokenData.id,
+                userId: req.authSession.userId,
                 taskId: result.id,
             });
         })
@@ -58,36 +50,35 @@ exports.add = (request, replay) => {
             }
             return task;
         })
-        .then(task => replay(task))
+        .then(task => res.json(task))
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.update = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    const { projects } = request.payload;
-    const taskId = request.payload.id;
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.update = (req, res, next) => {
+    const { projects } = req.body;
+    const taskId = req.body.id;
     const tasksData = {
-        payload: request.payload,
-        tokenId: tokenData.id,
+        task: req.body,
+        userId: req.authSession.userId,
     };
-    tasks.updateTask(tasksData)
+    debug(`Update task with id: ${taskId} (user id ${tasksData.userId})`);
+    tasks
+        .updateTask(tasksData)
         .then(() => {
-            debug(`Task id ${request.payload.id} updated`);
-            return tasks.getById({
-                tokenId: tokenData.id,
-                taskId: request.payload.id,
-            });
+            debug(`Task id ${req.body.id} updated`);
+            return tasks
+                .getById({
+                    userId: req.authSession.userId,
+                    taskId,
+                });
         })
         .then((task) => {
             if (taskId && projects) {
-                return projectsTasksRelations.addRelation(projects, taskId)
+                return projectsTasksRelations
+                    .addRelation(projects, taskId)
                     .then(() => {
                         debug(`Projects relations with task id ${task.id} updated`);
                         return task;
@@ -95,74 +86,69 @@ exports.update = (request, replay) => {
             }
             return task;
         })
-        .then(task => replay(task))
+        .then(task => res.json(task))
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.delete = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.delete = (req, res, next) => {
     const tasksData = {
-        payload: request.params.taskId,
-        tokenId: tokenData.id,
+        taskId: req.params.taskId,
+        userId: req.authSession.userId,
     };
-    tasks.deleteTask(tasksData)
+    debug(`Delete task with id: ${tasksData.taskId} (user id ${tasksData.userId})`);
+    tasks
+        .deleteTask(tasksData)
         .then(() => {
-            debug(`Task id ${request.params.taskId} deleted`);
-            replay({});
+            debug(`Task id ${req.params.taskId} deleted`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.connectProject = (request, replay) => {
-    projectsTasksRelations.addRelation(request.params.projectId, request.params.taskId)
+exports.connectProject = (req, res, next) => {
+    projectsTasksRelations
+        .addRelation(req.params.projectId, req.params.taskId)
         .then(() => {
-            debug(`Project id ${request.params.projectId} connected to task id ${request.params.taskId}`);
-            replay({});
+            debug(`Project id ${req.params.projectId} connected to task id ${req.params.taskId}`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.disconnectProject = (request, replay) => {
-    projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
+exports.disconnectProject = (req, res, next) => {
+    projectsTasksRelations
+        .deleteRelation(req.params.projectId, req.params.taskId)
         .then(() => {
-            debug(`Project id ${request.params.projectId} disconnected from task id ${request.params.taskId}`);
-            replay({});
+            debug(`Project id ${req.params.projectId} disconnected from task id ${req.params.taskId}`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.updatePositions = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.updatePositions = (req, res, next) => {
 
-    // ToDo: This is different from other requests
+    // ToDo: This is different from other reqs
     // `payload` and `tokenId` are properties in `tasksData` object
-    tasks.updateTaskPosition(Object.assign(request.payload, {tokenId: tokenData.id}))
+    tasks
+        .updateTaskPosition(Object.assign(req.body, {userId: req.authSession.userId}))
         .then(() => {
-            debug(`Task id ${request.payload.taskId} position updated`);
-            replay({});
+            debug(`Task id ${req.body.taskId} position updated`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };

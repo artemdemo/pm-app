@@ -4,7 +4,6 @@ import { loadTasks } from '../tasks/tasksActions';
 import { loadBoards } from '../boards/boardsActions';
 import { loadProjects } from '../projects/projectsActions';
 import { loadSettings } from '../settings/settingsActions';
-import { storeToken, getStoredToken, removeStoredToken } from '../../utils/user';
 import history from '../../history';
 import fetch from '../../utils/fetch';
 import checkResponseStatus from '../../utils/checkResponseStatus';
@@ -56,34 +55,34 @@ function loadDataAfterLogin(dispatch) {
     dispatch(loadSettings());
 }
 
-export function checkAuthentication(location) {
-    const token = getStoredToken();
-
-    if (!token) {
-        goToLoginPage(location);
-        return errorMessage('Please, login');
-    }
-
-    return (dispatch) => {
-        fetch('/api/user', token)
-            .then(checkResponseStatus)
-            .then(response => response.json())
-            .then((userData) => {
-                dispatch(successMessage('Welcome back!'));
-                dispatch(userAuthenticated(userData));
-                loadDataAfterLogin(dispatch);
-                if (isLoginSignupPage(location.pathname)) {
-                    history.goBack();
-                }
-            })
-            .catch(() => {
-                removeStoredToken();
-                dispatch(errorMessage('Please, login'));
-                dispatch(authenticationError());
-                goToLoginPage(location);
-            });
-    };
-}
+// export function checkAuthentication(location) {
+//     const token = getStoredToken();
+//
+//     if (!token) {
+//         goToLoginPage(location);
+//         return errorMessage('Please, login');
+//     }
+//
+//     return (dispatch) => {
+//         fetch('/api/user', token)
+//             .then(checkResponseStatus)
+//             .then(response => response.json())
+//             .then((userData) => {
+//                 dispatch(successMessage('Welcome back!'));
+//                 dispatch(userAuthenticated(userData));
+//                 loadDataAfterLogin(dispatch);
+//                 if (isLoginSignupPage(location.pathname)) {
+//                     history.goBack();
+//                 }
+//             })
+//             .catch(() => {
+//                 removeStoredToken();
+//                 dispatch(errorMessage('Please, login'));
+//                 dispatch(authenticationError());
+//                 goToLoginPage(location);
+//             });
+//     };
+// }
 
 /**
  * Login

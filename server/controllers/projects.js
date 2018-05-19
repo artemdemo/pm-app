@@ -1,115 +1,111 @@
 const debug = require('debug')('pm:controllers:projects');
-const boom = require('boom');
+const Boom = require('boom');
 const _isNumber = require('lodash/isNumber');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
-const auth = require('../auth');
 const errConstants = require('../constants/error');
 
-exports.index = (request, replay) => replay.file('index.html');
-
-exports.all = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
-    const projectsData = {
-        tokenId: tokenData.id,
-    };
-    projects.getAll(projectsData)
+exports.all = (req, res, next) => {
+    debug(`Get all projects (user id ${req.authSession.userId})`);
+    projects
+        .getAll({
+            userId: req.authSession.userId,
+        })
         .then((projects) => {
-            replay(projects);
+            res.json(projects);
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.add = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.add = (req, res, next) => {
     const projectsData = {
-        payload: request.payload,
-        tokenId: tokenData.id,
+        project: req.body,
+        userId: req.authSession.userId,
     };
-    projects.addNew(projectsData)
+    debug(`Add project (user id ${projectsData.userId})`);
+
+    projects
+        .addNew(projectsData)
         .then((result) => {
             debug(`Project id ${result.id} created`);
-            replay(result);
+            res.json(result);
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.update = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
-    const { id, tasks } = request.payload;
-    if (!tokenData) {
-        replay(boom.unauthorized(errConstants.NO_ID_IN_TOKEN));
-        return;
-    }
+exports.update = (req, res, next) => {
+    const { id, tasks } = req.body;
+
     const projectsData = {
-        payload: request.payload,
-        tokenId: tokenData.id,
+        project: req.body,
+        userId: req.authSession.userId,
     };
-    projects.updateProject(projectsData)
+    debug(`Update project with id: ${id} (user id ${projectsData.userId})`);
+    projects
+        .updateProject(projectsData)
         .then((updatedData) => {
-            debug(`Project id ${request.payload.id} updated`);
+            debug(`Project id ${id} updated`);
             if (tasks && _isNumber(id)) {
-                return projectsTasksRelations.addRelation(id, tasks)
+                return projectsTasksRelations
+                    .addRelation(id, tasks)
                     .then(() => {
-                        debug(`Added relations to project id ${request.payload.id} and tasks ${tasks}`);
-                        replay(updatedData);
+                        debug(`Added relations to project id ${id} and tasks ${tasks}`);
+                        res.json(updatedData);
                     });
             }
-            replay(updatedData);
+            res.json(updatedData);
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.delete = (request, replay) => {
-    const tokenData = auth.parseTokenData(request.headers.authorization);
+exports.delete = (req, res, next) => {
     const projectsData = {
-        payload: request.params.projectId,
-        tokenId: tokenData.id,
+        projectId: req.params.projectId,
+        userId: req.authSession.userId,
     };
-    projects.deleteProject(projectsData)
+    debug(`Delete project with id: ${projectsData.projectId} (user id ${projectsData.userId})`);
+    projects
+        .deleteProject(projectsData)
         .then(() => {
-            debug(`Project id ${request.params.projectId} deleted`);
-            replay({});
+            debug(`Project id ${req.params.projectId} deleted`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.connectTask = (request, replay) => {
-    projectsTasksRelations.addRelation(request.params.projectId, request.params.taskId)
-        .then(() => replay({}))
+exports.connectTask = (req, res, next) => {
+    projectsTasksRelations
+        .addRelation(req.params.projectId, req.params.taskId)
+        .then(() => {
+            debug(`Task id ${req.params.taskId} connected to project id ${req.params.projectId}`);
+            res.json({});
+        })
         .catch(() => {
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
 
-exports.disconnectTask = (request, replay) => {
-    projectsTasksRelations.deleteRelation(request.params.projectId, request.params.taskId)
+exports.disconnectTask = (req, res, next) => {
+    projectsTasksRelations
+        .deleteRelation(req.params.projectId, req.params.taskId)
         .then(() => {
-            debug(`Task id ${request.params.taskId} disconnected from project id ${request.params.projectId}`);
-            replay({});
+            debug(`Task id ${req.params.taskId} disconnected from project id ${req.params.projectId}`);
+            res.json({});
         })
         .catch((err) => {
             debug(err);
-            replay(boom.badRequest(errConstants.DB_ERROR));
+            next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };

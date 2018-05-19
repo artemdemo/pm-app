@@ -1,6 +1,7 @@
 const moment = require('moment');
 const aguid = require('aguid');  // https://github.com/ideaq/aguid
 const DB = require('sqlite-crud');
+const config = require('../config');
 
 const tableName = 'sessions';
 
@@ -38,9 +39,9 @@ const getSession = async function(queryObject) {
 
 
 const updateSession = async function(session) {
-    const expiration = moment(new Date()).add(7, 'days');
     const updateData = {
-        expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
+        added: moment().format('YYYY-MM-DD HH:mm:ss'),
+        expires_in: config.expPeriod,
     };
 
     if (!session.id) {
@@ -68,16 +69,16 @@ const addSession = async function(newSession) {
 
     if (!session) {
         const sessionId = aguid(); // a random session id
-        const expiration = moment(new Date()).add(30, 'm');
         await DB.insertRow(tableName, {
             id: sessionId,
             user_id: newSession.user_id,
-            expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
+            added: moment().format('YYYY-MM-DD HH:mm:ss'),
+            expires_in: config.expPeriod,
         });
 
         return {
             id: sessionId,
-            expiration: expiration.format('YYYY-MM-DD HH:mm:ss'),
+            expiresIn: config.expPeriod,
         };
     }
 

@@ -1,15 +1,15 @@
+const debug = require('debug')('pm:model:projects');
 const moment = require('moment');
 const DB = require('sqlite-crud');
-const sessions = require('./sessions');
-const { queryRowsWithSession } = require('../utils/db');
+const { queryRows } = require('../utils/db');
 
 const tableName = 'projects';
 
 const getAll = async function(projectsData) {
-    const projects = await queryRowsWithSession({
+    const projects = await queryRows({
         tableName,
         fields: ['id', 'name', 'description', 'added', 'updated'],
-        tokenId: projectsData.tokenId,
+        userId: projectsData.userId,
     });
     const promisesList = [];
     projects.forEach((project) => {
@@ -33,19 +33,18 @@ const getAll = async function(projectsData) {
 const addNew = async function(newProjectData) {
     const now = moment(new Date());
 
-    if (!newProjectData.payload.name) {
-        throw new Error('No newProjectData.payload.name in given project');
+    if (!newProjectData.project.name) {
+        throw new Error('No newProjectData.project.name in given project');
     }
 
-    const id = newProjectData.tokenId;
+    debug(newProjectData);
 
-    const session = await sessions.getSession({ id });
     const result = await DB.insertRow(tableName, {
-        name: newProjectData.payload.name,
-        description: newProjectData.payload.description,
+        name: newProjectData.project.name,
+        description: newProjectData.project.description,
         added: now.format('YYYY-MM-DD HH:mm:ss'),
         updated: now.format('YYYY-MM-DD HH:mm:ss'),
-        user_id: session.user_id,
+        user_id: newProjectData.userId,
     });
 
     return {
@@ -61,14 +60,14 @@ const updateProject = async function(projectData) {
     const updateData = {};
     const updateAllowed = true;
 
-    if (!projectData.payload.id) {
-        throw new Error('No projectData.payload.id in given project');
+    if (!projectData.project.id) {
+        throw new Error('No projectData.project.id in given project');
     }
 
     const allowedFields = ['name', 'description'];
     allowedFields.forEach((field) => {
-        if (projectData.payload.hasOwnProperty(field)) {
-            updateData[field] = projectData.payload[field];
+        if (projectData.project.hasOwnProperty(field)) {
+            updateData[field] = projectData.project[field];
         }
     });
 
@@ -78,17 +77,18 @@ const updateProject = async function(projectData) {
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    const id = projectData.tokenId;
+    debug(updateData);
 
-    const session = await sessions.getSession({ id });
+    // ToDo: This API should return number of rows that have been affected
+    // (or 0 when no rows affected)
     await DB.updateRow(tableName, updateData, [{
         column: 'id',
         comparator: '=',
-        value: projectData.payload.id,
+        value: projectData.project.id,
     }, {
         column: 'user_id',
         comparator: '=',
-        value: session.user_id,
+        value: projectData.userId,
     }]);
 
     return {
@@ -98,21 +98,20 @@ const updateProject = async function(projectData) {
 
 
 const deleteProject = async function(projectData) {
-    if (!projectData.payload) {
+    if (!projectData.projectId) {
         throw new Error('No projectId in given project');
     }
 
-    const id = projectData.tokenId;
+    debug(projectData);
 
-    const session = await sessions.getSession({ id });
     return DB.deleteRows(tableName, [{
         column: 'id',
         comparator: '=',
-        value: projectData.payload,
+        value: projectData.projectId,
     }, {
         column: 'user_id',
         comparator: '=',
-        value: session.user_id,
+        value: projectData.userId,
     }]);
 };
 

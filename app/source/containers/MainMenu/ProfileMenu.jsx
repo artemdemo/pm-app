@@ -5,8 +5,8 @@ import onClickOutside from 'react-click-outside';
 import { Link } from 'react-router';
 
 class ProfileMenu extends React.PureComponent {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             open: false,
@@ -27,10 +27,10 @@ class ProfileMenu extends React.PureComponent {
         }
     }
 
-    handleLogout() {
+    handleLogout = () => {
         const { onLogout } = this.props;
         onLogout && onLogout();
-    }
+    };
 
     render() {
         const { username } = this.props;
@@ -60,7 +60,7 @@ class ProfileMenu extends React.PureComponent {
                     <li>
                         <span
                             className='dropdown-menu-link'
-                            onClick={this.handleLogout.bind(this)}
+                            onClick={this.handleLogout}
                             data-qa='logout-main-menu-button'
                         >
                             Logout
@@ -78,7 +78,7 @@ ProfileMenu.propTypes = {
 };
 
 ProfileMenu.defaultProps = {
-    username: null,
+    username: 'user',
     onLogout: null,
 };
 

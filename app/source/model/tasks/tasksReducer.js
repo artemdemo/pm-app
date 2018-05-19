@@ -122,22 +122,30 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Deleting
          */
+        case tasksConst.DELETE_TASK:
+            return {
+                ...state,
+                deleting: true,
+            };
+        case tasksConst.TASK_DELETED:
+            return {
+                ...state,
+                data: state.data.filter(task => task.id !== action.id),
+                deleting: false,
+                deletingError: null,
+            };
+        case tasksConst.TASK_DELETING_ERROR:
+            return {
+                ...state,
+                deleting: false,
+                deletingError: action.err,
+            };
         /*
          * Loading
          */
         /*
          * Updating position
          */
-        case tasksConst.TASK_DELETED:
-            for (let i = 0, len = state.length; i < len; i++) {
-                if (state[i].id === action.id) {
-                    return [
-                        ...state.slice(0, i),
-                        ...state.slice(i + 1),
-                    ];
-                }
-            }
-            return state;
         // case tasksConst.TASK_UPDATED:
         //     for (let i = 0, len = state.length; i < len; i++) {
         //         const { task } = action;

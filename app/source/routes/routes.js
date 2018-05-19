@@ -5,6 +5,7 @@ const routes = [
     {
         path: '/',
         _component: 'AppView',
+        _checkAuth: false,
         indexRoute: {
             _component: 'MainView',
         },
@@ -32,10 +33,12 @@ const routes = [
             {
                 path: 'login',
                 _component: 'LoginView',
+                _checkAuth: false,
             },
             {
                 path: 'signup',
                 _component: 'SignupView',
+                _checkAuth: false,
             },
         ],
     },
@@ -46,8 +49,10 @@ const routes = [
     {
         path: '*',
         _component: 'AppView',
+        _checkAuth: false,
         indexRoute: {
             _component: 'RouteNotFoundView',
+            _checkAuth: false,
         },
     },
 ];
