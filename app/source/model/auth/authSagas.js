@@ -6,6 +6,7 @@ import {
     loginError,
 } from './authAction';
 import auth, { Token } from '../../services/auth';
+import * as location from '../../services/location';
 
 function* loginSaga() {
     while (true) {
@@ -16,11 +17,12 @@ function* loginSaga() {
                 .send(loginUser)
                 .promise();
             const expires = (new Date()).getTime() + (result.body.expiration * 1000);
-            const token = new Token(
+            const tokenInstance = new Token(
                 result.headers.authorization,
                 expires
             );
-            auth.saveToken(token);
+            auth.saveToken(tokenInstance);
+            location.replace('/');
             yield put(loggedIn(result.body));
         } catch (err) {
             yield put(loginError(err));

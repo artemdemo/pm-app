@@ -1,11 +1,12 @@
 import React from 'react';
+import auth from '../../services/auth';
+import * as location from '../../services/location';
 
 const authorization = (WrappedComponent) => {
     class WithAuthorization extends React.Component {
         constructor(props) {
             super(props);
             this.state = {
-                isLoadingUserData: true,
                 allowed: true,
             };
         }
@@ -19,9 +20,14 @@ const authorization = (WrappedComponent) => {
         }
 
         updateState() {
-            this.setState({
-                allowed: false,
-            });
+            if (auth.isAuthorized()) {
+                this.setState({
+                    allowed: true,
+                });
+            } else {
+                auth.removeToken();
+                location.push('/login');
+            }
         }
 
         render() {

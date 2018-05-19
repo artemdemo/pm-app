@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import LoginController from '../../controllers/LoginController';
 import UserNotificator from '../../containers/UserNotificator/UserNotificator';
 import Modal from '../../containers/Modal/Modal';
 
@@ -7,6 +7,7 @@ class AppView extends React.PureComponent {
     render() {
         return (
             <div className='app'>
+                <LoginController />
                 <UserNotificator />
                 <Modal />
 
@@ -17,7 +18,4 @@ class AppView extends React.PureComponent {
 }
 
 
-export default connect(
-    () => ({}),
-    {}
-)(AppView);
+export default AppView;

@@ -2,8 +2,13 @@ import request from 'superagent-bluebird-promise';
 
 const defaultHeaders = {};
 
-export const setHeader = (name, value) => {
+export const setDefaultHeader = (name, value) => {
     defaultHeaders[name] = value;
+};
+
+export const clearDefaultHeaders = () => {
+    const keys = Object.keys(defaultHeaders);
+    keys.forEach(key => delete defaultHeaders[key]);
 };
 
 const applyHeaders = (request) => {

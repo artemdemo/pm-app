@@ -3,7 +3,8 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { login } from '../../model/auth/authAction';
 import LoginUser from '../../model/auth/LoginUser';
-import history from '../../history';
+import auth from '../../services/auth';
+import * as location from '../../services/location';
 
 import '../form-signin.less';
 
@@ -15,10 +16,9 @@ class LoginView extends React.PureComponent {
         this.passwordRef = null;
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { user } = nextProps;
-        if (user.token) {
-            history.push('/tasks');
+    componentDidMount() {
+        if (auth.isAuthorized()) {
+            location.replace('/')
         }
     }
 
@@ -80,9 +80,7 @@ class LoginView extends React.PureComponent {
 }
 
 export default connect(
-    state => ({
-        user: state.user,
-    }), {
+    () => ({}), {
         login,
     }
 )(LoginView);

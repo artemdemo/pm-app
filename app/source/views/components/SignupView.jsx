@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { signup } from '../../model/user/userActions';
 import { errorMessage } from '../../model/notification/notificationActions';
+import auth from '../../services/auth';
+import * as location from '../../services/location';
 
 import '../form-signin.less';
 
@@ -13,6 +15,12 @@ class SignupView extends React.PureComponent {
         this.usernameRef = null;
         this.emailRef = null;
         this.passwordRef = null;
+    }
+
+    componentDidMount() {
+        if (auth.isAuthorized()) {
+            location.replace('/')
+        }
     }
 
     submitSignup(e) {

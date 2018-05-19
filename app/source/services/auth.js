@@ -35,6 +35,10 @@ const removeToken = () => {
     localStorage.removeItem(PM_TOKEN_EXP);
 };
 
+/**
+ *
+ * @return {boolean}
+ */
 const isAuthorized = () => {
     const tokenInstance = getToken();
     if (tokenInstance) {
