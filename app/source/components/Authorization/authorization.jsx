@@ -7,7 +7,7 @@ const authorization = (WrappedComponent) => {
         constructor(props) {
             super(props);
             this.state = {
-                allowed: true,
+                allowed: false,
             };
         }
 
