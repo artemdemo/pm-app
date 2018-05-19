@@ -4,6 +4,21 @@ import * as location from '../../services/location';
 
 const authorization = (WrappedComponent) => {
     class WithAuthorization extends React.Component {
+        static getDerivedStateFromProps() {
+            if (auth.isAuthorized()) {
+                return {
+                    allowed: true,
+                }
+            }
+            WithAuthorization.redirectToLoginPage();
+            return null;
+        }
+
+        static redirectToLoginPage() {
+            auth.removeToken();
+            location.push('/login');
+        }
+
         constructor(props) {
             super(props);
             this.state = {
@@ -11,22 +26,13 @@ const authorization = (WrappedComponent) => {
             };
         }
 
-        componentWillMount() {
-            this.updateState(this.props);
-        }
-
-        componentWillReceiveProps(nextProps) {
-            this.updateState(nextProps);
-        }
-
-        updateState() {
+        componentDidMount() {
             if (auth.isAuthorized()) {
                 this.setState({
                     allowed: true,
                 });
             } else {
-                auth.removeToken();
-                location.push('/login');
+                WithAuthorization.redirectToLoginPage();
             }
         }
 
