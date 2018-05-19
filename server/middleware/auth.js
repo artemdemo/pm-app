@@ -34,8 +34,8 @@ const sessionMiddleware = (req, res, next) => {
         });
     } else {
         const allowedUrls = [
-            /\/api\/login/,
-            /\/api\/signup/,
+            /\/api\/user\/login/,
+            /\/api\/user\/signup/,
         ];
         const allowed = allowedUrls.some(urlRegex => urlRegex.test(req.url));
         if (allowed) {

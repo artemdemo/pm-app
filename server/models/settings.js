@@ -1,13 +1,13 @@
 const serializer = require('../utils/serializer');
-const { queryRowsWithSession } = require('../utils/db');
+const { queryRows } = require('../utils/db');
 
 const tableName = 'settings';
 
 exports.getAll = async function(settingsData) {
-    const rows = await queryRowsWithSession({
+    const rows = await queryRows({
         tableName,
         fields: ['name', 'value'],
-        tokenId: settingsData.tokenId,
+        userId: settingsData.userId,
     });
     return serializer.strArrToObj(rows);
 };

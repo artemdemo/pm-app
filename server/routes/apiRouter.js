@@ -28,10 +28,9 @@ router.delete('/tasks/:taskId/project/:projectId', tasksController.disconnectPro
 router.put('/tasks/position', tasksController.updatePositions);
 
 router.get('/user', userController.user);
-router.post('/user', userController.signup);
+router.post('/user/signup', userController.signup);
 router.put('/user/login', userController.login);
 
 router.get('/settings', settingsController.all);
-router.put('/settings', settingsController.update);
 
 module.exports = router;
