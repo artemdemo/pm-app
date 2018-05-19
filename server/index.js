@@ -8,8 +8,8 @@ const Boom = require('boom');
 const bodyParser = require('body-parser');
 const DB = require('sqlite-crud');
 
-const apiRouter = require('./routes/apiRouter');
-const { addAuth } = require('./middleware/auth');
+const apiRouter = require('./source/routes/apiRouter');
+const { addAuth } = require('./source/middleware/auth');
 
 let pathToTheDB;
 let cliDBPath = '';
@@ -58,7 +58,7 @@ if (cliDBPath) {
 
 DB.connectToDB(pathToTheDB);
 if (migrateDB) {
-    const migrationPath = './models/migrations';
+    const migrationPath = './source/models/migrations';
     debug(`Migrating DB, path to files with migrations is "${migrationPath}"`);
     DB.migrate(migrationPath)
         .catch((err) => {
