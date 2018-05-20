@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { signup } from '../../model/user/userActions';
+import { signup } from '../../model/auth/authActions';
 import { errorMessage } from '../../model/notification/notificationActions';
 import auth from '../../services/auth';
 import * as location from '../../services/location';

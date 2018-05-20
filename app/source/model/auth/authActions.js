@@ -5,12 +5,12 @@ import * as authConst from './authConst';
  */
 
 /**
- * @param loginUser {LoginUser}
+ * @param data {LoginUser}
  */
-export function login(loginUser) {
+export function login(data) {
     return {
         type: authConst.LOGIN,
-        loginUser,
+        data,
     }
 }
 
@@ -58,6 +58,30 @@ export function userLoaded(data) {
 export function userLoadingError(err = true) {
     return {
         type: authConst.USER_LOADING_ERROR,
+        err,
+    };
+}
+
+/*
+ * Signup
+ */
+
+export function signup(data) {
+    return {
+        type: authConst.SIGNUP,
+        data
+    };
+}
+
+export function signedUp() {
+    return {
+        type: authConst.SIGNED_UP,
+    };
+}
+
+export function signupError(err = true) {
+    return {
+        type: authConst.SIGNUP_ERROR,
         err,
     };
 }
