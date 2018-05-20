@@ -24,7 +24,7 @@
   "homepage": "https://github.com/artemdemo/pm-app#readme",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "bootstrap": "^3.3.6",
+    "bootstrap": "^4.1.1",
     "classnames": "^2.2.5",
     "flatpickr": "^4.1.4",
     "history": "^4.7.2",
