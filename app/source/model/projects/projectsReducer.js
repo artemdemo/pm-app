@@ -104,6 +104,13 @@ export default function projects(state = initState, action) {
                 deleting: false,
                 deletingError: action.err,
             };
+        /*
+         * Reset
+         */
+        case projectsConst.RESET_PROJECTS:
+            return {
+                ...initState,
+            };
         default:
             return state;
     }

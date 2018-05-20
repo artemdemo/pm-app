@@ -205,6 +205,10 @@ export default function tasksReducer(state = initState, action) {
                     .concat(boardTasks));
             }
             return state;
+        case tasksConst.RESET_TASKS:
+            return {
+                ...initState,
+            };
         default:
             return state;
     }

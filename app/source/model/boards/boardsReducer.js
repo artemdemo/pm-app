@@ -102,6 +102,13 @@ export default function boards(state = initState, action) {
                 deleting: false,
                 deletingError: action.err,
             };
+        /*
+         * Clear
+         */
+        case boardsConst.RESET_BOARDS:
+            return {
+                ...initState,
+            };
         default:
             return state;
     }

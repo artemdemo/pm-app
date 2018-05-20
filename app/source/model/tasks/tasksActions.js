@@ -149,3 +149,13 @@ export function taskDeletingError(err = true) {
 //             });
 //     };
 // }
+
+/*
+ * Reset
+ */
+
+export function resetTasks() {
+    return {
+        type: tasksConst.RESET_TASKS,
+    }
+}

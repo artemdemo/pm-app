@@ -75,6 +75,10 @@ export default function authReducer(state = initState, action) {
                 loading: false,
                 loadingError: null,
             };
+        case authConst.RESET_USER:
+            return {
+                ...initState,
+            };
         default:
             return state;
     }

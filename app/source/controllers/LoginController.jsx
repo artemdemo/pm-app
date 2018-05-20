@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loadTasks } from '../model/tasks/tasksActions';
-import { loadProjects } from '../model/projects/projectsActions';
-import { loadBoards } from '../model/boards/boardsActions';
-import { loadUser } from '../model/auth/authActions';
+import { loadTasks, resetTasks } from '../model/tasks/tasksActions';
+import { loadProjects, resetProjects } from '../model/projects/projectsActions';
+import { loadBoards, resetBoards } from '../model/boards/boardsActions';
+import { loadUser, resetUser } from '../model/auth/authActions';
 import auth from '../services/auth';
 import { setDefaultHeader } from '../services/request';
 
@@ -27,10 +27,11 @@ class LoginController extends React.PureComponent {
             this.props.auth.signupError === null;
 
         if ((loggedIn || signedUp) && auth.isAuthorized()) {
+            this.resetData();
             // I'm loading all data even after signing up
             // For now it's not so relevant, but in the future user could have some basic tasks,
             // so it's good to have this call just in case
-            this.loadData()
+            this.loadData();
         }
     }
 
@@ -41,6 +42,14 @@ class LoginController extends React.PureComponent {
         loadTasks();
         loadProjects();
         loadBoards();
+    }
+
+    resetData() {
+        const { resetTasks, resetProjects, resetBoards, resetUser } = this.props;
+        resetTasks();
+        resetProjects();
+        resetBoards();
+        resetUser();
     }
 
     render() {
@@ -56,5 +65,9 @@ export default connect(
         loadTasks,
         loadProjects,
         loadBoards,
+        resetTasks,
+        resetProjects,
+        resetBoards,
+        resetUser,
     }
 )(LoginController);

@@ -11,3 +11,5 @@ export const USER_LOADING_ERROR = 'USER_LOADING_ERROR';
 export const SIGNUP = 'SIGNUP';
 export const SIGNED_UP = 'SIGNED_UP';
 export const SIGNUP_ERROR = 'SIGNUP_ERROR';
+
+export const RESET_USER = 'RESET_USER';

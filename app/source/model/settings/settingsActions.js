@@ -48,3 +48,13 @@ export function settingsUpdatingError(err = true) {
         err,
     };
 }
+
+/*
+ * Reset
+ */
+
+export function resetSettings() {
+    return {
+        type: settingsConst.RESET_SETTINGS,
+    }
+}

@@ -116,3 +116,13 @@ export function boardDeletingError(err) {
         err,
     };
 }
+
+/*
+ * Reset
+ */
+
+export function resetBoards() {
+    return {
+        type: boardsConst.RESET_BOARDS,
+    }
+}

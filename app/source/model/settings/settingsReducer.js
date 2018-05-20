@@ -52,6 +52,13 @@ export default function settings(state = initState, action) {
                 updating: false,
                 updatingError: action.err,
             };
+        /*
+         * Reset
+         */
+        case settingsConst.RESET_SETTINGS:
+            return {
+                ...initState,
+            };
         default:
             return state;
     }

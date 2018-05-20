@@ -99,3 +99,12 @@ export function projectDeletingError(err = true) {
     };
 }
 
+/*
+ * Reset
+ */
+
+export function resetProjects() {
+    return {
+        type: projectsConst.RESET_PROJECTS,
+    }
+}

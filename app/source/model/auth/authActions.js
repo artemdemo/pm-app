@@ -86,3 +86,13 @@ export function signupError(err = true) {
         err,
     };
 }
+
+/*
+ * Reset
+ */
+
+export function resetUser() {
+    return {
+        type: authConst.RESET_USER,
+    };
+}
