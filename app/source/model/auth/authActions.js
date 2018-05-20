@@ -73,9 +73,10 @@ export function signup(data) {
     };
 }
 
-export function signedUp() {
+export function signedUp(data) {
     return {
         type: authConst.SIGNED_UP,
+        data,
     };
 }
 

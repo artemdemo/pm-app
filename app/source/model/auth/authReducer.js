@@ -4,6 +4,8 @@ const initState = {
     data: {},
     login: false,
     loginError: null,
+    signup: false,
+    signupError: null,
     loading: false,
     loadingError: null,
 };
@@ -30,6 +32,27 @@ export default function authReducer(state = initState, action) {
                 ...state,
                 login: false,
                 loginError: action.err,
+            };
+        /*
+         * Signup
+         */
+        case authConst.SIGNUP:
+            return {
+                ...state,
+                signup: true,
+            };
+        case authConst.SIGNED_UP:
+            return {
+                ...state,
+                data: action.data,
+                signup: false,
+                signupError: null,
+            };
+        case authConst.SIGNUP_ERROR:
+            return {
+                ...state,
+                signup: false,
+                signupError: action.err,
             };
         /*
          * Loading user data
