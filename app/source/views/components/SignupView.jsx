@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { signup } from '../../model/auth/authActions';
 import { errorMessage } from '../../model/notification/notificationActions';
+import User from '../../model/auth/User';
 import auth from '../../services/auth';
 import * as location from '../../services/location';
 
@@ -26,18 +27,14 @@ class SignupView extends React.PureComponent {
     submitSignup(e) {
         e.preventDefault();
         const { signup, errorMessage } = this.props;
-        const username = this.usernameRef.value;
-        const email = this.emailRef.value;
-        const password = this.passwordRef.value;
-        if (username !== '' &&
-            email !== '' &&
-            password !== '') {
-            signup({
-                username,
-                email,
-                password,
+        try {
+            const signupUser = new User({
+                username: this.usernameRef.value,
+                email: this.emailRef.value,
+                password: this.passwordRef.value,
             });
-        } else {
+            signup(signupUser);
+        } catch (e) {
             errorMessage('Please fill all fields');
         }
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { login } from '../../model/auth/authActions';
-import LoginUser from '../../model/auth/LoginUser';
+import User from '../../model/auth/User';
 import auth from '../../services/auth';
 import * as location from '../../services/location';
 
@@ -25,10 +25,10 @@ class LoginView extends React.PureComponent {
     submitLogin(e) {
         e.preventDefault();
         const { login } = this.props;
-        const loginUser = new LoginUser(
-            this.emailRef.value,
-            this.passwordRef.value,
-        );
+        const loginUser = new User({
+            email: this.emailRef.value,
+            password: this.passwordRef.value,
+        });
         login(loginUser);
     }
 
