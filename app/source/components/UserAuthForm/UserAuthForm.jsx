@@ -28,28 +28,32 @@ class UserAuthForm extends React.PureComponent {
         const { signup } = this.props;
         const title = signup ? 'Sign up' : 'Please sign in';
         return (
-            <h2>{title}</h2>
+            <h2 className='user-auth-form-title'>{title}</h2>
         );
     };
 
     renderUsername() {
-        return (
-            <React.Fragment>
-                <label htmlFor='inputUsername' className='sr-only'>
-                    Username
-                </label>
-                <input
-                    type='text'
-                    name='username'
-                    id='inputUsername'
-                    ref={this.usernameRef}
-                    className='form-control'
-                    placeholder='Username'
-                    required=''
-                    autoComplete='off'
-                />
-            </React.Fragment>
-        );
+        const { signup } = this.props;
+        if (signup) {
+            return (
+                <React.Fragment>
+                    <label htmlFor='inputUsername' className='sr-only'>
+                        Username
+                    </label>
+                    <input
+                        type='text'
+                        name='username'
+                        id='inputUsername'
+                        ref={this.usernameRef}
+                        className='form-control'
+                        placeholder='Username'
+                        required=''
+                        autoComplete='off'
+                    />
+                </React.Fragment>
+            );
+        }
+        return null;
     }
 
     render() {
