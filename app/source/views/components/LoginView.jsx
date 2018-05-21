@@ -33,13 +33,14 @@ class LoginView extends React.PureComponent {
             <div className='container'>
                 <UserAuthForm
                     onSubmit={this.submitLogin}
-                />
-                <Link
-                    to='/signup'
-                    className='btn btn-link btn-block'
                 >
-                    Create new account - sign up
-                </Link>
+                    <Link
+                        to='/signup'
+                        className='btn btn-link btn-block'
+                    >
+                        Create new account - sign up
+                    </Link>
+                </UserAuthForm>
             </div>
         );
     }

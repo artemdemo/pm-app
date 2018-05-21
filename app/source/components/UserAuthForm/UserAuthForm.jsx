@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import './UserAuthForm.less';
+
 class UserAuthForm extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -86,6 +88,7 @@ class UserAuthForm extends React.PureComponent {
                 >
                     Login
                 </button>
+                {this.props.children}
             </div>
         );
     }

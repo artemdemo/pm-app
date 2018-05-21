@@ -35,14 +35,15 @@ class SignupView extends React.PureComponent {
                 <UserAuthForm
                     onSubmit={this.submitSignup}
                     signup
-                />
-                <Link
-                    to='/login'
-                    className='btn btn-link btn-block'
-                    data-qa='link-to-login'
                 >
-                    I have an account - login
-                </Link>
+                    <Link
+                        to='/login'
+                        className='btn btn-link btn-block'
+                        data-qa='link-to-login'
+                    >
+                        I have an account - login
+                    </Link>
+                </UserAuthForm>
             </div>
         );
     }
