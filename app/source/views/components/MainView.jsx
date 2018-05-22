@@ -1,29 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MainMenu from '../../containers/MainMenu/MainMenu';
 
 const MainView = (props) => {
     const { tasks, projects } = props;
     const doneTasks = tasks.data.filter(task => task.done).length;
 
     return (
-        <div>
-            <MainMenu />
+        <div className='list-container'>
+            <div className='list-container__list'>
+                <h4>Tasks</h4>
+                <p>
+                    Total: {tasks.data.length}<br />
+                    In process: {tasks.data.length - doneTasks}<br />
+                    Done: {doneTasks}<br />
+                </p>
 
-            <div className='list-container'>
-                <div className='list-container__list'>
-                    <h4>Tasks</h4>
-                    <p>
-                        Total: {tasks.data.length}<br />
-                        In process: {tasks.data.length - doneTasks}<br />
-                        Done: {doneTasks}<br />
-                    </p>
-
-                    <h4>Projects</h4>
-                    <p>
-                        Total: {projects.data.length}<br />
-                    </p>
-                </div>
+                <h4>Projects</h4>
+                <p>
+                    Total: {projects.data.length}<br />
+                </p>
             </div>
         </div>
     );
