@@ -8,7 +8,7 @@ const Icon = (props) => {
     const { name, inText, className, onClick } = props;
 
     if (name === '' && !ENV.production) {
-        console.warn('Icon prop `name` couldn\'t be empty');
+        throw new Error('Icon prop `name` couldn\'t be empty');
     }
 
     const iconClass = classnames(className, {
