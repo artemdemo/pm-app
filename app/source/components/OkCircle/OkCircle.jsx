@@ -45,7 +45,7 @@ class OkCircle extends React.PureComponent {
         if (!loading) {
             return (
                 <span className={classOkCircle}>
-                    <Icon name='ok-circle' />
+                    <Icon name='check-circle' />
                 </span>
             );
         }
