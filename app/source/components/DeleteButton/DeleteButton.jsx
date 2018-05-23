@@ -56,14 +56,16 @@ class DeleteButton extends React.PureComponent {
                     <div className='delete-button__title'>Delete?</div>
                     <div className='delete-button-buttons'>
                         <Icon
-                            name='ok-sign'
+                            name='check-circle'
                             className='delete-button-buttons__ok'
                             onClick={this.delete.bind(this)}
+                            type='solid'
                         />
                         <Icon
-                            name='remove-sign'
+                            name='minus-circle'
                             className='delete-button-buttons__cancel'
                             onClick={this.hideDeleteButtons.bind(this)}
+                            type='solid'
                         />
                     </div>
                 </div>
