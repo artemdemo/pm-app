@@ -69,7 +69,7 @@ class InputMd extends React.PureComponent {
                         onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__preview`}
                     >
-                        <Icon name='eye-open' />
+                        <Icon name='eye' />
                     </div>
                     <input
                         type={type}
@@ -88,7 +88,7 @@ class InputMd extends React.PureComponent {
                         onClick={this.togglePreview.bind(this)}
                         data-qa={`${dataQa}__edit-content`}
                     >
-                        <Icon name='pencil' />
+                        <Icon name='pencil-alt' type='solid' />
                     </div>
                     <div
                         className='input-md-content__rendered'

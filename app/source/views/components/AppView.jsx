@@ -17,15 +17,17 @@ class AppView extends React.PureComponent {
 
     render() {
         return (
-            <div className='app'>
+            <React.Fragment>
                 {this.renderMenu()}
 
                 <LoginController />
                 <UserNotificator />
                 <Modal />
 
-                {this.props.children}
-            </div>
+                <div className='container'>
+                    {this.props.children}
+                </div>
+            </React.Fragment>
         );
     }
 }

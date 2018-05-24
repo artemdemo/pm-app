@@ -27,26 +27,19 @@ class SingleTask extends React.PureComponent {
             description: '',
             board_id: 0,
             done: false,
-            sp: 0,
             priority: 0,
             loadingData: false,
             selectedProjects: [],
             availableProjects: [],
         };
-        this.dueDateRef = this;
     }
 
     componentDidMount() {
-        this.dueInstance = new Flatpickr(this.dueDateRef);
         this.setupData();
     }
 
     componentWillReceiveProps(nextProps) {
         this.setupData(nextProps);
-    }
-
-    componentWillUnmount() {
-        this.dueInstance.destroy();
     }
 
     setupData(props = this.props) {
@@ -55,10 +48,7 @@ class SingleTask extends React.PureComponent {
         this.setState({
             name: task.name || '',
             description: task.description || '',
-            board_id: task.board_id > 0 ? task.board_id : 0,
             done: task.done || false,
-            sp: task.sp || 0,
-            priority: task.priority || 0,
             loadingData: false,
             selectedProjects,
             availableProjects,
@@ -90,8 +80,6 @@ class SingleTask extends React.PureComponent {
 
     submitTask() {
         const { task, updateTask, errorMessage, onSave } = this.props;
-        const boardId = this.state.board_id;
-        const due = this.dueDateRef.value || null;
 
         if (this.state.name === '') {
             errorMessage('Name can\'t be empty');
@@ -103,11 +91,7 @@ class SingleTask extends React.PureComponent {
             name: this.state.name,
             description: this.state.description,
             done: this.state.done,
-            sp: _isNumber(this.state.sp) ? Number(this.state.sp) : null,
-            board_id: boardId > 0 ? Number(boardId) : null,
             projects: this.state.selectedProjects.map(project => project.id),
-            priority: this.state.priority,
-            due,
         };
         this.setState({
             loadingData: true,
@@ -191,75 +175,6 @@ class SingleTask extends React.PureComponent {
                         placeholder='Connect to project'
                         onSelect={this.connectProject.bind(this)}
                     />
-                </div>
-                <div className='form-group'>
-                    <div className='row'>
-                        <div className='col-xs-6'>
-                            <select
-                                className='form-control'
-                                value={this.state.board_id}
-                                onChange={e => this.setState({
-                                    board_id: e.target.value,
-                                })}
-                                name='board'
-                                disabled={this.state.done}
-                                data-qa='select-board'
-                            >
-                                <option value='0'>No board selected</option>
-                                {boards.data.map(board => (
-                                    <option value={board.id} key={`board-${board.id}`}>
-                                        {board.title}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className='col-xs-6'>
-                            <div className='input-group'>
-                                <input
-                                    type='number'
-                                    name='sp'
-                                    value={this.state.sp}
-                                    onChange={e => this.setState({
-                                        sp: e.target.value,
-                                    })}
-                                    className='form-control'
-                                    placeholder='SP'
-                                />
-                                <div className='input-group-addon'>SP</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className='form-group'>
-                    <div className='row'>
-                        <div className='col-xs-6'>
-                            <div className='input-group'>
-                                <div className='input-group-addon'>Due</div>
-                                <input
-                                    type='text'
-                                    name='due'
-                                    placeholder='Due date'
-                                    ref={ref => this.dueDateRef = ref}
-                                    className='form-control' />
-                            </div>
-                        </div>
-                        <div className='col-xs-6'>
-                            <select
-                                className='form-control'
-                                name='priority'
-                                value={this.state.priority}
-                                onChange={e => this.setState({
-                                    priority: e.target.value,
-                                })}
-                                data-qa='select-priority'
-                            >
-                                <option>Select priority</option>
-                                {settings.priority && settings.priority.map(item => (
-                                    <option value={item.id} key={`priority-${item.id}`}>{item.value}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div className='form-group text-muted'>
                     <p>Task Added: {task.added}</p>

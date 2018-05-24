@@ -11,10 +11,6 @@ class LoginController extends React.PureComponent {
     componentDidMount() {
         if (auth.isAuthorized()) {
             this.loadData();
-
-            // I need to load user data only if he is already logged in
-            const { loadUser } = this.props;
-            loadUser();
         }
     }
 
@@ -36,12 +32,13 @@ class LoginController extends React.PureComponent {
     }
 
     loadData() {
-        const { loadTasks, loadProjects, loadBoards } = this.props;
+        const { loadTasks, loadProjects, loadBoards, loadUser } = this.props;
         const tokenInstance = auth.getToken();
         setDefaultHeader('authorization', `Bearer ${tokenInstance.token}`);
         loadTasks();
         loadProjects();
         loadBoards();
+        loadUser();
     }
 
     resetData() {

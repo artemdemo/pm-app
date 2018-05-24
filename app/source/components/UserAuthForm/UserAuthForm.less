@@ -1,0 +1,27 @@
+.user-auth-form {
+    max-width: 350px;
+    margin: 20% auto 0 auto;
+
+    .form-control {
+        border-radius: 0;
+        position: relative;
+        padding: 10px;
+        margin-bottom: -1px;
+
+        &:focus {
+            z-index: 2;
+        }
+
+        &:first-of-type {
+            border-radius: .25rem .25rem 0 0;
+        }
+        &:last-of-type {
+            border-radius: 0 0 .25rem .25rem;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.user-auth-form-title {
+    margin-bottom: 20px;
+}
