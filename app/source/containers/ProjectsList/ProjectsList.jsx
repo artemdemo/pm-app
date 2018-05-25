@@ -35,25 +35,19 @@ class ProjectsList extends React.PureComponent {
         return (
             <div>
                 <h4>Active</h4>
-                <div
-                    className='projects-list'
-                    data-qa='projects-list__active'
-                >
+                <div className='projects-list'>
                     {this.filterProjects('active', projects).map(project => (
                         <ProjectsListItem project={project} key={`project-${project.id}`} />
                     ))}
                 </div>
                 <h4>Other</h4>
-                <div
-                    className='projects-list'
-                    data-qa='projects-list__other'
-                >
+                <div className='projects-list'>
                     {this.filterProjects('empty', projects).map(project => (
                         <ProjectsListItem project={project} key={`project-${project.id}`} />
                     ))}
                 </div>
                 <button
-                    className='btn btn-default'
+                    className='btn btn-light'
                     onClick={() => {
                         selectProject({});
                     }}
