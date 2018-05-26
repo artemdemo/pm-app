@@ -29,14 +29,14 @@ class ProjectsListItem extends React.PureComponent {
         const { project } = this.props;
         if (project.tasks.length > 0) {
             return (
-                <div>
+                <React.Fragment>
                     <div className='text-muted'>
                         Total: {this.filterTasks('all').length}
                     </div>
                     <div className='text-muted'>
                         Done: {this.filterTasks('done').length}
                     </div>
-                </div>
+                </React.Fragment>
             );
         }
         return null;

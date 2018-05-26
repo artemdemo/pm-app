@@ -5,8 +5,6 @@ import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import ProjectsListItem from './ProjectsListItem';
 import { clearEntity, selectProject } from '../../model/selectedEntity/selectedEntityActions';
 
-import './ProjectsList.less';
-
 class ProjectsList extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -35,15 +33,25 @@ class ProjectsList extends React.PureComponent {
         return (
             <div>
                 <h4>Active</h4>
-                <div className='projects-list'>
+                <div className='row'>
                     {this.filterProjects('active', projects).map(project => (
-                        <ProjectsListItem project={project} key={`project-${project.id}`} />
+                        <div
+                            className='col-6 col-md-3'
+                            key={`project-${project.id}`}
+                        >
+                            <ProjectsListItem project={project} />
+                        </div>
                     ))}
                 </div>
                 <h4>Other</h4>
-                <div className='projects-list'>
+                <div className='row'>
                     {this.filterProjects('empty', projects).map(project => (
-                        <ProjectsListItem project={project} key={`project-${project.id}`} />
+                        <div
+                            className='col-6 col-md-3'
+                            key={`project-${project.id}`}
+                        >
+                            <ProjectsListItem project={project} />
+                        </div>
                     ))}
                 </div>
                 <button
