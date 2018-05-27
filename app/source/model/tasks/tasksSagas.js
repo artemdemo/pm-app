@@ -10,6 +10,8 @@ import {
     taskUpdatingError,
     taskDeleted,
     taskDeletingError,
+    taskPositionUpdated,
+    taskPositionUpdateError,
 } from './tasksActions';
 
 function* loadTasksSaga() {
@@ -70,11 +72,32 @@ function* deleteTaskSaga() {
     }
 }
 
+function* updateTaskPositionSaga() {
+    while (true) {
+        try {
+            const { draggedTask, boardId, nearTaskId, position } = yield take(tasksConst.UPDATE_TASK_POSITION);
+            yield request
+                .put('/api/tasks/position')
+                .send({
+                    taskId: draggedTask.id,
+                    nearTaskId,
+                    position,
+                    boardId,
+                })
+                .promise();
+            yield put(taskPositionUpdated());
+        } catch (err) {
+            yield put(taskPositionUpdateError(err));
+        }
+    }
+}
+
 export default function* tasksSagas() {
     yield [
         loadTasksSaga(),
         addTaskSaga(),
         updateTaskSaga(),
         deleteTaskSaga(),
+        updateTaskPositionSaga(),
     ];
 }

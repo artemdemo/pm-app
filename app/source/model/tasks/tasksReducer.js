@@ -141,30 +141,12 @@ export default function tasksReducer(state = initState, action) {
                 deletingError: action.err,
             };
         /*
-         * Loading
-         */
-        /*
          * Updating position
          */
-        // case tasksConst.TASK_UPDATED:
-        //     for (let i = 0, len = state.length; i < len; i++) {
-        //         const { task } = action;
-        //         if (state[i].id === task.id) {
-        //             // If task is `done` it shouldn't be connected to any board
-        //             if (task.done) {
-        //                 task.board_id = null;
-        //             }
-        //             return sortTasksByUpdate([
-        //                 ...state.slice(0, i),
-        //                 task,
-        //                 ...state.slice(i + 1),
-        //             ]);
-        //         }
-        //     }
-        //     return state;
-        case tasksConst.UPDATE_TASK_POSITIONS_AFTER_DRAGGING:
+        case tasksConst.UPDATE_TASK_POSITION:
             if (action.draggedTask) {
                 const sortedTasks = state
+                    .data
                     .filter(task => task.board_id === action.boardId && task.id !== action.draggedTask.id)
                     .sort(sortByIdPositionScrum);
                 let boardTasks = [];
@@ -200,11 +182,20 @@ export default function tasksReducer(state = initState, action) {
                     id_position_scrum: index,
                 }));
 
-                return sortTasksByUpdate(state
-                    .filter(task => task.board_id !== action.boardId && task.id !== action.draggedTask.id)
-                    .concat(boardTasks));
+                return {
+                    ...state,
+                    data: sortTasksByUpdate(state
+                        .data
+                        .filter(task => task.board_id !== action.boardId && task.id !== action.draggedTask.id)
+                        .concat(boardTasks)),
+                };
             }
-            return state;
+            return {
+                ...state,
+            };
+        /*
+         * Reset task
+         */
         case tasksConst.RESET_TASKS:
             return {
                 ...initState,

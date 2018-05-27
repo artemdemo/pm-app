@@ -7,7 +7,7 @@ import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContaine
 import { DragItem } from '../../components/DragNDrop/DragItem';
 import { showModal, hideModal } from '../../model/modal/modalActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
-import { updateDraggedTaskPosition } from '../../model/tasks/tasksActions';
+import { updateTaskPosition } from '../../model/tasks/tasksActions';
 import Icon from '../../components/Icon/Icon';
 
 import './ScrumBoard.less';
@@ -36,11 +36,11 @@ class ScrumBoard extends React.PureComponent {
     }
 
     dragStopped(itemData) {
-        const { tasks, updateDraggedTaskPosition } = this.props;
+        const { tasks, updateTaskPosition } = this.props;
 
         // ToDo: `itemData.item` should be `itemData.itemId` or something like that
         const task = tasks.data.find(_ => _.id === itemData.item);
-        updateDraggedTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
+        updateTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 
     editBoard() {
@@ -102,6 +102,6 @@ export default connect(
     }), {
         showModal,
         hideModal,
-        updateDraggedTaskPosition,
+        updateTaskPosition,
     }
 )(ScrumBoard);

@@ -106,49 +106,28 @@ export function taskDeletingError(err = true) {
  * Updating position
  */
 
-/**
- * After task has been dragged I need to update id of all tasks
- * @param draggedTask {Object}
- * @param boardId {Number}
- * @param nearTaskId {Number|null} - in case there is no near task it will be `null`
- * @param position {String} - `before` or `after`
- */
-// export function updateDraggedTaskPosition(draggedTask, boardId, nearTaskId, position) {
-//     const token = getStoredToken();
-//
-//     function updateTaskPosition(draggedTask) {
-//         return {
-//             type: tasksConst.UPDATE_TASK_POSITION,
-//             draggedTask,
-//             boardId,
-//             nearTaskId,
-//             position,
-//         };
-//     }
-//
-//     return (dispatch) => {
-//         dispatch(updateTaskPosition(draggedTask));
-//
-//         fetch('/api/tasks/position', token, {method: 'PUT',
-//             body: {
-//                 taskId: draggedTask.id,
-//                 nearTaskId,
-//                 position,
-//                 boardId,
-//             }})
-//             .then(checkResponseStatus)
-//             .then((response) => {
-//                 return response.json();
-//             })
-//             .then(() => {
-//                 dispatch(successMessage('Task position updated'));
-//             })
-//             .catch((e) => {
-//                 console.error(e);
-//                 dispatch(errorMessage('Error, while updating task position'));
-//             });
-//     };
-// }
+export function updateTaskPosition(draggedTask, boardId, nearTaskId, position) {
+    return {
+        type: tasksConst.UPDATE_TASK_POSITION,
+        draggedTask,
+        boardId,
+        nearTaskId,
+        position,
+    };
+}
+
+export function taskPositionUpdated() {
+    return {
+        type: tasksConst.TASK_POSITION_UPDATED,
+    };
+}
+
+export function taskPositionUpdateError(err = true) {
+    return {
+        type: tasksConst.TASK_POSITION_UPDATING_ERROR,
+        err,
+    };
+}
 
 /*
  * Reset
