@@ -96,10 +96,10 @@ module.exports = (options) => {
                 filename: './index.html',
                 appVersion: options.appVersion,
             }),
-            new CleanWebpackPlugin([options.buildFolder], {
+            new CleanWebpackPlugin([`pm-app/${options.buildFolder}`], {
                 verbose: true,
                 dry: false,
-                root: process.cwd(),
+                root: `${process.cwd()}/../`,
                 exclude: ['.gitignore'],
             }),
 
