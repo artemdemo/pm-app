@@ -10,7 +10,6 @@ import { addTask } from '../../model/tasks/tasksActions';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import { selectTask, clearEntity } from '../../model/selectedEntity/selectedEntityActions';
-import { errorMessage } from '../../model/notification/notificationActions';
 
 import './TasksListItem.less';
 
@@ -41,12 +40,11 @@ class TasksListItem extends React.PureComponent {
     }
 
     createNewTask(e) {
-        const { addTask, errorMessage, projectId } = this.props;
+        const { addTask, projectId } = this.props;
         const newTaskName = this.state.name;
         e.preventDefault();
 
         if (newTaskName === '') {
-            errorMessage('Name can\'t be empty');
             return;
         }
 
@@ -139,6 +137,5 @@ export default connect(
         selectTask,
         clearEntity,
         addTask,
-        errorMessage,
     }
 )(TasksListItem);

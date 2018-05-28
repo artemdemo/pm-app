@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import UserAuthForm from '../../components/UserAuthForm/UserAuthForm';
 import { signup } from '../../model/auth/authActions';
-import { errorMessage } from '../../model/notification/notificationActions';
 import User from '../../model/auth/User';
 import auth from '../../services/auth';
 import * as location from '../../services/location';
@@ -16,7 +15,7 @@ class SignupView extends React.PureComponent {
     }
 
     submitSignup = ({ email, password, username }) => {
-        const { signup, errorMessage } = this.props;
+        const { signup } = this.props;
         try {
             const signupUser = new User({
                 username,
@@ -25,7 +24,7 @@ class SignupView extends React.PureComponent {
             });
             signup(signupUser);
         } catch (e) {
-            errorMessage('Please fill all fields');
+            console.error(e);
         }
     };
 
@@ -50,6 +49,5 @@ class SignupView extends React.PureComponent {
 export default connect(
     () => ({}), {
         signup,
-        errorMessage,
     }
 )(SignupView);

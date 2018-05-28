@@ -11,7 +11,6 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
-import { errorMessage } from '../../model/notification/notificationActions';
 import { showModal, hideModal } from '../../model/modal/modalActions';
 import SingleTask from '../SingleTask/SingleTask';
 
@@ -69,10 +68,9 @@ class SingleProject extends React.PureComponent {
     }
 
     submitProject() {
-        const { project, updateProject, addProject, errorMessage } = this.props;
+        const { project, updateProject, addProject } = this.props;
 
         if (this.state.name === '') {
-            errorMessage('Name can\'t be empty');
             return;
         }
 
@@ -255,7 +253,6 @@ export default connect(
         deleteProject,
         updateProject,
         addProject,
-        errorMessage,
         showModal,
         hideModal,
     }

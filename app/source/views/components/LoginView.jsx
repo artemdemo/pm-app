@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import UserAuthForm from '../../components/UserAuthForm/UserAuthForm';
+import { errorMsg } from '../../components/Notificator/Notificator';
 import { login } from '../../model/auth/authActions';
-import { errorMessage } from '../../model/notification/notificationActions';
 import User from '../../model/auth/User';
 import auth from '../../services/auth';
 import * as location from '../../services/location';
@@ -24,7 +24,7 @@ class LoginView extends React.PureComponent {
             });
             login(loginUser);
         } catch (e) {
-            errorMessage('Please fill all fields');
+            errorMsg(e.toString());
         }
     };
 

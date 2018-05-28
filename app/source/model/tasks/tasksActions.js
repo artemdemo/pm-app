@@ -1,7 +1,4 @@
 import * as tasksConst from './tasksConst';
-import { errorMessage, successMessage } from '../notification/notificationActions';
-import fetch from '../../utils/fetch';
-import checkResponseStatus from '../../utils/checkResponseStatus';
 
 /*
  * Loading

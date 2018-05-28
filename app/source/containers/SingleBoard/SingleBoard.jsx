@@ -6,7 +6,6 @@ import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
 import { addBoard, updateBoard, deleteBoard } from '../../model/boards/boardsActions';
-import { errorMessage } from '../../model/notification/notificationActions';
 
 import './SingleBoard.less';
 
@@ -43,11 +42,10 @@ class SingleBoard extends React.PureComponent {
     }
 
     submitBoard() {
-        const { board, addBoard, updateBoard, errorMessage, onSave } = this.props;
+        const { board, addBoard, updateBoard, onSave } = this.props;
         const idPosition = this.state.id_position;
 
         if (this.state.title === '') {
-            errorMessage('Title can\'t be empty');
             return;
         }
 
@@ -209,6 +207,5 @@ export default connect(
         addBoard,
         updateBoard,
         deleteBoard,
-        errorMessage,
     }
 )(SingleBoard);

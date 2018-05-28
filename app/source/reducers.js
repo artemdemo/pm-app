@@ -4,7 +4,6 @@ import { routerReducer } from 'react-router-redux';
 import auth from './model/auth/authReducer';
 import boards from './model/boards/boardsReducer';
 import modal from './model/modal/modalReducer';
-import notification from './model/notification/notificationReducer';
 import projects from './model/projects/projectsReducer';
 import selectedEntity from './model/selectedEntity/selectedEntityReducer';
 import settings from './model/settings/settingsReducer';
@@ -14,7 +13,6 @@ const reducers = combineReducers({
     auth,
     boards,
     modal,
-    notification,
     projects,
     selectedEntity,
     settings,
