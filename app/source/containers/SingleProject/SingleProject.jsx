@@ -213,12 +213,12 @@ class SingleProject extends React.PureComponent {
                     />
                 </div>
                 {this.renderTime()}
-                <div className='clearfix'>
-                    <div className='pull-left'>
+                <div className='row justify-content-between'>
+                    <div className='col-6'>
                         <span className='buttons-group'>
                             {this.renderSaveButton()}
                             <button
-                                className='btn btn-default'
+                                className='btn btn-light'
                                 disabled={this.state.loadingData}
                                 onClick={() => clearEntity(entityConst.ENTITY_PROJECT)}
                                 data-qa='project-cancel'
@@ -228,7 +228,7 @@ class SingleProject extends React.PureComponent {
                         </span>
                         {this.renderLoadingSpinner()}
                     </div>
-                    <div className='pull-right'>
+                    <div className='col-4'>
                         {this.renderDeleteButton()}
                     </div>
                 </div>

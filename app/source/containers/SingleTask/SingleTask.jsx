@@ -22,7 +22,6 @@ class SingleTask extends React.PureComponent {
         this.state = {
             name: '',
             description: '',
-            board_id: 0,
             done: false,
             priority: 0,
             loadingData: false,
@@ -105,7 +104,7 @@ class SingleTask extends React.PureComponent {
     render() {
         const cancelButtonClass = classnames({
             btn: true,
-            'btn-default': true,
+            'btn-light': true,
             btn_disabled: this.state.loadingData,
         });
         const renderLoadingSpinner = () => {
@@ -118,7 +117,7 @@ class SingleTask extends React.PureComponent {
             }
             return null;
         };
-        const { task, boards, settings, onCancel, className } = this.props;
+        const { task, onCancel, className } = this.props;
         return (
             <div className={className}>
                 <div className='form-group'>
@@ -176,8 +175,8 @@ class SingleTask extends React.PureComponent {
                     <p>Task Added: {task.added}</p>
                     <p>Last updated: {task.updated}</p>
                 </div>
-                <div className='clearfix'>
-                    <div className='pull-left'>
+                <div className='row justify-content-between'>
+                    <div className='col-6'>
                         <span className='buttons-group'>
                             <button
                                 className='btn btn-primary'
@@ -196,7 +195,7 @@ class SingleTask extends React.PureComponent {
                         </span>
                         {renderLoadingSpinner()}
                     </div>
-                    <div className='pull-right'>
+                    <div className='col-4'>
                         <DeleteButton onDelete={this.deleteTask.bind(this)} />
                     </div>
                 </div>
@@ -220,9 +219,7 @@ SingleTask.defaultProps = {
 
 export default connect(
     state => ({
-        boards: state.boards,
         projects: state.projects,
-        settings: state.settings,
     }),
     {
         deleteTask,
