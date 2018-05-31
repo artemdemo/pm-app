@@ -2,21 +2,18 @@
 
 exports[`<Icon> should be rendered with "in text" class 1`] = `
 <span
-  className="glyphicon glyphicon-fire icon_in-text"
-  onClick={null}
+  className="far fa-fire icon_in-text"
 />
 `;
 
 exports[`<Icon> should be rendered with className 1`] = `
 <span
-  className="some-class glyphicon glyphicon-fire"
-  onClick={null}
+  className="some-class far fa-fire"
 />
 `;
 
 exports[`<Icon> should be rendered with icon name 1`] = `
 <span
-  className="glyphicon glyphicon-fire"
-  onClick={null}
+  className="far fa-fire"
 />
 `;

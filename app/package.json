@@ -8,8 +8,7 @@
     "build": "webpack --progress --colors",
     "eslint": "eslint ./source/**/*.js ./source/**/**/*.js ./source/**/*.jsx ./source/**/**/*.jsx",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
-    "test": "npm run test:unit",
-    "test:unit": "BABEL_DISABLE_CACHE=1 jest --config ./jest/jest-config.json",
+    "test": "BABEL_DISABLE_CACHE=1 jest --config ./jest/jest-config.json",
     "test:e2e": "./e2e-test.sh"
   },
   "repository": {
