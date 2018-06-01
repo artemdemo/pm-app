@@ -10,7 +10,7 @@ import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 import '../list-container.less';
 
 const TasksView = (props) => {
-    const { selectedEntity, clearEntity } = props;
+    const { selectedEntity } = props;
     const selectedTask = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_TASK ?
         selectedEntity.entity :
         undefined;
@@ -20,22 +20,10 @@ const TasksView = (props) => {
     });
     return (
         <div className={classView}>
-            <div className='list-container__list'>
-                <ErrorBoundary componentName='TasksList'>
-                    <TasksList />
-                </ErrorBoundary>
-            </div>
-            <div className='list-container__panel'>
-                <ErrorBoundary componentName='SingleTask'>
-                    <SingleTask
-                        task={selectedTask}
-                        onSave={() => clearEntity(entityConst.ENTITY_TASK)}
-                        onCancel={() => clearEntity(entityConst.ENTITY_TASK)}
-                        onDelete={() => clearEntity(entityConst.ENTITY_TASK)}
-                        className='single-panel'
-                    />
-                </ErrorBoundary>
-            </div>
+            <ErrorBoundary componentName='TasksList'>
+                <TasksList />
+            </ErrorBoundary>
+            {props.children}
         </div>
     );
 };

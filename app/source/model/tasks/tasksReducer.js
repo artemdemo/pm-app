@@ -5,6 +5,8 @@ const initState = {
     data: [],
     loading: false,
     loadingError: null,
+    loadingSingle: false,
+    loadingSingleError: null,
     updating: false,
     updatingError: null,
     adding: false,
@@ -63,6 +65,37 @@ export default function tasksReducer(state = initState, action) {
                 ...state,
                 loading: false,
                 loadingError: action.err,
+            };
+        /*
+         * Load single task
+         */
+        case tasksConst.LOAD_SINGLE_TASK:
+            return {
+                ...state,
+                loadingSingle: true,
+            };
+        case tasksConst.SINGLE_TASK_LOADED:
+            let newTaskAdded = false;
+            const dataWithNewTask = state.data.map((item) => {
+                if (item.id === action.data.id) {
+                    newTaskAdded = true;
+                    return action.data;
+                }
+                return item;
+            });
+            return {
+                ...state,
+                data: newTaskAdded ? dataWithNewTask : [
+                    ...state.data,
+                    action.data,
+                ],
+                loadingSingle: false,
+            };
+        case  tasksConst.SINGLE_TASK_LOADING_ERROR:
+            return {
+                ...state,
+                loadingSingle: false,
+                loadingSingleError: action.err,
             };
         /*
          * Adding

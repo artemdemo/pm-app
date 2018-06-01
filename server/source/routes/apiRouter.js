@@ -22,6 +22,7 @@ router.delete('/api/projects/:taskId/task/:projectId', projectsController.discon
 router.get('/tasks', tasksController.all);
 router.post('/tasks', tasksController.add);
 router.put('/tasks', tasksController.update);
+router.get('/tasks/:taskId', tasksController.one);
 router.delete('/tasks/:taskId', tasksController.delete);
 router.get('/tasks/:taskId/project/:projectId', tasksController.connectProject);
 router.delete('/tasks/:taskId/project/:projectId', tasksController.disconnectProject);

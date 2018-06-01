@@ -8,12 +8,28 @@ import LabelsList from '../../components/LabelsList/LabelsList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import DropdownList from '../../components/DropdownList/DropdownList';
-import DeleteButton from '../../components/DeleteButton/DeleteButton';
+import EntityModal from '../../components/EntityModal/EntityModal';
+import { loadSingleTask } from '../../model/tasks/tasksActions';
 
 class SingleTaskView extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedProjects: [],
+            availableProjects: [],
+        };
+    }
+
+    componentDidMount() {
+        const { loadSingleTask, params } = this.props;
+        loadSingleTask(params.taskId);
+    }
+
     render() {
+        const task = {};
         return (
-            <React.Fragment>
+            <EntityModal>
                 <div className='form-group'>
                     <input
                         type='text'
@@ -25,13 +41,14 @@ class SingleTaskView extends React.PureComponent {
                 <div className='form-group'>
                     <textarea
                         className='form-control'
+                        placeholder='Task description'
                         rows='3'
                     />
                 </div>
                 <div className='form-group'>
                     <OkCircle
                         doneStatus={this.state.done}
-                        onChange={this.toggleDone.bind(this)}
+                        onChange={this.toggleDone}
                     >
                         Mark done
                     </OkCircle>
@@ -39,7 +56,7 @@ class SingleTaskView extends React.PureComponent {
                 <div className='form-group'>
                     <LabelsList
                         list={this.state.selectedProjects}
-                        onDelete={this.disconnectProject.bind(this)}
+                        onDelete={this.disconnectProject}
                         delitable
                     />
                 </div>
@@ -47,7 +64,7 @@ class SingleTaskView extends React.PureComponent {
                     <DropdownList
                         list={this.state.availableProjects}
                         placeholder='Connect to project'
-                        onSelect={this.connectProject.bind(this)}
+                        onSelect={this.connectProject}
                     />
                 </div>
                 <div className='form-group text-muted'>
@@ -59,28 +76,29 @@ class SingleTaskView extends React.PureComponent {
                         <span className='buttons-group'>
                             <button
                                 className='btn btn-primary'
-                                onClick={this.submitTask.bind(this)}
+                                onClick={this.submitTask}
                                 data-qa='task-save'
                             >
                                 <span>Save</span>
                             </button>
-                            <span
-                                className={cancelButtonClass}
-                                onClick={() => onCancel()}
-                                data-qa='task-cancel'
+                            <button
+                                className='btn btn-light'
                             >
                                 Cancel
-                            </span>
+                            </button>
                         </span>
-                        {renderLoadingSpinner()}
                     </div>
                     <div className='col-4'>
-                        <DeleteButton onDelete={this.deleteTask.bind(this)} />
+
                     </div>
                 </div>
-            </React.Fragment>
+            </EntityModal>
         );
     }
 }
 
-export default SingleTaskView;
+export default connect(
+    () => ({}), {
+        loadSingleTask,
+    }
+)(SingleTaskView);

@@ -25,6 +25,31 @@ export function tasksLoadingError(err) {
 }
 
 /*
+ * Load single task
+ */
+
+export function loadSingleTask(id) {
+    return {
+        type: tasksConst.LOAD_SINGLE_TASK,
+        id,
+    };
+}
+
+export function singleTaskLoaded(data) {
+    return {
+        type: tasksConst.SINGLE_TASK_LOADED,
+        data,
+    };
+}
+
+export function singleTasksLoadingError(err) {
+    return {
+        type: tasksConst.SINGLE_TASK_LOADING_ERROR,
+        err,
+    };
+}
+
+/*
  * Adding
  */
 

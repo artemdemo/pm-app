@@ -9,7 +9,8 @@ import emoji from '../../utils/emoji/emoji';
 import { addTask } from '../../model/tasks/tasksActions';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import LabelsList from '../../components/LabelsList/LabelsList';
-import { selectTask, clearEntity } from '../../model/selectedEntity/selectedEntityActions';
+import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
+import * as location from '../../services/location';
 
 import './TasksListItem.less';
 
@@ -31,9 +32,9 @@ class TasksListItem extends React.PureComponent {
     toggleDone() {}
 
     taskClick() {
-        const { task, selectTask, clearEntity } = this.props;
+        const { task, clearEntity } = this.props;
         if (task.id) {
-            selectTask(task);
+            location.push(`/tasks/${task.id}`);
         } else {
             clearEntity(entityConst.ENTITY_TASK);
         }
@@ -134,7 +135,6 @@ export default connect(
         projects: state.projects,
     }),
     {
-        selectTask,
         clearEntity,
         addTask,
     }

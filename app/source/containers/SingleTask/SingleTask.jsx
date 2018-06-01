@@ -23,8 +23,6 @@ class SingleTask extends React.PureComponent {
             name: '',
             description: '',
             done: false,
-            priority: 0,
-            loadingData: false,
             selectedProjects: [],
             availableProjects: [],
         };
@@ -49,9 +47,6 @@ class SingleTask extends React.PureComponent {
             selectedProjects,
             availableProjects,
         });
-        if (_isString(task.due)) {
-            this.dueInstance.setDate(task.due);
-        }
     }
 
     connectProject(newProject) {

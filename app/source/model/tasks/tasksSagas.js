@@ -4,6 +4,8 @@ import * as tasksConst from './tasksConst';
 import {
     tasksLoaded,
     tasksLoadingError,
+    singleTaskLoaded,
+    singleTasksLoadingError,
     taskAdded,
     taskAddingError,
     taskUpdated,
@@ -24,6 +26,20 @@ function* loadTasksSaga() {
             yield put(tasksLoaded(result.body));
         } catch (err) {
             yield put(tasksLoadingError(err));
+        }
+    }
+}
+
+function* loadSingleTaskSaga() {
+    while (true) {
+        try {
+            const { id } = yield take(tasksConst.LOAD_SINGLE_TASK);
+            const result = yield request
+                .get(`/api/tasks/${id}`)
+                .promise();
+            yield put(singleTaskLoaded(result.body));
+        } catch (err) {
+            yield put(singleTasksLoadingError(err));
         }
     }
 }
@@ -95,6 +111,7 @@ function* updateTaskPositionSaga() {
 export default function* tasksSagas() {
     yield [
         loadTasksSaga(),
+        loadSingleTaskSaga(),
         addTaskSaga(),
         updateTaskSaga(),
         deleteTaskSaga(),
