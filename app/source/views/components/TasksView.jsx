@@ -1,14 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import _isNumber from 'lodash/isNumber';
-import _isNaN from 'lodash/isNaN';
 import emoji from '../../utils/emoji/emoji';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import RadioMenu from '../../components/RadioMenu/RadioMenu';
-import TasksListItem from '../../containers/TasksList/TasksListItem';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
-
-//import './TasksList.less';
+import TasksList from '../../containers/TasksList/TasksList';
 
 class TasksView extends React.PureComponent {
     constructor(props) {
@@ -41,51 +37,9 @@ class TasksView extends React.PureComponent {
         return projectsList.filter(project => project.tasks.length > 0);
     }
 
-    filterTasks(tasksList) {
-        const filteredByStatus = tasksList
-            .filter((task) => {
-                switch (this.state.filteredByStatusId) {
-                    case 'active':
-                        return task.done === false;
-                    case 'completed':
-                        return task.done === true;
-                    default:
-                        return true;
-                }
-            });
-        const resultList = (() => {
-            const projectId = (() => {
-                const projectIdNumber = parseInt(this.state.filteredByProjectId, 10);
-                if (_isNaN(projectIdNumber)) {
-                    return this.state.filteredByProjectId;
-                }
-                return projectIdNumber;
-            })();
-            switch (true) {
-                case projectId === 'free':
-                    return filteredByStatus.filter((task) => {
-                        return task.projects.length === 0;
-                    });
-                case _isNumber(projectId):
-                    return filteredByStatus.filter((task) => {
-                        return task.projects.indexOf(projectId) > -1;
-                    });
-                case projectId === 'all':
-                default:
-                    return filteredByStatus;
-            }
-        })();
-        return resultList;
-    }
-
     render() {
         const { tasks, projects } = this.props;
-        const tasksList = this.filterTasks(tasks.data);
         const projectsList = this.filterProjects(projects.data);
-        const newTask = {
-            name: '',
-            description: '',
-        };
         return (
             <React.Fragment>
                 <div className='fluid-oneline-grid'>
@@ -118,17 +72,11 @@ class TasksView extends React.PureComponent {
                         </select>
                     </div>
                 </div>
-                <TasksListItem
-                    task={newTask}
-                    projectId={this.state.filteredByProjectId}
-                    key='task-0'
+                <TasksList
+                    tasks={tasks.data}
+                    byProjectId={this.state.filteredByProjectId}
+                    byStatusId={this.state.filteredByStatusId}
                 />
-                {tasksList.map(task => (
-                    <TasksListItem
-                        task={task}
-                        key={`task-${task.id}`}
-                    />
-                ))}
                 {this.props.children}
             </React.Fragment>
         );
