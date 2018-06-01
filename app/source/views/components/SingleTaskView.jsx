@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import _isString from 'lodash/isString';
 import { filterProjects } from '../../utils/tasks';
 import { deleteTask, updateTask } from '../../model/tasks/tasksActions';
@@ -10,6 +11,7 @@ import OkCircle from '../../components/OkCircle/OkCircle';
 import DropdownList from '../../components/DropdownList/DropdownList';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import { loadSingleTask } from '../../model/tasks/tasksActions';
+import * as location from '../../services/location';
 
 class SingleTaskView extends React.PureComponent {
     constructor(props) {
@@ -81,11 +83,12 @@ class SingleTaskView extends React.PureComponent {
                             >
                                 <span>Save</span>
                             </button>
-                            <button
+                            <Link
                                 className='btn btn-light'
+                                to={location.wrapUrl('/tasks')}
                             >
                                 Cancel
-                            </button>
+                            </Link>
                         </span>
                     </div>
                     <div className='col-4'>
