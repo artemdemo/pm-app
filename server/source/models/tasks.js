@@ -19,21 +19,29 @@ exports.getAll = async function(tasksData) {
         fields: TASK_FIELDS,
         userId: tasksData.userId,
     });
-    const promisesList = [];
+    const relationsListPromises = [];
     const tasks = parseTasks(rows);
     tasks.forEach((task) => {
         const projectsQuery = `SELECT projects_tasks_relations.task_id,
-                                      projects_tasks_relations.project_id
+                                      projects_tasks_relations.project_id,
+                                      projects.name AS project_name
                                FROM tasks
                                INNER JOIN projects_tasks_relations
                                        ON tasks.id = projects_tasks_relations.task_id
+                               INNER JOIN projects
+                                       ON projects.id = projects_tasks_relations.project_id
                                WHERE tasks.id = ?;`;
-        promisesList.push(DB.queryRows(projectsQuery, [task.id]));
+        relationsListPromises.push(DB.queryRows(projectsQuery, [task.id]));
     });
 
-    const resultsList = await Promise.all(promisesList);
-    resultsList.forEach((data, index) => {
-        tasks[index].projects = data.map(item => item.project_id);
+    const relationsList = await Promise.all(relationsListPromises);
+    console.log(relationsList);
+
+    relationsList.forEach((data, index) => {
+        tasks[index].projects = data.map(item => ({
+            id: item.project_id,
+            name: item.project_name,
+        }));
     });
     return tasks;
 };
