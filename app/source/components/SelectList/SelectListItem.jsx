@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import './DropdownListItem.less';
+import './SelectListItem.less';
 
-class DropdownListItem extends React.PureComponent {
+class SelectListItem extends React.PureComponent {
     clickHandler() {
         const { onClick, item } = this.props;
         onClick && onClick(item);
@@ -13,8 +13,8 @@ class DropdownListItem extends React.PureComponent {
     render() {
         const { item } = this.props;
         const itemClass = classnames({
-            'dropdown-list-item': true,
-            'dropdown-list-item_done': item.done,
+            'select-list-item': true,
+            'select-list-item_done': item.done,
         });
         return (
             <div
@@ -27,9 +27,9 @@ class DropdownListItem extends React.PureComponent {
     }
 }
 
-DropdownListItem.propTypes = {
+SelectListItem.propTypes = {
     item: PropTypes.shape({}).isRequired,
     onClick: PropTypes.func.isRequired,
 };
 
-export default DropdownListItem;
+export default SelectListItem;
