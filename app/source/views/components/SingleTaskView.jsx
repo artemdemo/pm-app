@@ -26,6 +26,7 @@ class SingleTaskView extends React.PureComponent {
                 name: task.name || '',
                 description: task.description || '',
                 done: task.done || false,
+                selectedProjects: task.projects || [],
                 prevSingleData: task,
             };
         }
