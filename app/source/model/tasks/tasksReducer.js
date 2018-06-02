@@ -3,6 +3,7 @@ import { sortByIdPositionScrum } from '../../utils/tasks';
 
 const initState = {
     data: [],
+    singleData: {},
     loading: false,
     loadingError: null,
     loadingSingle: false,
@@ -75,20 +76,9 @@ export default function tasksReducer(state = initState, action) {
                 loadingSingle: true,
             };
         case tasksConst.SINGLE_TASK_LOADED:
-            let newTaskAdded = false;
-            const dataWithNewTask = state.data.map((item) => {
-                if (item.id === action.data.id) {
-                    newTaskAdded = true;
-                    return action.data;
-                }
-                return item;
-            });
             return {
                 ...state,
-                data: newTaskAdded ? dataWithNewTask : [
-                    ...state.data,
-                    action.data,
-                ],
+                singleData: action.data,
                 loadingSingle: false,
             };
         case  tasksConst.SINGLE_TASK_LOADING_ERROR:

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { filterTasks } from '../../utils/tasks';
 import { deleteProject, updateProject, addProject } from '../../model/projects/projectsActions';
-import DropdownList from '../../components/DropdownList/DropdownList';
+import SelectList from '../../components/SelectList/SelectList';
 import NarrowList from '../../components/NarrowList/NarrowList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
@@ -193,7 +193,7 @@ class SingleProject extends React.PureComponent {
                     {this.renderNarrowList()}
                 </div>
                 <div className='form-group'>
-                    <DropdownList
+                    <SelectList
                         list={this.state.availableTasks}
                         placeholder='Connect tasks to project'
                         onSelect={this.connectTask.bind(this)}

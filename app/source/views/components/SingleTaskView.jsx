@@ -4,20 +4,44 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import _isString from 'lodash/isString';
 import { filterProjects } from '../../utils/tasks';
-import { deleteTask, updateTask } from '../../model/tasks/tasksActions';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import OkCircle from '../../components/OkCircle/OkCircle';
-import DropdownList from '../../components/DropdownList/DropdownList';
+import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
-import { loadSingleTask } from '../../model/tasks/tasksActions';
+import {
+    addTask,
+    updateTask,
+    loadSingleTask,
+    deleteTask,
+} from '../../model/tasks/tasksActions';
+import Task from '../../model/tasks/Task';
 import * as location from '../../services/location';
+import tasksSagas from '../../model/tasks/tasksSagas';
 
 class SingleTaskView extends React.PureComponent {
+    static getDerivedStateFromProps(props, state) {
+        const { tasks } = props;
+        if (tasks.singleData !== state.prevSingleData) {
+            const task = tasks.singleData;
+            return {
+                name: task.name || '',
+                description: task.description || '',
+                done: task.done || false,
+                prevSingleData: task,
+            };
+        }
+        return null;
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
+            name: '',
+            description: '',
+            done: false,
+            prevSingleData: null,
             selectedProjects: [],
             availableProjects: [],
         };
@@ -28,16 +52,27 @@ class SingleTaskView extends React.PureComponent {
         loadSingleTask(params.taskId);
     }
 
+    submitTask = () => {
+        const { updateTask, tasks } = this.props;
+        const task = new Task({
+            ...tasks.singleData,
+            name: this.state.name,
+            description: this.state.description,
+            done: this.state.done,
+        });
+        updateTask(task);
+    };
+
     render() {
-        const task = {};
         return (
             <EntityModal>
                 <div className='form-group'>
                     <input
                         type='text'
                         className='form-control'
-                        id='exampleFormControlInput1'
                         placeholder='Task name'
+                        onChange={e => this.setState({name: e.target.value})}
+                        value={this.state.name}
                     />
                 </div>
                 <div className='form-group'>
@@ -45,12 +80,14 @@ class SingleTaskView extends React.PureComponent {
                         className='form-control'
                         placeholder='Task description'
                         rows='3'
+                        onChange={e => this.setState({description: e.target.value})}
+                        value={this.state.description}
                     />
                 </div>
                 <div className='form-group'>
                     <OkCircle
                         doneStatus={this.state.done}
-                        onChange={this.toggleDone}
+                        onChange={done => this.setState({ done })}
                     >
                         Mark done
                     </OkCircle>
@@ -63,15 +100,11 @@ class SingleTaskView extends React.PureComponent {
                     />
                 </div>
                 <div className='form-group'>
-                    <DropdownList
+                    <SelectList
                         list={this.state.availableProjects}
                         placeholder='Connect to project'
                         onSelect={this.connectProject}
                     />
-                </div>
-                <div className='form-group text-muted'>
-                    <p>Task Added: {task.added}</p>
-                    <p>Last updated: {task.updated}</p>
                 </div>
                 <div className='row justify-content-between'>
                     <div className='col-6'>
@@ -101,7 +134,10 @@ class SingleTaskView extends React.PureComponent {
 }
 
 export default connect(
-    () => ({}), {
+    state => ({
+        tasks: state.tasks,
+    }), {
+        updateTask,
         loadSingleTask,
     }
 )(SingleTaskView);

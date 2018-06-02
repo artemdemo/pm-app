@@ -4,9 +4,9 @@ import classnames from 'classnames';
 import _isString from 'lodash/isString';
 import DropdownListItem from './DropdownListItem';
 
-import './DropdownList.less';
+import './SelectList.less';
 
-class DropdownList extends React.PureComponent {
+class SelectList extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -101,13 +101,13 @@ class DropdownList extends React.PureComponent {
     }
 }
 
-DropdownList.propTypes = {
+SelectList.propTypes = {
     list: PropTypes.arrayOf(PropTypes.object).isRequired,
     onSelect: PropTypes.func,
 };
 
-DropdownList.defaultProps = {
+SelectList.defaultProps = {
     onSelect: null,
 };
 
-export default DropdownList;
+export default SelectList;
