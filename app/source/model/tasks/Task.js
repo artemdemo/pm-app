@@ -9,7 +9,9 @@ class Task {
             id,
             board_id = null,
             id_position_scrum = null,
+            projects = [],
         } = taskProps;
+
         if (name == null || name === '') {
             throw new Error('"name" is required for Task creation');
         }
@@ -21,6 +23,7 @@ class Task {
         }
         this.board_id = board_id;
         this.id_position_scrum = id_position_scrum;
+        this.projects = projects;
 
         // Future proof props copying
         // In case they've been added, but I haven't mentioned them here

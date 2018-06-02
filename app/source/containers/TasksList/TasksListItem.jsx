@@ -11,6 +11,7 @@ import OkCircle from '../../components/OkCircle/OkCircle';
 import LabelsList from '../../components/LabelsList/LabelsList';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 import * as location from '../../services/location';
+import Task from '../../model/tasks/Task';
 
 import './TasksListItem.less';
 
@@ -51,11 +52,11 @@ class TasksListItem extends React.PureComponent {
 
         const projects = _isNumber(projectId) ? [Number(projectId)] : [];
 
-        addTask({
+        addTask(new Task({
             name: newTaskName,
             done: false,
             projects,
-        });
+        }));
 
         this.setState({
             name: '',
