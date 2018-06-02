@@ -40,7 +40,6 @@ class SingleTaskView extends React.PureComponent {
             done: false,
             prevSingleData: null,
             selectedProjects: [],
-            availableProjects: [],
         };
     }
 
@@ -49,6 +48,17 @@ class SingleTaskView extends React.PureComponent {
         loadSingleTask(params.taskId);
     }
 
+    connectProject = (project) => {
+        if (!this.state.selectedProjects.includes(project)) {
+            this.setState({
+                selectedProjects: [
+                    ...this.state.selectedProjects,
+                    project,
+                ],
+            });
+        }
+    };
+
     submitTask = () => {
         const { updateTask, tasks } = this.props;
         const task = new Task({
@@ -56,11 +66,13 @@ class SingleTaskView extends React.PureComponent {
             name: this.state.name,
             description: this.state.description,
             done: this.state.done,
+            projects: this.state.selectedProjects.map(item => item.id),
         });
         updateTask(task);
     };
 
     render() {
+        const { projects } = this.props;
         return (
             <EntityModal>
                 <div className='form-group'>
@@ -96,7 +108,7 @@ class SingleTaskView extends React.PureComponent {
                 </div>
                 <div className='form-group'>
                     <SelectList
-                        list={this.state.availableProjects}
+                        list={projects.data}
                         placeholder='Connect to project'
                         onSelect={this.connectProject}
                     />
