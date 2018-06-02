@@ -3,8 +3,6 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import _isString from 'lodash/isString';
-import { filterProjects } from '../../utils/tasks';
-import LabelsList from '../../components/LabelsList/LabelsList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
@@ -92,11 +90,9 @@ class SingleTaskView extends React.PureComponent {
                     </OkCircle>
                 </div>
                 <div className='form-group'>
-                    <LabelsList
-                        list={this.state.selectedProjects}
-                        onDelete={this.disconnectProject}
-                        delitable
-                    />
+                    {this.state.selectedProjects.map((item, index) => (
+                        <span key={`single-task-projects-item-${index}`}>{item.name}</span>
+                    ))}
                 </div>
                 <div className='form-group'>
                     <SelectList

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { filterProjects } from '../../utils/tasks';
 import Icon from '../../components/Icon/Icon';
-import LabelsList from '../../components/LabelsList/LabelsList';
 import * as taskConst from '../../model/tasks/tasksConst';
 import { selectTask } from '../../model/selectedEntity/selectedEntityActions';
 
@@ -76,12 +75,6 @@ class BoardTask extends React.PureComponent {
                     {renderSP()}
                     {renderDue()}
                     {renderPriority()}
-                </div>
-                <div className='board-task__labels-list'>
-                    <LabelsList
-                        list={selectedProjects}
-                        delitable={false}
-                    />
                 </div>
             </div>
         );
