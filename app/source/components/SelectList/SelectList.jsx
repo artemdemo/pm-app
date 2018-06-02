@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import _isString from 'lodash/isString';
 import SelectListItem from './SelectListItem';
+import { SilectItemProp } from './SelectListProps';
 
 import './SelectList.less';
 
@@ -102,7 +103,7 @@ class SelectList extends React.PureComponent {
 }
 
 SelectList.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+    list: PropTypes.arrayOf(SilectItemProp).isRequired,
     onSelect: PropTypes.func,
 };
 

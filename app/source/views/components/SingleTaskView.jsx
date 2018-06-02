@@ -10,14 +10,12 @@ import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import {
-    addTask,
     updateTask,
     loadSingleTask,
     deleteTask,
 } from '../../model/tasks/tasksActions';
 import Task from '../../model/tasks/Task';
 import * as location from '../../services/location';
-import tasksSagas from '../../model/tasks/tasksSagas';
 
 class SingleTaskView extends React.PureComponent {
     static getDerivedStateFromProps(props, state) {
@@ -136,8 +134,10 @@ class SingleTaskView extends React.PureComponent {
 export default connect(
     state => ({
         tasks: state.tasks,
+        projects: state.projects,
     }), {
         updateTask,
         loadSingleTask,
+        deleteTask,
     }
 )(SingleTaskView);
