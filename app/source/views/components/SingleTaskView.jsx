@@ -7,6 +7,7 @@ import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
+import ProjectLabels from '../../components/SingleTask/ProjectLabels';
 import {
     updateTask,
     loadSingleTask,
@@ -49,7 +50,9 @@ class SingleTaskView extends React.PureComponent {
     }
 
     connectProject = (project) => {
-        if (!this.state.selectedProjects.includes(project)) {
+        const hasProject = this.state.selectedProjects.find(item => item.id === project.id);
+
+        if (!hasProject) {
             this.setState({
                 selectedProjects: [
                     ...this.state.selectedProjects,
@@ -57,6 +60,12 @@ class SingleTaskView extends React.PureComponent {
                 ],
             });
         }
+    };
+
+    disconnectProject = (project) => {
+        this.setState({
+            selectedProjects: this.state.selectedProjects.filter(item => item !== project),
+        });
     };
 
     submitTask = () => {
@@ -69,6 +78,7 @@ class SingleTaskView extends React.PureComponent {
             projects: this.state.selectedProjects.map(item => item.id),
         });
         updateTask(task);
+        location.push('/tasks');
     };
 
     render() {
@@ -102,9 +112,10 @@ class SingleTaskView extends React.PureComponent {
                     </OkCircle>
                 </div>
                 <div className='form-group'>
-                    {this.state.selectedProjects.map((item, index) => (
-                        <span key={`single-task-projects-item-${index}`}>{item.name}</span>
-                    ))}
+                    <ProjectLabels
+                        projects={this.state.selectedProjects}
+                        onClick={this.disconnectProject}
+                    />
                 </div>
                 <div className='form-group'>
                     <SelectList
@@ -127,7 +138,7 @@ class SingleTaskView extends React.PureComponent {
                                 className='btn btn-light'
                                 to={location.wrapUrl('/tasks')}
                             >
-                                Cancel
+                                Close
                             </Link>
                         </span>
                     </div>

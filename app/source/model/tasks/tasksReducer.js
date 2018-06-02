@@ -73,6 +73,7 @@ export default function tasksReducer(state = initState, action) {
         case tasksConst.LOAD_SINGLE_TASK:
             return {
                 ...state,
+                singleData: {},
                 loadingSingle: true,
             };
         case tasksConst.SINGLE_TASK_LOADED:

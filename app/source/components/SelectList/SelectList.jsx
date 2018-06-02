@@ -58,7 +58,7 @@ class SelectList extends React.PureComponent {
             this.setState({
                 dropdownIsVisible: false,
             });
-        }, 200);
+        }, 100);
     };
 
     inputFocus = () => {
