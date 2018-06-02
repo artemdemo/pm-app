@@ -19,6 +19,24 @@ exports.all = (req, res, next) => {
         });
 };
 
+exports.one = (req, res, next) => {
+    const { taskId } = req.params;
+    const { userId } = req.authSession;
+    debug(`Get task with id: ${taskId} (user id ${userId})`);
+    tasks
+        .getById({
+            taskId,
+            userId,
+        })
+        .then((tasks) => {
+            res.json(tasks);
+        })
+        .catch((err) => {
+            debug(err);
+            next(Boom.badRequest(errConstants.DB_ERROR));
+        });
+};
+
 exports.add = (req, res, next) => {
     const { projects } = req.body;
     const tasksData = {

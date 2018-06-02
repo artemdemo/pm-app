@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import { filterTasks } from '../../utils/tasks';
 import { deleteProject, updateProject, addProject } from '../../model/projects/projectsActions';
-import DropdownList from '../../components/DropdownList/DropdownList';
+import SelectList from '../../components/SelectList/SelectList';
 import NarrowList from '../../components/NarrowList/NarrowList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
@@ -12,7 +12,6 @@ import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
 import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 import { showModal, hideModal } from '../../model/modal/modalActions';
-import SingleTask from '../SingleTask/SingleTask';
 
 class SingleProject extends React.PureComponent {
     constructor(props) {
@@ -90,17 +89,6 @@ class SingleProject extends React.PureComponent {
         }
     }
 
-    openTask(task) {
-        const { showModal, hideModal } = this.props;
-        showModal(<SingleTask
-            task={task}
-            className='single-task-modal'
-            onSave={() => hideModal()}
-            onDelete={() => hideModal()}
-            onCancel={() => hideModal()}
-        />);
-    }
-
     renderDeleteButton() {
         const { project } = this.props;
         if (project && project.id) {
@@ -128,7 +116,6 @@ class SingleProject extends React.PureComponent {
                 <NarrowList
                     list={this.state.selectedTasks}
                     deletable
-                    onClick={this.openTask.bind(this)}
                     onDelete={this.disconnectTask.bind(this)}
                 />
             );
@@ -206,7 +193,7 @@ class SingleProject extends React.PureComponent {
                     {this.renderNarrowList()}
                 </div>
                 <div className='form-group'>
-                    <DropdownList
+                    <SelectList
                         list={this.state.availableTasks}
                         placeholder='Connect tasks to project'
                         onSelect={this.connectTask.bind(this)}

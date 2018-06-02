@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import _isNumber from 'lodash/isNumber';
 import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
-import { filterProjects } from '../../utils/tasks';
 import emoji from '../../utils/emoji/emoji';
 import { addTask } from '../../model/tasks/tasksActions';
 import OkCircle from '../../components/OkCircle/OkCircle';
-import LabelsList from '../../components/LabelsList/LabelsList';
-import { selectTask, clearEntity } from '../../model/selectedEntity/selectedEntityActions';
+import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
+import * as location from '../../services/location';
+import Task from '../../model/tasks/Task';
 
 import './TasksListItem.less';
 
@@ -22,25 +21,25 @@ class TasksListItem extends React.PureComponent {
         };
     }
 
-    changeName(e) {
+    changeName = (e) => {
         this.setState({
             name: e.target.value,
         });
-    }
+    };
 
-    toggleDone() {}
+    toggleDone = () => {};
 
-    taskClick() {
-        const { task, selectTask, clearEntity } = this.props;
+    taskClick = () => {
+        const { task, clearEntity } = this.props;
         if (task.id) {
-            selectTask(task);
+            location.push(`/tasks/${task.id}`);
         } else {
             clearEntity(entityConst.ENTITY_TASK);
         }
-    }
+    };
 
-    createNewTask(e) {
-        const { addTask, projectId } = this.props;
+    createNewTask = (e) => {
+        const { addTask } = this.props;
         const newTaskName = this.state.name;
         e.preventDefault();
 
@@ -48,27 +47,22 @@ class TasksListItem extends React.PureComponent {
             return;
         }
 
-        const projects = _isNumber(projectId) ? [Number(projectId)] : [];
-
-        addTask({
+        addTask(new Task({
             name: newTaskName,
             done: false,
-            projects,
-        });
+        }));
 
         this.setState({
             name: '',
         });
-    }
+    };
 
     render() {
-        const { task, projects } = this.props;
+        const { task } = this.props;
         const itemClass = classnames({
             'tasks-list-item__text': true,
             'tasks-list-item__text_done': task.done,
         });
-
-        const { selectedProjects } = filterProjects(task, projects.data);
 
         const renderTaskName = () => {
             if (task.id) {
@@ -80,12 +74,12 @@ class TasksListItem extends React.PureComponent {
             }
 
             return (
-                <form onSubmit={this.createNewTask.bind(this)}>
+                <form onSubmit={this.createNewTask}>
                     <input
                         className='tasks-list-item__name-input'
                         placeholder='New task...'
                         value={this.state.name}
-                        onChange={this.changeName.bind(this)}
+                        onChange={this.changeName}
                         data-qa='new-task-input'
                     />
                 </form>
@@ -97,23 +91,16 @@ class TasksListItem extends React.PureComponent {
                 <div
                     className='tasks-list-item__cell
                                tasks-list-item__cell_icon'
-                    onClick={this.toggleDone.bind(this)}
+                    onClick={this.toggleDone}
                 >
                     <OkCircle doneStatus={task.done} />
                 </div>
                 <div
                     className='tasks-list-item__cell'
-                    onClick={this.taskClick.bind(this)}
+                    onClick={this.taskClick}
                 >
                     {renderTaskName()}
                 </div>
-                <div className='tasks-list-item__cell
-                                tasks-list-item__cell_labels'
-                >
-                    <LabelsList list={selectedProjects} limit={1} />
-                </div>
-                <div className='tasks-list-item__cell
-                                tasks-list-item__cell_icon' />
             </div>
         );
     }
@@ -130,11 +117,8 @@ TasksListItem.defaultProps = {
 };
 
 export default connect(
-    state => ({
-        projects: state.projects,
-    }),
+    () => ({}),
     {
-        selectTask,
         clearEntity,
         addTask,
     }

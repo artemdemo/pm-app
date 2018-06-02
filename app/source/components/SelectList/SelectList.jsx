@@ -2,11 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import _isString from 'lodash/isString';
-import DropdownListItem from './DropdownListItem';
+import SelectListItem from './SelectListItem';
+import { SilectItemProp } from './SelectListProps';
 
-import './DropdownList.less';
+import './SelectList.less';
 
-class DropdownList extends React.PureComponent {
+class SelectList extends React.PureComponent {
+    static getDerivedStateFromProps(props) {
+        return {
+            list: props.list
+        }
+    }
+
     constructor(props) {
         super(props);
 
@@ -18,17 +25,11 @@ class DropdownList extends React.PureComponent {
         this.blurTimeout = null;
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            list: nextProps.list,
-        });
-    }
-
     componentWillUnmount() {
         clearTimeout(this.blurTimeout);
     }
 
-    handleInputChange(e) {
+    handleInputChange = (e) => {
         const searchValue = e.target.value;
         if (searchValue !== '') {
             const regexp = new RegExp(searchValue, 'i');
@@ -48,51 +49,51 @@ class DropdownList extends React.PureComponent {
                 list: this.props.list,
             });
         }
-    }
+    };
 
-    inputBlur() {
+    inputBlur = () => {
         // 'blur' is firing faster then 'click' event
         // therefore I need a timeout to make it work
         this.blurTimeout = setTimeout(() => {
             this.setState({
                 dropdownIsVisible: false,
             });
-        }, 200);
-    }
+        }, 100);
+    };
 
-    inputFocus() {
+    inputFocus = () => {
         this.setState({
             dropdownIsVisible: true,
         });
-    }
+    };
 
-    selectHandler(item) {
+    selectHandler = (item) => {
         const { onSelect } = this.props;
         onSelect && onSelect(item);
-    }
+    };
 
     render() {
         const { placeholder } = this.props;
         const itemsClass = classnames({
-            'dropdown-list-items': true,
-            'dropdown-list-items_show': this.state.dropdownIsVisible,
+            'select-list-items': true,
+            'select-list-items_show': this.state.dropdownIsVisible,
         });
 
         return (
-            <div className='dropdown-list'>
+            <div className='select-list'>
                 <input
-                    className='flat-input dropdown-list__input'
-                    onFocus={this.inputFocus.bind(this)}
-                    onBlur={this.inputBlur.bind(this)}
-                    onChange={this.handleInputChange.bind(this)}
+                    className='flat-input select-list__input'
+                    onFocus={this.inputFocus}
+                    onBlur={this.inputBlur}
+                    onChange={this.handleInputChange}
                     placeholder={placeholder}
                 />
                 <div className={itemsClass}>
                     {this.state.list.map(item => (
-                        <DropdownListItem
+                        <SelectListItem
                             item={item}
                             key={`dropdown-item-${item.id}`}
-                            onClick={this.selectHandler.bind(this)}
+                            onClick={this.selectHandler}
                         />
                     ))}
                 </div>
@@ -101,13 +102,13 @@ class DropdownList extends React.PureComponent {
     }
 }
 
-DropdownList.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired,
+SelectList.propTypes = {
+    list: PropTypes.arrayOf(SilectItemProp).isRequired,
     onSelect: PropTypes.func,
 };
 
-DropdownList.defaultProps = {
+SelectList.defaultProps = {
     onSelect: null,
 };
 
-export default DropdownList;
+export default SelectList;

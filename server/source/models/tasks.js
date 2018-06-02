@@ -13,27 +13,35 @@ const parseTasks = tasks => tasks.map((task) => {
 const TASK_FIELDS = ['id', 'name', 'description', 'done', 'priority',
     'due', 'added', 'updated', 'board_id', 'id_position_scrum'];
 
+const TASK_ROJECTS_QUERY = `SELECT projects_tasks_relations.task_id,
+                                   projects_tasks_relations.project_id,
+                                   projects.name AS project_name
+                            FROM tasks
+                            INNER JOIN projects_tasks_relations
+                                    ON tasks.id = projects_tasks_relations.task_id
+                            INNER JOIN projects
+                                    ON projects.id = projects_tasks_relations.project_id
+                            WHERE tasks.id = ?;`;
+
 exports.getAll = async function(tasksData) {
     const rows = await queryRows({
         tableName,
         fields: TASK_FIELDS,
         userId: tasksData.userId,
     });
-    const promisesList = [];
+    const relationsListPromises = [];
     const tasks = parseTasks(rows);
     tasks.forEach((task) => {
-        const projectsQuery = `SELECT projects_tasks_relations.task_id,
-                                      projects_tasks_relations.project_id
-                               FROM tasks
-                               INNER JOIN projects_tasks_relations
-                                       ON tasks.id = projects_tasks_relations.task_id
-                               WHERE tasks.id = ?;`;
-        promisesList.push(DB.queryRows(projectsQuery, [task.id]));
+        relationsListPromises.push(DB.queryRows(TASK_ROJECTS_QUERY, [task.id]));
     });
 
-    const resultsList = await Promise.all(promisesList);
-    resultsList.forEach((data, index) => {
-        tasks[index].projects = data.map(item => item.project_id);
+    const relationsList = await Promise.all(relationsListPromises);
+
+    relationsList.forEach((data, index) => {
+        tasks[index].projects = data.map(item => ({
+            id: item.project_id,
+            name: item.project_name,
+        }));
     });
     return tasks;
 };
@@ -55,7 +63,16 @@ exports.getById = async function(taskData) {
     if (tasks.length === 0) {
         return null;
     }
-    return parseTasks(tasks)[0];
+    const task = parseTasks(tasks)[0];
+    const relations = await DB.queryRows(TASK_ROJECTS_QUERY, [task.id]);
+
+    return {
+        ...task,
+        projects: relations.map(item => ({
+            id: item.project_id,
+            name: item.project_name,
+        })),
+    };
 };
 
 /**

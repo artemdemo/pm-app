@@ -4,7 +4,6 @@ import NotificationSystem from 'react-notification-system';
 const notificatorRef = React.createRef();
 
 // @docs https://github.com/igorprado/react-notification-system
-
 const defaultOptions = {
     level: 'info',   // success, error, warning, info
     position: 'tr',  // tr (top right), tl (top left), tc (top center), br (bottom right), bl (bottom left), bc (bottom center)

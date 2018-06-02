@@ -21,6 +21,12 @@ const routes = [
             {
                 path: 'tasks',
                 _component: 'TasksView',
+                childRoutes: [
+                    {
+                        path: ':taskId',
+                        _component: 'SingleTaskView',
+                    },
+                ],
             },
             {
                 path: 'scrum',

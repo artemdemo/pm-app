@@ -17,3 +17,5 @@ export const replace = (url) => {
 export const goBack = () => {
     history.goBack();
 };
+
+export const wrapUrl = url => url;
