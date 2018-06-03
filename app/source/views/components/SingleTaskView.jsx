@@ -81,6 +81,12 @@ class SingleTaskView extends React.PureComponent {
         location.push('/tasks');
     };
 
+    deleteTask = () => {
+        const { deleteTask, params } = this.props;
+        deleteTask(Number(params.taskId));
+        location.push('/tasks');
+    };
+
     render() {
         const { projects } = this.props;
         return (
@@ -130,9 +136,8 @@ class SingleTaskView extends React.PureComponent {
                             <button
                                 className='btn btn-primary'
                                 onClick={this.submitTask}
-                                data-qa='task-save'
                             >
-                                <span>Save</span>
+                                Save
                             </button>
                             <Link
                                 className='btn btn-light'
@@ -143,7 +148,12 @@ class SingleTaskView extends React.PureComponent {
                         </span>
                     </div>
                     <div className='col-4'>
-
+                        <button
+                            className='btn btn-danger'
+                            onClick={this.deleteTask}
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
             </EntityModal>
