@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import emoji from '../../utils/emoji/emoji';
-import { selectProject } from '../../model/selectedEntity/selectedEntityActions';
+import * as location from '../../services/location';
 
 import './ProjectsListItem.less';
 
@@ -43,11 +43,11 @@ class ProjectsListItem extends React.PureComponent {
     }
 
     render() {
-        const { project, selectProject } = this.props;
+        const { project } = this.props;
         return (
             <div
                 className='projects-list-item'
-                onClick={() => selectProject(project)}
+                onClick={() => location.push(`projects/${project.id}`)}
             >
                 <div className='projects-list-item__title'>
                     {emoji(project.name)}
@@ -71,7 +71,5 @@ ProjectsListItem.defaultProps = {
 export default connect(
     state => ({
         tasks: state.tasks,
-    }), {
-        selectProject,
-    }
+    })
 )(ProjectsListItem);
