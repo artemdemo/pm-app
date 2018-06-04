@@ -25,6 +25,31 @@ export function projectsLoadingError(err = true) {
 }
 
 /*
+* Load single project
+*/
+
+export function loadSingleProject(id) {
+    return {
+        type: projectsConst.LOAD_SINGLE_PROJECT,
+        id,
+    };
+}
+
+export function singleProjectLoaded(data) {
+    return {
+        type: projectsConst.SINGLE_PROJECT_LOADED,
+        data,
+    };
+}
+
+export function singleProjectsLoadingError(err) {
+    return {
+        type: projectsConst.SINGLE_PROJECT_LOADING_ERROR,
+        err,
+    };
+}
+
+/*
  * Adding
  */
 

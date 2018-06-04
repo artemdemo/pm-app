@@ -2,6 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import EntityModal from '../../components/EntityModal/EntityModal';
+import {
+    updateProject,
+    loadSingleProject,
+    deleteProject,
+} from '../../model/projects/projectsActions';
 import * as location from '../../services/location';
 
 class SingleProjectView extends React.PureComponent {
@@ -12,6 +17,11 @@ class SingleProjectView extends React.PureComponent {
             name: '',
             description: '',
         };
+    }
+
+    componentDidMount() {
+        const { loadSingleProject, params } = this.props;
+        loadSingleProject(params.taskId);
     }
 
     submitProject = () => {};
@@ -74,5 +84,9 @@ class SingleProjectView extends React.PureComponent {
 export default connect(
     state => ({
         projects: state.projects,
-    })
+    }), {
+        updateProject,
+        loadSingleProject,
+        deleteProject,
+    }
 )(SingleProjectView);
