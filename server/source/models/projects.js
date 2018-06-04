@@ -14,17 +14,23 @@ const getAll = async function(projectsData) {
     const promisesList = [];
     projects.forEach((project) => {
         const tasksQuery = `SELECT projects_tasks_relations.task_id,
-                                   projects_tasks_relations.project_id
+                                   projects_tasks_relations.project_id,
+                                   tasks.name AS task_name
                             FROM projects
                             INNER JOIN projects_tasks_relations
                                     ON projects.id = projects_tasks_relations.project_id
+                            INNER JOIN tasks
+                                    ON tasks.id = projects_tasks_relations.task_id
                             WHERE projects.id = ?;`;
         promisesList.push(DB.queryRows(tasksQuery, [project.id]));
     });
 
     const resultsList = await Promise.all(promisesList);
     resultsList.forEach((data, index) => {
-        projects[index].tasks = data.map(item => item.task_id);
+        projects[index].tasks = data.map((item) => ({
+            id: item.task_id,
+            name: item.task_name,
+        }));
     });
     return projects;
 };
