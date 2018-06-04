@@ -13,15 +13,15 @@ const parseTasks = tasks => tasks.map((task) => {
 const TASK_FIELDS = ['id', 'name', 'description', 'done', 'priority',
     'due', 'added', 'updated', 'board_id', 'id_position_scrum'];
 
-const TASK_ROJECTS_QUERY = `SELECT projects_tasks_relations.task_id,
-                                   projects_tasks_relations.project_id,
-                                   projects.name AS project_name
-                            FROM tasks
-                            INNER JOIN projects_tasks_relations
-                                    ON tasks.id = projects_tasks_relations.task_id
-                            INNER JOIN projects
-                                    ON projects.id = projects_tasks_relations.project_id
-                            WHERE tasks.id = ?;`;
+const TASKS_QUERY = `SELECT projects_tasks_relations.task_id,
+                            projects_tasks_relations.project_id,
+                            projects.name AS project_name
+                     FROM tasks
+                     INNER JOIN projects_tasks_relations
+                             ON tasks.id = projects_tasks_relations.task_id
+                     INNER JOIN projects
+                             ON projects.id = projects_tasks_relations.project_id
+                     WHERE tasks.id = ?;`;
 
 exports.getAll = async function(tasksData) {
     const rows = await queryRows({
@@ -32,7 +32,7 @@ exports.getAll = async function(tasksData) {
     const relationsListPromises = [];
     const tasks = parseTasks(rows);
     tasks.forEach((task) => {
-        relationsListPromises.push(DB.queryRows(TASK_ROJECTS_QUERY, [task.id]));
+        relationsListPromises.push(DB.queryRows(TASKS_QUERY, [task.id]));
     });
 
     const relationsList = await Promise.all(relationsListPromises);
@@ -64,7 +64,7 @@ exports.getById = async function(taskData) {
         return null;
     }
     const task = parseTasks(tasks)[0];
-    const relations = await DB.queryRows(TASK_ROJECTS_QUERY, [task.id]);
+    const relations = await DB.queryRows(TASKS_QUERY, [task.id]);
 
     return {
         ...task,

@@ -20,6 +20,24 @@ exports.all = (req, res, next) => {
         });
 };
 
+exports.one = (req, res, next) => {
+    const { projectId } = req.params;
+    const { userId } = req.authSession;
+    debug(`Get project with id: ${projectId} (user id ${userId})`);
+    projects
+        .getById({
+            projectId,
+            userId,
+        })
+        .then((projects) => {
+            res.json(projects);
+        })
+        .catch((err) => {
+            debug(err);
+            next(Boom.badRequest(errConstants.DB_ERROR));
+        });
+};
+
 exports.add = (req, res, next) => {
     const projectsData = {
         project: req.body,

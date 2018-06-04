@@ -21,7 +21,7 @@ class SingleProjectView extends React.PureComponent {
 
     componentDidMount() {
         const { loadSingleProject, params } = this.props;
-        loadSingleProject(params.taskId);
+        loadSingleProject(params.projectId);
     }
 
     submitProject = () => {};
