@@ -1,85 +1,85 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
+import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import ProjectsListItem from './ProjectsListItem';
-import { clearEntity, selectProject } from '../../model/selectedEntity/selectedEntityActions';
 
 class ProjectsList extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.filterProjects = (filter, projects) => {
-            switch (filter) {
-                case 'active':
-                    return projects.filter(item => item.tasks.length && item.tasks.length > 0);
-                case 'empty':
-                    return projects.filter(item => !item.tasks.length || item.tasks.length === 0);
-                case 'all':
-                default:
-                    return projects;
-            }
-        };
+    filterProjects(filter, projects) {
+        switch (filter) {
+            case 'active':
+                return projects.filter(item => item.tasks.length && item.tasks.length > 0);
+            case 'empty':
+                return projects.filter(item => !item.tasks.length || item.tasks.length === 0);
+            case 'all':
+            default:
+                return projects;
+        }
     }
 
-    componentWillUnmount() {
-        const { clearEntity } = this.props;
-        clearEntity(entityConst.ENTITY_PROJECT);
+    renderActive() {
+        const { projects } = this.props;
+        const activeProjects = this.filterProjects('active', projects);
+        if (activeProjects.length > 0) {
+            return (
+                <div className='form-group'>
+                    <h4>Active</h4>
+                    <div className='row'>
+                        {this.filterProjects('active', projects).map(project => (
+                            <div
+                                className='col-6 col-md-3'
+                                key={`project-${project.id}`}
+                            >
+                                <ProjectsListItem project={project} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        return null;
+    }
+
+    renderEmpty() {
+        const { projects } = this.props;
+        const emptyProjects = this.filterProjects('empty', projects);
+        if (emptyProjects.length > 0) {
+            return (
+                <div className='form-group'>
+                    <h4>Other</h4>
+                    <div className='row'>
+                        {emptyProjects.map(project => (
+                            <div
+                                className='col-6 col-md-3'
+                                key={`project-${project.id}`}
+                            >
+                                <ProjectsListItem project={project} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        return null;
     }
 
     render() {
-        const { projects, selectProject } = this.props;
+
 
         return (
-            <div>
-                <h4>Active</h4>
-                <div className='row'>
-                    {this.filterProjects('active', projects).map(project => (
-                        <div
-                            className='col-6 col-md-3'
-                            key={`project-${project.id}`}
-                        >
-                            <ProjectsListItem project={project} />
-                        </div>
-                    ))}
-                </div>
-                <h4>Other</h4>
-                <div className='row'>
-                    {this.filterProjects('empty', projects).map(project => (
-                        <div
-                            className='col-6 col-md-3'
-                            key={`project-${project.id}`}
-                        >
-                            <ProjectsListItem project={project} />
-                        </div>
-                    ))}
-                </div>
-                <button
-                    className='btn btn-light'
-                    onClick={() => {
-                        selectProject({});
-                    }}
-                    data-qa='new-project'
-                >
-                    New Project
-                </button>
-            </div>
+            <ErrorBoundary componentName='ProjectsList'>
+                {this.renderActive()}
+                {this.renderEmpty()}
+            </ErrorBoundary>
         );
     }
 }
 
 ProjectsList.propTypes = {
-    projects: PropTypes.arrayOf(PropTypes.object),
+    projects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 ProjectsList.defaultProps = {
     projects: [],
 };
 
-export default connect(
-    () => ({}),
-    {
-        clearEntity,
-        selectProject,
-    }
-)(ProjectsList);
+export default ProjectsList;
