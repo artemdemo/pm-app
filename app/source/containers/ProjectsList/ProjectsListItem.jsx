@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import propTypes from 'prop-types';
 import pluralize from 'pluralize';
 import _get from 'lodash/get';
@@ -36,8 +35,4 @@ ProjectsListItem.defaultProps = {
 
 
 // ToDo: Why ProjectsListItem is connected??
-export default connect(
-    state => ({
-        tasks: state.tasks,
-    })
-)(ProjectsListItem);
+export default ProjectsListItem;

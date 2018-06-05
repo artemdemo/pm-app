@@ -10,12 +10,26 @@ import {
 import * as location from '../../services/location';
 
 class SingleProjectView extends React.PureComponent {
+    static getDerivedStateFromProps(props, state) {
+        const { projects } = props;
+        if (projects.singleData !== state.prevSingleData) {
+            const project = projects.singleData;
+            return {
+                name: project.name || '',
+                description: project.description || '',
+                prevSingleData: project,
+            };
+        }
+        return null;
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
             name: '',
             description: '',
+            prevSingleData: null,
         };
     }
 
