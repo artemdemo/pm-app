@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ScrumBoard from './ScrumBoard';
-import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
-import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 import { showModal, hideModal } from '../../model/modal/modalActions';
 import SingleBoard from '../SingleBoard/SingleBoard';
 
@@ -21,11 +19,6 @@ class BoardsList extends React.PureComponent {
                 onCancel={() => hideModal()}
             />);
         };
-    }
-
-    componentWillUnmount() {
-        const { clearEntity } = this.props;
-        clearEntity(entityConst.ENTITY_TASK);
     }
 
     render() {
@@ -53,7 +46,6 @@ export default connect(
     state => ({
         boards: state.boards,
     }), {
-        clearEntity,
         showModal,
         hideModal,
     }
