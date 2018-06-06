@@ -62,7 +62,7 @@ const getById = async function(projectData) {
     return {
         ...project,
         tasks: relations.map(item => ({
-            id: item.project_id,
+            id: item.task_id,
             name: item.task_name,
         })),
     };

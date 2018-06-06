@@ -30,8 +30,8 @@ exports.one = (req, res, next) => {
             projectId,
             userId,
         })
-        .then((projects) => {
-            res.json(projects);
+        .then((project) => {
+            res.json(project);
         })
         .catch((err) => {
             debug(err);
