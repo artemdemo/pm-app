@@ -8,6 +8,7 @@ import {
     deleteProject,
 } from '../../model/projects/projectsActions';
 import * as location from '../../services/location';
+import Project from '../../model/projects/Project';
 
 class SingleProjectView extends React.PureComponent {
     static getDerivedStateFromProps(props, state) {
@@ -40,7 +41,15 @@ class SingleProjectView extends React.PureComponent {
         }
     }
 
-    submitProject = () => {};
+    submitProject = () => {
+        const { updateProject, projects } = this.props;
+        const project = new Project({
+            ...projects.singleData,
+            name: this.state.name,
+            description: this.state.description,
+        });
+        updateProject(project);
+    };
 
     deleteProject = () => {};
 
