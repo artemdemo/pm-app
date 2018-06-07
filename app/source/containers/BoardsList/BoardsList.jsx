@@ -31,7 +31,7 @@ class BoardsList extends React.PureComponent {
                     ))}
                 </div>
                 <button
-                    className='btn btn-default'
+                    className='btn btn-light'
                     onClick={this.addNewBoard}
                     data-qa='new-board'
                 >
