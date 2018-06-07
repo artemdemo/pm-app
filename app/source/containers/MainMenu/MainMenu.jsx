@@ -28,17 +28,13 @@ class MainMenu extends React.PureComponent {
     }
 
     render() {
-        const { auth } = this.props;
-
         return (
             <div className='main-menu'>
-                <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+                <nav className='navbar navbar-expand-sm navbar-light bg-light'>
                     <Link className='navbar-brand' to='/'>&lt;PM&gt;</Link>
                     <button
                         className='navbar-toggler'
                         type='button'
-                        aria-controls='navbarSupportedContent'
-                        aria-expanded='false'
                         aria-label='Toggle navigation'
                     >
                         <span className='navbar-toggler-icon' />

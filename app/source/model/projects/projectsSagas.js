@@ -4,6 +4,8 @@ import * as projectsConst from './projectsConst';
 import {
     projectsLoaded,
     projectsLoadingError,
+    singleProjectLoaded,
+    singleProjectsLoadingError,
     projectAdded,
     projectAddingError,
     projectUpdated,
@@ -22,6 +24,20 @@ function* loadProjectsSaga() {
             yield put(projectsLoaded(result.body));
         } catch (err) {
             yield put(projectsLoadingError(err));
+        }
+    }
+}
+
+function* loadSingleProjectSaga() {
+    while (true) {
+        try {
+            const { id } = yield take(projectsConst.LOAD_SINGLE_PROJECT);
+            const result = yield request
+                .get(`/api/projects/${id}`)
+                .promise();
+            yield put(singleProjectLoaded(result.body));
+        } catch (err) {
+            yield put(singleProjectsLoadingError(err));
         }
     }
 }
@@ -73,6 +89,7 @@ function* deleteProjectSaga() {
 export default function* projectsSagas() {
     yield [
         loadProjectsSaga(),
+        loadSingleProjectSaga(),
         addProjectSaga(),
         updateProjectSaga(),
         deleteProjectSaga(),

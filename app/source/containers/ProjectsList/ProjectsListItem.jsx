@@ -1,62 +1,29 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import propTypes from 'prop-types';
+import pluralize from 'pluralize';
+import _get from 'lodash/get';
 import emoji from '../../utils/emoji/emoji';
-import { selectProject } from '../../model/selectedEntity/selectedEntityActions';
+import * as location from '../../services/location';
 
 import './ProjectsListItem.less';
 
-class ProjectsListItem extends React.PureComponent {
-    filterTasks(filter) {
-        const { tasks, project } = this.props;
-        if (project.tasks.length === 0) {
-            return [];
-        }
-        switch (filter) {
-            case 'done':
-                return tasks.data.filter((task) => {
-                    return task.done === true && project.tasks.indexOf(task.id) !== -1;
-                });
-            case 'all':
-            default:
-                return tasks.data.filter((task) => {
-                    return project.tasks.indexOf(task.id) !== -1;
-                });
-        }
-    }
-
-    renderTasks() {
-        const { project } = this.props;
-        if (project.tasks.length > 0) {
-            return (
-                <React.Fragment>
-                    <div className='text-muted'>
-                        Total: {this.filterTasks('all').length}
-                    </div>
-                    <div className='text-muted'>
-                        Done: {this.filterTasks('done').length}
-                    </div>
-                </React.Fragment>
-            );
-        }
-        return null;
-    }
-
-    render() {
-        const { project, selectProject } = this.props;
-        return (
-            <div
-                className='projects-list-item'
-                onClick={() => selectProject(project)}
-            >
-                <div className='projects-list-item__title'>
-                    {emoji(project.name)}
-                </div>
-                {this.renderTasks()}
+const ProjectsListItem = (props) => {
+    const { project } = props;
+    const tasksAmount = _get(project, 'tasks.length', 0);
+    return (
+        <div
+            className='projects-list-item'
+            onClick={() => location.push(`/projects/${project.id}`)}
+        >
+            <div className='projects-list-item__title'>
+                {emoji(project.name)}
             </div>
-        );
-    }
-}
+            <div className='text-muted'>
+                {pluralize('task', tasksAmount, true)}
+            </div>
+        </div>
+    );
+};
 
 ProjectsListItem.propTypes = {
     project: propTypes.shape({}),
@@ -68,10 +35,4 @@ ProjectsListItem.defaultProps = {
 
 
 // ToDo: Why ProjectsListItem is connected??
-export default connect(
-    state => ({
-        tasks: state.tasks,
-    }), {
-        selectProject,
-    }
-)(ProjectsListItem);
+export default ProjectsListItem;

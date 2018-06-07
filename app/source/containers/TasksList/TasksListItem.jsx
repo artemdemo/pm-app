@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import emoji from '../../utils/emoji/emoji';
 import { addTask } from '../../model/tasks/tasksActions';
 import OkCircle from '../../components/OkCircle/OkCircle';
-import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 import * as location from '../../services/location';
 import Task from '../../model/tasks/Task';
 
@@ -30,11 +28,9 @@ class TasksListItem extends React.PureComponent {
     toggleDone = () => {};
 
     taskClick = () => {
-        const { task, clearEntity } = this.props;
+        const { task } = this.props;
         if (task.id) {
             location.push(`/tasks/${task.id}`);
-        } else {
-            clearEntity(entityConst.ENTITY_TASK);
         }
     };
 
@@ -119,7 +115,6 @@ TasksListItem.defaultProps = {
 export default connect(
     () => ({}),
     {
-        clearEntity,
         addTask,
     }
 )(TasksListItem);

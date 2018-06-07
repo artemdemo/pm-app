@@ -35,6 +35,12 @@ const routes = [
             {
                 path: 'projects',
                 _component: 'ProjectsView',
+                childRoutes: [
+                    {
+                        path: ':projectId',
+                        _component: 'SingleProjectView',
+                    },
+                ],
             },
             {
                 path: 'login',

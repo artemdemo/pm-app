@@ -1,6 +1,7 @@
 const debug = require('debug')('pm:controllers:projects');
 const Boom = require('boom');
 const _isNumber = require('lodash/isNumber');
+const _get = require('lodash/get');
 const projects = require('../models/projects');
 const projectsTasksRelations = require('../models/projects_tasks_relations');
 const errConstants = require('../constants/error');
@@ -13,6 +14,24 @@ exports.all = (req, res, next) => {
         })
         .then((projects) => {
             res.json(projects);
+        })
+        .catch((err) => {
+            debug(err);
+            next(Boom.badRequest(errConstants.DB_ERROR));
+        });
+};
+
+exports.one = (req, res, next) => {
+    const { projectId } = req.params;
+    const { userId } = req.authSession;
+    debug(`Get project with id: ${projectId} (user id ${userId})`);
+    projects
+        .getById({
+            projectId,
+            userId,
+        })
+        .then((project) => {
+            res.json(project);
         })
         .catch((err) => {
             debug(err);
@@ -51,11 +70,11 @@ exports.update = (req, res, next) => {
         .updateProject(projectsData)
         .then((updatedData) => {
             debug(`Project id ${id} updated`);
-            if (tasks && _isNumber(id)) {
+            if (_get(tasks, 'length', 0) > 0 && _isNumber(id)) {
                 return projectsTasksRelations
-                    .addRelation(id, tasks)
+                    .addRelation(id, tasks.map(item => item.id))
                     .then(() => {
-                        debug(`Added relations to project id ${id} and tasks ${tasks}`);
+                        debug(`Added relations to project id ${id} and tasks ${JSON.stringify(tasks)}`);
                         res.json(updatedData);
                     });
             }

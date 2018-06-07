@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
@@ -89,16 +88,6 @@ class SingleBoard extends React.PureComponent {
                 </button>
             );
         };
-        const renderLoadingSpinner = () => {
-            if (this.state.loadingData) {
-                return (
-                    <span className='btn btn-link'>
-                        <LoadingSpinner />
-                    </span>
-                );
-            }
-            return null;
-        };
         const renderDeleteButton = () => {
             if (board && board.id) {
                 return (
@@ -176,7 +165,6 @@ class SingleBoard extends React.PureComponent {
                                 Cancel
                             </button>
                         </span>
-                        {renderLoadingSpinner()}
                     </div>
                     <div className='pull-right'>
                         {renderDeleteButton()}

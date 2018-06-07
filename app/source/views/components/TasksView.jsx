@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import emoji from '../../utils/emoji/emoji';
-import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
 import RadioMenu from '../../components/RadioMenu/RadioMenu';
-import { clearEntity } from '../../model/selectedEntity/selectedEntityActions';
 import TasksList from '../../containers/TasksList/TasksList';
 
 class TasksView extends React.PureComponent {
@@ -20,11 +18,6 @@ class TasksView extends React.PureComponent {
             filteredByProjectId: 'all',
             filteredByStatusId: this.statusMenu[0].id,
         };
-    }
-
-    componentWillUnmount() {
-        const { clearEntity } = this.props;
-        clearEntity(entityConst.ENTITY_TASK);
     }
 
     selectRadioItem(item) {
@@ -87,7 +80,5 @@ export default connect(
     state => ({
         tasks: state.tasks,
         projects: state.projects,
-    }), {
-        clearEntity,
-    }
+    })
 )(TasksView);

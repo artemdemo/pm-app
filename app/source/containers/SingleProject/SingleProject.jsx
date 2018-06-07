@@ -6,7 +6,6 @@ import { filterTasks } from '../../utils/tasks';
 import { deleteProject, updateProject, addProject } from '../../model/projects/projectsActions';
 import SelectList from '../../components/SelectList/SelectList';
 import NarrowList from '../../components/NarrowList/NarrowList';
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import DeleteButton from '../../components/DeleteButton/DeleteButton';
 import InputMd from '../../components/InputMd/InputMd';
 import TextareaMd from '../../components/TextareaMd/TextareaMd';
@@ -94,17 +93,6 @@ class SingleProject extends React.PureComponent {
         if (project && project.id) {
             return (
                 <DeleteButton onDelete={this.deleteProject.bind(this)} />
-            );
-        }
-        return null;
-    }
-
-    renderLoadingSpinner() {
-        if (this.state.loadingData) {
-            return (
-                <span className='btn btn-link'>
-                    <LoadingSpinner />
-                </span>
             );
         }
         return null;
@@ -213,7 +201,6 @@ class SingleProject extends React.PureComponent {
                                 Cancel
                             </button>
                         </span>
-                        {this.renderLoadingSpinner()}
                     </div>
                     <div className='col-4'>
                         {this.renderDeleteButton()}

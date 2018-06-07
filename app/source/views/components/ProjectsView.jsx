@@ -1,35 +1,27 @@
 import React from 'react';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
-import * as entityConst from '../../model/selectedEntity/selectedEntityConst';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import ProjectsList from '../../containers/ProjectsList/ProjectsList';
-import SingleProject from '../../containers/SingleProject/SingleProject';
+import * as location from '../../services/location';
 
 import '../list-container.less';
 
 const ProjectsView = (props) => {
-    const { selectedEntity, projects } = props;
-    const selectedProject = !!selectedEntity && selectedEntity.type === entityConst.ENTITY_PROJECT ?
-        selectedEntity.entity :
-        undefined;
-    const classView = classnames({
-        'list-container': true,
-        'list-container_open-right-panel': !!selectedProject,
-    });
+    const { projects } = props;
     return (
-        <div className={classView}>
-            <div className='list-container__list'>
-                <ErrorBoundary componentName='ProjectsList'>
-                    <ProjectsList projects={projects.data} />
-                </ErrorBoundary>
-            </div>
-            <div className='list-container__panel'>
-                <ErrorBoundary componentName='SingleProject'>
-                    <SingleProject project={selectedProject} />
-                </ErrorBoundary>
-            </div>
-        </div>
+        <React.Fragment>
+            <p>
+                <button
+                    className='btn btn-light'
+                    onClick={() => location.push('projects/new')}
+                >
+                    New Project
+                </button>
+            </p>
+            <ProjectsList
+                projects={projects.data}
+            />
+            {props.children}
+        </React.Fragment>
     );
 };
 

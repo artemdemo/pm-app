@@ -15,6 +15,7 @@ router.delete('/boards/:boardId', boardsController.delete);
 router.get('/projects', projectsController.all);
 router.post('/projects', projectsController.add);
 router.put('/projects', projectsController.update);
+router.get('/projects/:projectId', projectsController.one);
 router.delete('/projects/:projectId', projectsController.delete);
 router.get('/projects/:taskId/task/:projectId', projectsController.connectTask);
 router.delete('/api/projects/:taskId/task/:projectId', projectsController.disconnectTask);

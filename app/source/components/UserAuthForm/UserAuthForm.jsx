@@ -12,7 +12,8 @@ class UserAuthForm extends React.PureComponent {
         this.usernameRef = React.createRef();
     }
 
-    handleSubmit = () => {
+    handleSubmit = (e) => {
+        e.preventDefault();
         const { onSubmit, signup } = this.props;
         const data = {
             email: this.emailRef.current.value,
@@ -58,7 +59,10 @@ class UserAuthForm extends React.PureComponent {
 
     render() {
         return (
-            <div className='user-auth-form'>
+            <form
+                className='user-auth-form'
+                onSubmit={this.handleSubmit}
+            >
                 {this.renderTitle()}
                 {this.renderUsername()}
                 <label htmlFor='inputEmail' className='sr-only'>
@@ -87,13 +91,12 @@ class UserAuthForm extends React.PureComponent {
                 />
                 <button
                     className='btn btn-lg btn-primary btn-block'
-                    type='button'
-                    onClick={this.handleSubmit}
+                    type='submit'
                 >
                     Login
                 </button>
                 {this.props.children}
-            </div>
+            </form>
         );
     }
 }

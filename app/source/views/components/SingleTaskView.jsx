@@ -1,32 +1,36 @@
 import React from 'react';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import _isString from 'lodash/isString';
-import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import { createSelector } from "reselect";
 import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import ProjectLabels from '../../components/SingleTask/ProjectLabels';
 import {
     updateTask,
-    loadSingleTask,
     deleteTask,
 } from '../../model/tasks/tasksActions';
 import Task from '../../model/tasks/Task';
 import * as location from '../../services/location';
 
+const getCurrentTask = createSelector(
+    props => props.tasks.data,
+    props => props.params.taskId,
+    (projects, taskId) => {
+        return projects.find(item => String(item.id) === taskId);
+    },
+);
+
 class SingleTaskView extends React.PureComponent {
     static getDerivedStateFromProps(props, state) {
-        const { tasks } = props;
-        if (tasks.singleData !== state.prevSingleData) {
-            const task = tasks.singleData;
+        const task = getCurrentTask(props);
+        if (task && task !== state.prevTask) {
             return {
                 name: task.name || '',
                 description: task.description || '',
                 done: task.done || false,
                 selectedProjects: task.projects || [],
-                prevSingleData: task,
+                prevTask: task,
             };
         }
         return null;
@@ -39,14 +43,9 @@ class SingleTaskView extends React.PureComponent {
             name: '',
             description: '',
             done: false,
-            prevSingleData: null,
+            prevTask: null,
             selectedProjects: [],
         };
-    }
-
-    componentDidMount() {
-        const { loadSingleTask, params } = this.props;
-        loadSingleTask(params.taskId);
     }
 
     connectProject = (project) => {
@@ -69,15 +68,26 @@ class SingleTaskView extends React.PureComponent {
     };
 
     submitTask = () => {
-        const { updateTask, tasks } = this.props;
-        const task = new Task({
-            ...tasks.singleData,
-            name: this.state.name,
-            description: this.state.description,
-            done: this.state.done,
-            projects: this.state.selectedProjects.map(item => item.id),
-        });
-        updateTask(task);
+        const { updateTask, params } = this.props;
+        const currentTask = getCurrentTask(this.props);
+        if (params.taskId === 'new') {
+            const task = new Task({
+                name: this.state.name,
+                description: this.state.description,
+                done: this.state.done,
+                projects: this.state.selectedProjects.map(item => item.id),
+            });
+            updateTask(task);
+        } else if (currentTask) {
+            const task = new Task({
+                ...currentTask,
+                name: this.state.name,
+                description: this.state.description,
+                done: this.state.done,
+                projects: this.state.selectedProjects.map(item => item.id),
+            });
+            updateTask(task);
+        }
         location.push('/tasks');
     };
 
@@ -167,7 +177,6 @@ export default connect(
         projects: state.projects,
     }), {
         updateTask,
-        loadSingleTask,
         deleteTask,
     }
 )(SingleTaskView);

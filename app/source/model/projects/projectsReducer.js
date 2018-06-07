@@ -2,8 +2,11 @@ import * as projectsConst from './projectsConst';
 
 const initState = {
     data: [],
+    singleData: {},
     loading: false,
     loadingError: null,
+    loadingSingle: false,
+    loadingSingleError: null,
     updating: false,
     updatingError: null,
     adding: false,
@@ -34,6 +37,27 @@ export default function projects(state = initState, action) {
                 ...state,
                 loading: false,
                 loadingError: action.err,
+            };
+        /*
+         * Load single task
+         */
+        case projectsConst.LOAD_SINGLE_PROJECT:
+            return {
+                ...state,
+                singleData: {},
+                loadingSingle: true,
+            };
+        case projectsConst.SINGLE_PROJECT_LOADED:
+            return {
+                ...state,
+                singleData: action.data,
+                loadingSingle: false,
+            };
+        case  projectsConst.SINGLE_PROJECT_LOADING_ERROR:
+            return {
+                ...state,
+                loadingSingle: false,
+                loadingSingleError: action.err,
             };
         /*
          * Add

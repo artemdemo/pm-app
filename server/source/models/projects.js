@@ -5,28 +5,67 @@ const { queryRows } = require('../utils/db');
 
 const tableName = 'projects';
 
+const PROJECT_FIELDS = ['id', 'name', 'description', 'added', 'updated'];
+
+const PROJECTS_QUERY = `SELECT projects_tasks_relations.task_id,
+                               projects_tasks_relations.project_id,
+                               tasks.name AS task_name
+                        FROM projects
+                        INNER JOIN projects_tasks_relations
+                                ON projects.id = projects_tasks_relations.project_id
+                        INNER JOIN tasks
+                                ON tasks.id = projects_tasks_relations.task_id
+                        WHERE projects.id = ?;`;
+
 const getAll = async function(projectsData) {
     const projects = await queryRows({
         tableName,
-        fields: ['id', 'name', 'description', 'added', 'updated'],
+        fields: PROJECT_FIELDS,
         userId: projectsData.userId,
     });
     const promisesList = [];
     projects.forEach((project) => {
-        const tasksQuery = `SELECT projects_tasks_relations.task_id,
-                                   projects_tasks_relations.project_id
-                            FROM projects
-                            INNER JOIN projects_tasks_relations
-                                    ON projects.id = projects_tasks_relations.project_id
-                            WHERE projects.id = ?;`;
-        promisesList.push(DB.queryRows(tasksQuery, [project.id]));
+        promisesList.push(DB.queryRows(PROJECTS_QUERY, [project.id]));
     });
 
     const resultsList = await Promise.all(promisesList);
     resultsList.forEach((data, index) => {
-        projects[index].tasks = data.map(item => item.task_id);
+        projects[index].tasks = data.map((item) => ({
+            id: item.task_id,
+            name: item.task_name,
+        }));
     });
     return projects;
+};
+
+/**
+ * Get project by its id
+ * @param projectData {Object}
+ * @param projectData.userId {Number}
+ * @param projectData.projectId {Number}
+ * @return {Promise<Object>}
+ */
+const getById = async function(projectData) {
+    const projects = await queryRows({
+        tableName,
+        fields: PROJECT_FIELDS,
+        userId: projectData.userId,
+        where: `projects.id = ${projectData.projectId}`,
+    });
+
+    if (projects.length === 0) {
+        return null;
+    }
+    const project = projects[0];
+    const relations = await DB.queryRows(PROJECTS_QUERY, [project.id]);
+
+    return {
+        ...project,
+        tasks: relations.map(item => ({
+            id: item.task_id,
+            name: item.task_name,
+        })),
+    };
 };
 
 
@@ -117,6 +156,7 @@ const deleteProject = async function(projectData) {
 
 module.exports = {
     getAll,
+    getById,
     addNew,
     updateProject,
     deleteProject,

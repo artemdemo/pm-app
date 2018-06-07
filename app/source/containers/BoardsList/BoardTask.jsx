@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { filterProjects } from '../../utils/tasks';
 import Icon from '../../components/Icon/Icon';
 import * as taskConst from '../../model/tasks/tasksConst';
-import { selectTask } from '../../model/selectedEntity/selectedEntityActions';
 
 import './BoardTask.less';
 
@@ -16,8 +14,7 @@ class BoardTask extends React.PureComponent {
     }
 
     render() {
-        const { task, projects, settings } = this.props;
-        const { selectedProjects } = filterProjects(task, projects.data);
+        const { task, settings } = this.props;
 
         const renderSP = () => {
             if (task.sp > 0) {
@@ -94,7 +91,5 @@ export default connect(
         tasks: state.tasks,
         projects: state.projects,
         settings: state.settings,
-    }), {
-        selectTask,
-    }
+    })
 )(BoardTask);
