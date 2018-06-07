@@ -1,20 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { createSelector } from 'reselect';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import {
+    addProject,
     updateProject,
-    loadSingleProject,
     deleteProject,
 } from '../../model/projects/projectsActions';
 import * as location from '../../services/location';
 import Project from '../../model/projects/Project';
 
+const getCurrentProject = createSelector(
+    props => props.projects.data,
+    props => props.params.projectId,
+    (projects, projectId) => {
+        return projects.find(item => String(item.id) === projectId);
+    },
+);
+
 class SingleProjectView extends React.PureComponent {
     static getDerivedStateFromProps(props, state) {
-        const { projects } = props;
-        if (projects.singleData !== state.prevSingleData) {
-            const project = projects.singleData;
+        const project = getCurrentProject(props);
+        if (project && project !== state.prevProject) {
             return {
                 name: project.name || '',
                 description: project.description || '',
@@ -30,28 +38,38 @@ class SingleProjectView extends React.PureComponent {
         this.state = {
             name: '',
             description: '',
-            prevSingleData: null,
+            prevProject: null,
         };
     }
 
-    componentDidMount() {
-        const { loadSingleProject, params } = this.props;
-        if (params.projectId !== 'new') {
-            loadSingleProject(params.projectId);
-        }
-    }
-
     submitProject = () => {
-        const { updateProject, projects } = this.props;
-        const project = new Project({
-            ...projects.singleData,
-            name: this.state.name,
-            description: this.state.description,
-        });
-        updateProject(project);
+        const { updateProject, addProject, params } = this.props;
+        const currentProject = getCurrentProject(this.props);
+        if (params.projectId === 'new') {
+            const project = new Project({
+                name: this.state.name,
+                description: this.state.description,
+            });
+            addProject(project);
+        } else if (currentProject) {
+            const project = new Project({
+                ...currentProject,
+                name: this.state.name,
+                description: this.state.description,
+            });
+            updateProject(project);
+        }
+        location.push('/projects');
     };
 
-    deleteProject = () => {};
+    deleteProject = () => {
+        const { deleteProject } = this.props;
+        const currentProject = getCurrentProject(this.props);
+        if (currentProject) {
+            deleteProject(currentProject.id);
+        }
+        location.push('/projects');
+    };
 
     render() {
         return (
@@ -95,7 +113,7 @@ class SingleProjectView extends React.PureComponent {
                     <div className='col-4'>
                         <button
                             className='btn btn-danger'
-                            onClick={this.deleteTask}
+                            onClick={this.deleteProject}
                         >
                             Delete
                         </button>
@@ -110,8 +128,8 @@ export default connect(
     state => ({
         projects: state.projects,
     }), {
+        addProject,
         updateProject,
-        loadSingleProject,
         deleteProject,
     }
 )(SingleProjectView);

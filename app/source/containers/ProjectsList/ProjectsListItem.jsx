@@ -13,7 +13,7 @@ const ProjectsListItem = (props) => {
     return (
         <div
             className='projects-list-item'
-            onClick={() => location.push(`projects/${project.id}`)}
+            onClick={() => location.push(`/projects/${project.id}`)}
         >
             <div className='projects-list-item__title'>
                 {emoji(project.name)}
