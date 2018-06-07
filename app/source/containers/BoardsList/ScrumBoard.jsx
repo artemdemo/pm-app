@@ -5,7 +5,6 @@ import BoardTask from './BoardTask';
 import SingleBoard from '../SingleBoard/SingleBoard';
 import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContainer';
 import { DragItem } from '../../components/DragNDrop/DragItem';
-import { showModal, hideModal } from '../../model/modal/modalActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import { updateTaskPosition } from '../../model/tasks/tasksActions';
 import Icon from '../../components/Icon/Icon';
@@ -43,16 +42,7 @@ class ScrumBoard extends React.PureComponent {
         updateTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 
-    editBoard() {
-        const { showModal, board, hideModal } = this.props;
-        showModal(<SingleBoard
-            board={board}
-            className='single-board'
-            onSave={() => hideModal()}
-            onDelete={() => hideModal()}
-            onCancel={() => hideModal()}
-        />);
-    }
+    editBoard() {}
 
     render() {
         const { board } = this.props;
@@ -100,8 +90,6 @@ export default connect(
     state => ({
         tasks: state.tasks,
     }), {
-        showModal,
-        hideModal,
         updateTaskPosition,
     }
 )(ScrumBoard);
