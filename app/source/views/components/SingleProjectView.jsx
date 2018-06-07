@@ -26,7 +26,7 @@ class SingleProjectView extends React.PureComponent {
             return {
                 name: project.name || '',
                 description: project.description || '',
-                prevSingleData: project,
+                prevProject: project,
             };
         }
         return null;
