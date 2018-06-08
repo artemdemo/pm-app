@@ -28,7 +28,7 @@ const createPositionsQuery = (boards) => {
  */
 const getAllBoards = userId => queryRows({
     tableName,
-    fields: ['id', 'title', 'description', 'id_position'],
+    fields: ['id', 'name', 'description', 'id_position'],
     userId,
 });
 
@@ -43,7 +43,7 @@ const getAll = boardsData => getAllBoards(boardsData.userId)
     .then((boards) => {
         return boards.map(board => ({
             id: board.id,
-            title: board.title,
+            name: board.name,
             description: board.description,
             id_position: board.id_position,
         }));
@@ -54,7 +54,7 @@ const getAll = boardsData => getAllBoards(boardsData.userId)
  * @param newBoardData {Object}
  * @param newBoardData.userId {String}
  * @param newBoardData.board {Object}
- * @param newBoardData.board.title {String}
+ * @param newBoardData.board.name {String}
  * @param newBoardData.board.description {String}
  * @param newBoardData.board.id_position {Number}
  * @returns {Promise}
@@ -65,7 +65,7 @@ const addNew = async function(newBoardData) {
     const boards = await getAllBoards(newBoardData.userId);
 
     const newBoard = {
-        title: newBoardData.board.title,
+        name: newBoardData.board.name,
         description: newBoardData.board.description,
         added: now.format('YYYY-MM-DD HH:mm:ss'),
         updated: now.format('YYYY-MM-DD HH:mm:ss'),
@@ -117,7 +117,7 @@ const updateBoard = async function(boardData) {
         throw new Error('No boardData.board.id in given task');
     }
 
-    const allowedFields = ['title', 'description'];
+    const allowedFields = ['name', 'description'];
     allowedFields.forEach((field) => {
         if (boardData.board.hasOwnProperty(field)) {
             updateData[field] = boardData.board[field];

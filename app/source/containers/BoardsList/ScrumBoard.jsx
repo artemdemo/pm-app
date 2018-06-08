@@ -7,6 +7,7 @@ import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContaine
 import { DragItem } from '../../components/DragNDrop/DragItem';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import { updateTaskPosition } from '../../model/tasks/tasksActions';
+import { updateBoard } from '../../model/boards/boardsActions';
 
 import './ScrumBoard.less';
 
@@ -42,6 +43,7 @@ class ScrumBoard extends React.PureComponent {
     }
 
     menuClick = (itemName) => {
+        const { updateBoard } = this.props;
         switch (itemName) {
             case menuItemsMap.MOVE_LEFT:
             case menuItemsMap.MOVE_RIGHT:
@@ -62,7 +64,7 @@ class ScrumBoard extends React.PureComponent {
                             disableRight={utmostRight}
                         />
                     </div>
-                    <div className='board-title__name'>{board.title}</div>
+                    <div className='board-title__name'>{board.name}</div>
                 </div>
                 <DragItemsContainer
                     className='board-tasks'
@@ -100,6 +102,7 @@ export default connect(
     state => ({
         tasks: state.tasks,
     }), {
+        updateBoard,
         updateTaskPosition,
     }
 )(ScrumBoard);

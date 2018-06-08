@@ -22,16 +22,25 @@ const jwtMiddleware = jwt({
 
 const sessionMiddleware = (req, res, next) => {
     if (req.auth) {
-        sessions.getSession({
-            id: req.auth.id,
-        }).then((session) => {
-            req.authSession = {
-                id: session.id,
-                userId: session.user_id,
-                expiration: session.expiration,
-            };
-            next();
-        });
+        sessions
+            .getSession({
+                id: req.auth.id,
+            })
+            .then((session) => {
+                if (!session) {
+                    throw new Error(`There is no sessions for given id - ${req.auth.id}`);
+                }
+                req.authSession = {
+                    id: session.id,
+                    userId: session.user_id,
+                    expiration: session.expiration,
+                };
+                next();
+            })
+            .catch((err) => {
+                debug(err);
+                next(Boom.unauthorized());
+            })
     } else {
         const allowedUrls = [
             /\/api\/user\/login/,
