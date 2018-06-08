@@ -35,6 +35,9 @@ class BoardMenu extends React.PureComponent {
     handleMenuClick(itemName) {
         const { onClick } = this.props;
         onClick && onClick(itemName);
+        this.setState({
+            showDropdown: false,
+        });
     }
 
     renderMoveRight() {

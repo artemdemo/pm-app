@@ -8,6 +8,7 @@ import { DragItem } from '../../components/DragNDrop/DragItem';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import { updateTaskPosition } from '../../model/tasks/tasksActions';
 import { updateBoard } from '../../model/boards/boardsActions';
+import Board from '../../model/boards/Board';
 
 import './ScrumBoard.less';
 
@@ -43,11 +44,25 @@ class ScrumBoard extends React.PureComponent {
     }
 
     menuClick = (itemName) => {
-        const { updateBoard } = this.props;
+        const { updateBoard, board } = this.props;
+        let newBoard;
         switch (itemName) {
             case menuItemsMap.MOVE_LEFT:
+                newBoard = new Board({
+                    ...board,
+                    id_position: board.id_position - 1,
+                });
+                break;
             case menuItemsMap.MOVE_RIGHT:
+                newBoard = new Board({
+                    ...board,
+                    id_position: board.id_position + 1,
+                });
+                break;
             case menuItemsMap.EDIT:
+        }
+        if (newBoard) {
+            updateBoard(newBoard);
         }
     };
 

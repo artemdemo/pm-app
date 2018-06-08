@@ -1,6 +1,9 @@
 const debug = require('debug')('pm:models:boards');
 const moment = require('moment');
 const DB = require('sqlite-crud');
+const _sortBy = require('lodash/sortBy');
+const _get = require('lodash/get');
+const arrayMove = require('array-move');
 const { queryRows } = require('../utils/db');
 
 const tableName = 'boards';
@@ -130,14 +133,6 @@ const updateBoard = async function(boardData) {
 
     updateData.updated = now.format('YYYY-MM-DD HH:mm:ss');
 
-    const boards = await getAllBoards(boardData.userId);
-    const updatedBoard = Object.assign(updateData, {
-        id: boardData.board.id,
-        id_position: boardData.board.id_position,
-    });
-
-    debug(updatedBoard);
-
     await DB.updateRow(tableName, updateData, [{
         column: 'id',
         comparator: '=',
@@ -148,27 +143,33 @@ const updateBoard = async function(boardData) {
         value: boardData.userId,
     }]);
 
-    const boardsList = [];
-    let newBoardAdded = false;
+    let boards = await getAllBoards(boardData.userId);
+    boards = _sortBy(boards, ['id_position']);
 
-    boards.forEach((board, i) => {
-        if (board.id !== updatedBoard.id) {
-            if (updatedBoard.id_position === i) {
-                newBoardAdded = true;
-                boardsList.push(updatedBoard);
-            }
-            boardsList.push(board);
-        }
+    const updatedBoard = Object.assign(updateData, {
+        id: boardData.board.id,
+        id_position: boardData.board.id_position,
     });
-    if (!newBoardAdded) {
-        boardsList.push(updatedBoard);
-    }
 
-    const boardsListWithIdPosition = boardsList.map((board, index) => Object.assign(board, {
-        id_position: index,
-    }));
+    debug(updatedBoard);
 
-    const query = createPositionsQuery(boardsListWithIdPosition);
+    const prevPosition = (() => {
+        const board = boards.find(item => item.id === updatedBoard.id);
+        return _get(board, 'id_position', undefined);
+    })();
+
+    const updatedBoardsList = (() => {
+        const newPosition = updatedBoard.id_position;
+        if (prevPosition != null && prevPosition !== newPosition) {
+            const movedBoards = arrayMove(boards, prevPosition, newPosition);
+            return movedBoards.map((board, index) => Object.assign(board, {
+                id_position: index,
+            }));
+        }
+        return boards;
+    })();
+
+    const query = createPositionsQuery(updatedBoardsList);
     return DB.run(query)
         .then(() => {
             debug(`Board id ${boardData.board.id} moved`);

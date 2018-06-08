@@ -19,6 +19,7 @@
   "homepage": "https://github.com/artemdemo/pm-app#readme",
   "dependencies": {
     "aguid": "^2.0.0",
+    "array-move": "^1.0.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "boom": "^7.2.0",
