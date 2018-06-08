@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { createSelector } from 'reselect';
 import {
     addBoard,
 } from '../../model/boards/boardsActions';
 import EntityModal from '../../components/EntityModal/EntityModal';
+import EntityControllers from '../../components/EntityControllers/EntityControllers';
+import * as location from '../../services/location';
 
 const getCurrentBoard = createSelector(
     props => props.boards.data,
@@ -36,6 +37,10 @@ class SingleBoardView extends React.PureComponent {
         };
     }
 
+    submitBoard = () => {};
+
+    deleteBoard = () => {};
+
     render() {
         return (
             <EntityModal>
@@ -48,6 +53,12 @@ class SingleBoardView extends React.PureComponent {
                         value={this.state.name}
                     />
                 </div>
+
+                <EntityControllers
+                    onSave={this.submitBoard}
+                    onClose={() => location.push('/scrum')}
+                    onDelete={this.deleteBoard}
+                />
             </EntityModal>
         );
     }

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createSelector } from 'reselect';
 import EntityModal from '../../components/EntityModal/EntityModal';
+import EntityControllers from '../../components/EntityControllers/EntityControllers';
 import {
     addProject,
     updateProject,
@@ -93,32 +94,11 @@ class SingleProjectView extends React.PureComponent {
                     />
                 </div>
 
-                <div className='row justify-content-between'>
-                    <div className='col-6'>
-                        <span className='buttons-group'>
-                            <button
-                                className='btn btn-primary'
-                                onClick={this.submitProject}
-                            >
-                                Save
-                            </button>
-                            <Link
-                                className='btn btn-light'
-                                to={location.wrapUrl('/projects')}
-                            >
-                                Close
-                            </Link>
-                        </span>
-                    </div>
-                    <div className='col-4'>
-                        <button
-                            className='btn btn-danger'
-                            onClick={this.deleteProject}
-                        >
-                            Delete
-                        </button>
-                    </div>
-                </div>
+                <EntityControllers
+                    onSave={this.submitProject}
+                    onClose={() => location.push('/projects')}
+                    onDelete={this.deleteProject}
+                />
             </EntityModal>
         );
     }
