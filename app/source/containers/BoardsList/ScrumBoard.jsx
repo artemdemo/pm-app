@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BoardTask from './BoardTask';
-import SingleBoard from '../SingleBoard/SingleBoard';
+import BoardMenu, { menuItemsMap } from '../SingleBoard/BoardMenu';
 import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContainer';
 import { DragItem } from '../../components/DragNDrop/DragItem';
-import { showModal, hideModal } from '../../model/modal/modalActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import { updateTaskPosition } from '../../model/tasks/tasksActions';
-import Icon from '../../components/Icon/Icon';
+import { updateBoard } from '../../model/boards/boardsActions';
+import Board from '../../model/boards/Board';
+import * as location from '../../services/location';
 
 import './ScrumBoard.less';
 
@@ -43,30 +44,45 @@ class ScrumBoard extends React.PureComponent {
         updateTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 
-    editBoard() {
-        const { showModal, board, hideModal } = this.props;
-        showModal(<SingleBoard
-            board={board}
-            className='single-board'
-            onSave={() => hideModal()}
-            onDelete={() => hideModal()}
-            onCancel={() => hideModal()}
-        />);
-    }
+    menuClick = (itemName) => {
+        const { updateBoard, board } = this.props;
+        let boardWithNewPosition;
+        switch (itemName) {
+            case menuItemsMap.MOVE_LEFT:
+                boardWithNewPosition = new Board({
+                    ...board,
+                    id_position: board.id_position - 1,
+                });
+                break;
+            case menuItemsMap.MOVE_RIGHT:
+                boardWithNewPosition = new Board({
+                    ...board,
+                    id_position: board.id_position + 1,
+                });
+                break;
+            case menuItemsMap.EDIT:
+                location.push(`/scrum/${board.id}`);
+                break;
+        }
+        if (boardWithNewPosition) {
+            updateBoard(boardWithNewPosition);
+        }
+    };
 
     render() {
-        const { board } = this.props;
+        const { board, utmostLeft, utmostRight } = this.props;
 
         return (
             <div className='scrum-board'>
-                <div className='board__title'>
-                    <div className='board__name'>{board.title}</div>
-                    <div
-                        className='board__edit-board'
-                        onClick={this.editBoard.bind(this)}
-                    >
-                        <Icon name='pencil' />
+                <div className='board-title'>
+                    <div className='board-title__menu'>
+                        <BoardMenu
+                            onClick={this.menuClick}
+                            disableLeft={utmostLeft}
+                            disableRight={utmostRight}
+                        />
                     </div>
+                    <div className='board-title__name'>{board.name}</div>
                 </div>
                 <DragItemsContainer
                     className='board-tasks'
@@ -90,18 +106,21 @@ class ScrumBoard extends React.PureComponent {
 
 ScrumBoard.propTypes = {
     board: PropTypes.shape({}),
+    utmostLeft: PropTypes.bool,
+    utmostRight: PropTypes.bool,
 };
 
 ScrumBoard.defaultProps = {
     board: {},
+    utmostLeft: false,
+    utmostRight: false,
 };
 
 export default connect(
     state => ({
         tasks: state.tasks,
     }), {
-        showModal,
-        hideModal,
+        updateBoard,
         updateTaskPosition,
     }
 )(ScrumBoard);

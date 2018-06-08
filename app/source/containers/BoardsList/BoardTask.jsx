@@ -9,8 +9,7 @@ import './BoardTask.less';
 
 class BoardTask extends React.PureComponent {
     openTask() {
-        const { task, selectTask } = this.props;
-        selectTask(task);
+        console.log('openTask is not implemented');
     }
 
     render() {

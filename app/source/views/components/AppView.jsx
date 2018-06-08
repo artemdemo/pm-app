@@ -1,7 +1,6 @@
 import React from 'react';
 import LoginController from '../../controllers/LoginController';
 import Notificator from '../../components/Notificator/Notificator';
-import Modal from '../../containers/Modal/Modal';
 import MainMenu from '../../containers/MainMenu/MainMenu';
 import auth from '../../services/auth';
 
@@ -21,7 +20,6 @@ class AppView extends React.PureComponent {
                 {this.renderMenu()}
 
                 <LoginController />
-                <Modal />
 
                 <div className='container'>
                     {this.props.children}

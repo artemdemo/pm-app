@@ -1,18 +1,19 @@
 import React from 'react';
-import ErrorBoundary from '../../components/ErrorBoundary/ErrorBoundary';
 import BoardsList from '../../containers/BoardsList/BoardsList';
+import * as location from '../../services/location';
 
-import '../list-container.less';
-
-const ScrumView = () => {
+const ScrumView = (props) => {
     return (
-        <div className='list-container'>
-            <div className='list-container__list'>
-                <ErrorBoundary componentName='BoardsList'>
-                    <BoardsList />
-                </ErrorBoundary>
-            </div>
-        </div>
+        <React.Fragment>
+            <BoardsList />
+            <button
+                className='btn btn-light'
+                onClick={() => location.push('/scrum/new')}
+            >
+                New Board
+            </button>
+            {props.children}
+        </React.Fragment>
     );
 };
 

@@ -5,6 +5,7 @@ import { createSelector } from "reselect";
 import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
+import EntityControllers from '../../components/EntityControllers/EntityControllers';
 import ProjectLabels from '../../components/SingleTask/ProjectLabels';
 import {
     updateTask,
@@ -140,32 +141,12 @@ class SingleTaskView extends React.PureComponent {
                         onSelect={this.connectProject}
                     />
                 </div>
-                <div className='row justify-content-between'>
-                    <div className='col-6'>
-                        <span className='buttons-group'>
-                            <button
-                                className='btn btn-primary'
-                                onClick={this.submitTask}
-                            >
-                                Save
-                            </button>
-                            <Link
-                                className='btn btn-light'
-                                to={location.wrapUrl('/tasks')}
-                            >
-                                Close
-                            </Link>
-                        </span>
-                    </div>
-                    <div className='col-4'>
-                        <button
-                            className='btn btn-danger'
-                            onClick={this.deleteTask}
-                        >
-                            Delete
-                        </button>
-                    </div>
-                </div>
+
+                <EntityControllers
+                    onSave={this.submitTask}
+                    onClose={() => location.push('/tasks')}
+                    onDelete={this.deleteTask}
+                />
             </EntityModal>
         );
     }
