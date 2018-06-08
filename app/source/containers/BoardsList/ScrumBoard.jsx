@@ -42,21 +42,16 @@ class ScrumBoard extends React.PureComponent {
         updateTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 
-    editBoard() {}
-
     render() {
         const { board } = this.props;
 
         return (
             <div className='scrum-board'>
-                <div className='board__title'>
-                    <div className='board__name'>{board.title}</div>
-                    <div
-                        className='board__edit-board'
-                        onClick={this.editBoard.bind(this)}
-                    >
-                        <Icon name='pencil' />
+                <div className='board-title'>
+                    <div className='board-title__menu'>
+                        <Icon name='ellipsis-v' type='solid' />
                     </div>
+                    <div className='board-title__name'>{board.title}</div>
                 </div>
                 <DragItemsContainer
                     className='board-tasks'
