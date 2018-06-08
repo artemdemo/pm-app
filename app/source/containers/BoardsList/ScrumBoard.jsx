@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BoardTask from './BoardTask';
-import SingleBoard from '../SingleBoard/SingleBoard';
+import BoardMenu, { menuItemsMap } from '../SingleBoard/BoardMenu';
 import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContainer';
 import { DragItem } from '../../components/DragNDrop/DragItem';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 import { updateTaskPosition } from '../../model/tasks/tasksActions';
-import Icon from '../../components/Icon/Icon';
 
 import './ScrumBoard.less';
 
@@ -42,14 +41,26 @@ class ScrumBoard extends React.PureComponent {
         updateTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
     }
 
+    menuClick = (itemName) => {
+        switch (itemName) {
+            case menuItemsMap.MOVE_LEFT:
+            case menuItemsMap.MOVE_RIGHT:
+            case menuItemsMap.EDIT:
+        }
+    };
+
     render() {
-        const { board } = this.props;
+        const { board, utmostLeft, utmostRight } = this.props;
 
         return (
             <div className='scrum-board'>
                 <div className='board-title'>
                     <div className='board-title__menu'>
-                        <Icon name='ellipsis-v' type='solid' />
+                        <BoardMenu
+                            onClick={this.menuClick}
+                            disableLeft={utmostLeft}
+                            disableRight={utmostRight}
+                        />
                     </div>
                     <div className='board-title__name'>{board.title}</div>
                 </div>
@@ -75,10 +86,14 @@ class ScrumBoard extends React.PureComponent {
 
 ScrumBoard.propTypes = {
     board: PropTypes.shape({}),
+    utmostLeft: PropTypes.bool,
+    utmostRight: PropTypes.bool,
 };
 
 ScrumBoard.defaultProps = {
     board: {},
+    utmostLeft: false,
+    utmostRight: false,
 };
 
 export default connect(

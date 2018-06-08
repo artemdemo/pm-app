@@ -8,12 +8,16 @@ const BoardsList = (props) => {
     const { boards } = props;
     return (
         <div className='boards-list'>
-            {boards.data.map(board => (
-                <ScrumBoard
-                    board={board}
-                    key={`board-${board.id}`}
-                />
-            ))}
+            {boards.data.map((board, index) => {
+                return (
+                    <ScrumBoard
+                        board={board}
+                        utmostLeft={index === 0}
+                        utmostRight={index === boards.data.length - 1}
+                        key={`board-${board.id}`}
+                    />
+                );
+            })}
         </div>
     );
 };
