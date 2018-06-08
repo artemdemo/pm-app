@@ -31,6 +31,12 @@ const routes = [
             {
                 path: 'scrum',
                 _component: 'ScrumView',
+                childRoutes: [
+                    {
+                        path: ':boardId',
+                        _component: 'SingleBoardView',
+                    },
+                ],
             },
             {
                 path: 'projects',

@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import ProjectsList from '../../containers/ProjectsList/ProjectsList';
 import * as location from '../../services/location';
 
-import '../list-container.less';
-
 const ProjectsView = (props) => {
     const { projects } = props;
     return (
@@ -12,7 +10,7 @@ const ProjectsView = (props) => {
             <p>
                 <button
                     className='btn btn-light'
-                    onClick={() => location.push('projects/new')}
+                    onClick={() => location.push('/projects/new')}
                 >
                     New Project
                 </button>
