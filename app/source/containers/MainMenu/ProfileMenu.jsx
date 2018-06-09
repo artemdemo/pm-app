@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import onClickOutside from 'react-click-outside';
 import { Link } from 'react-router';
+import * as location from '../../services/location';
 
 class ProfileMenu extends React.PureComponent {
     constructor(props) {
         super(props);
-
         this.state = {
-            open: false,
+            showDropdown: false,
         };
     }
 
@@ -20,54 +20,58 @@ class ProfileMenu extends React.PureComponent {
     }
 
     handleClickOutside() {
-        if (this.state.open === true) {
-            this.setState({
-                open: false,
-            });
-        }
+        this.setState({
+            showDropdown: false,
+        });
     }
 
-    handleLogout = () => {
+    handleLogout = (e) => {
+        e.preventDefault();
         const { onLogout } = this.props;
         onLogout && onLogout();
+    };
+
+    handleShowDropdown = (e) => {
+        e.preventDefault();
+        this.setState({
+            showDropdown: true,
+        });
     };
 
     render() {
         const { username } = this.props;
 
-        const profileClass = classnames({
-            dropdown: true,
-            open: this.state.open,
+        const dropdownClass = classnames('dropdown-menu dropdown-menu-right', {
+            show: this.state.showDropdown,
         });
 
         return (
-            <li className={profileClass}>
-                <span
-                    className='navbar-link'
-                    onClick={this.toggleProfileDropdown.bind(this)}
-                    data-qa='profile-menu-toggle'
+            <div className='dropdown'>
+                <a
+                    href='#'
+                    className='nav-link dropdown-toggle'
+                    onClick={this.handleShowDropdown}
                 >
-                    { username } <span className='caret' />
-                </span>
-                <ul className='dropdown-menu'>
-                    <li>
-                        <Link to='/profile'>Profile</Link>
-                    </li>
-                    <li>
-                        <Link to='/settings'>Settings</Link>
-                    </li>
-                    <li role='separator' className='divider' />
-                    <li>
-                        <span
-                            className='dropdown-menu-link'
-                            onClick={this.handleLogout}
-                            data-qa='logout-main-menu-button'
-                        >
-                            Logout
-                        </span>
-                    </li>
-                </ul>
-            </li>
+                    { username }
+                </a>
+                <div className={dropdownClass}>
+
+                    <Link
+                        className='dropdown-item'
+                        to={location.wrapUrl('/profile')}>Profile</Link>
+                    <Link
+                        className='dropdown-item'
+                        to={location.wrapUrl('/settings')}>Settings</Link>
+                    <div className='dropdown-divider' />
+                    <a
+                        href='#'
+                        className='dropdown-item'
+                        onClick={this.handleLogout}
+                    >
+                        Logout
+                    </a>
+                </div>
+            </div>
         );
     }
 }

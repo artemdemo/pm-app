@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { logout } from '../../model/auth/authActions';
@@ -16,18 +15,13 @@ class MainMenu extends React.PureComponent {
         };
     }
 
-    logout() {
+    logout = () => {
         const { logout } = this.props;
         logout();
-    }
-
-    toggleMenu() {
-        this.setState({
-            menuOpen: !this.state.menuOpen,
-        });
-    }
+    };
 
     render() {
+        const { auth } = this.props;
         return (
             <div className='main-menu'>
                 <nav className='navbar navbar-expand-sm navbar-light bg-light'>
@@ -40,7 +34,7 @@ class MainMenu extends React.PureComponent {
                         <span className='navbar-toggler-icon' />
                     </button>
                     <div className='collapse navbar-collapse'>
-                        <ul className='navbar-nav'>
+                        <ul className='navbar-nav mr-auto'>
                             <li className='nav-item'>
                                 <Link className='nav-link' to='/tasks'>
                                     Tasks
@@ -57,6 +51,12 @@ class MainMenu extends React.PureComponent {
                                 </Link>
                             </li>
                         </ul>
+                        <div className='navbar-nav my-lg-0'>
+                            <ProfileMenu
+                                username={auth.data.username}
+                                onLogout={this.logout}
+                            />
+                        </div>
                     </div>
                 </nav>
             </div>
