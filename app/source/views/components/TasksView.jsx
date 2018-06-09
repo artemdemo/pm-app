@@ -35,14 +35,14 @@ class TasksView extends React.PureComponent {
         const projectsList = this.filterProjects(projects.data);
         return (
             <React.Fragment>
-                <div className='fluid-oneline-grid'>
-                    <div className='fluid-oneline-grid__cell'>
+                <div className='row'>
+                    <div className='col-md-auto'>
                         <RadioMenu
                             list={this.statusMenu}
                             onSelect={this.selectRadioItem.bind(this)}
                         />
                     </div>
-                    <div className='fluid-oneline-grid__cell'>
+                    <div className='col-md-4'>
                         <select
                             className='form-control input-sm'
                             onChange={(e) => {
