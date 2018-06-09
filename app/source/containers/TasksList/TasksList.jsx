@@ -6,10 +6,10 @@ import TasksListItem from './TasksListItem';
 
 class TasksList extends React.PureComponent {
     filterTasks(tasksList) {
-        const { byProjectId, byStatusId } = this.props;
+        const { byProjectId, byStatus } = this.props;
         const filteredByStatus = tasksList
             .filter((task) => {
-                switch (byStatusId) {
+                switch (byStatus) {
                     case 'active':
                         return task.done === false;
                     case 'completed':
@@ -71,13 +71,13 @@ class TasksList extends React.PureComponent {
 TasksList.propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.shape({})),
     byProjectId: PropTypes.string,
-    byStatusId: PropTypes.any,
+    byStatus: PropTypes.any,
 };
 
 TasksList.defaultProps = {
     tasks: [],
     byProjectId: 'all',
-    byStatusId: null,
+    byStatus: null,
 };
 
 export default TasksList;

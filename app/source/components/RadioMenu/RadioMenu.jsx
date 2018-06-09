@@ -2,43 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RadioMenuItem from './RadioMenuItem';
 
-import './RadioMenu.less';
-
 class RadioMenu extends React.PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            selectedList: props.list.map((item, i) => {
-                return Object.assign(item, {
-                    $$selected: i === 0,
-                });
-            }),
-        };
-
-        this.selectItem = (selectedItem) => {
-            const { onSelect } = this.props;
-            this.setState({
-                selectedList: this.state.selectedList.map((item) => {
-                    return Object.assign(item, {
-                        $$selected: selectedItem.id === item.id,
-                    });
-                }),
-            });
-            onSelect(selectedItem);
-        };
-    }
+    selectItem = (item) => {
+        const { onChange } = this.props;
+        onChange && onChange(item);
+    };
 
     render() {
-        // ToDo: onClick from <RadioMenuItem> should return "item"
+        const { list, selectedItem } = this.props;
         return (
-            <div className='radio-menu'>
-                {this.state.selectedList.map(item => (
+            <div className='btn-group' role='group'>
+                {list.map(item => (
                     <RadioMenuItem
                         item={item}
-                        selected={item.$$selected}
-                        onClick={() => this.selectItem(item)}
-                        key={`radio-menu-item-${item.id}`}
+                        selected={item === selectedItem}
+                        onClick={this.selectItem}
+                        key={`radio-menu-item-${item.value}`}
                     />
                 ))}
             </div>
@@ -47,8 +26,18 @@ class RadioMenu extends React.PureComponent {
 }
 
 RadioMenu.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object),
-    onSelect: PropTypes.func,
+    list: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.string,
+        name: PropTypes.string,
+    })),
+    onChange: PropTypes.func,
+    selectedItem: PropTypes.shape({}),
+};
+
+RadioMenu.defaultProps = {
+    list: [],
+    onChange: null,
+    selectedItem: null,
 };
 
 export default RadioMenu;
