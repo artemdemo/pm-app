@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _isNumber from 'lodash/isNumber';
-import _isNaN from 'lodash/isNaN';
 import TasksListItem from './TasksListItem';
 
 class TasksList extends React.PureComponent {
     filterTasks(tasksList) {
-        const { byProjectId, byStatus } = this.props;
+        const { byProject, byStatus } = this.props;
         const filteredByStatus = tasksList
             .filter((task) => {
                 switch (byStatus) {
@@ -18,33 +16,20 @@ class TasksList extends React.PureComponent {
                         return true;
                 }
             });
-        const resultList = (() => {
-            const projectId = (() => {
-                const projectIdNumber = parseInt(byProjectId, 10);
-                if (_isNaN(projectIdNumber)) {
-                    return byProjectId;
-                }
-                return projectIdNumber;
-            })();
-            switch (true) {
-                case projectId === 'free':
-                    return filteredByStatus.filter((task) => {
-                        return task.projects.length === 0;
-                    });
-                case _isNumber(projectId):
-                    return filteredByStatus.filter((task) => {
-                        return task.projects.indexOf(projectId) > -1;
-                    });
-                case projectId === 'all':
-                default:
-                    return filteredByStatus;
-            }
-        })();
-        return resultList;
+
+        const projectId = parseInt(byProject, 10);
+        if (Number.isInteger(projectId)) {
+            return filteredByStatus.filter((task) => {
+                return !!task.projects.find(item => item.id === projectId);
+            });
+        }
+        // when byProject === 'all'
+        // and in all default cases
+        return filteredByStatus;
     }
 
     render() {
-        const { tasks, byProjectId } = this.props;
+        const { tasks, byProject } = this.props;
         const tasksList = this.filterTasks(tasks);
         const newTask = {
             name: '',
@@ -54,7 +39,7 @@ class TasksList extends React.PureComponent {
             <React.Fragment>
                 <TasksListItem
                     task={newTask}
-                    projectId={byProjectId}
+                    projectId={byProject}
                     key='task-0'
                 />
                 {tasksList.map(task => (
@@ -70,13 +55,13 @@ class TasksList extends React.PureComponent {
 
 TasksList.propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.shape({})),
-    byProjectId: PropTypes.string,
+    byProject: PropTypes.string,
     byStatus: PropTypes.any,
 };
 
 TasksList.defaultProps = {
     tasks: [],
-    byProjectId: 'all',
+    byProject: 'all',
     byStatus: null,
 };
 

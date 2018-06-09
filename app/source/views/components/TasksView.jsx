@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import emoji from '../../utils/emoji/emoji';
 import RadioMenu from '../../components/RadioMenu/RadioMenu';
 import TasksList from '../../containers/TasksList/TasksList';
 
@@ -15,7 +14,7 @@ class TasksView extends React.PureComponent {
         super(props);
 
         this.state = {
-            filteredByProjectId: 'all',
+            project: 'all',
             status: taskStatuses[0],
         };
     }
@@ -50,18 +49,17 @@ class TasksView extends React.PureComponent {
                                 onChange={(e) => {
                                     const projectId = e.target.value;
                                     this.setState({
-                                        filteredByProjectId: projectId,
+                                        project: projectId,
                                     });
                                 }}>
-                                <option value='all'>All projects</option>
-                                <option value='free'>Tasks without project</option>
-                                <option disabled>—</option>
+                                <option value='all'>All tasks</option>
+                                <option disabled>Filter by project:</option>
                                 {projectsList.map(project => (
                                     <option
                                         value={project.id}
                                         key={`project-filter-${project.id}`}
                                     >
-                                        {emoji(project.name)}
+                                        {project.name}
                                     </option>
                                 ))}
                             </select>
@@ -70,7 +68,7 @@ class TasksView extends React.PureComponent {
                 </div>
                 <TasksList
                     tasks={tasks.data}
-                    byProjectId={this.state.filteredByProjectId}
+                    byProject={this.state.project}
                     byStatus={this.state.status.value}
                 />
                 {this.props.children}
