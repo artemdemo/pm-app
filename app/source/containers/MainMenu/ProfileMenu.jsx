@@ -20,21 +20,26 @@ class ProfileMenu extends React.PureComponent {
     }
 
     handleClickOutside() {
-        this.setState({
-            showDropdown: false,
-        });
+        this.closeMenu();
     }
 
     handleLogout = (e) => {
         e.preventDefault();
         const { onLogout } = this.props;
         onLogout && onLogout();
+        this.closeMenu();
     };
 
     handleShowDropdown = (e) => {
         e.preventDefault();
         this.setState({
             showDropdown: true,
+        });
+    };
+
+    closeMenu = (e) => {
+        this.setState({
+            showDropdown: false,
         });
     };
 
@@ -58,10 +63,18 @@ class ProfileMenu extends React.PureComponent {
 
                     <Link
                         className='dropdown-item'
-                        to={location.wrapUrl('/profile')}>Profile</Link>
+                        onClick={this.closeMenu}
+                        to={location.wrapUrl('/profile')}
+                    >
+                        Profile
+                    </Link>
                     <Link
                         className='dropdown-item'
-                        to={location.wrapUrl('/settings')}>Settings</Link>
+                        onClick={this.closeMenu}
+                        to={location.wrapUrl('/settings')}
+                    >
+                        Settings
+                    </Link>
                     <div className='dropdown-divider' />
                     <a
                         href='#'
