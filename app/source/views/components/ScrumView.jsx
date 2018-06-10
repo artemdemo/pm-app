@@ -5,13 +5,15 @@ import * as location from '../../services/location';
 const ScrumView = (props) => {
     return (
         <React.Fragment>
+            <p>
+                <button
+                    className='btn btn-light'
+                    onClick={() => location.push('/scrum/new')}
+                >
+                    New Board
+                </button>
+            </p>
             <BoardsList />
-            <button
-                className='btn btn-light'
-                onClick={() => location.push('/scrum/new')}
-            >
-                New Board
-            </button>
             {props.children}
         </React.Fragment>
     );
