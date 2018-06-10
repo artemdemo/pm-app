@@ -83,26 +83,22 @@ exports.update = (req, res, next) => {
         userId: req.authSession.userId,
     };
     debug(`Update task with id: ${taskId} (user id ${tasksData.userId})`);
+    debug(req.body);
     tasks
         .updateTask(tasksData)
         .then(() => {
-            debug(`Task id ${req.body.id} updated`);
-            return tasks
-                .getById({
-                    userId: req.authSession.userId,
-                    taskId,
+            return projectsTasksRelations
+                .addRelation(projects, taskId)
+                .then(() => {
+                    debug(`Projects relations with task id ${taskId} updated`);
                 });
         })
-        .then((task) => {
-            if (taskId && projects) {
-                return projectsTasksRelations
-                    .addRelation(projects, taskId)
-                    .then(() => {
-                        debug(`Projects relations with task id ${task.id} updated`);
-                        return task;
-                    });
-            }
-            return task;
+        .then(() => {
+            return tasks
+                .getById({
+                    taskId,
+                    userId: req.authSession.userId,
+                });
         })
         .then(task => res.json(task))
         .catch((err) => {
