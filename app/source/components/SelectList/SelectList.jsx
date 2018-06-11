@@ -75,6 +75,7 @@ class SelectList extends React.PureComponent {
     render() {
         const { placeholder } = this.props;
         const itemsClass = classnames({
+            'list-group': true,
             'select-list-items': true,
             'select-list-items_show': this.state.dropdownIsVisible,
         });
@@ -82,7 +83,7 @@ class SelectList extends React.PureComponent {
         return (
             <div className='select-list'>
                 <input
-                    className='flat-input select-list__input'
+                    className='form-control'
                     onFocus={this.inputFocus}
                     onBlur={this.inputBlur}
                     onChange={this.handleInputChange}

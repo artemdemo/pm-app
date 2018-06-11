@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { SilectItemProp } from './SelectListProps';
-
-import './SelectListItem.less';
 
 class SelectListItem extends React.PureComponent {
     clickHandler = () => {
@@ -13,13 +10,9 @@ class SelectListItem extends React.PureComponent {
 
     render() {
         const { item } = this.props;
-        const itemClass = classnames({
-            'select-list-item': true,
-            'select-list-item_done': item.done,
-        });
         return (
             <div
-                className={itemClass}
+                className='list-group-item list-group-item-action'
                 onClick={this.clickHandler}
             >
                 {item.name}
