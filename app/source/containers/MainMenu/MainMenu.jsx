@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { logout } from '../../model/auth/authActions';
@@ -20,6 +21,15 @@ class MainMenu extends React.PureComponent {
         logout();
     };
 
+    navItemClass(path) {
+        const { routing } = this.props;
+        const isActive = routing.locationBeforeTransitions.pathname === path;
+        return classnames({
+            'nav-item': true,
+            active: isActive,
+        });
+    }
+
     render() {
         const { auth } = this.props;
         return (
@@ -35,17 +45,17 @@ class MainMenu extends React.PureComponent {
                     </button>
                     <div className='collapse navbar-collapse'>
                         <ul className='navbar-nav mr-auto'>
-                            <li className='nav-item'>
+                            <li className={this.navItemClass('/tasks')}>
                                 <Link className='nav-link' to='/tasks'>
                                     Tasks
                                 </Link>
                             </li>
-                            <li className='nav-item'>
+                            <li className={this.navItemClass('/scrum')}>
                                 <Link className='nav-link' to='/scrum'>
                                     Scrum
                                 </Link>
                             </li>
-                            <li className='nav-item'>
+                            <li className={this.navItemClass('/projects')}>
                                 <Link className='nav-link' to='/projects'>
                                     Projects
                                 </Link>
@@ -67,6 +77,7 @@ class MainMenu extends React.PureComponent {
 export default connect(
     state => ({
         auth: state.auth,
+        routing: state.routing,
     }), {
         logout,
     }
