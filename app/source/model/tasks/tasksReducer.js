@@ -1,4 +1,3 @@
-import * as tasksConst from './tasksConst';
 import * as tasksActions from './tasksActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 
@@ -71,19 +70,19 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Load single task
          */
-        case tasksConst.LOAD_SINGLE_TASK:
+        case `${tasksActions.loadSingleTask}`:
             return {
                 ...state,
                 singleData: {},
                 loadingSingle: true,
             };
-        case tasksConst.SINGLE_TASK_LOADED:
+        case `${tasksActions.singleTaskLoaded}`:
             return {
                 ...state,
                 singleData: action.data,
                 loadingSingle: false,
             };
-        case  tasksConst.SINGLE_TASK_LOADING_ERROR:
+        case  `${tasksActions.singleTasksLoadingError}`:
             return {
                 ...state,
                 loadingSingle: false,
@@ -92,12 +91,12 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Adding
          */
-        case tasksConst.ADD_TASK:
+        case `${tasksActions.addTask}`:
             return {
                 ...state,
                 adding: true,
             };
-        case tasksConst.TASK_ADDED:
+        case `${tasksActions.taskAdded}`:
             return {
                 ...state,
                 data: [
@@ -107,7 +106,7 @@ export default function tasksReducer(state = initState, action) {
                 adding: false,
                 addingError: null,
             };
-        case tasksConst.TASK_ADDING_ERROR:
+        case `${tasksActions.taskAddingError}`:
             return {
                 ...state,
                 adding: false,
@@ -116,12 +115,12 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Updating
          */
-        case tasksConst.UPDATE_TASK:
+        case `${tasksActions.updateTask}`:
             return {
                 ...state,
                 updating: true,
             };
-        case tasksConst.TASK_UPDATED:
+        case `${tasksActions.taskUpdated}`:
             return {
                 ...state,
                 data: sortTasksByUpdate(state.data.map((task) => {
@@ -138,7 +137,7 @@ export default function tasksReducer(state = initState, action) {
                 updating: false,
                 updatingError: null,
             };
-        case tasksConst.TASK_UPDATING_ERROR:
+        case `${tasksActions.taskUpdatingError}`:
             return {
                 ...state,
                 updating: false,
@@ -147,19 +146,19 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Deleting
          */
-        case tasksConst.DELETE_TASK:
+        case `${tasksActions.deleteTask}`:
             return {
                 ...state,
                 deleting: true,
             };
-        case tasksConst.TASK_DELETED:
+        case `${tasksActions.taskDeleted}`:
             return {
                 ...state,
                 data: state.data.filter(task => task.id !== action.id),
                 deleting: false,
                 deletingError: null,
             };
-        case tasksConst.TASK_DELETING_ERROR:
+        case `${tasksActions.taskDeletingError}`:
             return {
                 ...state,
                 deleting: false,
@@ -168,7 +167,7 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Updating position
          */
-        case tasksConst.UPDATE_TASK_POSITION:
+        case `${tasksActions.updateTaskPosition}`:
             if (action.draggedTask) {
                 const sortedTasks = state
                     .data
@@ -221,7 +220,7 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Reset task
          */
-        case tasksConst.RESET_TASKS:
+        case `${tasksActions.resetTasks}`:
             return {
                 ...initState,
             };

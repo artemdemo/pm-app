@@ -1,20 +1,24 @@
 import { take, put } from 'redux-saga/effects';
 import request from '../../services/request';
-import * as tasksConst from './tasksConst';
 import {
     loadTasks,
     tasksLoaded,
     tasksLoadingError,
+    loadSingleTask,
     singleTaskLoaded,
     singleTasksLoadingError,
+    addTask,
     taskAdded,
     taskAddingError,
+    updateTask,
     taskUpdated,
     taskUpdatingError,
+    deleteTask,
     taskDeleted,
     taskDeletingError,
     taskPositionUpdated,
     taskPositionUpdateError,
+    updateTaskPosition,
 } from './tasksActions';
 
 function* loadTasksSaga() {
@@ -34,7 +38,7 @@ function* loadTasksSaga() {
 function* loadSingleTaskSaga() {
     while (true) {
         try {
-            const { id } = yield take(tasksConst.LOAD_SINGLE_TASK);
+            const { id } = yield take(`${loadSingleTask}`);
             const result = yield request
                 .get(`/api/tasks/${id}`)
                 .promise();
@@ -48,7 +52,7 @@ function* loadSingleTaskSaga() {
 function* addTaskSaga() {
     while (true) {
         try {
-            const { task } = yield take(tasksConst.ADD_TASK);
+            const { task } = yield take(`${addTask}`);
             const result = yield request
                 .post('/api/tasks')
                 .send(task)
@@ -63,7 +67,7 @@ function* addTaskSaga() {
 function* updateTaskSaga() {
     while (true) {
         try {
-            const { task } = yield take(tasksConst.UPDATE_TASK);
+            const { task } = yield take(`${updateTask}`);
             const result = yield request
                 .put('/api/tasks')
                 .send(task)
@@ -78,7 +82,7 @@ function* updateTaskSaga() {
 function* deleteTaskSaga() {
     while (true) {
         try {
-            const { id } = yield take(tasksConst.DELETE_TASK);
+            const { id } = yield take(`${deleteTask}`);
             yield request
                 .delete(`/api/tasks/${id}`)
                 .promise();
@@ -92,7 +96,7 @@ function* deleteTaskSaga() {
 function* updateTaskPositionSaga() {
     while (true) {
         try {
-            const { draggedTask, boardId, nearTaskId, position } = yield take(tasksConst.UPDATE_TASK_POSITION);
+            const { draggedTask, boardId, nearTaskId, position } = yield take(`${updateTaskPosition}`);
             yield request
                 .put('/api/tasks/position')
                 .send({
