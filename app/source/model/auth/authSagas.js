@@ -1,5 +1,5 @@
 import { take, put } from 'redux-saga/effects';
-import request from '../../services/request';
+import request, { clearDefaultHeaders } from '../../services/request';
 import * as authConst from './authConst';
 import {
     loggedIn,
@@ -81,6 +81,7 @@ function* logoutSaga() {
     while (true) {
         yield take(authConst.LOGOUT);
         auth.removeToken();
+        clearDefaultHeaders();
         location.replace('/login');
     }
 }

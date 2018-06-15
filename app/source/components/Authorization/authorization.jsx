@@ -1,5 +1,6 @@
 import React from 'react';
 import auth from '../../services/auth';
+import { clearDefaultHeaders } from '../../services/request';
 import * as location from '../../services/location';
 
 const authorization = (WrappedComponent) => {
@@ -16,6 +17,7 @@ const authorization = (WrappedComponent) => {
 
         static redirectToLoginPage() {
             auth.removeToken();
+            clearDefaultHeaders();
             location.push('/login');
         }
 
