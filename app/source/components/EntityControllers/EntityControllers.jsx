@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ElementsRow from '../../components/ElementsRow/ElementsRow';
 
 class EntityControllers extends React.PureComponent {
     handleSave = () => {
@@ -21,18 +22,20 @@ class EntityControllers extends React.PureComponent {
         return (
             <div className='row justify-content-between'>
                 <div className='col-6'>
-                    <button
-                        className='btn btn-primary'
-                        onClick={this.handleSave}
-                    >
-                        Save
-                    </button>
-                    <button
-                        className='btn btn-light'
-                        onClick={this.handleClose}
-                    >
-                        Close
-                    </button>
+                    <ElementsRow>
+                        <button
+                            className='btn btn-primary'
+                            onClick={this.handleSave}
+                        >
+                            Save
+                        </button>
+                        <button
+                            className='btn btn-light'
+                            onClick={this.handleClose}
+                        >
+                            Close
+                        </button>
+                    </ElementsRow>
                 </div>
                 <div className='col-4'>
                     <button
