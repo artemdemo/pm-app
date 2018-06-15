@@ -2,6 +2,7 @@ import { take, put } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as tasksConst from './tasksConst';
 import {
+    loadTasks,
     tasksLoaded,
     tasksLoadingError,
     singleTaskLoaded,
@@ -19,7 +20,7 @@ import {
 function* loadTasksSaga() {
     while (true) {
         try {
-            yield take(tasksConst.LOAD_TASKS);
+            yield take(`${loadTasks}`);
             const result = yield request
                 .get('/api/tasks')
                 .promise();

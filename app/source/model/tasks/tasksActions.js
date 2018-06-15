@@ -1,28 +1,15 @@
 import * as tasksConst from './tasksConst';
+import { createAction } from '../../services/actionCreator';
 
 /*
  * Loading
  */
 
-export function loadTasks() {
-    return {
-        type: tasksConst.LOAD_TASKS,
-    };
-}
+export const loadTasks = createAction('LOAD_TASKS');
 
-export function tasksLoaded(tasks) {
-    return {
-        type: tasksConst.TASKS_LOADED,
-        tasks,
-    };
-}
+export const tasksLoaded = createAction('TASKS_LOADED', tasks => ({ tasks }));
 
-export function tasksLoadingError(err) {
-    return {
-        type: tasksConst.TASKS_LOADING_ERROR,
-        err,
-    };
-}
+export const tasksLoadingError = createAction('TASKS_LOADING_ERROR', err => ({ err }));
 
 /*
  * Load single task

@@ -1,4 +1,5 @@
 import * as tasksConst from './tasksConst';
+import * as tasksActions from './tasksActions';
 import { sortByIdPositionScrum } from '../../utils/tasks';
 
 const initState = {
@@ -48,12 +49,12 @@ export default function tasksReducer(state = initState, action) {
         /*
          * Loading
          */
-        case tasksConst.LOAD_TASKS:
+        case `${tasksActions.loadTasks}`:
             return {
                 ...state,
                 loading: true,
             };
-        case tasksConst.TASKS_LOADED:
+        case `${tasksActions.tasksLoaded}`:
             return {
                 ...state,
                 // ToDo: Why need to sort here? Can't it came sorted from the server?
@@ -61,7 +62,7 @@ export default function tasksReducer(state = initState, action) {
                 loading: false,
                 loadingError: null,
             };
-        case tasksConst.TASKS_LOADING_ERROR:
+        case `${tasksActions.tasksLoadingError}`:
             return {
                 ...state,
                 loading: false,
