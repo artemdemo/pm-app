@@ -1,36 +1,17 @@
 import { take, put } from 'redux-saga/effects';
 import request from '../../services/request';
-import {
-    loadTasks,
-    tasksLoaded,
-    tasksLoadingError,
-    loadSingleTask,
-    singleTaskLoaded,
-    singleTasksLoadingError,
-    addTask,
-    taskAdded,
-    taskAddingError,
-    updateTask,
-    taskUpdated,
-    taskUpdatingError,
-    deleteTask,
-    taskDeleted,
-    taskDeletingError,
-    taskPositionUpdated,
-    taskPositionUpdateError,
-    updateTaskPosition,
-} from './tasksActions';
+import * as tasksActions from './tasksActions';
 
 function* loadTasksSaga() {
     while (true) {
         try {
-            yield take(`${loadTasks}`);
+            yield take(`${tasksActions.loadTasks}`);
             const result = yield request
                 .get('/api/tasks')
                 .promise();
-            yield put(tasksLoaded(result.body));
+            yield put(tasksActions.tasksLoaded(result.body));
         } catch (err) {
-            yield put(tasksLoadingError(err));
+            yield put(tasksActions.tasksLoadingError(err));
         }
     }
 }
@@ -38,13 +19,13 @@ function* loadTasksSaga() {
 function* loadSingleTaskSaga() {
     while (true) {
         try {
-            const { id } = yield take(`${loadSingleTask}`);
+            const { id } = yield take(`${tasksActions.loadSingleTask}`);
             const result = yield request
                 .get(`/api/tasks/${id}`)
                 .promise();
-            yield put(singleTaskLoaded(result.body));
+            yield put(tasksActions.singleTaskLoaded(result.body));
         } catch (err) {
-            yield put(singleTasksLoadingError(err));
+            yield put(tasksActions.singleTasksLoadingError(err));
         }
     }
 }
@@ -52,14 +33,14 @@ function* loadSingleTaskSaga() {
 function* addTaskSaga() {
     while (true) {
         try {
-            const { task } = yield take(`${addTask}`);
+            const { task } = yield take(`${tasksActions.addTask}`);
             const result = yield request
                 .post('/api/tasks')
                 .send(task)
                 .promise();
-            yield put(taskAdded(result.body));
+            yield put(tasksActions.taskAdded(result.body));
         } catch (err) {
-            yield put(taskAddingError(err));
+            yield put(tasksActions.taskAddingError(err));
         }
     }
 }
@@ -67,14 +48,14 @@ function* addTaskSaga() {
 function* updateTaskSaga() {
     while (true) {
         try {
-            const { task } = yield take(`${updateTask}`);
+            const { task } = yield take(`${tasksActions.updateTask}`);
             const result = yield request
                 .put('/api/tasks')
                 .send(task)
                 .promise();
-            yield put(taskUpdated(result.body));
+            yield put(tasksActions.taskUpdated(result.body));
         } catch (err) {
-            yield put(taskUpdatingError(err));
+            yield put(tasksActions.taskUpdatingError(err));
         }
     }
 }
@@ -82,13 +63,13 @@ function* updateTaskSaga() {
 function* deleteTaskSaga() {
     while (true) {
         try {
-            const { id } = yield take(`${deleteTask}`);
+            const { id } = yield take(`${tasksActions.deleteTask}`);
             yield request
                 .delete(`/api/tasks/${id}`)
                 .promise();
-            yield put(taskDeleted(id));
+            yield put(tasksActions.taskDeleted(id));
         } catch (err) {
-            yield put(taskDeletingError(err));
+            yield put(tasksActions.taskDeletingError(err));
         }
     }
 }
@@ -96,7 +77,7 @@ function* deleteTaskSaga() {
 function* updateTaskPositionSaga() {
     while (true) {
         try {
-            const { draggedTask, boardId, nearTaskId, position } = yield take(`${updateTaskPosition}`);
+            const { draggedTask, boardId, nearTaskId, position } = yield take(`${tasksActions.updateTaskPosition}`);
             yield request
                 .put('/api/tasks/position')
                 .send({
@@ -106,9 +87,9 @@ function* updateTaskPositionSaga() {
                     boardId,
                 })
                 .promise();
-            yield put(taskPositionUpdated());
+            yield put(tasksActions.taskPositionUpdated());
         } catch (err) {
-            yield put(taskPositionUpdateError(err));
+            yield put(tasksActions.taskPositionUpdateError(err));
         }
     }
 }

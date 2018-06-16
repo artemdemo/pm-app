@@ -1,4 +1,4 @@
-import * as authConst from './authConst';
+import * as authActions from './authActions';
 
 const initState = {
     data: {},
@@ -15,19 +15,19 @@ export default function authReducer(state = initState, action) {
         /*
          * Login
          */
-        case authConst.LOGIN:
+        case `${authActions.login}`:
             return {
                 ...state,
                 login: true,
             };
-        case authConst.LOGGED_IN:
+        case `${authActions.loggedIn}`:
             return {
                 ...state,
                 data: action.data,
                 login: false,
                 loginError: null,
             };
-        case authConst.LOGIN_ERROR:
+        case `${authActions.loginError}`:
             return {
                 ...state,
                 login: false,
@@ -36,19 +36,19 @@ export default function authReducer(state = initState, action) {
         /*
          * Signup
          */
-        case authConst.SIGNUP:
+        case `${authActions.signup}`:
             return {
                 ...state,
                 signup: true,
             };
-        case authConst.SIGNED_UP:
+        case `${authActions.signedUp}`:
             return {
                 ...state,
                 data: action.data,
                 signup: false,
                 signupError: null,
             };
-        case authConst.SIGNUP_ERROR:
+        case `${authActions.signupError}`:
             return {
                 ...state,
                 signup: false,
@@ -57,25 +57,25 @@ export default function authReducer(state = initState, action) {
         /*
          * Loading user data
          */
-        case authConst.LOAD_USER:
+        case `${authActions.loadUser}`:
             return {
                 ...state,
                 loading: true,
             };
-        case authConst.USER_LOADED:
+        case `${authActions.userLoaded}`:
             return {
                 ...state,
                 data: action.data,
                 loading: false,
                 loadingError: null,
             };
-        case authConst.USER_LOADING_ERROR:
+        case `${authActions.userLoadingError}`:
             return {
                 ...state,
                 loading: false,
                 loadingError: null,
             };
-        case authConst.RESET_USER:
+        case `${authActions.resetUser}`:
             return {
                 ...initState,
             };
