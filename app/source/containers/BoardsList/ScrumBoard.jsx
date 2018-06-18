@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import BoardTask from './BoardTask';
 import BoardMenu, { menuItemsMap } from '../SingleBoard/BoardMenu';
 import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContainer';
 import { DragItem } from '../../components/DragNDrop/DragItem';
@@ -90,12 +89,12 @@ class ScrumBoard extends React.PureComponent {
                 >
                     {this.selectedTasks.map(task => (
                         <DragItem
-                            className='board-task'
+                            className='scrum-board-task'
                             key={`task-${task.id}`}
                             item={task.id}
                             dragStopped={this.dragStopped.bind(this)}
                         >
-                            <BoardTask task={task} />
+                            {task.name}
                         </DragItem>
                     ))}
                 </DragItemsContainer>
