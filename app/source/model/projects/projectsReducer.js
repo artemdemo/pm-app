@@ -1,4 +1,4 @@
-import * as projectsConst from './projectsConst';
+import * as projectsActions from './projectsActions';
 
 const initState = {
     data: [],
@@ -20,19 +20,19 @@ export default function projects(state = initState, action) {
         /*
          * Load
          */
-        case projectsConst.LOAD_PROJECTS:
+        case `${projectsActions.loadProjects}`:
             return {
                 ...state,
                 loading: true,
             };
-        case projectsConst.PROJECTS_LOADED:
+        case `${projectsActions.projectsLoaded}`:
             return {
                 ...state,
                 data: [...action.projects],
                 loading: false,
                 loadingError: null,
             };
-        case projectsConst.PROJECTS_LOADING_ERROR:
+        case `${projectsActions.projectsLoadingError}`:
             return {
                 ...state,
                 loading: false,
@@ -41,19 +41,19 @@ export default function projects(state = initState, action) {
         /*
          * Load single task
          */
-        case projectsConst.LOAD_SINGLE_PROJECT:
+        case `${projectsActions.loadSingleProject}`:
             return {
                 ...state,
                 singleData: {},
                 loadingSingle: true,
             };
-        case projectsConst.SINGLE_PROJECT_LOADED:
+        case `${projectsActions.singleProjectLoaded}`:
             return {
                 ...state,
                 singleData: action.data,
                 loadingSingle: false,
             };
-        case  projectsConst.SINGLE_PROJECT_LOADING_ERROR:
+        case `${projectsActions.singleProjectsLoadingError}`:
             return {
                 ...state,
                 loadingSingle: false,
@@ -62,13 +62,13 @@ export default function projects(state = initState, action) {
         /*
          * Add
          */
-        case projectsConst.ADD_PROJECT:
+        case `${projectsActions.addProject}`:
             return {
                 ...state,
                 loading: false,
                 loadingError: action.err,
             };
-        case projectsConst.PROJECT_ADDED:
+        case `${projectsActions.projectAdded}`:
             return {
                 ...state,
                 data: [
@@ -78,7 +78,7 @@ export default function projects(state = initState, action) {
                 adding: false,
                 addingError: null,
             };
-        case projectsConst.PROJECT_ADDING_ERROR:
+        case `${projectsActions.projectAddingError}`:
             return {
                 ...state,
                 adding: false,
@@ -87,12 +87,12 @@ export default function projects(state = initState, action) {
         /*
          * Update
          */
-        case projectsConst.UPDATE_PROJECT:
+        case `${projectsActions.updateProject}`:
             return {
                 ...state,
                 updating: true,
             };
-        case projectsConst.PROJECT_UPDATED:
+        case `${projectsActions.projectUpdated}`:
             return {
                 ...state,
                 data: state.data.map((item) => {
@@ -101,7 +101,7 @@ export default function projects(state = initState, action) {
                 updating: false,
                 updatingError: null,
             };
-        case projectsConst.PROJECT_UPDATING_ERROR:
+        case `${projectsActions.projectUpdatingError}`:
             return {
                 ...state,
                 updating: false,
@@ -110,19 +110,19 @@ export default function projects(state = initState, action) {
         /*
          * Delete
          */
-        case projectsConst.DELETE_PROJECT:
+        case `${projectsActions.deleteProject}`:
             return {
                 ...state,
                 deleting: true,
             };
-        case projectsConst.PROJECT_DELETED:
+        case `${projectsActions.projectDeleted}`:
             return {
                 ...state,
                 data: state.data.filter(item => item.id !== action.id),
                 deleting: false,
                 deletingError: null,
             };
-        case projectsConst.PROJECT_DELETING_ERROR:
+        case `${projectsActions.projectDeletingError}`:
             return {
                 ...state,
                 deleting: false,
@@ -131,7 +131,7 @@ export default function projects(state = initState, action) {
         /*
          * Reset
          */
-        case projectsConst.RESET_PROJECTS:
+        case `${projectsActions.resetProjects}`:
             return {
                 ...initState,
             };

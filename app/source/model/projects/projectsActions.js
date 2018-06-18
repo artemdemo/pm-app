@@ -1,135 +1,41 @@
-import * as projectsConst from './projectsConst';
+import { createAction } from '../../services/actionCreator';
 
 /*
  * Loading
  */
-
-export function loadProjects() {
-    return {
-        type: projectsConst.LOAD_PROJECTS,
-    };
-}
-
-export function projectsLoaded(projects) {
-    return {
-        type: projectsConst.PROJECTS_LOADED,
-        projects,
-    };
-}
-
-export function projectsLoadingError(err = true) {
-    return {
-        type: projectsConst.PROJECTS_LOADING_ERROR,
-        err,
-    };
-}
+export const loadProjects = createAction('LOAD_PROJECTS');
+export const projectsLoaded = createAction('PROJECTS_LOADED', projects => ({ projects }));
+export const projectsLoadingError = createAction('PROJECTS_LOADING_ERROR', (err = true) => ({ err }));
 
 /*
 * Load single project
 */
-
-export function loadSingleProject(id) {
-    return {
-        type: projectsConst.LOAD_SINGLE_PROJECT,
-        id,
-    };
-}
-
-export function singleProjectLoaded(data) {
-    return {
-        type: projectsConst.SINGLE_PROJECT_LOADED,
-        data,
-    };
-}
-
-export function singleProjectsLoadingError(err) {
-    return {
-        type: projectsConst.SINGLE_PROJECT_LOADING_ERROR,
-        err,
-    };
-}
+export const loadSingleProject = createAction('LOAD_SINGLE_PROJECT', id => ({ id }));
+export const singleProjectLoaded = createAction('SINGLE_PROJECT_LOADED', data => ({ data }));
+export const singleProjectsLoadingError = createAction('SINGLE_PROJECT_LOADING_ERROR', (err = true) => ({ err }));
 
 /*
  * Adding
  */
-
-export function addProject(project) {
-    return {
-        type: projectsConst.ADD_PROJECT,
-        project,
-    };
-}
-
-export function projectAdded(project) {
-    return {
-        type: projectsConst.PROJECT_ADDED,
-        project,
-    };
-}
-
-export function projectAddingError(err = true) {
-    return {
-        type: projectsConst.PROJECT_ADDING_ERROR,
-        err,
-    };
-}
+export const addProject = createAction('ADD_PROJECT', project => ({ project }));
+export const projectAdded = createAction('PROJECT_ADDED', project => ({ project }));
+export const projectAddingError = createAction('PROJECT_ADDING_ERROR', (err = true) => ({ err }));
 
 /*
  * Updating
  */
-
-export function updateProject(project) {
-    return {
-        type: projectsConst.UPDATE_PROJECT,
-        project,
-    };
-}
-
-export function projectUpdated(project) {
-    return {
-        type: projectsConst.PROJECT_UPDATED,
-        project,
-    };
-}
-
-export function projectUpdatingError(err = true) {
-    return {
-        type: projectsConst.PROJECT_UPDATING_ERROR,
-        err,
-    };
-}
+export const updateProject = createAction('UPDATE_PROJECT', project => ({ project }));
+export const projectUpdated = createAction('PROJECT_UPDATED', project => ({ project }));
+export const projectUpdatingError = createAction('PROJECT_UPDATING_ERROR', (err = true) => ({ err }));
 
 /*
  * Delete
  */
-
-export function deleteProject(id) {
-    return {
-        type: projectsConst.DELETE_PROJECT,
-        id,
-    };
-}
-
-export function projectDeleted(id) {
-    return {
-        type: projectsConst.PROJECT_DELETED,
-        id,
-    };
-}
-
-export function projectDeletingError(err = true) {
-    return {
-        type: projectsConst.PROJECT_DELETING_ERROR,
-        err,
-    };
-}
+export const deleteProject = createAction('DELETE_PROJECT', id => ({ id }));
+export const projectDeleted = createAction('PROJECT_DELETED', id => ({ id }));
+export const projectDeletingError = createAction('PROJECT_DELETING_ERROR', (err = true) => ({ err }));
 
 /*
  * Reset
  */
-
-export function resetProjects() {
-    return {
-        type: projectsConst.RESET_PROJECTS,
-    }
-}
+export const resetProjects = createAction('RESET_PROJECTS');
