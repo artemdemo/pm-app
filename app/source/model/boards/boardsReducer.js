@@ -1,4 +1,4 @@
-import * as boardsConst from './boardsConst';
+import * as boardsActions from './boardsActions';
 import { sortByIdPosition } from '../../utils/boards';
 
 const initState = {
@@ -18,19 +18,19 @@ export default function boards(state = initState, action) {
         /*
          * Load
          */
-        case boardsConst.LOAD_BOARDS:
+        case `${boardsActions.loadBoards}`:
             return {
                 ...state,
                 loading: true
             };
-        case boardsConst.BOARDS_LOADED:
+        case `${boardsActions.boardsLoaded}`:
             return {
                 ...state,
                 data: action.boards.sort(sortByIdPosition),
                 loading: false,
                 loadingError: null,
             };
-        case boardsConst.BOARDS_LOADING_ERROR:
+        case `${boardsActions.boardsLoadingError}`:
             return {
                 ...state,
                 loading: false,
@@ -39,12 +39,12 @@ export default function boards(state = initState, action) {
         /*
          * Add
          */
-        case boardsConst.ADD_BOARD:
+        case `${boardsActions.addBoard}`:
             return {
                 ...state,
                 adding: true,
             };
-        case boardsConst.BOARD_ADDED:
+        case `${boardsActions.boardAdded}`:
             return {
                 ...state,
                 data: [
@@ -54,7 +54,7 @@ export default function boards(state = initState, action) {
                 adding: false,
                 addingError: null,
             };
-        case boardsConst.BOARD_ADDING_ERROR:
+        case `${boardsActions.boardAddingError}`:
             return {
                 ...state,
                 adding: false,
@@ -63,19 +63,19 @@ export default function boards(state = initState, action) {
         /*
          * Update
          */
-        case boardsConst.UPDATE_BOARD:
+        case `${boardsActions.updateBoard}`:
             return {
                 ...state,
                 updating: true,
             };
-        case boardsConst.BOARD_UPDATED:
+        case `${boardsActions.boardUpdated}`:
             // After updating single board I'll request all list, since they whole order could change
             return {
                 ...state,
                 updating: false,
                 updatingError: null,
             };
-        case boardsConst.BOARD_UPDATING_ERROR:
+        case `${boardsActions.boardUpdatingError}`:
             return {
                 ...state,
                 updating: false,
@@ -84,19 +84,19 @@ export default function boards(state = initState, action) {
         /*
          * Delete
          */
-        case boardsConst.DELETE_BOARD:
+        case `${boardsActions.deleteBoard}`:
             return {
                 ...state,
                 deleting: true,
             };
-        case boardsConst.BOARD_DELETED:
+        case `${boardsActions.boardDeleted}`:
             return {
                 ...state,
                 data: state.data.filter(item => item.id !== action.id),
                 deleting: true,
                 deletingError: null,
             };
-        case boardsConst.BOARD_DELETING_ERROR:
+        case `${boardsActions.boardDeletingError}`:
             return {
                 ...state,
                 deleting: false,
@@ -105,7 +105,7 @@ export default function boards(state = initState, action) {
         /*
          * Clear
          */
-        case boardsConst.RESET_BOARDS:
+        case `${boardsActions.resetBoards}`:
             return {
                 ...initState,
             };

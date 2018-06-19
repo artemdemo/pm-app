@@ -1,92 +1,29 @@
-import * as boardsConst from './boardsConst';
+import { createAction } from '../../services/actionCreator';
 
 /*
  * Loading
  */
-
-export function loadBoards() {
-    return {
-        type: boardsConst.LOAD_BOARDS,
-    };
-}
-
-export function boardsLoaded(boards) {
-    return {
-        type: boardsConst.BOARDS_LOADED,
-        boards,
-    };
-}
-
-export function boardsLoadingError(err = true) {
-    return {
-        type: boardsConst.BOARDS_LOADING_ERROR,
-        err,
-    };
-}
+export const loadBoards = createAction('LOAD_BOARDS');
+export const boardsLoaded = createAction('BOARDS_LOADED', boards => ({ boards }));
+export const boardsLoadingError = createAction('BOARDS_LOADING_ERROR', (err = true) => ({ err }));
 
 /*
  * Adding
  */
 
-/**
- * Add new board
- * @param board {Object}
- * @param board.title {String}
- * @param board.description {String}
- */
-export function addBoard(board) {
-    return {
-        type: boardsConst.ADD_BOARD,
-        board,
-    };
-}
-
-export function boardAdded(board) {
-    return {
-        type: boardsConst.BOARD_ADDED,
-        board,
-    };
-}
-
-export function boardAddingError(err) {
-    return {
-        type: boardsConst.BOARD_ADDING_ERROR,
-        err,
-    };
-}
+export const addBoard = createAction('ADD_BOARD', board => ({ board }));
+export const boardAdded = createAction('BOARD_ADDED', board => ({ board }));
+export const boardAddingError = createAction('BOARD_ADDING_ERROR', (err = true) => ({ err }));
 
 /*
  * Updating
  */
 
-/**
- * Update board
- * @param board {Object}
- * @param board.id {String}
- * @param board.title {String}
- * @param board.description {String}
- */
-export function updateBoard(board) {
-    return {
-        type: boardsConst.UPDATE_BOARD,
-        board,
-    };
-}
-
-export function boardUpdated() {
-    // After updating single board I'll request all list, since they whole order could change
-    // Therefore there is no additional data here
-    return {
-        type: boardsConst.BOARD_UPDATED,
-    };
-}
-
-export function boardUpdatingError(err) {
-    return {
-        type: boardsConst.BOARD_UPDATING_ERROR,
-        err,
-    };
-}
+export const updateBoard = createAction('UPDATE_BOARD', board => ({ board }));
+// After updating single board I'll request all list, since they whole order could change
+// Therefore there is no additional data here
+export const boardUpdated = createAction('BOARD_UPDATED');
+export const boardUpdatingError = createAction('BOARD_UPDATING_ERROR', (err = true) => ({ err }));
 
 /*
  * Deleting
@@ -96,33 +33,13 @@ export function boardUpdatingError(err) {
  * Delete board
  * @param id {Number}
  */
-export function deleteBoard(id) {
-    return {
-        type: boardsConst.DELETE_BOARD,
-        id,
-    };
-}
 
-export function boardDeleted(id) {
-    return {
-        type: boardsConst.BOARD_DELETED,
-        id,
-    };
-}
-
-export function boardDeletingError(err) {
-    return {
-        type: boardsConst.BOARD_DELETING_ERROR,
-        err,
-    };
-}
+export const deleteBoard = createAction('DELETE_BOARD', id => ({ id }));
+export const boardDeleted = createAction('BOARD_DELETED', id => ({ id }));
+export const boardDeletingError = createAction('BOARD_DELETING_ERROR', (err = true) => ({ err }));
 
 /*
  * Reset
  */
 
-export function resetBoards() {
-    return {
-        type: boardsConst.RESET_BOARDS,
-    }
-}
+export const resetBoards = createAction('RESET_BOARDS');

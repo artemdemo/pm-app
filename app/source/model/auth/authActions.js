@@ -1,98 +1,36 @@
-import * as authConst from './authConst';
+import { createAction } from '../../services/actionCreator';
 
 /*
  * Login
  */
 
-/**
- * @param data {LoginUser}
- */
-export function login(data) {
-    return {
-        type: authConst.LOGIN,
-        data,
-    }
-}
-
-export function loggedIn(data) {
-    return {
-        type: authConst.LOGGED_IN,
-        data,
-    }
-}
-
-export function loginError(err = true) {
-    return {
-        type: authConst.LOGIN_ERROR,
-        err,
-    }
-}
+export const login = createAction('LOGIN', data => ({ data }));
+export const loggedIn = createAction('LOGGED_IN', data => ({ data }));
+export const loginError = createAction('LOGIN_ERROR', (err = true) => ({ err }));
 
 /*
  * Logout
  */
 
-export function logout() {
-    return {
-        type: authConst.LOGOUT,
-    }
-}
+export const logout = createAction('LOGOUT');
 
 /*
  * User data
  */
-
-export function loadUser() {
-    return {
-        type: authConst.LOAD_USER,
-    };
-}
-
-export function userLoaded(data) {
-    return {
-        type: authConst.USER_LOADED,
-        data,
-    };
-}
-
-export function userLoadingError(err = true) {
-    return {
-        type: authConst.USER_LOADING_ERROR,
-        err,
-    };
-}
+export const loadUser = createAction('LOAD_USER');
+export const userLoaded = createAction('USER_LOADED', data => ({ data }));
+export const userLoadingError = createAction('USER_LOADING_ERROR', (err = true) => ({ err }));
 
 /*
  * Signup
  */
 
-export function signup(data) {
-    return {
-        type: authConst.SIGNUP,
-        data
-    };
-}
-
-export function signedUp(data) {
-    return {
-        type: authConst.SIGNED_UP,
-        data,
-    };
-}
-
-export function signupError(err = true) {
-    return {
-        type: authConst.SIGNUP_ERROR,
-        err,
-    };
-}
+export const signup = createAction('SIGNUP', data => ({ data }));
+export const signedUp = createAction('SIGNED_UP', data => ({ data }));
+export const signupError = createAction('SIGNUP_ERROR', (err = true) => ({ err }));
 
 /*
  * Reset
  */
 
-export function resetUser() {
-    return {
-        type: authConst.RESET_USER,
-    };
-}
+export const resetUser = createAction('RESET_USER');

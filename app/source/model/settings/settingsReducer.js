@@ -1,4 +1,4 @@
-import * as settingsConst from './settingsConst';
+import * as settingsActions from './settingsActions';
 
 const initState = {
     data: {},
@@ -13,19 +13,19 @@ export default function settings(state = initState, action) {
         /*
          * Loading
          */
-        case settingsConst.LOAD_SETTINGS:
+        case `${settingsActions.loadSettings}`:
             return {
                 ...state,
                 loading: true,
             };
-        case settingsConst.SETTINGS_LOADED:
+        case `${settingsActions.settingsLoaded}`:
             return {
                 ...state,
                 data: action.settings,
                 loading: false,
                 loadingError: null,
             };
-        case settingsConst.SETTINGS_LOADING_ERROR:
+        case `${settingsActions.settingsLoadingError}`:
             return {
                 ...state,
                 loading: false,
@@ -34,19 +34,19 @@ export default function settings(state = initState, action) {
         /*
          * Updating
          */
-        case settingsConst.UPDATE_SETTINGS:
+        case `${settingsActions.updateSettings}`:
             return {
                 ...state,
                 updating: true,
             };
-        case settingsConst.SETTINGS_UPDATED:
+        case `${settingsActions.settingsUpdated}`:
             return {
                 ...state,
                 data: action.settings,
                 updating: false,
                 updatingError: null,
             };
-        case settingsConst.SETTINGS_UPDATING_ERROR:
+        case `${settingsActions.settingsUpdatingError}`:
             return {
                 ...state,
                 updating: false,
@@ -55,7 +55,7 @@ export default function settings(state = initState, action) {
         /*
          * Reset
          */
-        case settingsConst.RESET_SETTINGS:
+        case `${settingsActions.resetSettings}`:
             return {
                 ...initState,
             };
