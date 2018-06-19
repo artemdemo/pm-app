@@ -1,60 +1,20 @@
-import * as settingsConst from './settingsConst';
+import { createAction } from '../../services/actionCreator';
 
 /*
  * Load
  */
-
-export function loadSettings() {
-    return {
-        type: settingsConst.LOAD_SETTINGS,
-    };
-}
-
-export function settingsLoaded(settings) {
-    return {
-        type: settingsConst.SETTINGS_LOADED,
-        settings,
-    };
-}
-
-export function settingsLoadingError(err = true) {
-    return {
-        type: settingsConst.SETTINGS_LOADING_ERROR,
-        err,
-    };
-}
+export const loadSettings = createAction('LOAD_SETTINGS');
+export const settingsLoaded = createAction('SETTINGS_LOADED', settings => ({ settings }));
+export const settingsLoadingError = createAction('SETTINGS_LOADING_ERROR', (err = true) => ({ err }));
 
 /*
  * Update
  */
-
-export function updateSettings(settings) {
-    return {
-        type: settingsConst.UPDATE_SETTINGS,
-        settings,
-    };
-}
-
-export function settingsUpdated(settings) {
-    return {
-        type: settingsConst.SETTINGS_UPDATED,
-        settings,
-    };
-}
-
-export function settingsUpdatingError(err = true) {
-    return {
-        type: settingsConst.SETTINGS_UPDATING_ERROR,
-        err,
-    };
-}
+export const updateSettings = createAction('UPDATE_SETTINGS', settings => ({ settings }));
+export const settingsUpdated = createAction('SETTINGS_UPDATED', settings => ({ settings }));
+export const settingsUpdatingError = createAction('SETTINGS_UPDATING_ERROR', (err = true) => ({ err }));
 
 /*
  * Reset
  */
-
-export function resetSettings() {
-    return {
-        type: settingsConst.RESET_SETTINGS,
-    }
-}
+export const resetSettings = createAction('RESET_SETTINGS');

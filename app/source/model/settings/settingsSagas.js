@@ -1,23 +1,17 @@
 import { take, put } from 'redux-saga/effects';
 import request from '../../services/request';
-import * as projectsConst from './settingsConst';
-import {
-    settingsLoaded,
-    settingsLoadingError,
-    settingsUpdated,
-    settingsUpdatingError,
-} from './settingsActions';
+import * as settingsActions from './settingsActions';
 
 function* loadSettingsSaga() {
     while (true) {
         try {
-            yield take(projectsConst.LOAD_SETTINGS);
+            yield take(settingsActions.loadSettings);
             const result = yield request
                 .get('/api/settings')
                 .promise();
-            yield put(settingsLoaded(result.body));
+            yield put(settingsActions.settingsLoaded(result.body));
         } catch (err) {
-            yield put(settingsLoadingError(err));
+            yield put(settingsActions.settingsLoadingError(err));
         }
     }
 }
@@ -25,14 +19,14 @@ function* loadSettingsSaga() {
 function* updateSettingsSaga() {
     while (true) {
         try {
-            const { settings } = yield take(projectsConst.UPDATE_SETTINGS);
+            const { settings } = yield take(settingsActions.updateSettings);
             const result = yield request
                 .put('/api/settings')
                 .send(settings)
                 .promise();
-            yield put(settingsUpdated(result.body));
+            yield put(settingsActions.settingsUpdated(result.body));
         } catch (err) {
-            yield put(settingsUpdatingError(err));
+            yield put(settingsActions.settingsUpdatingError(err));
         }
     }
 }
