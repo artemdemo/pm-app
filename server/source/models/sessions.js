@@ -5,7 +5,7 @@ const config = require('../config');
 
 const tableName = 'sessions';
 
-const getSession = async function(queryObject) {
+exports.getSession = async function(queryObject) {
     let column;
     let value;
 
@@ -38,7 +38,7 @@ const getSession = async function(queryObject) {
 };
 
 
-const updateSession = async function(session) {
+exports.updateSession = async function(session) {
     const updateData = {
         added: moment().format('YYYY-MM-DD HH:mm:ss'),
         expires_in: config.expPeriod,
@@ -58,7 +58,7 @@ const updateSession = async function(session) {
 };
 
 
-const addSession = async function(newSession) {
+exports.addSession = async function(newSession) {
     if (!newSession.user_id) {
         throw new Error('No user_id in given object');
     }
@@ -90,10 +90,4 @@ const addSession = async function(newSession) {
         id: session.id,
         expiration: result.expiration,
     };
-};
-
-
-module.exports = {
-    addSession,
-    getSession,
 };

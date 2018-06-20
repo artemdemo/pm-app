@@ -42,7 +42,7 @@ const getAllBoards = userId => queryRows({
  * @param boardsData.id {String}
  * @returns {Promise}
  */
-const getAll = boardsData => getAllBoards(boardsData.userId)
+exports.getAll = boardsData => getAllBoards(boardsData.userId)
     .then((boards) => {
         return boards.map(board => ({
             id: board.id,
@@ -62,7 +62,7 @@ const getAll = boardsData => getAllBoards(boardsData.userId)
  * @param newBoardData.board.id_position {Number}
  * @returns {Promise}
  */
-const addNew = async function(newBoardData) {
+exports.addNew = async function(newBoardData) {
     const now = moment(new Date());
 
     const boards = await getAllBoards(newBoardData.userId);
@@ -111,7 +111,7 @@ const addNew = async function(newBoardData) {
  * Update board
  * @returns {Promise}
  */
-const updateBoard = async function(boardData) {
+exports.updateBoard = async function(boardData) {
     const now = moment(new Date());
     const updateData = {};
     const updateAllowed = true;
@@ -182,7 +182,7 @@ const updateBoard = async function(boardData) {
  * @param boardData.userId {String}
  * @param boardData.boardId {String}
  */
-const deleteBoard = async function(boardData) {
+exports.deleteBoard = async function(boardData) {
     if (!boardData.boardId) {
         throw new Error('No "id" in given board');
     }
@@ -202,11 +202,4 @@ const deleteBoard = async function(boardData) {
     const boards = await getAllBoards(boardData.userId);
     const query = createPositionsQuery(boards);
     return DB.run(query);
-};
-
-module.exports = {
-    getAll,
-    addNew,
-    updateBoard,
-    deleteBoard,
 };

@@ -78,11 +78,12 @@ exports.add = (req, res, next) => {
 exports.update = (req, res, next) => {
     const { projects } = req.body;
     const taskId = req.body.id;
+    const userId = req.authSession.userId;
     const tasksData = {
         task: req.body,
-        userId: req.authSession.userId,
+        userId,
     };
-    debug(`Update task with id: ${taskId} (user id ${tasksData.userId})`);
+    debug(`Update task with id: ${taskId} (user id ${userId})`);
     debug(req.body);
     tasks
         .updateTask(tasksData)
@@ -97,7 +98,7 @@ exports.update = (req, res, next) => {
             tasks
                 .getById({
                     taskId,
-                    userId: req.authSession.userId,
+                    userId,
                 }))
         .then(task => res.json(task))
         .catch((err) => {

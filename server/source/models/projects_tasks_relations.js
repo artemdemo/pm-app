@@ -9,7 +9,7 @@ const tableName = 'projects_tasks_relations';
  * @param projectId {Number || Array}
  * @param taskId {Number || Array}
  */
-const addRelation = async function(projectId, taskId) {
+exports.addRelation = async function(projectId, taskId) {
 
     if (Array.isArray(projectId) && Array.isArray(taskId)) {
         throw new Error('projectId and taskId can\'t be both an Array');
@@ -61,7 +61,7 @@ const addRelation = async function(projectId, taskId) {
  * @param projectId {Number}
  * @param taskId {Number}
  */
-const deleteRelation = async function(projectId, taskId) {
+exports.deleteRelation = async function(projectId, taskId) {
     if (_isNumber(projectId) || Number(projectId) < 1) {
         throw new Error('projectId should be a number, greater than 1');
     } else if (_isNumber(taskId) || Number(taskId) < 1) {
@@ -80,9 +80,4 @@ const deleteRelation = async function(projectId, taskId) {
             value: projectId,
         },
     ]);
-};
-
-module.exports = {
-    addRelation,
-    deleteRelation,
 };

@@ -17,7 +17,7 @@ const PROJECTS_QUERY = `SELECT projects_tasks_relations.task_id,
                                 ON tasks.id = projects_tasks_relations.task_id
                         WHERE projects.id = ?;`;
 
-const getAll = async function(projectsData) {
+exports.getAll = async function(projectsData) {
     const projects = await queryRows({
         tableName,
         fields: PROJECT_FIELDS,
@@ -45,7 +45,7 @@ const getAll = async function(projectsData) {
  * @param projectData.projectId {Number}
  * @return {Promise<Object>}
  */
-const getById = async function(projectData) {
+exports.getById = async function(projectData) {
     const projects = await queryRows({
         tableName,
         fields: PROJECT_FIELDS,
@@ -69,7 +69,7 @@ const getById = async function(projectData) {
 };
 
 
-const addNew = async function(newProjectData) {
+exports.addNew = async function(newProjectData) {
     const now = moment(new Date());
 
     if (!newProjectData.project.name) {
@@ -94,7 +94,7 @@ const addNew = async function(newProjectData) {
 };
 
 
-const updateProject = async function(projectData) {
+exports.updateProject = async function(projectData) {
     const now = moment(new Date());
     const updateData = {};
     const updateAllowed = true;
@@ -136,7 +136,7 @@ const updateProject = async function(projectData) {
 };
 
 
-const deleteProject = async function(projectData) {
+exports.deleteProject = async function(projectData) {
     if (!projectData.projectId) {
         throw new Error('No projectId in given project');
     }
@@ -152,12 +152,4 @@ const deleteProject = async function(projectData) {
         comparator: '=',
         value: projectData.userId,
     }]);
-};
-
-module.exports = {
-    getAll,
-    getById,
-    addNew,
-    updateProject,
-    deleteProject,
 };
