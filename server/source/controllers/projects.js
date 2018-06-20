@@ -30,9 +30,7 @@ exports.one = (req, res, next) => {
             projectId,
             userId,
         })
-        .then((project) => {
-            res.json(project);
-        })
+        .then(project => res.json(project))
         .catch((err) => {
             debug(err);
             next(Boom.badRequest(errConstants.DB_ERROR));
@@ -40,18 +38,26 @@ exports.one = (req, res, next) => {
 };
 
 exports.add = (req, res, next) => {
+    const userId = req.authSession.userId;
     const projectsData = {
         project: req.body,
-        userId: req.authSession.userId,
+        userId,
     };
-    debug(`Add project (user id ${projectsData.userId})`);
+    debug(`Add project (user id ${userId})`);
 
     projects
         .addNew(projectsData)
         .then((result) => {
             debug(`Project id ${result.id} created`);
-            res.json(result);
+            return result.id;
         })
+        .then((projectId) =>
+            projects
+                .getById({
+                    projectId,
+                    userId,
+                }))
+        .then(project => res.json(project))
         .catch((err) => {
             debug(err);
             next(Boom.badRequest(errConstants.DB_ERROR));
@@ -61,25 +67,31 @@ exports.add = (req, res, next) => {
 exports.update = (req, res, next) => {
     const { id, tasks } = req.body;
 
+    const userId = req.authSession.userId;
     const projectsData = {
         project: req.body,
-        userId: req.authSession.userId,
+        userId,
     };
-    debug(`Update project with id: ${id} (user id ${projectsData.userId})`);
+    debug(`Update project with id: ${id} (user id ${userId})`);
     projects
         .updateProject(projectsData)
-        .then((updatedData) => {
+        .then(() => {
             debug(`Project id ${id} updated`);
             if (_get(tasks, 'length', 0) > 0 && _isNumber(id)) {
                 return projectsTasksRelations
                     .addRelation(id, tasks.map(item => item.id))
                     .then(() => {
                         debug(`Added relations to project id ${id} and tasks ${JSON.stringify(tasks)}`);
-                        res.json(updatedData);
                     });
             }
-            res.json(updatedData);
         })
+        .then(() =>
+            projects
+                .getById({
+                    projectId: id,
+                    userId,
+                }))
+        .then(project => res.json(project))
         .catch((err) => {
             debug(err);
             next(Boom.badRequest(errConstants.DB_ERROR));
@@ -87,15 +99,17 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
+    const userId = req.authSession.userId;
+    const projectId = req.params.projectId;
     const projectsData = {
-        projectId: req.params.projectId,
-        userId: req.authSession.userId,
+        projectId,
+        userId,
     };
-    debug(`Delete project with id: ${projectsData.projectId} (user id ${projectsData.userId})`);
+    debug(`Delete project with id: ${projectId} (user id ${userId})`);
     projects
         .deleteProject(projectsData)
         .then(() => {
-            debug(`Project id ${req.params.projectId} deleted`);
+            debug(`Project id ${projectId} deleted`);
             res.json({});
         })
         .catch((err) => {

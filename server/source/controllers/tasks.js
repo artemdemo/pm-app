@@ -93,13 +93,12 @@ exports.update = (req, res, next) => {
                     debug(`Projects relations with task id ${taskId} updated`);
                 });
         })
-        .then(() => {
-            return tasks
+        .then(() =>
+            tasks
                 .getById({
                     taskId,
                     userId: req.authSession.userId,
-                });
-        })
+                }))
         .then(task => res.json(task))
         .catch((err) => {
             debug(err);
