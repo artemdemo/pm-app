@@ -5,7 +5,7 @@ const config = require('../config');
 
 const tableName = 'sessions';
 
-exports.getSession = async function(queryObject) {
+const getSession = async function(queryObject) {
     let column;
     let value;
 
@@ -38,7 +38,7 @@ exports.getSession = async function(queryObject) {
 };
 
 
-exports.updateSession = async function(session) {
+const updateSession = async function(session) {
     const updateData = {
         added: moment().format('YYYY-MM-DD HH:mm:ss'),
         expires_in: config.expPeriod,
@@ -58,7 +58,7 @@ exports.updateSession = async function(session) {
 };
 
 
-exports.addSession = async function(newSession) {
+const addSession = async function(newSession) {
     if (!newSession.user_id) {
         throw new Error('No user_id in given object');
     }
@@ -90,4 +90,13 @@ exports.addSession = async function(newSession) {
         id: session.id,
         expiration: result.expiration,
     };
+};
+
+// Pay attention to implementation, you can't move it to
+// `exports.getSession`
+// `exports.addSession`
+// Since you're using `getSession` inside of `addSession` (for example)
+module.exports = {
+    getSession,
+    addSession,
 };
