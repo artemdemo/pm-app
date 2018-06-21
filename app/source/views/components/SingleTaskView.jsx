@@ -101,7 +101,7 @@ class SingleTaskView extends React.PureComponent {
     render() {
         const { projects } = this.props;
         return (
-            <EntityModal>
+            <EntityModal title='Task'>
                 <div className='form-group'>
                     <input
                         type='text'
