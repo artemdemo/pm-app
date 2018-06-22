@@ -20,31 +20,27 @@ class EntityControllers extends React.PureComponent {
 
     render() {
         return (
-            <div className='row justify-content-between'>
-                <div className='col-6'>
-                    <ElementsRow>
-                        <button
-                            className='btn btn-primary'
-                            onClick={this.handleSave}
-                        >
-                            Save
-                        </button>
-                        <button
-                            className='btn btn-light'
-                            onClick={this.handleClose}
-                        >
-                            Close
-                        </button>
-                    </ElementsRow>
-                </div>
-                <div className='col-4'>
+            <div className='d-flex mb-2'>
+                <ElementsRow className='mr-auto'>
                     <button
-                        className='btn btn-danger'
-                        onClick={this.handleDelete}
+                        className='btn btn-primary'
+                        onClick={this.handleSave}
                     >
-                        Delete
+                        Save
                     </button>
-                </div>
+                    <button
+                        className='btn btn-light'
+                        onClick={this.handleClose}
+                    >
+                        Close
+                    </button>
+                </ElementsRow>
+                <button
+                    className='btn btn-danger'
+                    onClick={this.handleDelete}
+                >
+                    Delete
+                </button>
             </div>
         );
     }

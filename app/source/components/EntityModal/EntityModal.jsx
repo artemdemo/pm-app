@@ -9,7 +9,7 @@ class EntityModal extends React.PureComponent {
         const { title } = this.props;
         if (_isString(title) && title.length > 0) {
             return (
-                <div className='entity-modal-title border-bottom'>
+                <div className='entity-modal-title border-bottom rounded-top'>
                     {title}
                 </div>
             );
