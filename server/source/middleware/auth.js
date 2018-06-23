@@ -1,6 +1,6 @@
 const Boom = require('boom');
 const jwt = require('express-jwt');
-const debug = require('debug')('pm:middleware.auth');
+const debug = require('debug')('pm:middleware:auth');
 const secret = require('../secret');
 const sessions = require('../models/sessions');
 
@@ -43,6 +43,7 @@ const sessionMiddleware = (req, res, next) => {
             })
     } else {
         const allowedUrls = [
+            /^\/$/,
             /\/api\/user\/login/,
             /\/api\/user\/signup/,
         ];

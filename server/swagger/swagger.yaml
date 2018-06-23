@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  version: "0.1.0"
+  title: pm-app
+#basePath: /api/v1
+basePath: /api
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /user:
+    x-swagger-router-controller: user
+    get:
+      description: Get information baout the user
+      operationId: user
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: User info
+        "500":
+          description: Internal error
+
+  /user/login:
+    x-swagger-router-controller: user
+    put:
+      description: Login user
+      operationId: login
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: User logged in
+        "500":
+          description: Internal error
+
+  /tasks:
+    x-swagger-router-controller: tasks
+    get:
+      description: Get tasks
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all tasks related to user
+        "500":
+          description: Internal error
+
+  /projects:
+    x-swagger-router-controller: projects
+    get:
+      description: Get projects
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+    post:
+      description: Create new project
+      operationId: add
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+
+  /boards:
+    x-swagger-router-controller: boards
+    get:
+      description: Get boards
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all boards related to user
+          schema:
+            $ref: '#/definitions/BoardsList'
+        "500":
+          description: Internal error
+
+responses:
+  Error:
+    description: Error
+    schema:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+
+definitions:
+  Board:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+
+  BoardsList:
+    properties:
+      schema:
+        type: array
+        items:
+          $ref: '#/definitions/Board'

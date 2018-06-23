@@ -4,7 +4,7 @@ const boom = require('boom');
 const sessions = require('../models/sessions');
 const users = require('../models/users');
 const secret = require('../secret');
-const auth = require('../auth');
+const auth = require('../middleware/auth');
 const errConstants = require('../constants/error');
 
 const tokenOptions = {
