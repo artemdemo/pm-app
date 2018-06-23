@@ -1,0 +1,13 @@
+paths:
+  /tasks:
+    x-swagger-router-controller: tasks
+    get:
+      description: Get tasks
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all tasks related to user
+        "500":
+          description: Internal error

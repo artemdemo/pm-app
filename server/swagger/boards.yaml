@@ -1,0 +1,25 @@
+paths:
+  /boards:
+    x-swagger-router-controller: boards
+    get:
+      description: Get boards
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all boards related to user
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Board'
+        "500":
+          description: Internal error
+
+definitions:
+  Board:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string

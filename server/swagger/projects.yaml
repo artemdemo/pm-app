@@ -1,0 +1,23 @@
+paths:
+  /projects:
+    x-swagger-router-controller: projects
+    get:
+      description: Get projects
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+    post:
+      description: Create new project
+      operationId: add
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error

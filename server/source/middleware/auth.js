@@ -43,7 +43,8 @@ const sessionMiddleware = (req, res, next) => {
             })
     } else {
         const allowedUrls = [
-            /^\/$/,
+            /\/api\/docs/,
+            /\/api\/api-docs/,
             /\/api\/user\/login/,
             /\/api\/user\/signup/,
         ];

@@ -23,6 +23,8 @@ paths:
       responses:
         200:
           description: User info
+          schema:
+            $ref: '#/definitions/User'
         "500":
           description: Internal error
 
@@ -39,57 +41,6 @@ paths:
         "500":
           description: Internal error
 
-  /tasks:
-    x-swagger-router-controller: tasks
-    get:
-      description: Get tasks
-      operationId: all
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: List of all tasks related to user
-        "500":
-          description: Internal error
-
-  /projects:
-    x-swagger-router-controller: projects
-    get:
-      description: Get projects
-      operationId: all
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: List of all projects related to user
-        "500":
-          description: Internal error
-    post:
-      description: Create new project
-      operationId: add
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: List of all projects related to user
-        "500":
-          description: Internal error
-
-  /boards:
-    x-swagger-router-controller: boards
-    get:
-      description: Get boards
-      operationId: all
-      consumes:
-        - application/json
-      responses:
-        200:
-          description: List of all boards related to user
-          schema:
-            $ref: '#/definitions/BoardsList'
-        "500":
-          description: Internal error
-
 responses:
   Error:
     description: Error
@@ -101,16 +52,9 @@ responses:
           type: string
 
 definitions:
-  Board:
+  User:
     properties:
-      id:
-        type: integer
-      name:
+      email:
         type: string
-
-  BoardsList:
-    properties:
-      schema:
-        type: array
-        items:
-          $ref: '#/definitions/Board'
+      username:
+        type: string
