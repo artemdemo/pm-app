@@ -43,10 +43,12 @@ const sessionMiddleware = (req, res, next) => {
             })
     } else {
         const allowedUrls = [
-            /\/api\/docs/,
-            /\/api\/api-docs/,
-            /\/api\/user\/login/,
-            /\/api\/user\/signup/,
+            /^\/$/,
+            // /^((?!api).)*$/,    // will match any line that not contains word "api"
+            /^\/js\/[\S]+\.(js|css)$/,
+            /^\/js\/[\S]+\.(js|css)\.map$/,
+            /\/api\/(docs|api-docs)/,
+            /\/api\/user\/(login|signup)/,
         ];
         const allowed = allowedUrls.some(urlRegex => urlRegex.test(req.url));
         if (allowed) {
