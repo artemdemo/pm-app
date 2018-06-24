@@ -22,7 +22,7 @@ exports.all = (req, res, next) => {
 };
 
 exports.one = (req, res, next) => {
-    const { projectId } = req.params;
+    const projectId = req.swagger.params.projectId.value;
     const { userId } = req.authSession;
     debug(`Get project with id: ${projectId} (user id ${userId})`);
     projects
@@ -100,7 +100,7 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
     const userId = req.authSession.userId;
-    const projectId = req.params.projectId;
+    const projectId = req.swagger.params.projectId.value;
     const projectsData = {
         projectId,
         userId,

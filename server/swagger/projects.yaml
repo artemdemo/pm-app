@@ -21,3 +21,44 @@ paths:
           description: List of all projects related to user
         "500":
           description: Internal error
+    put:
+      description: Update project
+      operationId: update
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+
+  /projects/{projectId}:
+    x-swagger-router-controller: projects
+    get:
+      description: Get single project
+      operationId: one
+      parameters:
+        - $ref: '#/parameters/projectId'
+      responses:
+        200:
+          description: Single project data
+        "500":
+          description: Internal error
+    delete:
+      description: Delete single project
+      operationId: delete
+      parameters:
+        - $ref: '#/parameters/projectId'
+      responses:
+        200:
+          description: Single project deleted
+        "500":
+          description: Internal error
+
+parameters:
+  projectId:
+    in: path
+    name: projectId
+    required: true
+    type: integer
+    description: The project ID
