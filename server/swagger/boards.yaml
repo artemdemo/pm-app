@@ -15,6 +15,8 @@ paths:
               $ref: '#/definitions/Board'
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
 
 definitions:
   Board:

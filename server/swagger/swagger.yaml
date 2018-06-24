@@ -27,6 +27,8 @@ paths:
             $ref: '#/definitions/User'
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
 
   /user/login:
     x-swagger-router-controller: user
@@ -40,6 +42,22 @@ paths:
           description: User logged in
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+parameters:
+  projectId:
+    in: path
+    name: projectId
+    required: true
+    type: integer
+    description: The project ID
+  taskId:
+    in: path
+    name: taskId
+    required: true
+    type: integer
+    description: The task ID
 
 responses:
   Error:

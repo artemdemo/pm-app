@@ -11,3 +11,5 @@ paths:
           description: List of all tasks related to user
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'

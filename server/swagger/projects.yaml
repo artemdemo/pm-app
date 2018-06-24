@@ -11,6 +11,8 @@ paths:
           description: List of all projects related to user
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
     post:
       description: Create new project
       operationId: add
@@ -21,6 +23,8 @@ paths:
           description: List of all projects related to user
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
     put:
       description: Update project
       operationId: update
@@ -31,6 +35,8 @@ paths:
           description: List of all projects related to user
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
 
   /projects/{projectId}:
     x-swagger-router-controller: projects
@@ -44,6 +50,8 @@ paths:
           description: Single project data
         "500":
           description: Internal error
+          schema:
+            $ref: '#/responses/Error'
     delete:
       description: Delete single project
       operationId: delete
@@ -54,11 +62,5 @@ paths:
           description: Single project deleted
         "500":
           description: Internal error
-
-parameters:
-  projectId:
-    in: path
-    name: projectId
-    required: true
-    type: integer
-    description: The project ID
+          schema:
+            $ref: '#/responses/Error'
