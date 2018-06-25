@@ -64,3 +64,32 @@ paths:
           description: Internal error
           schema:
             $ref: '#/responses/Error'
+
+#  /projects/{projectId}/task/{taskId}:
+#    x-swagger-router-controller: projects
+#    get:
+#      description: Connect task to projects
+#      operationId: connectTask
+#      parameters:
+#        - $ref: '#/parameters/projectId'
+#        - $ref: '#/parameters/taskId'
+#      responses:
+#        200:
+#          description: Connected
+#        "500":
+#          description: Internal error
+#          schema:
+#            $ref: '#/responses/Error'
+#    delete:
+#      description: Disconnect task from project
+#      operationId: disconnectTask
+#      parameters:
+#        - $ref: '#/parameters/projectId'
+#        - $ref: '#/parameters/taskId'
+#      responses:
+#        200:
+#          description: Disconnected
+#        "500":
+#          description: Internal error
+#          schema:
+#            $ref: '#/responses/Error'

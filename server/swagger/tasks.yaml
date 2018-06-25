@@ -13,3 +13,27 @@ paths:
           description: Internal error
           schema:
             $ref: '#/responses/Error'
+    post:
+      description: Create new task
+      operationId: add
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Created task
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    put:
+      description: Update task
+      operationId: update
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Updated task
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
