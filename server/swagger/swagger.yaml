@@ -91,3 +91,24 @@ definitions:
         type: string
       username:
         type: string
+  Task:
+    # ToDo: Add required properties
+    # ToDo: `added` and `updated` are time string it should be mentioned somehow
+    # ToDo: `Task` object also has `projects` array as property - you should use it as well
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      done:
+        type: boolean
+      added:
+        type: string
+      updated:
+        type: string
+      board_id:
+        type: integer
+      id_position_scrum:
+        type: integer

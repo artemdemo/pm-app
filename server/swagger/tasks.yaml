@@ -9,6 +9,10 @@ paths:
       responses:
         200:
           description: List of all tasks related to user
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Task'
         "500":
           description: Internal error
           schema:
@@ -21,6 +25,8 @@ paths:
       responses:
         200:
           description: Created task
+          schema:
+            $ref: '#/definitions/Task'
         "500":
           description: Internal error
           schema:
@@ -33,6 +39,8 @@ paths:
       responses:
         200:
           description: Updated task
+          schema:
+            $ref: '#/definitions/Task'
         "500":
           description: Internal error
           schema:
@@ -63,6 +71,8 @@ paths:
       responses:
         200:
           description: Single task data
+          schema:
+            $ref: '#/definitions/Task'
         "500":
           description: Internal error
           schema:
