@@ -1,0 +1,91 @@
+paths:
+  /tasks:
+    x-swagger-router-controller: tasks
+    get:
+      description: Get tasks
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all tasks related to user
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Task'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    post:
+      description: Create new task
+      operationId: add
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Created task
+          schema:
+            $ref: '#/definitions/Task'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    put:
+      description: Update task
+      operationId: update
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Updated task
+          schema:
+            $ref: '#/definitions/Task'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /tasks/position:
+    x-swagger-router-controller: tasks
+    put:
+      description: Update task position
+      operationId: updatePositions
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Updated task
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /tasks/{taskId}:
+    x-swagger-router-controller: tasks
+    get:
+      description: Get single task
+      operationId: one
+      parameters:
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Single task data
+          schema:
+            $ref: '#/definitions/Task'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    delete:
+      description: Delete single task
+      operationId: delete
+      parameters:
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Single task deleted
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'

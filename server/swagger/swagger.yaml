@@ -1,0 +1,114 @@
+swagger: "2.0"
+info:
+  version: "0.1.0"
+  title: pm-app
+#basePath: /api/v1
+basePath: /api
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /user:
+    x-swagger-router-controller: user
+    get:
+      description: Get information baout the user
+      operationId: user
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: User info
+          schema:
+            $ref: '#/definitions/User'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /user/login:
+    x-swagger-router-controller: user
+    put:
+      description: Login user
+      operationId: login
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: User logged in
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /settings:
+    x-swagger-router-controller: settings
+    put:
+      description: Settings for the current user
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Settings object
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+parameters:
+  projectId:
+    in: path
+    name: projectId
+    required: true
+    type: integer
+    description: The project ID
+  taskId:
+    in: path
+    name: taskId
+    required: true
+    type: integer
+    description: The task ID
+
+responses:
+  Error:
+    description: Error
+    schema:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+
+definitions:
+  User:
+    properties:
+      email:
+        type: string
+      username:
+        type: string
+  Task:
+    # ToDo: Add required properties
+    # ToDo: `added` and `updated` are time string it should be mentioned somehow
+    # ToDo: `Task` object also has `projects` array as property - you should use it as well
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      done:
+        type: boolean
+      added:
+        type: string
+      updated:
+        type: string
+      board_id:
+        type: integer
+      id_position_scrum:
+        type: integer

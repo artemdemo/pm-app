@@ -1,0 +1,95 @@
+paths:
+  /projects:
+    x-swagger-router-controller: projects
+    get:
+      description: Get projects
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    post:
+      description: Create new project
+      operationId: add
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    put:
+      description: Update project
+      operationId: update
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all projects related to user
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /projects/{projectId}:
+    x-swagger-router-controller: projects
+    get:
+      description: Get single project
+      operationId: one
+      parameters:
+        - $ref: '#/parameters/projectId'
+      responses:
+        200:
+          description: Single project data
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    delete:
+      description: Delete single project
+      operationId: delete
+      parameters:
+        - $ref: '#/parameters/projectId'
+      responses:
+        200:
+          description: Single project deleted
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+#  /projects/{projectId}/task/{taskId}:
+#    x-swagger-router-controller: projects
+#    get:
+#      description: Connect task to projects
+#      operationId: connectTask
+#      parameters:
+#        - $ref: '#/parameters/projectId'
+#        - $ref: '#/parameters/taskId'
+#      responses:
+#        200:
+#          description: Connected
+#        "500":
+#          description: Internal error
+#          schema:
+#            $ref: '#/responses/Error'
+#    delete:
+#      description: Disconnect task from project
+#      operationId: disconnectTask
+#      parameters:
+#        - $ref: '#/parameters/projectId'
+#        - $ref: '#/parameters/taskId'
+#      responses:
+#        200:
+#          description: Disconnected
+#        "500":
+#          description: Internal error
+#          schema:
+#            $ref: '#/responses/Error'
