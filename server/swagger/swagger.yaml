@@ -45,6 +45,21 @@ paths:
           schema:
             $ref: '#/responses/Error'
 
+  /settings:
+    x-swagger-router-controller: settings
+    put:
+      description: Settings for the current user
+      operationId: all
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Settings object
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
 parameters:
   projectId:
     in: path
