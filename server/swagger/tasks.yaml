@@ -37,3 +37,45 @@ paths:
           description: Internal error
           schema:
             $ref: '#/responses/Error'
+
+  /tasks/position:
+    x-swagger-router-controller: tasks
+    put:
+      description: Update task position
+      operationId: updatePositions
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Updated task
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /tasks/{taskId}:
+    x-swagger-router-controller: tasks
+    get:
+      description: Get single task
+      operationId: one
+      parameters:
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Single task data
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    delete:
+      description: Delete single task
+      operationId: delete
+      parameters:
+        - $ref: '#/parameters/taskId'
+      responses:
+        200:
+          description: Single task deleted
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
