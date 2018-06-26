@@ -14,7 +14,6 @@ const swaggerTools = require('swagger-tools');
 const bodyParser = require('body-parser');
 const DB = require('sqlite-crud');
 
-const apiRouter = require('./source/routes/apiRouter');
 const { addAuth } = require('./source/middleware/auth');
 
 let pathToTheDB;
