@@ -91,10 +91,15 @@ definitions:
         type: string
       username:
         type: string
+  ListItem:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
   Task:
-    # ToDo: Add required properties
-    # ToDo: `added` and `updated` are time string it should be mentioned somehow
-    # ToDo: `Task` object also has `projects` array as property - you should use it as well
+    required:
+      - name
     properties:
       id:
         type: integer
@@ -106,9 +111,35 @@ definitions:
         type: boolean
       added:
         type: string
+        format: date
       updated:
         type: string
+        format: date
       board_id:
         type: integer
       id_position_scrum:
         type: integer
+      projects:
+        type: array
+        items:
+          $ref: '#/definitions/ListItem'
+  Project:
+    required:
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      added:
+        type: string
+        format: date
+      updated:
+        type: string
+        format: date
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/ListItem'

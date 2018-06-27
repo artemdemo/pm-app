@@ -38,24 +38,17 @@ Alternatively you can open [http://localhost:8080/signup](http://localhost:8080/
 
 [All npm commands](docs/npm.md)
 
-## e2e tests
+## Tests
 
-Download the latest version of selenium server and chromedriver (which will be needed for running tests in Chrome browser)
-
-```
-$ npm run e2e-setup
-```
-
-Run e2e tests
+You need to run tests separatly for server and for client
 
 ```
 $ npm test
 ```
 
-More [about e2e tests](docs/e2e.md)
+## Swagger
 
-## Compilation
-
-I'm using webpack with some plugins
+* http://localhost:3000/api/docs/
+* http://localhost:3000/api/api-docs
 
 

@@ -9,6 +9,10 @@ paths:
       responses:
         200:
           description: List of all projects related to user
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/Project'
         "500":
           description: Internal error
           schema:
@@ -21,6 +25,8 @@ paths:
       responses:
         200:
           description: List of all projects related to user
+          schema:
+            $ref: '#/definitions/Project'
         "500":
           description: Internal error
           schema:
@@ -33,6 +39,8 @@ paths:
       responses:
         200:
           description: List of all projects related to user
+          schema:
+            $ref: '#/definitions/Project'
         "500":
           description: Internal error
           schema:
@@ -48,6 +56,8 @@ paths:
       responses:
         200:
           description: Single project data
+          schema:
+            $ref: '#/definitions/Project'
         "500":
           description: Internal error
           schema:
