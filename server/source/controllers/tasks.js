@@ -109,7 +109,7 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
     const tasksData = {
-        taskId: req.params.taskId,
+        taskId: req.swagger.params.taskId.value,
         userId: req.authSession.userId,
     };
     debug(`Delete task with id: ${tasksData.taskId} (user id ${tasksData.userId})`);

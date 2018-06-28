@@ -22,6 +22,12 @@ paths:
       operationId: add
       consumes:
         - application/json
+      parameters:
+        - in: body
+          name: project
+          description: The project to create.
+          schema:
+            $ref: '#/definitions/Project'
       responses:
         200:
           description: List of all projects related to user

@@ -17,6 +17,69 @@ paths:
           description: Internal error
           schema:
             $ref: '#/responses/Error'
+    post:
+      description: Create new board
+      operationId: add
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: board
+          description: The board to create.
+          schema:
+            $ref: '#/definitions/Board'
+      responses:
+        200:
+          description: List of all boards related to user
+          schema:
+            $ref: '#/definitions/Board'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    put:
+      description: Update board
+      operationId: update
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: List of all boards related to user
+          schema:
+            $ref: '#/definitions/Board'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+
+  /boards/{boardId}:
+    x-swagger-router-controller: boards
+    get:
+      description: Get single board
+      operationId: one
+      parameters:
+        - $ref: '#/parameters/boardId'
+      responses:
+        200:
+          description: Single board data
+          schema:
+            $ref: '#/definitions/Project'
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
+    delete:
+      description: Delete single board
+      operationId: delete
+      parameters:
+        - $ref: '#/parameters/boardId'
+      responses:
+        200:
+          description: Single board deleted
+        "500":
+          description: Internal error
+          schema:
+            $ref: '#/responses/Error'
 
 definitions:
   Board:

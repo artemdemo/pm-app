@@ -73,6 +73,12 @@ parameters:
     required: true
     type: integer
     description: The task ID
+  boardId:
+    in: path
+    name: boardId
+    required: true
+    type: integer
+    description: The board ID
 
 responses:
   Error:
@@ -91,6 +97,8 @@ definitions:
         type: string
       username:
         type: string
+  # I use ListItem as general definition for lists of tasks in project
+  # and list of projects in single task
   ListItem:
     properties:
       id:
@@ -143,3 +151,15 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/ListItem'
+  Board:
+    required:
+      - name
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      description:
+        type: string
+      id_position:
+        type: integer

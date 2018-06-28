@@ -58,16 +58,17 @@ exports.update = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
+    const boardId = req.swagger.params.boardId.value;
     const boardsData = {
-        boardId: req.params.boardId,
+        boardId,
         userId: req.authSession.userId,
     };
 
-    debug(`Delete board with id: ${boardsData.boardId} (user id ${boardsData.userId})`);
+    debug(`Delete board with id: ${boardId} (user id ${boardsData.userId})`);
     boards
         .deleteBoard(boardsData)
         .then(() => {
-            debug(`Board id ${req.params.boardId} deleted`);
+            debug(`Board id ${boardId} deleted`);
             res.json({});
         })
         .catch((err) => {
