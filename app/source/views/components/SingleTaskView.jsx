@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { createSelector } from "reselect";
 import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import EntityControllers from '../../components/EntityControllers/EntityControllers';
 import ProjectLabels from '../../components/SingleTask/ProjectLabels';
+import Popup from '../../components/Popup/Popup';
 import {
     updateTask,
     deleteTask,
@@ -47,6 +47,8 @@ class SingleTaskView extends React.PureComponent {
             prevTask: null,
             selectedProjects: [],
         };
+
+        this.popupRef = React.createRef();
     }
 
     connectProject = (project) => {
@@ -93,61 +95,78 @@ class SingleTaskView extends React.PureComponent {
     };
 
     deleteTask = () => {
-        const { deleteTask, params } = this.props;
-        deleteTask(Number(params.taskId));
-        location.push('/tasks');
+        // const { deleteTask, params } = this.props;
+        // deleteTask(Number(params.taskId));
+        // location.push('/tasks');
+        this.popupRef.current.show();
     };
 
     render() {
         const { projects } = this.props;
         return (
-            <EntityModal title='Task'>
-                <div className='form-group'>
-                    <input
-                        type='text'
-                        className='form-control'
-                        placeholder='Task name'
-                        onChange={e => this.setState({name: e.target.value})}
-                        value={this.state.name}
-                    />
-                </div>
-                <div className='form-group'>
-                    <textarea
-                        className='form-control'
-                        placeholder='Task description'
-                        rows='3'
-                        onChange={e => this.setState({description: e.target.value})}
-                        value={this.state.description}
-                    />
-                </div>
-                <div className='form-group'>
-                    <OkCircle
-                        doneStatus={this.state.done}
-                        onChange={done => this.setState({ done })}
-                    >
-                        Mark done
-                    </OkCircle>
-                </div>
-                <div className='form-group'>
-                    <ProjectLabels
-                        projects={this.state.selectedProjects}
-                        onClick={this.disconnectProject}
-                    />
-                </div>
-                <div className='form-group'>
-                    <SelectList
-                        list={projects.data}
-                        placeholder='Connect to project'
-                        onSelect={this.connectProject}
-                    />
-                </div>
+            <React.Fragment>
+                <EntityModal title='Task'>
+                    <div className='form-group'>
+                        <input
+                            type='text'
+                            className='form-control'
+                            placeholder='Task name'
+                            onChange={e => this.setState({name: e.target.value})}
+                            value={this.state.name}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <textarea
+                            className='form-control'
+                            placeholder='Task description'
+                            rows='3'
+                            onChange={e => this.setState({description: e.target.value})}
+                            value={this.state.description}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <OkCircle
+                            doneStatus={this.state.done}
+                            onChange={done => this.setState({ done })}
+                        >
+                            Mark done
+                        </OkCircle>
+                    </div>
+                    <div className='form-group'>
+                        <ProjectLabels
+                            projects={this.state.selectedProjects}
+                            onClick={this.disconnectProject}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <SelectList
+                            list={projects.data}
+                            placeholder='Connect to project'
+                            onSelect={this.connectProject}
+                        />
+                    </div>
 
-                <EntityControllers
-                    onSave={this.submitTask}
-                    onClose={() => location.push('/tasks')}
-                    onDelete={this.deleteTask}
-                />
-            </EntityModal>
+                    <EntityControllers
+                        onSave={this.submitTask}
+                        onClose={() => location.push('/tasks')}
+                        onDelete={this.deleteTask}
+                    />
+                </EntityModal>
+                <Popup
+                    title='Delete task'
+                    ref={this.popupRef}
+                    buttons={[
+                        {
+                            text: 'Cancel',
+                        },
+                        {
+                            text: 'Delete',
+                        },
+                    ]}
+                >
+                    Are you sure you want to delete this task?
+                </Popup>
+            </React.Fragment>
         );
     }
 }
