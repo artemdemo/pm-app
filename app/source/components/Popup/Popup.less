@@ -1,9 +1,6 @@
 @transition: transform ease 0.15s;
 @transition-bg: opacity 0.3s;
-@popup-bg: lightgray;
 @z-index: 1000;
-
-@title-bg: lighten(@popup-bg, 10%);
 
 .buttonClear() {
     background: none;
@@ -16,11 +13,10 @@
 }
 
 .popup {
-    border: 2px solid @title-bg;
     width: 470px;
     position: absolute;
-    background-color: @popup-bg;
-    box-shadow: 0 0 60px 0px rgba(0,0,0,0.5);
+    background-color: white;
+    box-shadow: 0 0 60px 0 rgba(0,0,0,0.5);
     display: none;
     top: 50%;
     left: 50%;
@@ -42,7 +38,6 @@
 
 .popup-title {
     padding: 15px;
-    background-color: @title-bg;
     display: flex;
 }
 .popup-title-section {

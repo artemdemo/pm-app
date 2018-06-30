@@ -95,9 +95,6 @@ class SingleTaskView extends React.PureComponent {
     };
 
     deleteTask = () => {
-        // const { deleteTask, params } = this.props;
-        // deleteTask(Number(params.taskId));
-        // location.push('/tasks');
         this.popupRef.current.show();
     };
 
@@ -158,9 +155,16 @@ class SingleTaskView extends React.PureComponent {
                     buttons={[
                         {
                             text: 'Cancel',
+                            className: 'btn btn-light',
                         },
                         {
                             text: 'Delete',
+                            className: 'btn btn-primary',
+                            onClick: () => {
+                                const { deleteTask, params } = this.props;
+                                deleteTask(Number(params.taskId));
+                                location.push('/tasks');
+                            },
                         },
                     ]}
                 >

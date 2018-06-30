@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import Modal from '../Modal/Modal';
 
 import './Popup.less';
@@ -44,7 +45,7 @@ class Popup extends React.PureComponent {
                         onClick={this.handleClose.bind(this)}
                         className='popup-title-close'
                     >
-                        ×
+                        &times;
                     </button>
                 );
             }
@@ -66,7 +67,7 @@ class Popup extends React.PureComponent {
         })();
         if (showCloseBtn || title) {
             return (
-                <div className='popup-title'>
+                <div className='popup-title border-bottom'>
                     <div className='popup-title-section'>
                         {titleContent}
                     </div>
@@ -140,6 +141,7 @@ class Popup extends React.PureComponent {
 
     render() {
         const { base, className, style, hideClickOutside } = this.props;
+        const popupClass = classnames(className, 'rounded');
         return (
             <React.Fragment>
                 <Modal
@@ -151,7 +153,7 @@ class Popup extends React.PureComponent {
                     <div />
                 </Modal>
                 <Modal
-                    className={className}
+                    className={popupClass}
                     baseClass='popup'
                     ref={this.modalRef}
                     style={style}
