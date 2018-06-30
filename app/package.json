@@ -1,6 +1,6 @@
 {
   "name": "pm-app",
-  "version": "1.20.0",
+  "version": "1.12.0",
   "description": "Project Management app",
   "main": "index.js",
   "scripts": {
