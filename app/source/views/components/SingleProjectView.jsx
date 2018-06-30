@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { createSelector } from 'reselect';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import EntityControllers from '../../components/EntityControllers/EntityControllers';
+import Popup from '../../components/Popup/Popup';
 import {
     addProject,
     updateProject,
@@ -41,6 +41,8 @@ class SingleProjectView extends React.PureComponent {
             description: '',
             prevProject: null,
         };
+
+        this.popupRef = React.createRef();
     }
 
     submitProject = () => {
@@ -64,42 +66,63 @@ class SingleProjectView extends React.PureComponent {
     };
 
     deleteProject = () => {
-        const { deleteProject } = this.props;
-        const currentProject = getCurrentProject(this.props);
-        if (currentProject) {
-            deleteProject(currentProject.id);
-        }
-        location.push('/projects');
+        this.popupRef.current.show();
     };
 
     render() {
         return (
-            <EntityModal>
-                <div className='form-group'>
-                    <input
-                        type='text'
-                        className='form-control'
-                        placeholder='Project name'
-                        onChange={e => this.setState({name: e.target.value})}
-                        value={this.state.name}
-                    />
-                </div>
-                <div className='form-group'>
-                    <textarea
-                        className='form-control'
-                        placeholder='Project description'
-                        rows='3'
-                        onChange={e => this.setState({description: e.target.value})}
-                        value={this.state.description}
-                    />
-                </div>
+            <React.Fragment>
+                <EntityModal title='Project'>
+                    <div className='form-group'>
+                        <input
+                            type='text'
+                            className='form-control'
+                            placeholder='Project name'
+                            onChange={e => this.setState({name: e.target.value})}
+                            value={this.state.name}
+                        />
+                    </div>
+                    <div className='form-group'>
+                        <textarea
+                            className='form-control'
+                            placeholder='Project description'
+                            rows='3'
+                            onChange={e => this.setState({description: e.target.value})}
+                            value={this.state.description}
+                        />
+                    </div>
 
-                <EntityControllers
-                    onSave={this.submitProject}
-                    onClose={() => location.push('/projects')}
-                    onDelete={this.deleteProject}
-                />
-            </EntityModal>
+                    <EntityControllers
+                        onSave={this.submitProject}
+                        onClose={() => location.push('/projects')}
+                        onDelete={this.deleteProject}
+                    />
+                </EntityModal>
+                <Popup
+                    title='Delete project'
+                    ref={this.popupRef}
+                    buttons={[
+                        {
+                            text: 'Cancel',
+                            className: 'btn btn-light',
+                        },
+                        {
+                            text: 'Delete',
+                            className: 'btn btn-primary',
+                            onClick: () => {
+                                const { deleteProject } = this.props;
+                                const currentProject = getCurrentProject(this.props);
+                                if (currentProject) {
+                                    deleteProject(currentProject.id);
+                                }
+                                location.push('/projects');
+                            },
+                        },
+                    ]}
+                >
+                    Are you sure you want to delete this project?
+                </Popup>
+            </React.Fragment>
         );
     }
 }

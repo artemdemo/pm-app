@@ -8,6 +8,7 @@ import {
 } from '../../model/boards/boardsActions';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import EntityControllers from '../../components/EntityControllers/EntityControllers';
+import Popup from '../../components/Popup/Popup';
 import Board from '../../model/boards/Board';
 import * as location from '../../services/location';
 
@@ -38,6 +39,8 @@ class SingleBoardView extends React.PureComponent {
             name: '',
             prevBoard: null,
         };
+
+        this.popupRef = React.createRef();
     }
 
     submitBoard = () => {
@@ -57,33 +60,54 @@ class SingleBoardView extends React.PureComponent {
     };
 
     deleteBoard = () => {
-        const { deleteBoard } = this.props;
-        const board = getCurrentBoard(this.props);
-        if (board) {
-            deleteBoard(board.id);
-        }
-        location.push('/scrum');
+        this.popupRef.current.show();
     };
 
     render() {
         return (
-            <EntityModal>
-                <div className='form-group'>
-                    <input
-                        type='text'
-                        className='form-control'
-                        placeholder='Board name'
-                        onChange={e => this.setState({name: e.target.value})}
-                        value={this.state.name}
-                    />
-                </div>
+            <React.Fragment>
+                <EntityModal title='Board'>
+                    <div className='form-group'>
+                        <input
+                            type='text'
+                            className='form-control'
+                            placeholder='Board name'
+                            onChange={e => this.setState({name: e.target.value})}
+                            value={this.state.name}
+                        />
+                    </div>
 
-                <EntityControllers
-                    onSave={this.submitBoard}
-                    onClose={() => location.push('/scrum')}
-                    onDelete={this.deleteBoard}
-                />
-            </EntityModal>
+                    <EntityControllers
+                        onSave={this.submitBoard}
+                        onClose={() => location.push('/scrum')}
+                        onDelete={this.deleteBoard}
+                    />
+                </EntityModal>
+                <Popup
+                    title='Delete board'
+                    ref={this.popupRef}
+                    buttons={[
+                        {
+                            text: 'Cancel',
+                            className: 'btn btn-light',
+                        },
+                        {
+                            text: 'Delete',
+                            className: 'btn btn-primary',
+                            onClick: () => {
+                                const { deleteBoard } = this.props;
+                                const board = getCurrentBoard(this.props);
+                                if (board) {
+                                    deleteBoard(board.id);
+                                }
+                                location.push('/scrum');
+                            },
+                        },
+                    ]}
+                >
+                    Are you sure you want to delete this board?
+                </Popup>
+            </React.Fragment>
         );
     }
 }
