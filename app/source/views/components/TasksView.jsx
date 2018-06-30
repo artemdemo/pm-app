@@ -36,7 +36,7 @@ class TasksView extends React.PureComponent {
             <React.Fragment>
                 <div className='form-group'>
                     <div className='row'>
-                        <div className='col-md-auto'>
+                        <div className='col-md-auto mb-md-0 mb-3'>
                             <RadioMenu
                                 list={taskStatuses}
                                 selectedItem={this.state.status}
