@@ -1,4 +1,4 @@
-import { take, put } from 'redux-saga/effects';
+import { take, put, all } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as projectsActions from './projectsActions';
 
@@ -75,11 +75,11 @@ function* deleteProjectSaga() {
 }
 
 export default function* projectsSagas() {
-    yield [
+    yield all([
         loadProjectsSaga(),
         loadSingleProjectSaga(),
         addProjectSaga(),
         updateProjectSaga(),
         deleteProjectSaga(),
-    ];
+    ]);
 }

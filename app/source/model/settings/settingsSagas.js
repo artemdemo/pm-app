@@ -1,4 +1,4 @@
-import { take, put } from 'redux-saga/effects';
+import { take, put, all } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as settingsActions from './settingsActions';
 
@@ -33,8 +33,8 @@ function* updateSettingsSaga() {
 
 
 export default function* settingsSagas() {
-    yield [
+    yield all([
         loadSettingsSaga(),
         updateSettingsSaga(),
-    ];
+    ]);
 }

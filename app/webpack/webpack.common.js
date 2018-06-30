@@ -70,8 +70,6 @@ module.exports = (options) => {
                 extractStyles.moduleRule(options.extractStylesFile),
 
                 {test: /\.(png|gif|jpg)(\?.*$|$)/, use: 'url-loader?limit=100000&name=images/[hash].[ext]'},
-                {test: /\.(json)(\?.*$|$)/, use: 'json-loader'},
-                {test: /\.(html)(\?.*$|$)/, use: 'html-loader'},
 
                 ...fontLoaders,
             ],
@@ -96,6 +94,7 @@ module.exports = (options) => {
                 filename: './index.html',
                 appVersion: options.appVersion,
             }),
+
             new CleanWebpackPlugin([`pm-app/${options.buildFolder}`], {
                 verbose: true,
                 dry: false,

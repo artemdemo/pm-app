@@ -1,4 +1,4 @@
-import { take, put } from 'redux-saga/effects';
+import { take, put, all } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as tasksActions from './tasksActions';
 
@@ -95,12 +95,12 @@ function* updateTaskPositionSaga() {
 }
 
 export default function* tasksSagas() {
-    yield [
+    yield all([
         loadTasksSaga(),
         loadSingleTaskSaga(),
         addTaskSaga(),
         updateTaskSaga(),
         deleteTaskSaga(),
         updateTaskPositionSaga(),
-    ];
+    ]);
 }

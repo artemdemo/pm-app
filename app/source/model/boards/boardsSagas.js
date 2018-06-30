@@ -1,4 +1,4 @@
-import { take, put } from 'redux-saga/effects';
+import { take, put, all } from 'redux-saga/effects';
 import request from '../../services/request';
 import * as boardsActions from './boardsActions';
 
@@ -64,10 +64,10 @@ function* deleteBoardSaga() {
 }
 
 export default function* boardsSagas() {
-    yield [
+    yield all([
         loadBoardsSaga(),
         addBoardSaga(),
         updateBoardSaga(),
         deleteBoardSaga(),
-    ];
+    ]);
 }

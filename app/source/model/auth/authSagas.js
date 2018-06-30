@@ -1,4 +1,4 @@
-import { take, put } from 'redux-saga/effects';
+import { take, put, all } from 'redux-saga/effects';
 import request, { clearDefaultHeaders } from '../../services/request';
 import * as authActions from './authActions';
 import auth, { Token } from '../../services/auth';
@@ -81,10 +81,10 @@ function* logoutSaga() {
 }
 
 export default function* authSagas() {
-    yield [
+    yield all([
         userSaga(),
         loginSaga(),
         logoutSaga(),
         signupSaga(),
-    ];
+    ]);
 }
