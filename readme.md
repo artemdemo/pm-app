@@ -10,7 +10,7 @@ Work in progress. There is still much to be done.
 ---
 ![alt tag](screenshots/projects.png)
 ---
-![alt tag](screenshots/projects-open.png)
+![alt tag](screenshots/tasks-open.png)
 
 ## Getting started
 
