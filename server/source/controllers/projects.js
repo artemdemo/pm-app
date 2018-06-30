@@ -117,28 +117,3 @@ exports.delete = (req, res, next) => {
             next(Boom.badRequest(errConstants.DB_ERROR));
         });
 };
-
-exports.connectTask = (req, res, next) => {
-    projectsTasksRelations
-        .addRelation(req.params.projectId, req.params.taskId)
-        .then(() => {
-            debug(`Task id ${req.params.taskId} connected to project id ${req.params.projectId}`);
-            res.json({});
-        })
-        .catch(() => {
-            next(Boom.badRequest(errConstants.DB_ERROR));
-        });
-};
-
-exports.disconnectTask = (req, res, next) => {
-    projectsTasksRelations
-        .deleteRelation(req.params.projectId, req.params.taskId)
-        .then(() => {
-            debug(`Task id ${req.params.taskId} disconnected from project id ${req.params.projectId}`);
-            res.json({});
-        })
-        .catch((err) => {
-            debug(err);
-            next(Boom.badRequest(errConstants.DB_ERROR));
-        });
-};

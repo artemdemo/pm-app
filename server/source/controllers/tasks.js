@@ -125,32 +125,6 @@ exports.delete = (req, res, next) => {
         });
 };
 
-exports.connectProject = (req, res, next) => {
-    projectsTasksRelations
-        .addRelation(req.params.projectId, req.params.taskId)
-        .then(() => {
-            debug(`Project id ${req.params.projectId} connected to task id ${req.params.taskId}`);
-            res.json({});
-        })
-        .catch((err) => {
-            debug(err);
-            next(Boom.badRequest(errConstants.DB_ERROR));
-        });
-};
-
-exports.disconnectProject = (req, res, next) => {
-    projectsTasksRelations
-        .deleteRelation(req.params.projectId, req.params.taskId)
-        .then(() => {
-            debug(`Project id ${req.params.projectId} disconnected from task id ${req.params.taskId}`);
-            res.json({});
-        })
-        .catch((err) => {
-            debug(err);
-            next(Boom.badRequest(errConstants.DB_ERROR));
-        });
-};
-
 exports.updatePositions = (req, res, next) => {
 
     // ToDo: This is different from other reqs
