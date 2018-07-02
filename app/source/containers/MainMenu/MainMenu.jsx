@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { Translate } from 'react-localize-redux';
 import { logout } from '../../model/auth/authActions';
 import ProfileMenu from './ProfileMenu';
 
@@ -47,17 +48,17 @@ class MainMenu extends React.PureComponent {
                         <ul className='navbar-nav mr-auto'>
                             <li className={this.navItemClass('/tasks')}>
                                 <Link className='nav-link' to='/tasks'>
-                                    Tasks
+                                    <Translate id='tasks' />
                                 </Link>
                             </li>
                             <li className={this.navItemClass('/scrum')}>
                                 <Link className='nav-link' to='/scrum'>
-                                    Scrum
+                                    <Translate id='scrum' />
                                 </Link>
                             </li>
                             <li className={this.navItemClass('/projects')}>
                                 <Link className='nav-link' to='/projects'>
-                                    Projects
+                                    <Translate id='projects' />
                                 </Link>
                             </li>
                         </ul>

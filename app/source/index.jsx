@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Bluebird from 'bluebird';
+import { LocalizeProvider } from 'react-localize-redux';
 import RouteProvider from './routes/RouteProvider';
 import { requestRoutes } from './model/routes/routesSagas';
 import history from './history';
@@ -25,12 +26,14 @@ const loadComponent = componentName => new Promise((resolve) => {
 });
 
 render(
-    <RouteProvider
-        store={store}
-        history={history}
-        requestRoutes={requestRoutes}
-        loadComponent={loadComponent}
-        authorization={authorization}
-    />,
+    <LocalizeProvider>
+        <RouteProvider
+            store={store}
+            history={history}
+            requestRoutes={requestRoutes}
+            loadComponent={loadComponent}
+            authorization={authorization}
+        />
+    </LocalizeProvider>,
     document.getElementById('pm-app')
 );
