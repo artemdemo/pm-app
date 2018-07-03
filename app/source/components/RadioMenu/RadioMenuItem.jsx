@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Translate } from 'react-localize-redux';
 
 class RadioMenuItem extends React.PureComponent {
     handleClick = () => {
@@ -20,7 +21,7 @@ class RadioMenuItem extends React.PureComponent {
                 className={itemClass}
                 onClick={this.handleClick}
             >
-                {item.name}
+                <Translate id={item.value}>{item.name}</Translate>
             </button>
         );
     }

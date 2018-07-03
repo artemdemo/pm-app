@@ -1,5 +1,17 @@
 {
   "tasks": "Tasks",
   "scrum": "Scrum",
-  "projects": "Projects"
+  "projects": "Projects",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "language": "Language",
+  "total": "Total",
+  "in-process": "In process",
+  "done": "Done",
+  "all": "All",
+  "active": "Active",
+  "completed": "Completed",
+  "all-tasks": "All tasks",
+  "filter-by-project": "Filter by project"
 }

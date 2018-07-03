@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import onClickOutside from 'react-click-outside';
 import { Link } from 'react-router';
+import { Translate } from 'react-localize-redux';
 import * as location from '../../services/location';
 
 class ProfileMenu extends React.PureComponent {
@@ -66,14 +67,14 @@ class ProfileMenu extends React.PureComponent {
                         onClick={this.closeMenu}
                         to={location.wrapUrl('/profile')}
                     >
-                        Profile
+                        <Translate id='profile' />
                     </Link>
                     <Link
                         className='dropdown-item'
                         onClick={this.closeMenu}
                         to={location.wrapUrl('/settings')}
                     >
-                        Settings
+                        <Translate id='settings' />
                     </Link>
                     <div className='dropdown-divider' />
                     <a
@@ -81,7 +82,7 @@ class ProfileMenu extends React.PureComponent {
                         className='dropdown-item'
                         onClick={this.handleLogout}
                     >
-                        Logout
+                        <Translate id='logout' />
                     </a>
                 </div>
             </div>

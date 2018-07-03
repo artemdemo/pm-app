@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translate } from 'react-localize-redux';
 import { withLocalize } from 'react-localize-redux';
 
 class SelectLanguage extends React.PureComponent {
@@ -22,7 +23,9 @@ class SelectLanguage extends React.PureComponent {
         console.log(activeLanguage);
         return (
             <div className='form-group'>
-                <label htmlFor='languageInput'>Language</label>
+                <label htmlFor='languageInput'>
+                    <Translate id='language' />
+                </label>
                 <select
                     id='languageInput'
                     className='form-control'

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-localize-redux';
 
 const MainView = (props) => {
     const { tasks, projects } = props;
@@ -7,16 +8,16 @@ const MainView = (props) => {
 
     return (
         <React.Fragment>
-            <h4>Tasks</h4>
+            <h4><Translate id='tasks' /></h4>
             <p>
-                Total: {tasks.data.length}<br />
-                In process: {tasks.data.length - doneTasks}<br />
-                Done: {doneTasks}<br />
+                <Translate id='total' />: {tasks.data.length}<br />
+                <Translate id='in-process' />: {tasks.data.length - doneTasks}<br />
+                <Translate id='done' />: {doneTasks}<br />
             </p>
 
-            <h4>Projects</h4>
+            <h4><Translate id='projects' /></h4>
             <p>
-                Total: {projects.data.length}<br />
+                <Translate id='total' />: {projects.data.length}<br />
             </p>
         </React.Fragment>
     );

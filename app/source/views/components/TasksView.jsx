@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-localize-redux';
 import RadioMenu from '../../components/RadioMenu/RadioMenu';
 import TasksList from '../../containers/TasksList/TasksList';
 
@@ -52,8 +53,12 @@ class TasksView extends React.PureComponent {
                                         project: projectId,
                                     });
                                 }}>
-                                <option value='all'>All tasks</option>
-                                <option disabled>Filter by project:</option>
+                                <option value='all'>
+                                    <Translate id='all-tasks' />
+                                </option>
+                                <option disabled>
+                                    <Translate id='filter-by-project' />
+                                </option>
                                 {projectsList.map(project => (
                                     <option
                                         value={project.id}

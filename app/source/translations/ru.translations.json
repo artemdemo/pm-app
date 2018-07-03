@@ -1,5 +1,17 @@
 {
   "tasks": "Задачи",
   "scrum": "Скрам",
-  "projects": "Проекты"
+  "projects": "Проекты",
+  "profile": "Профиль",
+  "settings": "Настройки",
+  "logout": "Выход",
+  "language": "Язык",
+  "total": "Всего",
+  "in-process": "В работе",
+  "done": "Сделано",
+  "all": "Все",
+  "active": "Активные",
+  "completed": "Законченные",
+  "all-tasks": "Все задачи",
+  "filter-by-project": "Отфильтровать по проекту"
 }
