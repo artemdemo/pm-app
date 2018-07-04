@@ -1,4 +1,5 @@
 import React from 'react';
+import { Translate } from 'react-localize-redux';
 import BoardsList from '../../containers/BoardsList/BoardsList';
 import * as location from '../../services/location';
 
@@ -10,7 +11,7 @@ const ScrumView = (props) => {
                     className='btn btn-light'
                     onClick={() => location.push('/scrum/new')}
                 >
-                    New Board
+                    <Translate id='new-board' />
                 </button>
             </p>
             <BoardsList />

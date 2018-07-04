@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Translate } from 'react-localize-redux';
 
 import './UserAuthForm.less';
 
@@ -27,9 +28,11 @@ class UserAuthForm extends React.PureComponent {
 
     renderTitle() {
         const { signup } = this.props;
-        const title = signup ? 'Sign up' : 'Please sign in';
+        const title = signup ? 'sign-up' : 'please-sign-in';
         return (
-            <h2 className='user-auth-form-title'>{title}</h2>
+            <h2 className='user-auth-form-title'>
+                <Translate id={title} />
+            </h2>
         );
     };
 

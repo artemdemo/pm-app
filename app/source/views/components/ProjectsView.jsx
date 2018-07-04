@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Translate } from 'react-localize-redux';
 import ProjectsList from '../../containers/ProjectsList/ProjectsList';
 import * as location from '../../services/location';
 
@@ -12,7 +13,7 @@ const ProjectsView = (props) => {
                     className='btn btn-light'
                     onClick={() => location.push('/projects/new')}
                 >
-                    New Project
+                    <Translate id='new-project' />
                 </button>
             </p>
             <ProjectsList

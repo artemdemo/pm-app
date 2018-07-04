@@ -13,5 +13,9 @@
   "active": "Active",
   "completed": "Completed",
   "all-tasks": "All tasks",
-  "filter-by-project": "Filter by project"
+  "filter-by-project": "Filter by project",
+  "please-sign-in": "Please sign in",
+  "sign-up": "Sign up",
+  "new-board": "New Board",
+  "new-project": "New Project"
 }
