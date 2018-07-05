@@ -17,5 +17,14 @@
   "please-sign-in": "Please sign in",
   "sign-up": "Sign up",
   "new-board": "New Board",
-  "new-project": "New Project"
+  "new-project": "New Project",
+  "save": "Save",
+  "close": "Close",
+  "delete": "Delete",
+  "username": "Username",
+  "email-address": "Email address",
+  "password": "Password",
+  "login": "Login",
+  "create-new-account": "Create new account - sign up",
+  "have-account": "I have an account - login"
 }

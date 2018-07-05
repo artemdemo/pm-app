@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Translate } from 'react-localize-redux';
 import ElementsRow from '../../components/ElementsRow/ElementsRow';
 
 class EntityControllers extends React.PureComponent {
@@ -26,20 +27,20 @@ class EntityControllers extends React.PureComponent {
                         className='btn btn-primary'
                         onClick={this.handleSave}
                     >
-                        Save
+                        <Translate id='save' />
                     </button>
                     <button
                         className='btn btn-light'
                         onClick={this.handleClose}
                     >
-                        Close
+                        <Translate id='close' />
                     </button>
                 </ElementsRow>
                 <button
                     className='btn btn-danger'
                     onClick={this.handleDelete}
                 >
-                    Delete
+                    <Translate id='delete' />
                 </button>
             </div>
         );

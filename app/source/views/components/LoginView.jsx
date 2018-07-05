@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { Translate } from 'react-localize-redux';
 import UserAuthForm from '../../components/UserAuthForm/UserAuthForm';
 import { errorMsg } from '../../components/Notificator/Notificator';
 import { login } from '../../model/auth/authActions';
@@ -37,7 +38,7 @@ class LoginView extends React.PureComponent {
                     to='/signup'
                     className='btn btn-link btn-block'
                 >
-                    Create new account - sign up
+                    <Translate id='create-new-account' />
                 </Link>
             </UserAuthForm>
         );

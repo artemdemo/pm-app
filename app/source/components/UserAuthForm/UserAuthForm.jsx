@@ -40,21 +40,25 @@ class UserAuthForm extends React.PureComponent {
         const { signup } = this.props;
         if (signup) {
             return (
-                <React.Fragment>
-                    <label htmlFor='inputUsername' className='sr-only'>
-                        Username
-                    </label>
-                    <input
-                        type='text'
-                        name='username'
-                        id='inputUsername'
-                        ref={this.usernameRef}
-                        className='form-control'
-                        placeholder='Username'
-                        required=''
-                        autoComplete='off'
-                    />
-                </React.Fragment>
+                <Translate>
+                    {({ translate }) => (
+                        <React.Fragment>
+                            <label htmlFor='inputUsername' className='sr-only'>
+                                {translate('username')}
+                            </label>
+                            <input
+                                type='text'
+                                name='username'
+                                id='inputUsername'
+                                ref={this.usernameRef}
+                                className='form-control'
+                                placeholder={translate('username')}
+                                required=''
+                                autoComplete='off'
+                            />
+                        </React.Fragment>
+                    )}
+                </Translate>
             );
         }
         return null;
@@ -62,44 +66,48 @@ class UserAuthForm extends React.PureComponent {
 
     render() {
         return (
-            <form
-                className='user-auth-form'
-                onSubmit={this.handleSubmit}
-            >
-                {this.renderTitle()}
-                {this.renderUsername()}
-                <label htmlFor='inputEmail' className='sr-only'>
-                    Email address
-                </label>
-                <input
-                    type='email'
-                    id='inputEmail'
-                    ref={this.emailRef}
-                    className='form-control'
-                    placeholder='Email address'
-                    required=''
-                    autoComplete='off'
-                />
-                <label htmlFor='inputPassword' className='sr-only'>
-                    Password
-                </label>
-                <input
-                    type='password'
-                    id='inputPassword'
-                    ref={this.passwordRef}
-                    className='form-control'
-                    placeholder='Password'
-                    required=''
-                    autoComplete='off'
-                />
-                <button
-                    className='btn btn-lg btn-primary btn-block'
-                    type='submit'
-                >
-                    Login
-                </button>
-                {this.props.children}
-            </form>
+            <Translate>
+                {({ translate }) => (
+                    <form
+                        className='user-auth-form'
+                        onSubmit={this.handleSubmit}
+                    >
+                        {this.renderTitle()}
+                        {this.renderUsername()}
+                        <label htmlFor='inputEmail' className='sr-only'>
+                            {translate('email-address')}
+                        </label>
+                        <input
+                            type='email'
+                            id='inputEmail'
+                            ref={this.emailRef}
+                            className='form-control'
+                            placeholder={translate('email-address')}
+                            required=''
+                            autoComplete='off'
+                        />
+                        <label htmlFor='inputPassword' className='sr-only'>
+                            {translate('password')}
+                        </label>
+                        <input
+                            type='password'
+                            id='inputPassword'
+                            ref={this.passwordRef}
+                            className='form-control'
+                            placeholder={translate('password')}
+                            required=''
+                            autoComplete='off'
+                        />
+                        <button
+                            className='btn btn-lg btn-primary btn-block'
+                            type='submit'
+                        >
+                            {translate('login')}
+                        </button>
+                        {this.props.children}
+                    </form>
+                )}
+            </Translate>
         );
     }
 }
