@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
+import { Translate } from 'react-localize-redux';
 import OkCircle from '../../components/OkCircle/OkCircle';
 import SelectList from '../../components/SelectList/SelectList';
 import EntityModal from '../../components/EntityModal/EntityModal';
@@ -101,76 +102,80 @@ class SingleTaskView extends React.PureComponent {
     render() {
         const { projects } = this.props;
         return (
-            <React.Fragment>
-                <EntityModal title='Task'>
-                    <div className='form-group'>
-                        <input
-                            type='text'
-                            className='form-control'
-                            placeholder='Task name'
-                            onChange={e => this.setState({name: e.target.value})}
-                            value={this.state.name}
-                        />
-                    </div>
-                    <div className='form-group'>
-                        <textarea
-                            className='form-control'
-                            placeholder='Task description'
-                            rows='3'
-                            onChange={e => this.setState({description: e.target.value})}
-                            value={this.state.description}
-                        />
-                    </div>
-                    <div className='form-group'>
-                        <OkCircle
-                            doneStatus={this.state.done}
-                            onChange={done => this.setState({ done })}
-                        >
-                            Mark done
-                        </OkCircle>
-                    </div>
-                    <div className='form-group'>
-                        <ProjectLabels
-                            projects={this.state.selectedProjects}
-                            onClick={this.disconnectProject}
-                        />
-                    </div>
-                    <div className='form-group'>
-                        <SelectList
-                            list={projects.data}
-                            placeholder='Connect to project'
-                            onSelect={this.connectProject}
-                        />
-                    </div>
+            <Translate>
+                {({ translate }) => (
+                    <React.Fragment>
+                        <EntityModal title={translate('task')}>
+                            <div className='form-group'>
+                                <input
+                                    type='text'
+                                    className='form-control'
+                                    placeholder={translate('task-name')}
+                                    onChange={e => this.setState({name: e.target.value})}
+                                    value={this.state.name}
+                                />
+                            </div>
+                            <div className='form-group'>
+                                <textarea
+                                    className='form-control'
+                                    placeholder={translate('task-description')}
+                                    rows='3'
+                                    onChange={e => this.setState({description: e.target.value})}
+                                    value={this.state.description}
+                                />
+                            </div>
+                            <div className='form-group'>
+                                <OkCircle
+                                    doneStatus={this.state.done}
+                                    onChange={done => this.setState({ done })}
+                                >
+                                    {translate('mark-done')}
+                                </OkCircle>
+                            </div>
+                            <div className='form-group'>
+                                <ProjectLabels
+                                    projects={this.state.selectedProjects}
+                                    onClick={this.disconnectProject}
+                                />
+                            </div>
+                            <div className='form-group'>
+                                <SelectList
+                                    list={projects.data}
+                                    placeholder={translate('connect-to-project')}
+                                    onSelect={this.connectProject}
+                                />
+                            </div>
 
-                    <EntityControllers
-                        onSave={this.submitTask}
-                        onClose={() => location.push('/tasks')}
-                        onDelete={this.deleteTask}
-                    />
-                </EntityModal>
-                <Popup
-                    title='Delete task'
-                    ref={this.popupRef}
-                    buttons={[
-                        {
-                            text: 'Cancel',
-                            className: 'btn btn-light',
-                        },
-                        {
-                            text: 'Delete',
-                            className: 'btn btn-primary',
-                            onClick: () => {
-                                const { deleteTask, params } = this.props;
-                                deleteTask(Number(params.taskId));
-                                location.push('/tasks');
-                            },
-                        },
-                    ]}
-                >
-                    Are you sure you want to delete this task?
-                </Popup>
-            </React.Fragment>
+                            <EntityControllers
+                                onSave={this.submitTask}
+                                onClose={() => location.push('/tasks')}
+                                onDelete={this.deleteTask}
+                            />
+                        </EntityModal>
+                        <Popup
+                            title={translate('delete-task')}
+                            ref={this.popupRef}
+                            buttons={[
+                                {
+                                    text: translate('cancel'),
+                                    className: 'btn btn-light',
+                                },
+                                {
+                                    text: translate('delete'),
+                                    className: 'btn btn-primary',
+                                    onClick: () => {
+                                        const { deleteTask, params } = this.props;
+                                        deleteTask(Number(params.taskId));
+                                        location.push('/tasks');
+                                    },
+                                },
+                            ]}
+                        >
+                            {translate('delete-it-question')}
+                        </Popup>
+                    </React.Fragment>
+                )}
+            </Translate>
         );
     }
 }

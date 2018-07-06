@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Translate } from 'react-localize-redux';
 import EntityModal from '../../components/EntityModal/EntityModal';
 import EntityControllers from '../../components/EntityControllers/EntityControllers';
 import Popup from '../../components/Popup/Popup';
@@ -71,58 +72,62 @@ class SingleProjectView extends React.PureComponent {
 
     render() {
         return (
-            <React.Fragment>
-                <EntityModal title='Project'>
-                    <div className='form-group'>
-                        <input
-                            type='text'
-                            className='form-control'
-                            placeholder='Project name'
-                            onChange={e => this.setState({name: e.target.value})}
-                            value={this.state.name}
-                        />
-                    </div>
-                    <div className='form-group'>
-                        <textarea
-                            className='form-control'
-                            placeholder='Project description'
-                            rows='3'
-                            onChange={e => this.setState({description: e.target.value})}
-                            value={this.state.description}
-                        />
-                    </div>
+            <Translate>
+                {({ translate }) => (
+                    <React.Fragment>
+                        <EntityModal title={translate('project')}>
+                            <div className='form-group'>
+                                <input
+                                    type='text'
+                                    className='form-control'
+                                    placeholder={translate('project-name')}
+                                    onChange={e => this.setState({name: e.target.value})}
+                                    value={this.state.name}
+                                />
+                            </div>
+                            <div className='form-group'>
+                            <textarea
+                                className='form-control'
+                                placeholder={translate('project-description')}
+                                rows='3'
+                                onChange={e => this.setState({description: e.target.value})}
+                                value={this.state.description}
+                            />
+                            </div>
 
-                    <EntityControllers
-                        onSave={this.submitProject}
-                        onClose={() => location.push('/projects')}
-                        onDelete={this.deleteProject}
-                    />
-                </EntityModal>
-                <Popup
-                    title='Delete project'
-                    ref={this.popupRef}
-                    buttons={[
-                        {
-                            text: 'Cancel',
-                            className: 'btn btn-light',
-                        },
-                        {
-                            text: 'Delete',
-                            className: 'btn btn-primary',
-                            onClick: () => {
-                                const { deleteProject } = this.props;
-                                const currentProject = getCurrentProject(this.props);
-                                if (currentProject) {
-                                    deleteProject(currentProject.id);
-                                }
-                                location.push('/projects');
-                            },
-                        },
-                    ]}
-                >
-                    Are you sure you want to delete this project?
-                </Popup>
-            </React.Fragment>
+                            <EntityControllers
+                                onSave={this.submitProject}
+                                onClose={() => location.push('/projects')}
+                                onDelete={this.deleteProject}
+                            />
+                        </EntityModal>
+                        <Popup
+                            title={translate('delete-project')}
+                            ref={this.popupRef}
+                            buttons={[
+                                {
+                                    text: translate('cancel'),
+                                    className: 'btn btn-light',
+                                },
+                                {
+                                    text: translate('delete'),
+                                    className: 'btn btn-primary',
+                                    onClick: () => {
+                                        const { deleteProject } = this.props;
+                                        const currentProject = getCurrentProject(this.props);
+                                        if (currentProject) {
+                                            deleteProject(currentProject.id);
+                                        }
+                                        location.push('/projects');
+                                    },
+                                },
+                            ]}
+                        >
+                            {translate('delete-it-question')}
+                        </Popup>
+                    </React.Fragment>
+                )}
+            </Translate>
         );
     }
 }
