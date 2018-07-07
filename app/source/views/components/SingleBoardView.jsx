@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Translate } from 'react-localize-redux';
 import {
     addBoard,
     updateBoard,
@@ -65,49 +66,53 @@ class SingleBoardView extends React.PureComponent {
 
     render() {
         return (
-            <React.Fragment>
-                <EntityModal title='Board'>
-                    <div className='form-group'>
-                        <input
-                            type='text'
-                            className='form-control'
-                            placeholder='Board name'
-                            onChange={e => this.setState({name: e.target.value})}
-                            value={this.state.name}
-                        />
-                    </div>
+            <Translate>
+                {({ translate }) => (
+                    <React.Fragment>
+                        <EntityModal title={translate('board')}>
+                            <div className='form-group'>
+                                <input
+                                    type='text'
+                                    className='form-control'
+                                    placeholder={translate('board-name')}
+                                    onChange={e => this.setState({name: e.target.value})}
+                                    value={this.state.name}
+                                />
+                            </div>
 
-                    <EntityControllers
-                        onSave={this.submitBoard}
-                        onClose={() => location.push('/scrum')}
-                        onDelete={this.deleteBoard}
-                    />
-                </EntityModal>
-                <Popup
-                    title='Delete board'
-                    ref={this.popupRef}
-                    buttons={[
-                        {
-                            text: 'Cancel',
-                            className: 'btn btn-light',
-                        },
-                        {
-                            text: 'Delete',
-                            className: 'btn btn-primary',
-                            onClick: () => {
-                                const { deleteBoard } = this.props;
-                                const board = getCurrentBoard(this.props);
-                                if (board) {
-                                    deleteBoard(board.id);
-                                }
-                                location.push('/scrum');
-                            },
-                        },
-                    ]}
-                >
-                    Are you sure you want to delete this board?
-                </Popup>
-            </React.Fragment>
+                            <EntityControllers
+                                onSave={this.submitBoard}
+                                onClose={() => location.push('/scrum')}
+                                onDelete={this.deleteBoard}
+                            />
+                        </EntityModal>
+                        <Popup
+                            title={translate('delete-board')}
+                            ref={this.popupRef}
+                            buttons={[
+                                {
+                                    text: translate('cancel'),
+                                    className: 'btn btn-light',
+                                },
+                                {
+                                    text: translate('delete'),
+                                    className: 'btn btn-primary',
+                                    onClick: () => {
+                                        const { deleteBoard } = this.props;
+                                        const board = getCurrentBoard(this.props);
+                                        if (board) {
+                                            deleteBoard(board.id);
+                                        }
+                                        location.push('/scrum');
+                                    },
+                                },
+                            ]}
+                        >
+                            {translate('delete-it-question')}
+                        </Popup>
+                    </React.Fragment>
+                )}
+            </Translate>
         );
     }
 }
