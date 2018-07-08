@@ -41,5 +41,8 @@
   "password": "Password",
   "login": "Login",
   "create-new-account": "Create new account - sign up",
-  "have-account": "I have an account - login"
+  "have-account": "I have an account - login",
+  "plan-tasks": "Plan tasks",
+  "selected-tasks": "Selected tasks",
+  "backlog-tasks": "Backlog tasks"
 }
