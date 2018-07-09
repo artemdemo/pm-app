@@ -27,4 +27,4 @@ const ScrumView = (props) => {
     );
 };
 
-export default ScrumView
+export default ScrumView;

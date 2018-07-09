@@ -19,6 +19,21 @@ class EntityControllers extends React.PureComponent {
         onDelete && onDelete();
     };
 
+    renderDelete() {
+        const { onDelete } = this.props;
+        if (onDelete) {
+            return (
+                <button
+                    className='btn btn-danger'
+                    onClick={this.handleDelete}
+                >
+                    <Translate id='delete' />
+                </button>
+            );
+        }
+        return null;
+    }
+
     render() {
         return (
             <div className='d-flex mb-2'>
@@ -36,12 +51,7 @@ class EntityControllers extends React.PureComponent {
                         <Translate id='close' />
                     </button>
                 </ElementsRow>
-                <button
-                    className='btn btn-danger'
-                    onClick={this.handleDelete}
-                >
-                    <Translate id='delete' />
-                </button>
+                {this.renderDelete()}
             </div>
         );
     }
