@@ -1,15 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DragItemsContainer } from '../../components/DragNDrop/DragItemsContainer';
+import { DragItem } from '../../components/DragNDrop/DragItem';
 
 class PlanTasks extends React.PureComponent {
+    dragStopped = (itemData) => {
+        console.log(itemData);
+    };
+
     render() {
         const { tasks } = this.props;
         return (
-            <div>
+            <DragItemsContainer
+                className='plan-tasks'
+                container={0}
+            >
                 {tasks.map(task => (
-                    <div key={`on-board-tasks__item-${task.id}`}>{task.name}</div>
+                    <DragItem
+                        className='plan-tasks-item'
+                        item={task.id}
+                        key={`plan-tasks-item-${task.id}`}
+                        dragStopped={this.dragStopped}
+                    >
+                        {task.name}
+                    </DragItem>
                 ))}
-            </div>
+            </DragItemsContainer>
         );
     }
 }

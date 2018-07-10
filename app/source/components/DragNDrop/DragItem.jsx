@@ -114,6 +114,20 @@ export class DragItem extends React.PureComponent {
         });
     }
 
+    // `position` can be `before` or `after`
+    renderPlaceholder(position) {
+        if (this.state.renderPlaceholder === position) {
+            const placeholderClass = classnames({
+                'drag-item__placeholder': true,
+                [`drag-item__placeholder_${position}`]: true,
+            });
+            return (
+                <div className={placeholderClass} />
+            );
+        }
+        return null;
+    }
+
     render() {
         const { className = '' } = this.props;
 
@@ -121,20 +135,6 @@ export class DragItem extends React.PureComponent {
             'drag-item-wrap': true,
             'drag-item-wrap_is-dragged': this.state.isDragged,
         });
-
-        // `position` can be `before` or `after`
-        const renderPlaceholder = (position) => {
-            if (this.state.renderPlaceholder === position) {
-                const placeholderClass = classnames({
-                    'drag-item__placeholder': true,
-                    [`drag-item__placeholder_${position}`]: true,
-                });
-                return (
-                    <div className={placeholderClass} />
-                );
-            }
-            return null;
-        };
 
         return (
             <div
@@ -144,11 +144,11 @@ export class DragItem extends React.PureComponent {
                 onDragStart={this.dragStart}
                 onDragEnd={this.dragEnd}
             >
-                {renderPlaceholder('before')}
+                {this.renderPlaceholder('before')}
                 <div className={className}>
                     {this.props.children}
                 </div>
-                {renderPlaceholder('after')}
+                {this.renderPlaceholder('after')}
             </div>
         );
     }

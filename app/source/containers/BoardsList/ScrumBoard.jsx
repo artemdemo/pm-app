@@ -35,13 +35,13 @@ class ScrumBoard extends React.PureComponent {
             .sort(sortByIdPositionScrum);
     }
 
-    dragStopped(itemData) {
+    dragStopped = (itemData) => {
         const { tasks, updateTaskPosition } = this.props;
 
         // ToDo: `itemData.item` should be `itemData.itemId` or something like that
         const task = tasks.data.find(_ => _.id === itemData.item);
         updateTaskPosition(task, itemData.container, itemData.nearItem, itemData.position);
-    }
+    };
 
     menuClick = (itemName) => {
         const { updateBoard, board } = this.props;
@@ -92,7 +92,7 @@ class ScrumBoard extends React.PureComponent {
                             className='scrum-board-task'
                             key={`task-${task.id}`}
                             item={task.id}
-                            dragStopped={this.dragStopped.bind(this)}
+                            dragStopped={this.dragStopped}
                         >
                             {task.name}
                         </DragItem>
