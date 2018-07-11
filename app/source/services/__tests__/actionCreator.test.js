@@ -14,7 +14,7 @@ describe('actionCreator', () => {
             const actionConst = 'SOME_ACTION';
             const action = createAction(actionConst);
             expect(String(action) === actionConst).toBe(true);
-            expect('' + action === actionConst).toBe(true);
+            expect(('' + action) === actionConst).toBe(true);
             expect(`${action}` === actionConst).toBe(true);
         });
 
