@@ -9,11 +9,11 @@ class PlanTasks extends React.PureComponent {
     };
 
     render() {
-        const { tasks } = this.props;
+        const { tasks, name } = this.props;
         return (
             <DragItemsContainer
                 className='plan-tasks'
-                container={0}
+                container={name}
             >
                 {tasks.map(task => (
                     <DragItem
@@ -32,6 +32,7 @@ class PlanTasks extends React.PureComponent {
 
 PlanTasks.propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.shape({})),
+    name: PropTypes.string,
 };
 
 export default PlanTasks;

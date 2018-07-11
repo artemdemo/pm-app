@@ -28,7 +28,10 @@ class PlanTasksView extends React.PureComponent {
                                 {translate('selected-tasks')}
                             </strong>
 
-                            <PlanTasks tasks={selectOnBoardTasks(this.props)} />
+                            <PlanTasks
+                                name='selected-tasks'
+                                tasks={selectOnBoardTasks(this.props)}
+                            />
 
                             <hr />
 
@@ -36,7 +39,10 @@ class PlanTasksView extends React.PureComponent {
                                 {translate('backlog-tasks')}
                             </strong>
 
-                            <PlanTasks tasks={selectFreeTasks(this.props)} />
+                            <PlanTasks
+                                name='backlog-tasks'
+                                tasks={selectFreeTasks(this.props)}
+                            />
 
                             <hr />
 

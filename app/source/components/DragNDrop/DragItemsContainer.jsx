@@ -94,5 +94,8 @@ export class DragItemsContainer extends React.PureComponent {
 }
 
 DragItemsContainer.propTypes = {
-    container: PropTypes.number,
+    container: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
 };
