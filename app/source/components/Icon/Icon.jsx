@@ -18,7 +18,7 @@ const iconTypes = {
 const Icon = (props) => {
     const { name, inText, className, type } = props;
 
-    if (name === '' && !ENV.production) {
+    if (name === '') {
         throw new Error('Icon prop `name` couldn\'t be empty');
     }
 

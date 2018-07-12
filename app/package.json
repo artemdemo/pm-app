@@ -9,7 +9,7 @@
     "eslint": "eslint ./source/**/*.js ./source/**/**/*.js ./source/**/*.jsx ./source/**/**/*.jsx",
     "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
     "test": "BABEL_DISABLE_CACHE=1 jest --config ./jest/jest-config.json",
-    "test:e2e": "./e2e-test.sh"
+    "test:coverage": "BABEL_DISABLE_CACHE=1 jest --config ./jest/jest-config.json --coverage"
   },
   "repository": {
     "type": "git",

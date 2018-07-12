@@ -26,4 +26,10 @@ describe('<Icon>', () => {
 
         expect(tree).toMatchSnapshot();
     });
+
+    it('should throw if there is no name', () => {
+        expect(() => {
+            Icon({ name: '' });
+        }).toThrow();
+    });
 });
