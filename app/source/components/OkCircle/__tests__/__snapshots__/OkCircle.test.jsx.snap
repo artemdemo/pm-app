@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<OkCircle> empty render 1`] = `
+<span
+  className="ok-circle-container"
+  onClick={[Function]}
+>
+  <span
+    className="ok-circle"
+  >
+    <span
+      className="far fa-check-circle"
+    />
+  </span>
+  <span
+    className="ok-circle-content"
+  />
+</span>
+`;
+
+exports[`<OkCircle> should render with done status 1`] = `
+<span
+  className="ok-circle-container"
+  onClick={[Function]}
+>
+  <span
+    className="ok-circle ok-circle_done"
+  >
+    <span
+      className="far fa-check-circle"
+    />
+  </span>
+  <span
+    className="ok-circle-content ok-circle-content_done"
+  />
+</span>
+`;
+
+exports[`<OkCircle> should render with text 1`] = `
+<span
+  className="ok-circle-container"
+  onClick={[Function]}
+>
+  <span
+    className="ok-circle ok-circle_with-text"
+  >
+    <span
+      className="far fa-check-circle"
+    />
+  </span>
+  <span
+    className="ok-circle-content"
+  >
+    some text
+  </span>
+</span>
+`;
