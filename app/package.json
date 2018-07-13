@@ -7,7 +7,6 @@
     "start": "webpack-dev-server",
     "build": "webpack --progress --colors",
     "eslint": "eslint ./source/**/*.js ./source/**/**/*.js ./source/**/*.jsx ./source/**/**/*.jsx",
-    "e2e-setup": "node_modules/selenium-standalone/bin/selenium-standalone install",
     "test": "BABEL_DISABLE_CACHE=1 jest --config ./jest/jest-config.json",
     "test:coverage": "BABEL_DISABLE_CACHE=1 jest --config ./jest/jest-config.json --coverage"
   },

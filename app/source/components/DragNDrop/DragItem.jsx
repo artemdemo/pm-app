@@ -21,31 +21,6 @@ export class DragItem extends React.PureComponent {
             isDragged: false,
         };
 
-        this.dragStart = (e) => {
-            e.dataTransfer.effectAllowed = 'move';
-
-            // Firefox requires calling dataTransfer.setData
-            // for the drag to properly work
-            e.dataTransfer.setData('text/html', e.currentTarget);
-
-            // dragged task can't be set right after dragging started,
-            // case it will trigger "display: none;" style and as a result it will stop dragging from happening
-            setTimeout(() => {
-                this.setState({
-                    isDragged: true,
-                });
-            }, 16);
-
-            const { dragStarted, item, $$key } = this.props;
-
-            if (dragStarted) {
-                dragStarted(e);
-            }
-
-            setDraggedItem(item);
-            setDraggedItemKey($$key);
-        };
-
         const setNewPosition = throttleLead((position) => {
             this.setState({
                 renderPlaceholder: position,
@@ -72,27 +47,6 @@ export class DragItem extends React.PureComponent {
 
             setNewPosition(position);
         };
-
-        this.dragEnd = () => {
-            this.setState({
-                isDragged: false,
-            });
-
-            const { dragStopped } = this.props;
-
-            if (dragStopped) {
-                dragStopped({
-                    item: getDraggedItem(),
-                    container: getLandingContainer(),
-                    nearItem: getNearItem(),
-                    position: getPosition(), // before, after
-                });
-            }
-
-            nerve.send({
-                route: 'item/drag-end',
-            });
-        };
     }
 
     componentDidMount() {
@@ -114,15 +68,60 @@ export class DragItem extends React.PureComponent {
         });
     }
 
+    dragStart = (e) => {
+        e.dataTransfer.effectAllowed = 'move';
+
+        // Firefox requires calling dataTransfer.setData
+        // for the drag to properly work
+        e.dataTransfer.setData('text/html', e.currentTarget);
+
+        // dragged task can't be set right after dragging started,
+        // case it will trigger "display: none;" style and as a result it will stop dragging from happening
+        setTimeout(() => {
+            this.setState({
+                isDragged: true,
+            });
+        }, 16);
+
+        const { dragStarted, item, $$key } = this.props;
+
+        dragStarted && dragStarted(e);
+
+        setDraggedItem(item);
+        setDraggedItemKey($$key);
+    };
+
+    dragEnd = () => {
+        this.setState({
+            isDragged: false,
+        });
+
+        const { dragStopped } = this.props;
+
+        if (dragStopped) {
+            dragStopped({
+                item: getDraggedItem(),
+                container: getLandingContainer(),
+                nearItem: getNearItem(),
+                position: getPosition(), // before, after
+            });
+        }
+
+        nerve.send({
+            route: 'item/drag-end',
+        });
+    };
+
     // `position` can be `before` or `after`
     renderPlaceholder(position) {
+        const { placeholderClass } = this.props;
         if (this.state.renderPlaceholder === position) {
-            const placeholderClass = classnames({
+            const placeholderClassName = classnames(placeholderClass, {
                 'drag-item__placeholder': true,
                 [`drag-item__placeholder_${position}`]: true,
             });
             return (
-                <div className={placeholderClass} />
+                <div className={placeholderClassName} />
             );
         }
         return null;
@@ -158,5 +157,13 @@ DragItem.propTypes = {
     dragStarted: PropTypes.func,
     dragStopped: PropTypes.func,
     item: PropTypes.number.isRequired,
+    placeholderClass: PropTypes.string,
     $$key: PropTypes.string,
+};
+
+DragItem.defaultProps = {
+    dragStarted: null,
+    dragStopped: null,
+    placeholderClass: '',
+    $$key: null,
 };

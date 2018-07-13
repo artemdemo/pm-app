@@ -18,6 +18,10 @@ const selectFreeTasks = createSelector(
 );
 
 class PlanTasksView extends React.PureComponent {
+    dragStopped = (itemData) => {
+        console.log(itemData);
+    };
+
     render() {
         return (
             <Translate>
@@ -31,6 +35,7 @@ class PlanTasksView extends React.PureComponent {
                             <PlanTasks
                                 name='selected-tasks'
                                 tasks={selectOnBoardTasks(this.props)}
+                                dragStopped={this.dragStopped}
                             />
 
                             <hr />
@@ -42,6 +47,7 @@ class PlanTasksView extends React.PureComponent {
                             <PlanTasks
                                 name='backlog-tasks'
                                 tasks={selectFreeTasks(this.props)}
+                                dragStopped={this.dragStopped}
                             />
 
                             <hr />
