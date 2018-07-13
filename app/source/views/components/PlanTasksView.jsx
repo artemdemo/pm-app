@@ -8,18 +8,48 @@ import EntityControllers from '../../components/EntityControllers/EntityControll
 import * as location from '../../services/location';
 
 const selectOnBoardTasks = createSelector(
-    props => props.tasks.data,
-    tasksList => tasksList.filter(task => task.board_id != null && task.board_id > -1)
+    state => state.tasks,
+    tasksList => tasksList.filter(task => task.$selected)
 );
 
 const selectFreeTasks = createSelector(
-    props => props.tasks.data,
-    tasksList => tasksList.filter(task => task.board_id == null)
+    props => props.tasks,
+    tasksList => tasksList.filter(task => !task.$selected)
 );
 
 class PlanTasksView extends React.PureComponent {
+    static getDerivedStateFromProps(props) {
+        return {
+            tasks: props.tasks.data.map((task) => {
+                const isSelected = task.board_id != null && task.board_id > -1;
+                return {
+                    ...task,
+                    $selected: isSelected,
+                };
+            }),
+        }
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tasks: [],
+        };
+    }
+
     dragStopped = (itemData) => {
-        console.log(itemData);
+        this.setState({
+            tasks: this.state.tasks.map((task) => {
+                if (task.id === itemData.item) {
+                    return {
+                        ...task,
+                        $selected: itemData.container === 'selected-tasks'
+                    };
+                }
+                return task;
+            }),
+        })
     };
 
     render() {
@@ -34,7 +64,7 @@ class PlanTasksView extends React.PureComponent {
 
                             <PlanTasks
                                 name='selected-tasks'
-                                tasks={selectOnBoardTasks(this.props)}
+                                tasks={selectOnBoardTasks(this.state)}
                                 dragStopped={this.dragStopped}
                             />
 
@@ -46,7 +76,7 @@ class PlanTasksView extends React.PureComponent {
 
                             <PlanTasks
                                 name='backlog-tasks'
-                                tasks={selectFreeTasks(this.props)}
+                                tasks={selectFreeTasks(this.state)}
                                 dragStopped={this.dragStopped}
                             />
 
