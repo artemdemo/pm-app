@@ -1,4 +1,5 @@
 import * as authActions from './authActions';
+import { createReducer } from '../../services/reducerCreator';
 
 const initState = {
     data: {},
@@ -10,76 +11,71 @@ const initState = {
     loadingError: null,
 };
 
-export default function authReducer(state = initState, action) {
-    switch (action.type) {
-        /*
-         * Login
-         */
-        case `${authActions.login}`:
-            return {
-                ...state,
-                login: true,
-            };
-        case `${authActions.loggedIn}`:
-            return {
-                ...state,
-                data: action.data,
-                login: false,
-                loginError: null,
-            };
-        case `${authActions.loginError}`:
-            return {
-                ...state,
-                login: false,
-                loginError: action.err,
-            };
-        /*
-         * Signup
-         */
-        case `${authActions.signup}`:
-            return {
-                ...state,
-                signup: true,
-            };
-        case `${authActions.signedUp}`:
-            return {
-                ...state,
-                data: action.data,
-                signup: false,
-                signupError: null,
-            };
-        case `${authActions.signupError}`:
-            return {
-                ...state,
-                signup: false,
-                signupError: action.err,
-            };
-        /*
-         * Loading user data
-         */
-        case `${authActions.loadUser}`:
-            return {
-                ...state,
-                loading: true,
-            };
-        case `${authActions.userLoaded}`:
-            return {
-                ...state,
-                data: action.data,
-                loading: false,
-                loadingError: null,
-            };
-        case `${authActions.userLoadingError}`:
-            return {
-                ...state,
-                loading: false,
-                loadingError: null,
-            };
-        case `${authActions.resetUser}`:
-            return {
-                ...initState,
-            };
-        default:
-            return state;
-    }
-}
+/*
+ * Login
+ */
+const loginReducers = {
+    [authActions.login]: {
+        login: true,
+    },
+    [authActions.loggedIn]: (state, action) => ({
+        ...state,
+        data: action.data,
+        login: false,
+        loginError: null,
+    }),
+    [authActions.loginError]: (state, action) => ({
+        ...state,
+        login: false,
+        loginError: action.err,
+    }),
+};
+
+/*
+ * Signup
+ */
+const signupReducers = {
+    [authActions.signup]: {
+        signup: true,
+    },
+    [authActions.signedUp]: (state, action) => ({
+        ...state,
+        data: action.data,
+        signup: false,
+        signupError: null,
+    }),
+    [authActions.signupError]: (state, action) => ({
+        ...state,
+        signup: false,
+        signupError: action.err,
+    }),
+};
+
+/*
+ * User data reducers
+ */
+const userDataReducers = {
+    [authActions.loadUser]: {
+        loading: true,
+    },
+    [authActions.userLoaded]: (state, action) => ({
+        ...state,
+        data: action.data,
+        loading: false,
+        loadingError: null,
+    }),
+    [authActions.userLoadingError]: (state, action) => ({
+        ...state,
+        loading: false,
+        loadingError: action.err,
+    }),
+    [authActions.resetUser]: () => ({
+        ...initState,
+    }),
+};
+
+export default createReducer(initState, {
+    ...loginReducers,
+    ...signupReducers,
+    ...userDataReducers,
+});
