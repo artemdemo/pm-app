@@ -9,9 +9,9 @@ function* loadBoardsSaga() {
             const result = yield request
                 .get('/api/boards')
                 .promise();
-            yield put(boardsActions.boardsLoaded(result.body));
+            yield put(boardsActions.loadBoardsResult(result.body));
         } catch (err) {
-            yield put(boardsActions.boardsLoadingError(err));
+            yield put(boardsActions.loadBoardsResult(err));
         }
     }
 }
@@ -19,14 +19,14 @@ function* loadBoardsSaga() {
 function* addBoardSaga() {
     while (true) {
         try {
-            const { board } = yield take(`${boardsActions.addBoard}`);
+            const { payload } = yield take(`${boardsActions.addBoard}`);
             const result = yield request
                 .post('/api/boards')
-                .send(board)
+                .send(payload)
                 .promise();
-            yield put(boardsActions.boardAdded(Object.assign(board, {id: result.body.id})));
+            yield put(boardsActions.addBoardResult(Object.assign(payload, {id: result.body.id})));
         } catch (err) {
-            yield put(boardsActions.boardAddingError(err));
+            yield put(boardsActions.addBoardResult(err));
         }
     }
 }
@@ -34,17 +34,17 @@ function* addBoardSaga() {
 function* updateBoardSaga() {
     while (true) {
         try {
-            const { board } = yield take(`${boardsActions.updateBoard}`);
+            const { payload } = yield take(`${boardsActions.updateBoard}`);
             yield request
                 .put('/api/boards')
-                .send(board)
+                .send(payload)
                 .promise();
             // After updating single board I'll request all list, since their whole order could change
             // Therefore there is no additional data here from the request
-            yield put(boardsActions.boardUpdated());
+            yield put(boardsActions.updateBoardResult());
             yield put(boardsActions.loadBoards());
         } catch (err) {
-            yield put(boardsActions.boardUpdatingError(err));
+            yield put(boardsActions.updateBoardResult(err));
         }
     }
 }
@@ -52,13 +52,13 @@ function* updateBoardSaga() {
 function* deleteBoardSaga() {
     while (true) {
         try {
-            const { id } = yield take(`${boardsActions.deleteBoard}`);
+            const { payload } = yield take(`${boardsActions.deleteBoard}`);
             yield request
-                .delete(`/api/boards/${id}`)
+                .delete(`/api/boards/${payload}`)
                 .promise();
-            yield put(boardsActions.boardDeleted(id));
+            yield put(boardsActions.deleteBoardResult(payload));
         } catch (err) {
-            yield put(boardsActions.boardDeletingError(err));
+            yield put(boardsActions.deleteBoardResult(err));
         }
     }
 }
