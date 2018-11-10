@@ -65,7 +65,7 @@ const deleteReducer = {
     [boardsActions.deleteBoardResult]: (state, payload) => ({
         ...state,
         data: _isError(payload) ? state.data : state.data.filter(item => item.id !== payload),
-        deleting: true,
+        deleting: false,
         deletingError: _isError(payload) ? payload : null,
     }),
 };

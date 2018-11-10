@@ -1,5 +1,5 @@
-import * as authActions from '../authActions';
-import authReducer from '../authReducer';
+import * as actions from '../authActions';
+import reducer from '../authReducer';
 
 const initState = {
     data: {},
@@ -13,11 +13,11 @@ const initState = {
 
 describe('authReducer', () => {
     it('should return initState', () => {
-        expect(authReducer()).toEqual(initState);
+        expect(reducer()).toEqual(initState);
     });
     describe('loginReducers', () => {
         it('login', () => {
-            expect(authReducer(initState, authActions.login()))
+            expect(reducer(initState, actions.login()))
                 .toEqual({
                     ...initState,
                     login: true,
@@ -33,8 +33,8 @@ describe('authReducer', () => {
             };
 
             it('data', () => {
-                const payload = authActions.loginResult(data);
-                expect(authReducer(state, payload))
+                const payload = actions.loginResult(data);
+                expect(reducer(state, payload))
                     .toEqual({
                         ...initState,
                         data,
@@ -45,8 +45,8 @@ describe('authReducer', () => {
 
             it('error', () => {
                 const err = new Error(data.message);
-                const payload = authActions.loginResult(err);
-                expect(authReducer(state, payload))
+                const payload = actions.loginResult(err);
+                expect(reducer(state, payload))
                     .toEqual({
                         ...initState,
                         login: false,
@@ -57,7 +57,7 @@ describe('authReducer', () => {
     });
     describe('signupReducers', () => {
         it('signup', () => {
-            expect(authReducer(initState, authActions.signup()))
+            expect(reducer(initState, actions.signup()))
                 .toEqual({
                     ...initState,
                     signup: true,
@@ -73,8 +73,8 @@ describe('authReducer', () => {
             };
 
             it('data', () => {
-                const payload = authActions.signupResult(data);
-                expect(authReducer(state, payload))
+                const payload = actions.signupResult(data);
+                expect(reducer(state, payload))
                     .toEqual({
                         ...initState,
                         data,
@@ -85,8 +85,8 @@ describe('authReducer', () => {
 
             it('error', () => {
                 const err = new Error(data.message);
-                const payload = authActions.signupResult(err);
-                expect(authReducer(state, payload))
+                const payload = actions.signupResult(err);
+                expect(reducer(state, payload))
                     .toEqual({
                         ...initState,
                         signup: false,
@@ -97,7 +97,7 @@ describe('authReducer', () => {
     });
     describe('userDataReducers', () => {
         it('userData', () => {
-            expect(authReducer(initState, authActions.loadUser()))
+            expect(reducer(initState, actions.loadUser()))
                 .toEqual({
                     ...initState,
                     loading: true,
@@ -113,8 +113,8 @@ describe('authReducer', () => {
             };
 
             it('data', () => {
-                const payload = authActions.loadUserResult(data);
-                expect(authReducer(state, payload))
+                const payload = actions.loadUserResult(data);
+                expect(reducer(state, payload))
                     .toEqual({
                         ...initState,
                         data,
@@ -125,8 +125,8 @@ describe('authReducer', () => {
 
             it('error', () => {
                 const err = new Error(data.message);
-                const payload = authActions.loadUserResult(err);
-                expect(authReducer(state, payload))
+                const payload = actions.loadUserResult(err);
+                expect(reducer(state, payload))
                     .toEqual({
                         ...initState,
                         loading: false,
@@ -140,7 +140,7 @@ describe('authReducer', () => {
                 data: { message: 'Prev data' },
                 loading: true,
             };
-            expect(authReducer(state, authActions.resetUser()))
+            expect(reducer(state, actions.resetUser()))
                 .toEqual({
                     ...initState,
                 });
