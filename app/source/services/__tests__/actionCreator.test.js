@@ -28,13 +28,13 @@ describe('actionCreator', () => {
             });
         });
 
-        it('should rewrite type', () => {
+        it('shouldn\'t rewrite type', () => {
             const actionConst = 'SOME_ACTION';
             const newActionConst = 'NEW_ACTION';
             const action = createAction(actionConst, smth => ({ smth, type: newActionConst }));
             const data = 'some data';
             expect(action(data)).toEqual({
-                type: newActionConst,
+                type: actionConst,
                 smth: data,
             });
         });

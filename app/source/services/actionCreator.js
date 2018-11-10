@@ -7,8 +7,11 @@ export const createAction = (constant, actionFunc) => {
         }
         const action = actionFunc(...args);
         return {
-            type: constant,
             ...action,
+            // The whole point of this helper service is to reduce boilerplate
+            // User should not be able to change `type`
+            // This way I can make tests easier
+            type: constant,
         };
     };
 
