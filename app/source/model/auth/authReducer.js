@@ -1,5 +1,5 @@
 import * as authActions from './authActions';
-import { createReducer } from '../../services/reducerCreator';
+import { createReducer } from 'redux-act';
 
 const initState = {
     data: {},
@@ -15,12 +15,13 @@ const initState = {
  * Login
  */
 const loginReducers = {
-    [authActions.login]: {
+    [authActions.login]: (state) => ({
+        ...state,
         login: true,
-    },
+    }),
     [authActions.loggedIn]: (state, payload) => ({
         ...state,
-        data: payload.data,
+        data: payload,
         login: false,
         loginError: null,
     }),
@@ -35,9 +36,10 @@ const loginReducers = {
  * Signup
  */
 const signupReducers = {
-    [authActions.signup]: {
+    [authActions.signup]: (state) => ({
+        ...state,
         signup: true,
-    },
+    }),
     [authActions.signedUp]: (state, payload) => ({
         ...state,
         data: payload.data,
@@ -55,9 +57,10 @@ const signupReducers = {
  * User data reducers
  */
 const userDataReducers = {
-    [authActions.loadUser]: {
+    [authActions.loadUser]: (state) => ({
+        ...state,
         loading: true,
-    },
+    }),
     [authActions.userLoaded]: (state, payload) => ({
         ...state,
         data: payload.data,
@@ -74,8 +77,8 @@ const userDataReducers = {
     }),
 };
 
-export default createReducer(initState, {
+export default createReducer({
     ...loginReducers,
     ...signupReducers,
     ...userDataReducers,
-});
+}, initState);

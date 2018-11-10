@@ -24,10 +24,10 @@ function* userSaga() {
 function* loginSaga() {
     while (true) {
         try {
-            const { data } = yield take(`${authActions.login}`);
+            const { payload } = yield take(`${authActions.login}`);
             const result = yield request
                 .put('/api/user/login')
-                .send(data)
+                .send(payload)
                 .promise();
             const expires = (new Date()).getTime() + (result.body.expiration * 1000);
             const tokenInstance = new Token(
@@ -49,10 +49,10 @@ function* loginSaga() {
 function* signupSaga() {
     while (true) {
         try {
-            const { data } = yield take(`${authActions.signup}`);
+            const { payload } = yield take(`${authActions.signup}`);
             const result = yield request
                 .post('/api/user/signup')
-                .send(data)
+                .send(payload)
                 .promise();
             const expires = (new Date()).getTime() + (result.body.expiration * 1000);
             const tokenInstance = new Token(
