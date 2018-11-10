@@ -1,5 +1,6 @@
-import * as authActions from './authActions';
 import { createReducer } from 'redux-act';
+import _isError from 'lodash/isError';
+import * as authActions from './authActions';
 
 const initState = {
     data: {},
@@ -19,17 +20,21 @@ const loginReducers = {
         ...state,
         login: true,
     }),
-    [authActions.loggedIn]: (state, payload) => ({
-        ...state,
-        data: payload,
-        login: false,
-        loginError: null,
-    }),
-    [authActions.loginError]: (state, payload) => ({
-        ...state,
-        login: false,
-        loginError: payload.err,
-    }),
+    [authActions.loginResult]: (state, payload) => {
+        if (_isError(payload)) {
+            return {
+                ...state,
+                login: false,
+                loginError: payload.err,
+            };
+        }
+        return {
+            ...state,
+            data: payload,
+            login: false,
+            loginError: null,
+        };
+    },
 };
 
 /*
@@ -40,17 +45,21 @@ const signupReducers = {
         ...state,
         signup: true,
     }),
-    [authActions.signedUp]: (state, payload) => ({
-        ...state,
-        data: payload.data,
-        signup: false,
-        signupError: null,
-    }),
-    [authActions.signupError]: (state, payload) => ({
-        ...state,
-        signup: false,
-        signupError: payload.err,
-    }),
+    [authActions.signupResult]: (state, payload) => {
+        if (_isError(payload)) {
+            return {
+                ...state,
+                signup: false,
+                signupError: payload.err,
+            };
+        }
+        return {
+            ...state,
+            data: payload,
+            signup: false,
+            signupError: null,
+        };
+    },
 };
 
 /*
@@ -61,17 +70,21 @@ const userDataReducers = {
         ...state,
         loading: true,
     }),
-    [authActions.userLoaded]: (state, payload) => ({
-        ...state,
-        data: payload.data,
-        loading: false,
-        loadingError: null,
-    }),
-    [authActions.userLoadingError]: (state, payload) => ({
-        ...state,
-        loading: false,
-        loadingError: payload.err,
-    }),
+    [authActions.loadUserResult]: (state, payload) => {
+        if (_isError(payload)) {
+            return {
+                ...state,
+                loading: false,
+                loadingError: payload.err,
+            };
+        }
+        return {
+            ...state,
+            data: payload,
+            loading: false,
+            loadingError: null,
+        };
+    },
     [authActions.resetUser]: () => ({
         ...initState,
     }),

@@ -11,12 +11,12 @@ function* userSaga() {
             const result = yield request
                 .get('/api/user')
                 .promise();
-            yield put(authActions.loggedIn({
+            yield put(authActions.loadUserResult({
                 email: result.body.email,
                 username: result.body.username,
             }));
         } catch (err) {
-            yield put(authActions.loginError(err));
+            yield put(authActions.loadUserResult(err));
         }
     }
 }
@@ -36,12 +36,12 @@ function* loginSaga() {
             );
             auth.saveToken(tokenInstance);
             location.replace('/');
-            yield put(authActions.loggedIn({
+            yield put(authActions.loginResult({
                 email: result.body.email,
                 username: result.body.username,
             }));
         } catch (err) {
-            yield put(authActions.loginError(err));
+            yield put(authActions.loginResult(err));
         }
     }
 }
@@ -61,12 +61,12 @@ function* signupSaga() {
             );
             auth.saveToken(tokenInstance);
             location.replace('/');
-            yield put(authActions.signedUp({
+            yield put(authActions.signupResult({
                 email: result.body.email,
                 username: result.body.username,
             }));
         } catch (err) {
-            yield put(authActions.signupError(err));
+            yield put(authActions.signupResult(err));
         }
     }
 }
