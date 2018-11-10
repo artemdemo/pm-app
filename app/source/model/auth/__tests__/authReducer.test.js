@@ -55,4 +55,95 @@ describe('authReducer', () => {
             });
         });
     });
+    describe('signupReducers', () => {
+        it('signup', () => {
+            expect(authReducer(initState, authActions.signup()))
+                .toEqual({
+                    ...initState,
+                    signup: true,
+                });
+        });
+        describe('signupResult', () => {
+            const data = {
+                message: 'Some data',
+            };
+            const state = {
+                ...initState,
+                signup: true,
+            };
+
+            it('data', () => {
+                const payload = authActions.signupResult(data);
+                expect(authReducer(state, payload))
+                    .toEqual({
+                        ...initState,
+                        data,
+                        signup: false,
+                        signupError: null,
+                    });
+            });
+
+            it('error', () => {
+                const err = new Error(data.message);
+                const payload = authActions.signupResult(err);
+                expect(authReducer(state, payload))
+                    .toEqual({
+                        ...initState,
+                        signup: false,
+                        signupError: err,
+                    });
+            });
+        });
+    });
+    describe('userDataReducers', () => {
+        it('userData', () => {
+            expect(authReducer(initState, authActions.loadUser()))
+                .toEqual({
+                    ...initState,
+                    loading: true,
+                });
+        });
+        describe('userDataResult', () => {
+            const data = {
+                message: 'Some data',
+            };
+            const state = {
+                ...initState,
+                loading: true,
+            };
+
+            it('data', () => {
+                const payload = authActions.loadUserResult(data);
+                expect(authReducer(state, payload))
+                    .toEqual({
+                        ...initState,
+                        data,
+                        loading: false,
+                        loadingError: null,
+                    });
+            });
+
+            it('error', () => {
+                const err = new Error(data.message);
+                const payload = authActions.loadUserResult(err);
+                expect(authReducer(state, payload))
+                    .toEqual({
+                        ...initState,
+                        loading: false,
+                        loadingError: err,
+                    });
+            });
+        });
+        it('should reset user', () => {
+            const state = {
+                ...initState,
+                data: { message: 'Prev data' },
+                loading: true,
+            };
+            expect(authReducer(state, authActions.resetUser()))
+                .toEqual({
+                    ...initState,
+                });
+        });
+    });
 });
