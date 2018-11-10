@@ -20,21 +20,12 @@ const loginReducers = {
         ...state,
         login: true,
     }),
-    [authActions.loginResult]: (state, payload) => {
-        if (_isError(payload)) {
-            return {
-                ...state,
-                login: false,
-                loginError: payload.err,
-            };
-        }
-        return {
-            ...state,
-            data: payload,
-            login: false,
-            loginError: null,
-        };
-    },
+    [authActions.loginResult]: (state, payload) => ({
+        ...state,
+        login: false,
+        data: _isError(payload) ? state.data : payload,
+        loginError: _isError(payload) ? payload : null,
+    }),
 };
 
 /*
@@ -45,21 +36,12 @@ const signupReducers = {
         ...state,
         signup: true,
     }),
-    [authActions.signupResult]: (state, payload) => {
-        if (_isError(payload)) {
-            return {
-                ...state,
-                signup: false,
-                signupError: payload.err,
-            };
-        }
-        return {
-            ...state,
-            data: payload,
-            signup: false,
-            signupError: null,
-        };
-    },
+    [authActions.signupResult]: (state, payload) => ({
+        ...state,
+        signup: false,
+        data: _isError(payload) ? state.data : payload,
+        signupError: _isError(payload) ? payload : null,
+    }),
 };
 
 /*
@@ -70,21 +52,12 @@ const userDataReducers = {
         ...state,
         loading: true,
     }),
-    [authActions.loadUserResult]: (state, payload) => {
-        if (_isError(payload)) {
-            return {
-                ...state,
-                loading: false,
-                loadingError: payload.err,
-            };
-        }
-        return {
-            ...state,
-            data: payload,
-            loading: false,
-            loadingError: null,
-        };
-    },
+    [authActions.loadUserResult]: (state, payload) => ({
+        ...state,
+        loading: false,
+        data: _isError(payload) ? state.data : payload,
+        loadingError: _isError(payload) ? payload : null,
+    }),
     [authActions.resetUser]: () => ({
         ...initState,
     }),
