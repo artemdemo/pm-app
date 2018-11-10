@@ -18,16 +18,16 @@ const loginReducers = {
     [authActions.login]: {
         login: true,
     },
-    [authActions.loggedIn]: (state, action) => ({
+    [authActions.loggedIn]: (state, payload) => ({
         ...state,
-        data: action.data,
+        data: payload.data,
         login: false,
         loginError: null,
     }),
-    [authActions.loginError]: (state, action) => ({
+    [authActions.loginError]: (state, payload) => ({
         ...state,
         login: false,
-        loginError: action.err,
+        loginError: payload.err,
     }),
 };
 
@@ -38,16 +38,16 @@ const signupReducers = {
     [authActions.signup]: {
         signup: true,
     },
-    [authActions.signedUp]: (state, action) => ({
+    [authActions.signedUp]: (state, payload) => ({
         ...state,
-        data: action.data,
+        data: payload.data,
         signup: false,
         signupError: null,
     }),
-    [authActions.signupError]: (state, action) => ({
+    [authActions.signupError]: (state, payload) => ({
         ...state,
         signup: false,
-        signupError: action.err,
+        signupError: payload.err,
     }),
 };
 
@@ -58,16 +58,16 @@ const userDataReducers = {
     [authActions.loadUser]: {
         loading: true,
     },
-    [authActions.userLoaded]: (state, action) => ({
+    [authActions.userLoaded]: (state, payload) => ({
         ...state,
-        data: action.data,
+        data: payload.data,
         loading: false,
         loadingError: null,
     }),
-    [authActions.userLoadingError]: (state, action) => ({
+    [authActions.userLoadingError]: (state, payload) => ({
         ...state,
         loading: false,
-        loadingError: action.err,
+        loadingError: payload.err,
     }),
     [authActions.resetUser]: () => ({
         ...initState,

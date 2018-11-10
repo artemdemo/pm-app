@@ -27,8 +27,12 @@ describe('authReducer', () => {
             const data = {
                 message: 'Some data',
             };
-            const action = authActions.loggedIn(data);
-            expect(authReducer(initState, action))
+            const payload = authActions.loggedIn(data);
+            const state = {
+                ...initState,
+                login: true,
+            };
+            expect(authReducer(state, payload))
                 .toEqual({
                     ...initState,
                     data,
@@ -40,7 +44,11 @@ describe('authReducer', () => {
             const err = {
                 message: 'Some error',
             };
-            expect(authReducer(initState, authActions.loginError(err)))
+            const state = {
+                ...initState,
+                login: true,
+            };
+            expect(authReducer(state, authActions.loginError(err)))
                 .toEqual({
                     ...initState,
                     login: false,
