@@ -16,6 +16,7 @@ export const logout = createAction('LOGOUT');
 /*
  * User data
  */
+
 export const loadUser = createAction('LOAD_USER');
 export const loadUserResult = createAction('LOAD_USER_RESULT');
 

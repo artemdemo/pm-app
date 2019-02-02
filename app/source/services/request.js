@@ -1,9 +1,18 @@
+/* eslint-disable guard-for-in */
+
 import request from 'superagent-bluebird-promise';
+import _isObject from 'lodash/isObject';
 
 const defaultHeaders = {};
 
-export const setDefaultHeader = (name, value) => {
-    defaultHeaders[name] = value;
+export const setDefaultHeader = (field, value) => {
+    if (_isObject(field)) {
+        for (const key in field) {
+            defaultHeaders[key] = field[key];
+        }
+    } else {
+        defaultHeaders[field] = value;
+    }
 };
 
 export const clearDefaultHeaders = () => {
